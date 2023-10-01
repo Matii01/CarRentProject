@@ -6,6 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CarRent.api.Controllers
 {
+
+    // ToDo create service 
+
     [Route("[controller]")]
     public class CarMakeController : BaseController
     {
@@ -19,6 +22,19 @@ namespace CarRent.api.Controllers
             var list = await _context.CarMakes.ToListAsync();
 
             return Ok(list);
+        }
+
+        [HttpGet("get/{id:int}")]
+        public async Task<IActionResult> GetCarMakesById(int id)
+        {
+            var carMake = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+
+            if(carMake is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(carMake);
         }
 
         [HttpGet(Name = "CarMake")]
@@ -45,9 +61,20 @@ namespace CarRent.api.Controllers
             return CreatedAtAction(nameof(CreateCarMake), carMake);
         }
 
-        [HttpPut("update{id:int}")]
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarMake(int id, [FromBody] CarMakeDto carMake)
         {
+            var toUpdate = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+
+            if (toUpdate is null)
+            {
+                return NotFound();
+            }
+            
+            toUpdate.Name = carMake.Name;
+            toUpdate.Description = carMake.Description;
+            await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
