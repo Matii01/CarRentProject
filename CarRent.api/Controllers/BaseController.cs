@@ -1,4 +1,4 @@
-﻿using CarRent.data.Repository;
+﻿using CarRent.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers

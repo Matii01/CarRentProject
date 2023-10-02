@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarRent.data\CarRent.data.csproj" />
+    <ProjectReference Include="..\CarRent.Repository\CarRent.Repository.csproj" />
     <ProjectReference Include="..\CarRent.Service\CarRent.Service.csproj" />
   </ItemGroup>
 

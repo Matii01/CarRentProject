@@ -1,13 +1,8 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Repository;
 using CarRent.data.RequestFeatures;
+using CarRent.Repository;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {

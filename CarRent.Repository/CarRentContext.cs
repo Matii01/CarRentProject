@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRent.data.Repository
+namespace CarRent.Repository
 {
     public class CarRentContext : DbContext
     {
         public CarRentContext(DbContextOptions options)
             : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace CarRent.data.Repository
         public DbSet<CarMake> CarMakes { get; set; }
         public DbSet<CarType> CarsTypes { get; set; }
         public DbSet<EngineType> EngineTypes { get; set; }
-        public DbSet<GearboxType> GearboxTypes { get; set;}
+        public DbSet<GearboxType> GearboxTypes { get; set; }
         public DbSet<KilometrLimit> KilometrLimits { get; set; }
         public DbSet<AirConditioningType> AirConditions { get; set; }
         public DbSet<CarDrive> CarDrives { get; set; }

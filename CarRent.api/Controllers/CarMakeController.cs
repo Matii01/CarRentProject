@@ -1,25 +1,27 @@
-﻿using CarRent.data.Models.CarRent;
-using CarRent.data.Repository;
+﻿using CarRent.data.DTO;
+using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CarRent.api.Controllers
 {
-
     // ToDo create service 
 
     [Route("[controller]")]
-    public class CarMakeController : BaseController
+    public class CarMakeController : ControllerBase
     {
-        public CarMakeController(CarRentContext context) : base(context)
+        private readonly ICarMakeService _carMakeService;
+
+        public CarMakeController(ICarMakeService carMakeService)
         {
+            _carMakeService = carMakeService;
         }
+      
 
         [HttpGet("all")]
         public async Task<IActionResult> GetCarMakes()
         {
-            var list = await _context.CarMakes.ToListAsync();
+            //var list = await _context.CarMakes.ToListAsync();
+            var list = await _carMakeService.GetAllCarMakesAsync(false);
 
             return Ok(list);
         }
@@ -27,12 +29,8 @@ namespace CarRent.api.Controllers
         [HttpGet("get/{id:int}")]
         public async Task<IActionResult> GetCarMakesById(int id)
         {
-            var carMake = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-
-            if(carMake is null)
-            {
-                return NotFound();
-            }
+            //var carMake = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+            var carMake = await _carMakeService.GetCarMakeAsync(id, false);
 
             return Ok(carMake);
         }
@@ -40,12 +38,8 @@ namespace CarRent.api.Controllers
         [HttpGet(Name = "CarMake")]
         public async Task<IActionResult> GetActiveCarMakes()
         {
-            var list = await _context.CarMakes.Where(x => x.IsActive).ToListAsync();
-
-            if (list.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
+            // ToDo 
+            var list = await _carMakeService.GetAllCarMakesAsync(false);
 
             return Ok(list);
         }
@@ -53,27 +47,16 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateCarMake([FromBody] CarMakeDto carMake)
         {
-            CarMake newCarMake = new() { Name = carMake.Name, Description = carMake.Description, IsActive = true};
-            
-            await _context.CarMakes.AddAsync(newCarMake);
-            await _context.SaveChangesAsync();
+            var createdCarMake = await _carMakeService.CreateCarMakeAsync(carMake);
+           
 
-            return CreatedAtAction(nameof(CreateCarMake), carMake);
+            return CreatedAtAction(nameof(CreateCarMake), new {Id = createdCarMake.Id}, createdCarMake);
         }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarMake(int id, [FromBody] CarMakeDto carMake)
         {
-            var toUpdate = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-
-            if (toUpdate is null)
-            {
-                return NotFound();
-            }
-            
-            toUpdate.Name = carMake.Name;
-            toUpdate.Description = carMake.Description;
-            await _context.SaveChangesAsync();
+            await _carMakeService.UpdateCarMakeAsync(id, carMake, trackChanges: false);
 
             return NoContent();
         }
@@ -81,14 +64,6 @@ namespace CarRent.api.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteCarMake(int id)
         {
-            var toDelete = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-            if (toDelete == null)
-            {
-                return NotFound();
-            }
-
-            toDelete.IsActive=false;
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

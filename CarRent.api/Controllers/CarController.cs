@@ -1,9 +1,6 @@
-﻿using CarRent.data.Repository;
-using CarRent.data.RequestFeatures;
+﻿using CarRent.data.RequestFeatures;
 using CarRent.Service.Interfaces;
-using CarRent.Service.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CarRent.api.Controllers
