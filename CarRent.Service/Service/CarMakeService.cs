@@ -28,6 +28,13 @@ namespace CarRent.Service.Service
                 .ToList();
             return carMakesDto;
         }
+
+        public async Task<IEnumerable<CarMakeDto>> GetAllActiveCarMakesAsync(bool trackChanges)
+        {
+            //var carMakes = await _repository.CarMake.
+            throw new NotImplementedException();
+               
+        }
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {
             var carMake = await _repository.CarMake.GetCarMakeAsync(id, trackChanges) ?? throw new Exception("CarMake not found");

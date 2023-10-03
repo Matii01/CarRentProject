@@ -10,6 +10,7 @@ namespace CarRent.Repository.Interfaces
     public interface ICarMakeRepository
     {
         Task<IEnumerable<CarMake>> GetAllCarMakeAsync(bool trackChanges);
+        Task<IEnumerable<CarMake>> GetAllActiveCarMakeAsync(bool trackChanges);
         Task<CarMake> GetCarMakeAsync(int id, bool trackChanges);
         void CreateCarMake(CarMake carMake);
         void DeleteCarMake(CarMake carMake);

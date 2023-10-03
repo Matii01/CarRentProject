@@ -9,6 +9,7 @@ namespace CarRent.Repository.Interfaces
     public interface IRepositoryManager
     {
         ICarMakeRepository CarMake { get; }
+        ICarTypeRepository CarType { get; }
         Task SaveAsync();
     }
 }

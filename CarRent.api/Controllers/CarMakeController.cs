@@ -7,13 +7,11 @@ namespace CarRent.api.Controllers
     // ToDo create service 
 
     [Route("[controller]")]
-    public class CarMakeController : ControllerBase
+    public class CarMakeController : BaseController
     {
-        private readonly ICarMakeService _carMakeService;
-
-        public CarMakeController(ICarMakeService carMakeService)
+        public CarMakeController(IServiceManager service) 
+            : base(service)
         {
-            _carMakeService = carMakeService;
         }
       
 
@@ -21,7 +19,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarMakes()
         {
             //var list = await _context.CarMakes.ToListAsync();
-            var list = await _carMakeService.GetAllCarMakesAsync(false);
+            var list = await _services.CarMakeService.GetAllCarMakesAsync(false);
 
             return Ok(list);
         }
@@ -30,7 +28,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarMakesById(int id)
         {
             //var carMake = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-            var carMake = await _carMakeService.GetCarMakeAsync(id, false);
+            var carMake = await _services.CarMakeService.GetCarMakeAsync(id, false);
 
             return Ok(carMake);
         }
@@ -39,7 +37,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetActiveCarMakes()
         {
             // ToDo 
-            var list = await _carMakeService.GetAllCarMakesAsync(false);
+            var list = await _services.CarMakeService.GetAllCarMakesAsync(false);
 
             return Ok(list);
         }
@@ -47,7 +45,7 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateCarMake([FromBody] CarMakeDto carMake)
         {
-            var createdCarMake = await _carMakeService.CreateCarMakeAsync(carMake);
+            var createdCarMake = await _services.CarMakeService.CreateCarMakeAsync(carMake);
            
 
             return CreatedAtAction(nameof(CreateCarMake), new {Id = createdCarMake.Id}, createdCarMake);
@@ -56,7 +54,7 @@ namespace CarRent.api.Controllers
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarMake(int id, [FromBody] CarMakeDto carMake)
         {
-            await _carMakeService.UpdateCarMakeAsync(id, carMake, trackChanges: false);
+            await _services.CarMakeService.UpdateCarMakeAsync(id, carMake, trackChanges: false);
 
             return NoContent();
         }
@@ -65,7 +63,8 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> DeleteCarMake(int id)
         {
 
-            return NoContent();
+            //return NoContent();
+            throw new NotImplementedException();
         }
     }
 }

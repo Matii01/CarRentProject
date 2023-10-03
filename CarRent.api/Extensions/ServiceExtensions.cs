@@ -1,5 +1,6 @@
 ﻿using CarRent.Repository;
 using CarRent.Repository.Interfaces;
+using CarRent.Service;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,9 @@ namespace CarRent.api.Extensions
 
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<ICarService, CarService>();
-            services.AddScoped<ICarMakeService, CarMakeService>();
+            //services.AddScoped<ICarService, CarService>();
+            //services.AddScoped<ICarMakeService, CarMakeService>();
+            services.AddScoped<IServiceManager, ServiceManager>();
         }
     }
 }

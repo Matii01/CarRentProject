@@ -25,6 +25,11 @@ namespace CarRent.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<CarMake>> GetAllActiveCarMakeAsync(bool trackChanges)
+        {
+            return await FindByCondition(x => x.IsActive == true, trackChanges).ToListAsync();
+        }
+
         public async Task<CarMake> GetCarMakeAsync(int id, bool trackChanges)
         {
             return await FindByCondition(x => x.Id == id, trackChanges).SingleOrDefaultAsync();

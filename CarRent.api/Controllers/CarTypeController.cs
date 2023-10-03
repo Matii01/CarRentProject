@@ -1,6 +1,7 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository;
+using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace CarRent.api.Controllers
     [Route("[controller]")]
     public class CarTypeController : BaseController
     {
-        public CarTypeController(CarRentContext context) : base(context)
+        public CarTypeController(IServiceManager service) : base(service)
         {
 
         }
@@ -17,7 +18,7 @@ namespace CarRent.api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarTypes()
         {
-            var carTypes = await _context.CarsTypes.ToListAsync();
+            var carTypes = await _services.CarTypeService.GetAllAsync(false); 
 
             return Ok(carTypes);
         }
@@ -25,10 +26,7 @@ namespace CarRent.api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCarTypes([FromBody] CarTypeDto carType)
         {
-            CarType newType = new() { Name = carType.Name, IsActive = true };
-
-            await _context.CarsTypes.AddAsync(newType);
-            await _context.SaveChangesAsync();
+            await _services.CarTypeService.CreateAsync(carType);
 
             return Ok();
         }
@@ -36,15 +34,7 @@ namespace CarRent.api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCarTypes(int id, [FromBody] CarTypeDto carType)
         {
-            var toUpdate = await _context.CarsTypes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-
-            if (toUpdate is null)
-            {
-                return NotFound();
-            }
-
-            toUpdate.Name = carType.Name;
-            await _context.SaveChangesAsync();
+            await _services.CarTypeService.UpdateAsync(id, carType, false);
 
             return NoContent();
         }
@@ -52,17 +42,8 @@ namespace CarRent.api.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteCarTypes(int id)
         {
-            var toDelete = await _context.CarsTypes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-
-            if (toDelete is null)
-            {
-                return NotFound();
-            }
-
-            toDelete.IsActive = false;
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            //return NoContent();
+            throw new NotImplementedException();
         }
     }
 }
