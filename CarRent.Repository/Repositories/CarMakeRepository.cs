@@ -1,6 +1,6 @@
 ﻿using CarRent.data.Models.CarRent;
 using CarRent.Repository.Abstract;
-using CarRent.Repository.Interfaces;
+using CarRent.Repository.Interfaces.CarInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

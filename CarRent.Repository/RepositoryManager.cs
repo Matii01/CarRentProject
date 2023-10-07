@@ -1,4 +1,5 @@
 ﻿using CarRent.Repository.Interfaces;
+using CarRent.Repository.Interfaces.CarInterfaces;
 using CarRent.Repository.Repositories;
 using System;
 using System.Collections.Generic;

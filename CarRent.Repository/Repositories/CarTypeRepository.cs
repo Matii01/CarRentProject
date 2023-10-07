@@ -1,6 +1,6 @@
 ﻿using CarRent.data.Models.CarRent;
 using CarRent.Repository.Abstract;
-using CarRent.Repository.Interfaces;
+using CarRent.Repository.Interfaces.CarInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,14 +33,14 @@ namespace CarRent.Repository.Repositories
             return await FindByCondition(x => x.Id == id, trackChanges)
                 .SingleOrDefaultAsync();
         }
-        public void CreateCarType(CarType carMake)
+        public void CreateCarType(CarType carType)
         {
-            Create(carMake);
+            Create(carType);
         }
 
-        public void DeleteCarType(CarType carMake)
+        public void DeleteCarType(CarType carType)
         {
-            Delete(carMake);
+            Delete(carType);
         }
     }
 }

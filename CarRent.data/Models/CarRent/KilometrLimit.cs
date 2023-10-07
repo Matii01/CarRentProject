@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.Models.CarRent
 {
-    public class KilometrLimit
+    public class KilometrLimit : BaseModel
     {
         public int Id { get; set; }
 

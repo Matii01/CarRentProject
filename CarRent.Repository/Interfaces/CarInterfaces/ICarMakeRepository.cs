@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRent.Repository.Interfaces
+namespace CarRent.Repository.Interfaces.CarInterfaces
 {
     public interface ICarMakeRepository
     {
