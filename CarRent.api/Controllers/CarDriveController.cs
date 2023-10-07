@@ -35,12 +35,14 @@ namespace CarRent.api.Controllers
             return Ok(carDrive);
         }
 
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCarDrive([FromBody] CarDriveDto carDrive)
         {
             var createdCarDrive = await _services.CarDriveService.CreateAsync(carDrive);
             return CreatedAtAction(nameof(CreateCarDrive), new { createdCarDrive.Id, createdCarDrive });
         }
 
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarDrive(int id, [FromBody] CarDriveDto carDrive)
         {
             await _services.CarDriveService.UpdateAsync(id, carDrive, trackChanges: true);
@@ -48,6 +50,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("delete")]
         public Task<IActionResult> DeleteCarDrive(int id)
         {
             throw new NotImplementedException();

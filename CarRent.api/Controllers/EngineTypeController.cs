@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
+    [Route("[controller]")]
     public class EngineTypeController : BaseController
     {
         public EngineTypeController(IServiceManager serviceManager)
@@ -33,12 +34,14 @@ namespace CarRent.api.Controllers
             return Ok(engineType);
         }
 
+        [HttpPost("create")]
         public async Task<IActionResult> CreateEngineType([FromBody] EngineTypeDto engineType)
         {
             var createdEngineType = await _services.EngineTypeService.CreateAsync(engineType);
             return CreatedAtAction(nameof(CreateEngineType), new { createdEngineType.Id, engineType });
         }
 
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarDrive(int id, [FromBody] EngineTypeDto EngineType)
         {
             await _services.EngineTypeService.UpdateAsync(id, EngineType, trackChanges: true);
@@ -46,6 +49,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("delete")]
         public Task<IActionResult> DeleteEngineType(int id)
         {
             throw new NotImplementedException();
