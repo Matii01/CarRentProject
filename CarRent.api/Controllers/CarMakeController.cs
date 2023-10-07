@@ -54,7 +54,7 @@ namespace CarRent.api.Controllers
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarMake(int id, [FromBody] CarMakeDto carMake)
         {
-            await _services.CarMakeService.UpdateCarMakeAsync(id, carMake, trackChanges: false);
+            await _services.CarMakeService.UpdateCarMakeAsync(id, carMake, trackChanges: true);
 
             return NoContent();
         }

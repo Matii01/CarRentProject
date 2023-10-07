@@ -1,16 +1,19 @@
 ﻿using CarRent.data.Models;
 using CarRent.Repository.Abstract;
+using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRent.Repository.Repositories
 {
-    public class GenericRepository<T> : RepositoryBase<T>, IGenericRepository<T> where T : BaseModel
+    public class GenericRepository<T> : RepositoryBase<T>, IGenericRepository<T> where T : BaseDictionaryModel
     {
         public GenericRepository(CarRentContext context) : base(context)
         {
@@ -18,8 +21,17 @@ namespace CarRent.Repository.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges)
         {
-            return await All(trackChanges)
-                .ToListAsync();
+            var query = All(trackChanges);
+
+           
+            var sortByProperty = (Activator.CreateInstance<T>()).SortBy;
+            
+            if (!string.IsNullOrEmpty(sortByProperty) && typeof(T).GetProperty(sortByProperty) != null)
+            {
+                query = query.OrderByField(sortByProperty, true);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllActiveAsync(bool trackChanges)
@@ -27,9 +39,24 @@ namespace CarRent.Repository.Repositories
             return await FindByCondition(x => x.IsActive == true, trackChanges).ToListAsync();
         }
 
-        public Task<T> GetAsync(int id, bool trackChanges)
+        public async Task<T> GetAsync(int id, bool trackChanges)
         {
-            throw new NotImplementedException();
+            return await FindByCondition(x => x.Id == id, trackChanges).SingleOrDefaultAsync();
         }
     }
 }
+
+
+/*
+  public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges)
+        {
+            var query = All(trackChanges);
+
+            if (!string.IsNullOrEmpty(typeof(T).GetProperty(typeof(T).BaseType.GetProperty("SortBy").GetValue(null).ToString())))
+            {
+                query = query.OrderBy(x => x.GetType().GetProperty(typeof(T).GetProperty("SortBy").GetValue(null).ToString()).GetValue(x));
+            }
+
+            return await query.ToListAsync();
+        }
+ */

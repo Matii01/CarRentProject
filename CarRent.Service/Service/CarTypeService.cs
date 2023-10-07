@@ -27,7 +27,7 @@ namespace CarRent.Service.Service
                 IsActive = true,
             };
 
-            _repository.CarType.CreateCarType(carTypeEntity);
+            _repository.CarType.Create(carTypeEntity);
             await _repository.SaveAsync();
 
             return new(carTypeEntity.Id, carTypeEntity.Name);
@@ -35,7 +35,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var carTypes = await _repository.CarType.GetAllActiveCarTypeAsync(trackChanges);
+            var carTypes = await _repository.CarType.GetAllActiveAsync(trackChanges);
             
             var carTypesDto = carTypes
                 .Select(x => new CarTypeDto(x.Id, x.Name))
@@ -45,7 +45,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var carTypes = await _repository.CarType.GetAllCarTypeAsync(trackChanges);
+            var carTypes = await _repository.CarType.GetAllAsync(trackChanges);
 
             var carTypesDto = carTypes
                 .Select(x => new CarTypeDto(x.Id, x.Name))
@@ -55,7 +55,7 @@ namespace CarRent.Service.Service
 
         public async Task<CarTypeDto> GetAsync(int id, bool trackChanges)
         {
-            var carType = await _repository.CarType.GetCarTypeAsync(id, trackChanges);
+            var carType = await _repository.CarType.GetAsync(id, trackChanges);
             var catTypeDto = new CarTypeDto(carType.Id, carType.Name);
 
             return catTypeDto;

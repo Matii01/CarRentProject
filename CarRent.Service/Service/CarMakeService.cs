@@ -21,7 +21,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllCarMakesAsync(bool trackChanges)
         {
-            var carMakes = await _repository.CarMake.GetAllCarMakeAsync(trackChanges);
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges);
 
             var carMakesDto = carMakes
                 .Select(x => new CarMakeDto(x.Id, x.Name, x.Description))
@@ -37,7 +37,7 @@ namespace CarRent.Service.Service
         }
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {
-            var carMake = await _repository.CarMake.GetCarMakeAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
+            var carMake = await _repository.CarMake.GetAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
             var carMakeDto = new CarMakeDto(carMake.Id, carMake.Name, carMake.Description);
 
             return carMakeDto;
@@ -51,7 +51,7 @@ namespace CarRent.Service.Service
                 Description = carMake.Description,
                 IsActive = true
             };
-            _repository.CarMake.CreateCarMake(carMakeEntity);
+            _repository.CarMake.Create(carMakeEntity);
             await _repository.SaveAsync();
 
             return new (carMakeEntity.Id, carMakeEntity.Name, carMakeEntity.Description);
@@ -59,7 +59,7 @@ namespace CarRent.Service.Service
 
         public async Task UpdateCarMakeAsync(int id, CarMakeDto carMake, bool trackChanges)
         {
-            var carMakeEntity = await _repository.CarMake.GetCarMakeAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
+            var carMakeEntity = await _repository.CarMake.GetAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
 
             carMakeEntity.Name = carMake.Name;
             carMakeEntity.Description = carMake.Description;
