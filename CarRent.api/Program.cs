@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServices();
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 // Add db connection
 builder.Services.ConfigureDbContext(builder.Configuration);
