@@ -13,7 +13,8 @@ namespace CarRent.Service.Service
 {
     public class AirConditioningTypeService : ServiceBase, IGenericService<AirConditioningTypeDto>
     {
-        public AirConditioningTypeService(IRepositoryManager repository, IMapper mapper) : base(repository, mapper)
+        public AirConditioningTypeService(IRepositoryManager repository, IMapper mapper) 
+            : base(repository, mapper)
         {
         }
 

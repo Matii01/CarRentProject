@@ -13,7 +13,8 @@ namespace CarRent.Service.Service
 {
     public class GearboxTypeService : ServiceBase, IGenericService<GearboxTypeDto>
     {
-        public GearboxTypeService(IRepositoryManager repository, IMapper mapper) : base(repository, mapper)
+        public GearboxTypeService(IRepositoryManager repository, IMapper mapper) 
+            : base(repository, mapper)
         {
         }
 

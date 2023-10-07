@@ -13,7 +13,8 @@ namespace CarRent.Service.Service
 {
     public class KilometrLimitService : ServiceBase, IGenericService<KilometrLimitDto>
     {
-        public KilometrLimitService(IRepositoryManager repository, IMapper mapper) : base(repository, mapper)
+        public KilometrLimitService(IRepositoryManager repository, IMapper mapper) 
+            : base(repository, mapper)
         {
         }
 
