@@ -9,6 +9,7 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IRepositoryManager
     {
+        ICarRepository Car { get; }
         IGenericRepository<AirConditioningType> AirConditioningType { get; }
         IGenericRepository<CarDrive> CarDrive { get; }
         IGenericRepository<CarMake> CarMake { get; }

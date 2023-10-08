@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.RequestFeatures;
+using CarRent.data.Models;
+using CarRent.Repository.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,11 @@ namespace CarRent.Service.Interfaces
 {
     public interface ICarService
     {
-        Task<List<CarListDtoForClient>> GetCarListForClient(CarParameters carParameters);
-        Task<CarDetailsDtoForClient> GetCarDetailsForClient(int id);
-        
+        Task<List<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);
+        Task<CarDetailsDtoForClient> GetCarDetailsForClientAsync(int id);
+        Task<CarDto> GetCarById(int id, bool trackChanges);
+        Task<Car> CreateCarAsync(NewCarDto car);
+        Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges);
+
     }
 }

@@ -8,6 +8,7 @@ namespace CarRent.Repository
     {
         private readonly CarRentContext _context;
 
+        private readonly Lazy<ICarRepository> _carRepository;
         private readonly Lazy<IGenericRepository<CarMake>> _carMakeRepository;
         private readonly Lazy<IGenericRepository<CarType>> _carTypeRepository;
         private readonly Lazy<IGenericRepository<AirConditioningType>> _airConditioningTypeRepository;
@@ -20,6 +21,9 @@ namespace CarRent.Repository
         public RepositoryManager(CarRentContext context)
         {
             _context = context;
+
+            _carRepository = new Lazy<ICarRepository>(() =>
+                new CarRepository(_context));
 
             _carMakeRepository = new Lazy<IGenericRepository<CarMake>>(() =>
                 new GenericRepository<CarMake>(_context));
@@ -43,6 +47,7 @@ namespace CarRent.Repository
                 new GenericRepository<KilometrLimit>(_context));
         }
 
+        public ICarRepository Car => _carRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;
         public IGenericRepository<CarType> CarType => _carTypeRepository.Value;
         public IGenericRepository<AirConditioningType> AirConditioningType => _airConditioningTypeRepository.Value;

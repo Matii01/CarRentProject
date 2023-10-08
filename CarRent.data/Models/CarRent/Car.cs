@@ -21,6 +21,8 @@ namespace CarRent.data.Models
         public string CarModel { get; set; } = null!;
         public string? Description {  get; set; }
 
+        public string? CarImage { get; set; }
+
         [Precision(18, 2)]
         [Range(0, int.MaxValue)]
         public double CarMileage { get; set; }  // przebieg samochodu 

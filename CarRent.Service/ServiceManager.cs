@@ -14,6 +14,7 @@ namespace CarRent.Service
 {
     public class ServiceManager : IServiceManager
     {
+        public readonly Lazy<ICarService> _carService;
         public readonly Lazy<ICarMakeService> _carMakeService;
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -26,6 +27,9 @@ namespace CarRent.Service
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper)
         {
+            _carService = new Lazy<ICarService>(() =>
+                new CarService(repositoryManager, mapper));    
+
             _carMakeService = new Lazy<ICarMakeService>(() 
                 => new CarMakeService(repositoryManager));
 
@@ -48,6 +52,7 @@ namespace CarRent.Service
                 => new GearboxTypeService(repositoryManager, mapper));
         }
 
+        public ICarService CarService => _carService.Value;
         public ICarMakeService CarMakeService => _carMakeService.Value;
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
