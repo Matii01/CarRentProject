@@ -15,7 +15,7 @@ namespace CarRent.Repository.Parameters
 
         public int PageSize
         {
-            get { return _pageSize = 10; }
+            get { return _pageSize; }
             set { _pageSize = (value > maxPageSize) ? maxPageSize : value; }
         }
 

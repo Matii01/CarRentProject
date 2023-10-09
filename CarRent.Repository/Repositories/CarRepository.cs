@@ -22,19 +22,21 @@ namespace CarRent.Repository.Repositories
 
         public async Task<IEnumerable<Car>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
         {
-            var list = await context.Cars
+            var list = await FindByCondition(x => x.IsActive == true, trackChanges)              
                 .Include(x => x.GearBoxType)
                 .Include(x => x.AirConditioningType)
-                .Skip(parameters.PageNumber)
+                
+                .Skip((parameters.PageNumber -1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
 
             return list;
         }
 
-        public Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges)
+        public async Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges)
         {
-            throw new NotImplementedException();
+            var list = await GetAllCarAsync(parameters, trackChanges);
+            return list;
         }
 
         public async Task<Car> GetCarAsync(int id, bool trackChanges)
@@ -49,23 +51,15 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.CarDrive)
                 .SingleOrDefaultAsync();
 
-            //var car = await context.Cars
-            //    .Include(x => x.CarMake)
-            //    .Include(x => x.CarType)
-            //    .Include(x => x.EngineType)
-            //    .Include(x => x.KilometrLimit)
-            //    .Include(x => x.AirConditioningType)
-            //    .Include(x => x.GearBoxType)
-            //    .Include(x => x.CarDrive)
-            //    .Where(x => x.Id == id)
-            //    .SingleOrDefaultAsync();
-
             return car;
         }
 
-        public Task<Car> GetCarForClientAsync(int id)
+        public async Task<Car> GetCarForClientAsync(int id)
         {
-            throw new NotImplementedException();
+            var car = await FindByCondition(x => x.Id == id, false)
+                .SingleOrDefaultAsync();
+            
+            return car;
         }
     }
 }
