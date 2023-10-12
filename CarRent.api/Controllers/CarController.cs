@@ -51,6 +51,12 @@ namespace CarRent.api.Controllers
             return Ok(car);
         }
 
+        [HttpGet("AllInfoForCar")]
+        public async Task<IActionResult> GetAllInfoForCarCar()
+        {
+            return NotFound();
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {

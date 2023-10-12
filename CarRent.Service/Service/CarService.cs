@@ -16,6 +16,7 @@ namespace CarRent.Service.Service
 
         }
 
+        
         public async Task<List<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
         {
             var list = await _repository.Car.GetAllActiveCarAsync(carParameters, trackChanges);

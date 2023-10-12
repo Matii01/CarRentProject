@@ -4,6 +4,8 @@ using CarRent.Service.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.ConfigureCors();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -20,6 +22,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
