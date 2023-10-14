@@ -14,4 +14,25 @@ namespace CarRent.data.DTO
     public record KilometrLimitDto(int Id, decimal LimitValue);
     public record CarDriveDto(int Id, string Name, string? Description);
     public record AirConditioningTypeDto(int Id, string Name, string SortBy);
+    public record AllInfoForNewCar
+    (
+        IEnumerable<CarMakeDto> CarMakes,
+        IEnumerable<CarTypeDto> CarType,
+        IEnumerable<EngineTypeDto> EngineType,
+        IEnumerable<GearboxTypeDto> GearboxType,
+        IEnumerable<KilometrLimitDto> KilometrLimit,
+        IEnumerable<CarDriveDto> CarDrive,
+        IEnumerable<AirConditioningTypeDto> AirConditioningType
+    );
+
+    /* public class AllTablesForNewCar
+    {
+        IEnumerable<CarMakeDto> CarMakes;
+        IEnumerable<CarTypeDto> CarType;
+        IEnumerable<EngineTypeDto> EngineType;
+        IEnumerable<GearboxTypeDto> GearboxType;
+        IEnumerable<KilometrLimitDto> KilometrLimit;
+        IEnumerable<CarDriveDto> CarDrive;
+        IEnumerable<AirConditioningTypeDto> AirConditioningType;
+    }*/
 }

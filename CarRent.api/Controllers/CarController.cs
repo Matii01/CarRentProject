@@ -54,7 +54,18 @@ namespace CarRent.api.Controllers
         [HttpGet("AllInfoForCar")]
         public async Task<IActionResult> GetAllInfoForCarCar()
         {
-            return NotFound();
+            var allCarInfo =  new AllInfoForNewCar(
+                CarMakes: await _services.CarMakeService.GetAllActiveCarMakesAsync(false),
+                CarType: await _services.CarTypeService.GetAllActiveAsync(false),
+                EngineType: await _services.EngineTypeService.GetAllActiveAsync(false),
+                GearboxType: await _services.GearboxTypeService.GetAllActiveAsync(false),
+                KilometrLimit: await _services.KilometrLimitService.GetAllActiveAsync(false),
+                CarDrive: await _services.CarDriveService.GetAllActiveAsync(false),
+                AirConditioningType: await _services.AirConditioningTypeService.GetAllActiveAsync(false)
+             );
+            
+            
+            return Ok(allCarInfo);
         }
 
         [HttpPost("create")]
@@ -75,6 +86,42 @@ namespace CarRent.api.Controllers
         public Task<IActionResult> DeleteCar(int id)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Store file in folder and return path to stored file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost("uploadCarImage")]
+        public async Task<IActionResult> UploadCarImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file is uploaded.");
+            }
+
+            var path = "C:\\Users\\msi\\source\\repos\\Project\\CarRentProject\\CarRent.websiteTs\\public";
+            var targetDirectory = Path.Combine(path, "CarImages");
+            var filePath = Path.Combine(targetDirectory, file.FileName);
+
+            if (!Directory.Exists(targetDirectory))
+            {
+                return BadRequest("The directory does not exist");
+            }
+
+            if (System.IO.File.Exists(filePath))
+            {
+                await Console.Out.WriteLineAsync("file exist");
+                return Ok(new { path = file.FileName });
+            }
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return Ok(new { path = file.FileName });
         }
     }
 }

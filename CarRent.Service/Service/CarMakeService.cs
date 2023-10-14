@@ -31,9 +31,16 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllActiveCarMakesAsync(bool trackChanges)
         {
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges);
+
+            var carMakesDto = carMakes
+                .Where(x => x.IsActive == true)
+                .Select(x => new CarMakeDto(x.Id, x.Name, x.Description))
+                .ToList();
+            return carMakesDto;
+
             //var carMakes = await _repository.CarMake.
-            throw new NotImplementedException();
-               
+            //throw new NotImplementedException();
         }
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {
