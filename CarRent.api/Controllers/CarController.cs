@@ -45,7 +45,7 @@ namespace CarRent.api.Controllers
             var car = await _services.CarService.GetCarById(id, false);
             if (car == null)
             {
-                return NotFound();
+                return NotFound("Car not found");
             }
 
             return Ok(car);
@@ -77,7 +77,7 @@ namespace CarRent.api.Controllers
         }
 
         [HttpPut("edit/{id:int}")]
-        public Task<IActionResult> UpdateCar([FromBody] NewCarDto car)
+        public Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
             throw new NotImplementedException();
         }

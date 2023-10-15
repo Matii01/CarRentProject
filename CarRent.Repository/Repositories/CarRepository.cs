@@ -39,7 +39,7 @@ namespace CarRent.Repository.Repositories
             return list;
         }
 
-        public async Task<Car> GetCarAsync(int id, bool trackChanges)
+        public async Task<Car?> GetCarAsync(int id, bool trackChanges)
         {
             var car = await FindByCondition(c => c.Id == id, trackChanges)
                 .Include(x => x.CarMake)
