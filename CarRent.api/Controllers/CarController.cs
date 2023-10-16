@@ -77,9 +77,11 @@ namespace CarRent.api.Controllers
         }
 
         [HttpPut("edit/{id:int}")]
-        public Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
+        public async Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
-            throw new NotImplementedException();
+            await _services.CarService.UpdateCarAsync(id, car, true);
+
+            return NoContent();
         }
 
         [HttpDelete("delete")]

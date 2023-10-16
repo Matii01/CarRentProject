@@ -39,7 +39,7 @@ namespace CarRent.Service.Service
             return MapHelper.MapCarToCarDetailsDtoForClient(item);
         }
 
-        public async Task<CarDto?> GetCarById(int id, bool trackChanges)
+        public async Task<NewCarDto?> GetCarById(int id, bool trackChanges)
         {
             var car = await _repository.Car.GetCarAsync(id, trackChanges);
             if(car is null)
@@ -47,7 +47,7 @@ namespace CarRent.Service.Service
                 return null;
             }
             //return _mapper.Map<CarDto>(car);
-            return MapHelper.MapCarToCarDto(car);
+            return MapHelper.MapCarToNewCarDto(car);
         }
 
         public async Task<Car> CreateCarAsync(NewCarDto car)
@@ -60,9 +60,11 @@ namespace CarRent.Service.Service
             return newCar;   
         }
 
-        public Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges)
+        public async Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges)
         {
-            throw new NotImplementedException();
+            var car = await _repository.Car.GetCarAsync(id, trackChanges) ?? throw new ArgumentException("not found");
+            MapHelper.UpdateCar(ref car, newCar);
+            await _repository.SaveAsync();
         }
 
         public Task DeleteCar(int id)

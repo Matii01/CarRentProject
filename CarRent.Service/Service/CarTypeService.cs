@@ -61,7 +61,7 @@ namespace CarRent.Service.Service
             return catTypeDto;
         }
 
-        public Task UpdateAsync(int id, CarTypeDto carMake, bool trackChanges)
+        public  Task UpdateAsync(int id, CarTypeDto carMake, bool trackChanges)
         {
             throw new NotImplementedException();
         }

@@ -17,7 +17,7 @@ namespace CarRent.data.DTO
         string CarModel,
         string? Description,
         string? CarImage,
-        decimal CarMileage,
+        double CarMileage,
         double Horsepower,
         double Acceleration0to100,
         int NumberOfSeats,
