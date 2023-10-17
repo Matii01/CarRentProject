@@ -9,7 +9,7 @@ namespace CarRent.data.DTO
     public record CarListDtoForClient(string Name, string Gearbox, string Ac, string AverageCombustion, decimal Price);
     public record CarDetailsDtoForClient(string Name);
 
-    public record CarListDto(string Name, string Gearbox, string Ac, string AverageCombustion, decimal Price);
+    public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
 
     public record NewCarDto(
         string Name,

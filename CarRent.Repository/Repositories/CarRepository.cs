@@ -25,8 +25,8 @@ namespace CarRent.Repository.Repositories
             var list = await FindByCondition(x => x.IsActive == true, trackChanges)              
                 .Include(x => x.GearBoxType)
                 .Include(x => x.AirConditioningType)
-                
-                .Skip((parameters.PageNumber -1) * parameters.PageSize)
+
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
 
@@ -35,7 +35,16 @@ namespace CarRent.Repository.Repositories
 
         public async Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges)
         {
-            var list = await GetAllCarAsync(parameters, trackChanges);
+            //var list = await GetAllCarAsync(parameters, trackChanges);
+            var list = All(trackChanges)
+                .Include(x => x.CarMake)
+                .Include(x => x.GearBoxType)
+                .Include(x => x.EngineType)
+                .Include(x => x.AirConditioningType)
+
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize);
+
             return list;
         }
 

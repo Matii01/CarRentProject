@@ -99,12 +99,14 @@ namespace CarRent.Service.Helper
         }
 
         public static List<CarListDto> MapCarToCarListDto(IEnumerable<Car> list)
-        {
+        { 
             return list.Select(x => new CarListDto(
+                x.Id,
                 x.Name,
+                x.CarMake.Name,
+                x.EngineType.Name,
                 x.GearBoxType.Name,
                 x.AirConditioningType.Name,
-                x.AverageCombustion.ToString(),
                 0)).ToList();
         }
 

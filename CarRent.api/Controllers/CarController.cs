@@ -30,7 +30,7 @@ namespace CarRent.api.Controllers
         }
 
         [HttpGet("workerCars")]
-        public async Task<IActionResult> GetCar()
+        public async Task<IActionResult> GetCars()
         {
             CarParameters param= new() { PageNumber = 1, PageSize = 10 };
             var list = await _services.CarService.GetCarsAsync(param, false);
