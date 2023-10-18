@@ -11,9 +11,10 @@ namespace CarRent.Repository.Parameters
         public string? GearboxType { get; set; }
         public string? ACType { get; set; }
         public string? EngineType { get; set; }
-        public string? CarDrive { get; set; }
-        public double Acceleration {  get; set; }
-
-
+        public string? CarType { get; set; }
+        public string? Make {  get; set; }
+        public double? PriceMin { get; set; }
+        public double? PriceMax { get; set; }
+        public int? MinSeatsNum { get; set; }
     }
 }
