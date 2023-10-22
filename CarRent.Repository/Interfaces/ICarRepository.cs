@@ -12,7 +12,7 @@ namespace CarRent.Repository.Interfaces
     public interface ICarRepository
     {
         Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges);
-        Task<IEnumerable<Car>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges);
+        Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges);
         Task<Car?> GetCarAsync(int id, bool trackChanges);
         Task<Car> GetCarForClientAsync(int id);
         void Create(Car car);

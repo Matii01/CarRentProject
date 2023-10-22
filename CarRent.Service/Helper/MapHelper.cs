@@ -91,10 +91,13 @@ namespace CarRent.Service.Helper
         public static List<CarListDtoForClient> MapCarToCarListDtoForClient(IEnumerable<Car> list)
         {
             return list.Select(x => new CarListDtoForClient(
+                x.Id,
                 x.Name,
+                x.CarMake.Name,
+                x.CarImage ?? "",
+                x.EngineType.Name,
                 x.GearBoxType.Name,
                 x.AirConditioningType.Name,
-                x.AverageCombustion.ToString(),
                 0)).ToList();
         }
 
@@ -112,7 +115,8 @@ namespace CarRent.Service.Helper
 
         public static CarDetailsDtoForClient MapCarToCarDetailsDtoForClient(Car car)
         {
-            return new CarDetailsDtoForClient(car.Name);
+            throw new NotImplementedException();
+            // return new CarDetailsDtoForClient(car.Name);
         }
     }
 }

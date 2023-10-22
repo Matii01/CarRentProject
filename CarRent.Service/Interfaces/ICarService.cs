@@ -11,7 +11,7 @@ namespace CarRent.Service.Interfaces
 {
     public interface ICarService
     {
-        Task<List<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);
+        Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);
         Task<List<CarListDto>> GetCarsAsync(CarParameters carParameters, bool trackChanges);
         Task<CarDetailsDtoForClient> GetCarDetailsForClientAsync(int id);
         Task<NewCarDto?> GetCarById(int id, bool trackChanges);

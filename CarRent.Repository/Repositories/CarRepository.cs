@@ -1,6 +1,7 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models;
 using CarRent.Repository.Abstract;
+using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using Microsoft.EntityFrameworkCore;
@@ -20,17 +21,31 @@ namespace CarRent.Repository.Repositories
 
         }
 
-        public async Task<IEnumerable<Car>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
+        public async Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
         {
-            var list = await FindByCondition(x => x.IsActive == true, trackChanges)              
-                .Include(x => x.GearBoxType)
-                .Include(x => x.AirConditioningType)
+            //PagedList<CarListDtoForClient> pagedList = null;
 
-                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                .Take(parameters.PageSize)
-                .ToListAsync();
+            //var pagedList = await context.Cars
+            //    .GetPagedListAsync(parameters);
 
-            return list;
+            var list = await context.Cars
+             .Search(parameters)
+             .Select(x => new CarListDtoForClient(
+                 x.Id,
+                 x.Name,
+                 x.CarMake.Name,
+                 x.CarImage ?? " ",
+                 x.EngineType.Name,
+                 x.GearBoxType.Name,
+                 x.AirConditioningType.Name,
+                 0
+                 ))
+             .ToListAsync();
+
+            var pagedList = PagedList<CarListDtoForClient>
+                .ToPagedList(list, parameters.PageNumber, parameters.PageSize);
+
+            return pagedList;
         }
 
         public async Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges)

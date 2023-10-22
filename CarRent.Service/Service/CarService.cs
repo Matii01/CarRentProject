@@ -17,12 +17,12 @@ namespace CarRent.Service.Service
         }
 
         
-        public async Task<List<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
+        public async Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
         {
             var list = await _repository.Car.GetAllActiveCarAsync(carParameters, trackChanges);
-            var items = MapHelper.MapCarToCarListDtoForClient(list);
+            //var items = MapHelper.MapCarToCarListDtoForClient(list);
 
-            return items;
+            return list;
         }
 
         public async Task<List<CarListDto>> GetCarsAsync(CarParameters carParameters, bool trackChanges)

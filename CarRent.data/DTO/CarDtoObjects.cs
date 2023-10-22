@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    public record CarListDtoForClient(string Name, string Gearbox, string Ac, string AverageCombustion, decimal Price);
-    public record CarDetailsDtoForClient(string Name);
+    public record CarListDtoForClient(int Id, string Name, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
+    public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
 
     public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
 

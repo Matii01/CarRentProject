@@ -1,8 +1,10 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Models.CarRent;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 
 namespace CarRent.api.Controllers
 {
@@ -15,13 +17,11 @@ namespace CarRent.api.Controllers
         }
 
         [HttpGet("cars")]
-        //public async Task<IActionResult> GetCarsForClient([FromQuery] CarParameters parameters)
-        public async Task<IActionResult> GetCarsForClient() // [FromQuery] or [FromBody] ? 
+        public async Task<IActionResult> GetCarsForClient([FromQuery] CarParameters parameters)
         {
-            CarParameters parameters = new() { PageNumber = 2, PageSize = 2};
             var list = await _services.CarService.GetCarListForClientAsync(parameters, false);
 
-            if(list.IsNullOrEmpty())
+            if(list.Items.IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -49,6 +49,19 @@ namespace CarRent.api.Controllers
             }
 
             return Ok(car);
+        }
+
+        [HttpGet("CarSortingInfo")]
+        public async Task<IActionResult> GetInfoForCarSorting()
+        {
+            var carSortingInfo = new InfoForSortingCar(
+                GearboxType: await _services.GearboxTypeService.GetAllActiveAsync(false),
+                EngineType: await _services.EngineTypeService.GetAllActiveAsync(false),
+                CarMakes: await _services.CarMakeService.GetAllActiveCarMakesAsync(false),
+                CarType: await _services.CarTypeService.GetAllActiveAsync(false)
+            );
+
+            return Ok(carSortingInfo);
         }
 
         [HttpGet("AllInfoForCar")]

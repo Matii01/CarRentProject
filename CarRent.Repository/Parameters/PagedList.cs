@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace CarRent.Repository.Parameters
 {
-    public class PagedList<T> : List<T> where T : class
+    public class PagedList<T> //: List<T> where T : class
     {
         public PageData MetaData { get; set; }
+        public List<T> Items { get; set; }
 
         public PagedList(List<T> items, int count, int pageNumber, int pageSize) 
         {
+            Items = items;
             MetaData = new PageData
             {
                 TotalCount = count,
@@ -19,7 +21,7 @@ namespace CarRent.Repository.Parameters
                 CurrentPage = pageNumber,
                 TotalPages = (int)Math.Ceiling(count / (double)pageSize)
             };
-            AddRange(items);
+            //AddRange(items);
         }
 
         public static PagedList<T> ToPagedList(IEnumerable<T> items, int pageNumber, int pageSize)
