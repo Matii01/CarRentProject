@@ -8,8 +8,11 @@ builder.Services.ConfigureCors();
 
 // Add services to the container.
 
+builder.Services.ConfigureAuthentication();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureJwtSettings(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -25,6 +28,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

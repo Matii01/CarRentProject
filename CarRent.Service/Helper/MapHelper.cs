@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models;
+using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -117,6 +118,18 @@ namespace CarRent.Service.Helper
         {
             throw new NotImplementedException();
             // return new CarDetailsDtoForClient(car.Name);
+        }
+
+        public static User MapUserForRegistrationDtoToUser(UserForRegistrationDto userForRegistration)
+        {
+            return new User()
+            {
+                FirstName = userForRegistration.FirstName,
+                LastName = userForRegistration.LastName,
+                UserName = userForRegistration.UserName,
+                Email = userForRegistration.Email,
+                PhoneNumber = userForRegistration.PhoneNumber,
+            };
         }
     }
 }

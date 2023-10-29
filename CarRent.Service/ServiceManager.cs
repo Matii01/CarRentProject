@@ -16,6 +16,7 @@ namespace CarRent.Service
     {
         public readonly Lazy<ICarService> _carService;
         public readonly Lazy<ICarMakeService> _carMakeService;
+     
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
         public readonly Lazy<IGenericService<EngineTypeDto>> _engineTypeService;

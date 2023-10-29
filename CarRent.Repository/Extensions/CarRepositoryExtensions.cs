@@ -46,34 +46,7 @@ namespace CarRent.Repository.Extensions
 
         public static async Task<PagedList<CarListDtoForClient>> GetPagedListAsync(this IQueryable<Car> cars, CarParameters param)
         {
-            if (param.GearboxTypeId.HasValue)
-            {
-                cars = cars.Where(x => x.GearBoxTypeId == param.GearboxTypeId);
-            }
-            if (param.ACTypeId.HasValue)
-            {
-                cars = cars.Where(x => x.AirConditioningTypeId == param.ACTypeId);
-            }
-            if (param.EngineTypeId.HasValue)
-            {
-                cars = cars.Where(x => x.EngineTypeId == param.EngineTypeId);
-            }
-            if (param.CarTypeId.HasValue)
-            {
-                cars = cars.Where(x => x.CarTypeId == param.CarTypeId);
-            }
-            if (param.MakeId.HasValue)
-            {
-                cars = cars.Where(x => x.CarMakeId == param.MakeId);
-            }
-            if (param.MinSeatsNum.HasValue)
-            {
-                cars = cars.Where(x => x.NumberOfSeats >= param.MinSeatsNum);
-            }
-
-            //var count = items.Count();
-            //var it = items.Skip((pageNumber - 1) * pageSize)
-            //    .Take(pageSize).ToList();
+            cars = cars.Search(param);
 
             int TotalCount = cars.Count();
 

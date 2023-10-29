@@ -1,5 +1,8 @@
 ﻿using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
+using CarRent.Repository.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CarRent.Repository
 {
-    public class CarRentContext : DbContext
+    public class CarRentContext : IdentityDbContext<User>
     {
         public CarRentContext(DbContextOptions options)
             : base(options)
@@ -20,6 +23,7 @@ namespace CarRent.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Car> Cars { get; set; }
