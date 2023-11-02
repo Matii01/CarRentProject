@@ -32,6 +32,16 @@ function Sidebar({ color, image, routes }) {
   const carPages = [
     { name: "Samochody", path: "/cars" },
     { name: "Dodaj", path: "/cars/add" },
+    { name: "Silniki", path: "/cars/engines" },
+    { name: "Kalendarz", path: "/cars/calendar" },
+    { name: "Typy", path: "" },
+    { name: "Klimatyzacje", path: "" },
+    { name: "Limity kilometrów", path: "" },
+  ];
+
+  const usersPages = [
+    { name: "Samochody", path: "/cars" },
+    { name: "Dodaj", path: "/cars/add" },
     { name: "Action", path: "" },
   ];
 
@@ -59,17 +69,6 @@ function Sidebar({ color, image, routes }) {
           </a>
         </div>
         <Nav>
-          <li
-            className={
-              true ? "active active-pro" : activeRoute("/admin/upgrade")
-            }
-          >
-            <NavLink to={"admin/upgrade"} className="nav-link">
-              {/* <i className={"prop.icon"} /> */}
-
-              <p>adsa</p>
-            </NavLink>
-          </li>
           <li
             className={
               false ? "active active-pro" : activeRoute("admin/upgrade")
@@ -120,27 +119,15 @@ function Sidebar({ color, image, routes }) {
 export default Sidebar;
 
 /*
-{routes.map((prop, key) => {
-            if (!prop.redirect)
-              return (
-                <li
-                  className={
-                    prop.upgrade
-                      ? "active active-pro"
-                      : activeRoute(prop.layout + prop.path)
-                  }
-                  key={key}
-                >
-                  <NavLink
-                    to={prop.layout + prop.path}
-                    className="nav-link"
-                    activeClassName="active"
-                  >
-                    <i className={prop.icon} />
-                    <p>{prop.name}</p>
-                  </NavLink>
-                </li>
-              );
-            return null;
-          })} 
-          */
+<li
+    className={
+      true ? "active active-pro" : activeRoute("/admin/upgrade")
+    }
+  >
+    <NavLink to={"admin/upgrade"} className="nav-link">
+      {/* <i className={"prop.icon"} /> }
+
+      <p>adsa</p>
+    </NavLink>
+  </li>
+*/

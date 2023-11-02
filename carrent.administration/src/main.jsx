@@ -25,10 +25,13 @@ import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
 import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import Admin from "./layouts/Admin";
+//import Admin from "./layouts/Admin";
 import App from "./App";
 import CarList from "./pages/cars/CarList";
 import AddCar from "./pages/cars/AddCar";
+import Engines from "./pages/cars/Engines";
+import CarCalendar from "./pages/cars/CarCalendar";
+import Calendar from "./pages/cars/Calendar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -37,10 +40,21 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "cars", element: <CarList /> },
+      {
+        path: "cars",
+        element: <CarList />,
+      },
       {
         path: "cars/add",
         element: <AddCar />,
+      },
+      {
+        path: "cars/engines",
+        element: <Engines />,
+      },
+      {
+        path: "cars/calendar",
+        element: <Calendar />,
       },
     ],
   },
@@ -51,14 +65,3 @@ root.render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
-
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import App from './App.jsx'
-// import './index.css'
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// )

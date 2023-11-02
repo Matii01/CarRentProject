@@ -25,7 +25,11 @@ namespace CarRent.api
 
             CreateMap<CarMake, CarMakeDto>();
             CreateMap<CarType, CarTypeDto>();
+            
             CreateMap<EngineType, EngineTypeDto>();
+            CreateMap<EngineTypeDto, EngineType>().
+                ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
             CreateMap<GearboxType, GearboxTypeDto>();
             CreateMap<KilometrLimit, KilometrLimitDto>();
             CreateMap<CarDrive,  CarDriveDto>();

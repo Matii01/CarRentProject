@@ -46,7 +46,7 @@ namespace CarRent.api.Controllers
         {
             await _services.EngineTypeService.UpdateAsync(id, EngineType, trackChanges: true);
 
-            return NoContent();
+            return StatusCode(201);
         }
 
         [HttpDelete("delete")]

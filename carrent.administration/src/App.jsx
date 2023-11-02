@@ -10,6 +10,7 @@ import FixedPlugin from "./components/FixedPlugin/FixedPlugin";
 import routes from "./routes";
 
 import sidebarImage from "./assets/img/sidebar-3.jpg";
+import { Col, Container, Row } from "react-bootstrap";
 
 function App() {
   const [color, setColor] = React.useState("black");
@@ -17,6 +18,7 @@ function App() {
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
   const mainPanel = React.useRef(null);
+
   return (
     <>
       <div className="wrapper">
@@ -34,3 +36,16 @@ function App() {
 }
 
 export default App;
+
+/*<>
+  <div className="wrapper">
+    <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
+    <div className="main-panel" ref={mainPanel}>
+      <AdminNavbar />
+      <div className="content">
+        <Outlet />
+      </div>
+      <Footer />
+    </div>
+  </div>
+</> */
