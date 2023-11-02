@@ -43,5 +43,7 @@ namespace CarRent.api.Controllers
             // var tokenDto = await _authenticationService.CreateToken(true);
             return Ok(loginDate);
         }
+
+        
     }
 }

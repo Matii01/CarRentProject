@@ -1,0 +1,32 @@
+.navLink {
+  background: 0 0;
+  color: #ffffff;
+  opacity: 0.86;
+  margin-left: 20px;
+  border-radius: 4px;
+  display: block;
+  padding: 3px 15px;
+  text-decoration: none;
+}
+
+.navLink > p {
+  display: inline flex;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.dropdownList {
+  list-style: none;
+  margin: 0;
+  padding-left: 3rem;
+}
+
+::selection {
+  background: transparent;
+  color: white;
+}
+
+.myCustomHighlightClass::selection {
+  background: #a0d1ff;
+  color: #000;
+}

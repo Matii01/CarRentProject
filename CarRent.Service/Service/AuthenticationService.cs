@@ -8,8 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -157,7 +159,7 @@ namespace CarRent.Service.Service
             return principial;
         }
 
-        public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+        public async Task<UserLoginData> RefreshToken(TokenDto tokenDto)
         {
             var principial = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
             var user = await _userManager.FindByNameAsync(principial.Identity.Name);
@@ -166,7 +168,34 @@ namespace CarRent.Service.Service
                 throw new Exception("RefreshTokenBadRequest");
             }
             _user = user;
-            return await CreateToken(populateExp: false);
+
+            var data = new UserLoginData
+            {
+                UserId = _user.Id,
+                UserName = _user.UserName,
+                Role = "",
+                Token = await CreateToken(populateExp: false)
+            };
+            return data;
+        }
+
+        public async Task<UserLoginData> RetrieveData(TokenDto tokenDto)
+        {
+            var principial = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+            var user = await _userManager.FindByNameAsync(principial.Identity.Name);
+            if(user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <=DateTime.Now)
+            {
+                throw new Exception("Fail during retrieved from token");
+            }
+            _user = user;
+            var data = new UserLoginData
+            {
+                UserId = _user.Id,
+                UserName = _user.UserName,
+                Role = "",
+                Token = tokenDto
+            };
+            return data;
         }
     }
 }

@@ -13,7 +13,9 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "carrent.websitets", "CarRen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRent.Service", "CarRent.Service\CarRent.Service.csproj", "{D9D90605-8877-4C3A-A5D4-6DD7A61F027D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRent.Repository", "CarRent.Repository\CarRent.Repository.csproj", "{4E7B00D0-23DE-4004-BC13-4EE005D85C7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRent.Repository", "CarRent.Repository\CarRent.Repository.csproj", "{4E7B00D0-23DE-4004-BC13-4EE005D85C7A}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "carrent.administration", "carrent.administration\carrent.administration.esproj", "{94C80681-D720-4484-B11E-E9E40C1C8808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,12 @@ Global
 		{4E7B00D0-23DE-4004-BC13-4EE005D85C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E7B00D0-23DE-4004-BC13-4EE005D85C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E7B00D0-23DE-4004-BC13-4EE005D85C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C80681-D720-4484-B11E-E9E40C1C8808}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

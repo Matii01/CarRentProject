@@ -14,6 +14,8 @@ namespace CarRent.Service.Interfaces
         Task<bool> ValidateUser(UserForAuthenticationDto userForAuth);
         Task<TokenDto> CreateToken(bool populateExp);
         Task<UserLoginData> Login(bool populateExp);
-        Task<TokenDto> RefreshToken(TokenDto tokenDto);
+        Task<UserLoginData> RefreshToken(TokenDto tokenDto);
+        Task<UserLoginData> RetrieveData(TokenDto tokenDto);
+        //Task<TokenDto> RefreshToken(TokenDto tokenDto);
     }
 }

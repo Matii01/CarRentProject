@@ -21,5 +21,12 @@ namespace CarRent.api.Controllers
             var tokenToReturn = await _authenticationService.RefreshToken(tokenDto);
             return Ok(tokenToReturn);
         }
+
+        [HttpPost("retrieve")]
+        public async Task<IActionResult> RetrieveData([FromBody] TokenDto user)
+        {
+            var retrievedData = await _authenticationService.RetrieveData(user); 
+            return Ok(retrievedData);
+        }
     }
 }
