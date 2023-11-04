@@ -18,11 +18,11 @@
 import React, { Component } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
-import { Nav, NavDropdown } from "react-bootstrap";
+import { Button, Nav, NavDropdown } from "react-bootstrap";
 import styles from "./Sidebar.module.css";
 import DropdownList from "./DropDownList";
 
-function Sidebar({ color, image, routes }) {
+function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   const pages = [
     { name: "Strona Główna", path: "" },
     { name: "Menu", path: "" },
@@ -49,8 +49,15 @@ function Sidebar({ color, image, routes }) {
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
   return (
-    <div className="sidebar" data-image={image} data-color={color}>
+    <div
+      className={`${styles.newSidebar} sidebar } ${
+        hide ? styles.moveSidebar : ""
+      }`}
+      data-image={image}
+      data-color={color}
+    >
       <div
         className="sidebar-background"
         style={{

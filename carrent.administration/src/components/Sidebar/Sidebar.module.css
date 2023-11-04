@@ -1,3 +1,23 @@
 .dropdownMenu {
   list-style: none;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.moveSidebar {
+  transform: translateX(-270px);
+}
+
+.newSidebar {
+  right: auto !important;
+}
+
+@media (max-width: 991px) {
+  .newSidebar {
+    position: absolute;
+    top: 0px;
+    left: -550px;
+  }
+}
