@@ -1,14 +1,18 @@
 import { Container, Table } from "react-bootstrap";
 import useFetch from "../../hooks/fetchData";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { useNavigate } from "react-router";
 
 function CarList() {
+  const navigate = useNavigate();
+
   const { data, loading, error } = useFetch(
     "https://localhost:7091/car/workerCars"
   );
 
   const handleRowDoubleClick = (carId) => {
     console.log(`double click ${carId}`);
+    navigate(`/car/details/${carId}`);
   };
 
   if (loading) {

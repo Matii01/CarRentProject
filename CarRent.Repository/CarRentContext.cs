@@ -34,5 +34,7 @@ namespace CarRent.Repository
         public DbSet<KilometrLimit> KilometrLimits { get; set; }
         public DbSet<AirConditioningType> AirConditions { get; set; }
         public DbSet<CarDrive> CarDrives { get; set; }
+        public DbSet<PriceList> PricesList { get; set; }
+        public DbSet<PricelistItem> PricelistItems { get; set; }
     }
 }
