@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CarRent.Service.Interfaces;
+using CarRent.data.DTO;
 
 namespace CarRent.api.Controllers
 {
@@ -9,6 +10,14 @@ namespace CarRent.api.Controllers
         public CarPriceListController(IServiceManager serviceManager) 
             : base(serviceManager)
         {
+        }
+
+        [HttpPost("addItem")]
+        public async Task<IActionResult> AddItemToPricelist(NewtPricelistItemDto newItem)
+        {
+            await _services.PriceListService.AddPosition(newItem);
+            
+            return Ok(newItem);
         }
 
         [HttpPost("create/{carId:int}")]
@@ -21,9 +30,10 @@ namespace CarRent.api.Controllers
                 return Ok("pricelist for this car already exist");
             }
 
+            //Add DtoObject
 
-            var result = new string[] { "ok it will be created", carId.ToString() };
-            return Ok(result);
+            var result = await _services.PriceListService.CreatePriceListForCarAsync(carId);
+            return CreatedAtAction(nameof(CreateCarPriceList), result);
         }
     }
 }

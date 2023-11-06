@@ -1,4 +1,5 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Models.CarRent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace CarRent.Service.Interfaces
     {
         Task<IEnumerable<PricelistItemDto>> GetPriceList(int Id, bool trackChanges);
         Task<IEnumerable<PricelistItemDto>?> GetPriceListForCar(int carId, bool trackChanges);
+        Task<PriceList> CreatePriceListForCarAsync(int carId);
         Task RemovePosition(int itemId);
         Task AddPosition(NewtPricelistItemDto item);
         Task<bool> CarPriceListExist(int carId);

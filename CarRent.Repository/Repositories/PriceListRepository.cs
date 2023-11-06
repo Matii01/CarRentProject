@@ -19,7 +19,7 @@ namespace CarRent.Repository.Repositories
 
         public IQueryable<PriceList> GetPriceListForCar(int carId, bool trackChanges)
         {
-            var priceList = FindByCondition(x => x.CarId == carId, trackChanges);
+            var priceList = FindByCondition(x => x.CarId == carId && x.IsActive == true, trackChanges);
             return priceList;
         }
     }

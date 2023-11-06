@@ -2,7 +2,6 @@
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
-using CarRent.Repository.Migrations;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -39,6 +38,18 @@ namespace CarRent.Service.Service
             return priceListItems;
         }
 
+        public async Task<PriceList> CreatePriceListForCarAsync(int carId)
+        {
+            var priceList = new PriceList 
+            { 
+                CarId = carId,
+                IsActive = true,
+            };
+            _repository.PriceList.Create(priceList);
+            await _repository.SaveAsync();
+            return priceList;
+        }
+
         public async Task AddPosition(NewtPricelistItemDto item)
         {
             var newItem = new PricelistItem
@@ -71,11 +82,15 @@ namespace CarRent.Service.Service
 
         public async Task<bool> CarPriceListExist(int carId)
         {
-            var carList = await _repository.PriceList
+            var car = await _repository.PriceList
                 .GetPriceListForCar(carId, false)
                 .SingleOrDefaultAsync();
 
-            return carList != null;
+            if(car is null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
