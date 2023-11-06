@@ -18,6 +18,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<EngineType> EngineType { get; }
         IGenericRepository<GearboxType> GearboxType { get; }
         IGenericRepository<KilometrLimit> KilometrLimit { get; }
+        IGenericRepository<PricelistItem> PricelistItem {  get; }
         Task SaveAsync();
     }
 }

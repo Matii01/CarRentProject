@@ -17,27 +17,10 @@ namespace CarRent.Repository.Repositories
         {
         }
 
-        public void AddPriceListPosition(PricelistItem item)
+        public IQueryable<PriceList> GetPriceListForCar(int carId, bool trackChanges)
         {
-            context.PricelistItems.Add(item);
-        }
-
-        public async Task<IEnumerable<PricelistItem>> GetPricelistItems(int id, bool trackChanges)
-        {
-            var lista = !trackChanges ?
-                context.PricelistItems.AsNoTracking().Where(x => x.PriceListId == id && x.IsActive == true) :
-                context.PricelistItems.Where(x => x.PriceListId == id && x.IsActive == true);
-
-            return await lista.ToListAsync();
-        }
-
-        public async Task RemovePriceListPosition(int itemId)
-        {
-            var item = await context.PricelistItems.SingleOrDefaultAsync(x => x.Id == itemId);
-            if(item != null)
-            {
-                item.IsActive = false;
-            }
+            var priceList = FindByCondition(x => x.CarId == carId, trackChanges);
+            return priceList;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace CarRent.Service.Interfaces
     {
         ICarService CarService { get; }
         ICarMakeService CarMakeService { get; }
+        IPriceListService PriceListService { get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }
@@ -20,5 +21,6 @@ namespace CarRent.Service.Interfaces
         IGenericService<AirConditioningTypeDto> AirConditioningTypeService { get; }
         IGenericService<KilometrLimitDto> KilometrLimitService { get; }
         IGenericService<GearboxTypeDto> GearboxTypeService { get; }
+        
     }
 }

@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace CarRent.Repository.Repositories
 {
+
+    // ToDo delete all ToAsync method 
     public class GenericRepository<T> : RepositoryBase<T>, IGenericRepository<T> where T : BaseDictionaryModel
     {
         public GenericRepository(CarRentContext context) : base(context)

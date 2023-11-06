@@ -9,9 +9,7 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IPriceListRepository
     {
-        Task<IEnumerable<PricelistItem>> GetPricelistItems(int id, bool trackChanges);
-        Task RemovePriceListPosition(int itemId);
-        void AddPriceListPosition(PricelistItem item);
+        IQueryable<PriceList> GetPriceListForCar(int carId, bool trackChanges);
         void Create(PriceList priceList);
         void Delete(PriceList priceList);
         /*

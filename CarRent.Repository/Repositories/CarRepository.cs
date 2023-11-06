@@ -23,10 +23,24 @@ namespace CarRent.Repository.Repositories
 
         public async Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
         {
+            //TODO można lepiej 
+
             //PagedList<CarListDtoForClient> pagedList = null;
 
             //var pagedList = await context.Cars
             //    .GetPagedListAsync(parameters);
+
+            //var newList = context.Cars.Search(parameters).Select(x => new CarListDtoForClient(
+            //     x.Id,
+            //     x.Name,
+            //     x.CarMake.Name,
+            //     x.CarImage ?? " ",
+            //     x.EngineType.Name,
+            //     x.GearBoxType.Name,
+            //     x.AirConditioningType.Name,
+            //     0
+            //     ));
+            
 
             var list = await context.Cars
              .Search(parameters)
@@ -43,7 +57,7 @@ namespace CarRent.Repository.Repositories
              .ToListAsync();
 
             var pagedList = PagedList<CarListDtoForClient>
-                .ToPagedList(list, parameters.PageNumber, parameters.PageSize);
+                .ToPagedList(list /*newList*/, parameters.PageNumber, parameters.PageSize);
 
             return pagedList;
         }
