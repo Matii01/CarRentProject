@@ -4,6 +4,7 @@ using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace CarRent.Service.Service
         {
         }
 
-        public async Task<IEnumerable<PricelistItemDto>?> GetPriceListForCar(int carId, bool trackChanges)
+        public async Task<IEnumerable<PricelistItemDto>?> GetPriceListsForCar(int carId, bool trackChanges)
         {
             var priceList = await _repository.PriceList
-                    .GetPriceListForCar(carId, trackChanges)
+                    .GetCurrentPriceList(carId, trackChanges)
                     .SingleOrDefaultAsync();
 
             if(priceList == null) 
@@ -38,16 +39,24 @@ namespace CarRent.Service.Service
             return priceListItems;
         }
 
-        public async Task<PriceList> CreatePriceListForCarAsync(int carId)
+        public async Task<PriceList> CreatePriceListForCarAsync(PriceListDto priceList)
         {
-            var priceList = new PriceList 
+            if(priceList.DateFrom >  priceList.DateTo) 
+            {
+                throw new Exception("Data From > Data To");
+            }
+
+            var newPriceList = new PriceList 
             { 
-                CarId = carId,
+                CarId = priceList.CarId,
+                DateFrom = priceList.DateFrom,
+                DateTo = priceList.DateTo,
                 IsActive = true,
             };
-            _repository.PriceList.Create(priceList);
+
+            _repository.PriceList.Create(newPriceList);
             await _repository.SaveAsync();
-            return priceList;
+            return newPriceList;
         }
 
         public async Task AddPosition(NewtPricelistItemDto item)
@@ -80,13 +89,14 @@ namespace CarRent.Service.Service
             //await _repository.SaveAsync();
         }
 
-        public async Task<bool> CarPriceListExist(int carId)
+        public async Task<bool> CarPriceListExistForThisDateTime(PriceListDto carList)
         {
+               //GetPriceListForDateTime
             var car = await _repository.PriceList
-                .GetPriceListForCar(carId, false)
-                .SingleOrDefaultAsync();
+                .GetPriceListForDateTime(carList.CarId, carList.DateFrom, carList.DateTo, false)
+                .ToListAsync();
 
-            if(car is null)
+            if(car.IsNullOrEmpty())
             {
                 return false;
             }

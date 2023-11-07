@@ -21,18 +21,22 @@ namespace CarRent.api.Controllers
         }
 
         [HttpPost("create/{carId:int}")]
-        public async Task<IActionResult> CreateCarPriceList(int carId)
+        public async Task<IActionResult> CreateCarPriceList(PriceListDto priceList)
         {
-            var carPriceList = await _services.PriceListService.CarPriceListExist(carId);
+            var exist = await _services.PriceListService
+                .CarPriceListExistForThisDateTime(priceList);
 
-            if (carPriceList)
+            if (exist)
             {
-                return Ok("pricelist for this car already exist");
+                return Ok("pricelist for this car for this DataTime already exist");
             }
-
+            //else
+            //{
+            //    return Ok("pricelist for this car will be added");
+            //}
             //Add DtoObject
 
-            var result = await _services.PriceListService.CreatePriceListForCarAsync(carId);
+            var result = await _services.PriceListService.CreatePriceListForCarAsync(priceList);
             return CreatedAtAction(nameof(CreateCarPriceList), result);
         }
     }

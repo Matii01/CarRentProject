@@ -11,11 +11,11 @@ namespace CarRent.Service.Interfaces
     public interface IPriceListService
     {
         Task<IEnumerable<PricelistItemDto>> GetPriceList(int Id, bool trackChanges);
-        Task<IEnumerable<PricelistItemDto>?> GetPriceListForCar(int carId, bool trackChanges);
-        Task<PriceList> CreatePriceListForCarAsync(int carId);
+        Task<IEnumerable<PricelistItemDto>?> GetPriceListsForCar(int carId, bool trackChanges);
+        Task<PriceList> CreatePriceListForCarAsync(PriceListDto priceList);
         Task RemovePosition(int itemId);
         Task AddPosition(NewtPricelistItemDto item);
-        Task<bool> CarPriceListExist(int carId);
+        Task<bool> CarPriceListExistForThisDateTime(PriceListDto priceList);
 
         /*
         Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);

@@ -9,7 +9,9 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IPriceListRepository
     {
-        IQueryable<PriceList> GetPriceListForCar(int carId, bool trackChanges);
+        IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges);
+        IQueryable<PriceList> GetPriceListForDateTime(int carId, DateTime from, DateTime to, bool trackChanges); 
+        IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges);
         void Create(PriceList priceList);
         void Delete(PriceList priceList);
         /*
