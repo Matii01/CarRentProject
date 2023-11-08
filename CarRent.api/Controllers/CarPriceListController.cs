@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CarRent.Service.Interfaces;
 using CarRent.data.DTO;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CarRent.api.Controllers
 {
@@ -10,6 +12,21 @@ namespace CarRent.api.Controllers
         public CarPriceListController(IServiceManager serviceManager) 
             : base(serviceManager)
         {
+        }
+
+        [HttpGet("{carId:int}")]
+        public async Task<IActionResult> GetPriceListForCar(int carId)
+        {
+            var result = await _services.PriceListService
+                .GetPriceListsForCar(carId, false);
+
+            if (result.IsNullOrEmpty()) 
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+
         }
 
         [HttpPost("addItem")]
