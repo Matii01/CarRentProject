@@ -25,29 +25,20 @@ namespace CarRent.Repository.Repositories
             return priceList;
         }
 
-        public IQueryable<PriceList> GetPriceListForDateTime(int carId, DateTime from, DateTime to, bool trackChanges)
-        {
-            var priceList = FindByCondition(
-                    x => x.CarId == carId && 
-                    x.IsActive == true &&
-                    !((from >x.DateTo && to > x.DateTo) || (from < x.DateFrom && to < x.DateFrom))
-                    , trackChanges);
-            
-            return priceList;
-        }
-
         public IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges)
         {
-            DateTime dateTime = DateTime.Now;
+            throw new NotImplementedException();
 
-            var priceList = FindByCondition(
-                    x => x.CarId == carId &&
-                    x.IsActive == true &&
-                    x.DateFrom <= dateTime &&
-                    x.DateTo >= dateTime
-                    , trackChanges);
+            //DateTime dateTime = DateTime.Now;
 
-            return priceList;
+            //var priceList = FindByCondition(
+            //        x => x.CarId == carId &&
+            //        x.IsActive == true &&
+            //        x.DateFrom <= dateTime &&
+            //        x.DateTo >= dateTime
+            //        , trackChanges);
+
+            //return priceList;
         }
     }
 }

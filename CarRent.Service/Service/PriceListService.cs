@@ -20,28 +20,42 @@ namespace CarRent.Service.Service
         {
         }
 
-        public async Task<IEnumerable<PriceListDto>?> GetPriceListsForCar(int carId, bool trackChanges)
+        public async Task<IEnumerable<PriceListDto>> GetPriceListsForCar(int carId, bool trackChanges)
         {
-            var priceList  = await _repository
-                .PriceList.GetPriceListsForCar(carId, trackChanges)
-                .Select(x => new PriceListDto(x.Id, x.CarId, x.DateFrom, x.DateTo))
+            var priceLists = await _repository.PriceList
+                .GetPriceListsForCar(carId, trackChanges)
+                .Select(x => new PriceListDto(x.Id,x.CarId,x.Name))
                 .ToListAsync();
 
-            return priceList;
+            return priceLists;
+        }
+
+        public async Task<IEnumerable<PricelistItemDto>> GetPricelistItems(int priceListId)
+        {
+            var priceListItem = await _repository.PricelistItem
+                .FindByCondition(x => x.PriceListId == priceListId && x.IsActive == true, false)
+                .Select(x => new PricelistItemDto(x.Id, x.Days, x.Price))
+                .ToListAsync();
+
+            return priceListItem;
+        }
+
+        public async Task<IEnumerable<PricelistDateDto>> GetPricelistDate(int priceListId)
+        {
+            var pricelistDate = await _repository.PricelistDate
+                .FindByCondition(x => x.PriceListId == priceListId && x.IsActive == true, false)
+                .Select(x => new PricelistDateDto(x.Id, x.PriceListId, x.DateFrom, x.DateTo))
+                .ToListAsync();
+
+            return pricelistDate;
         }
 
         public async Task<PriceList> CreatePriceListForCarAsync(PriceListDto priceList)
         {
-            if(priceList.DateFrom >  priceList.DateTo) 
+            var newPriceList = new PriceList
             {
-                throw new Exception("Data From > Data To");
-            }
-
-            var newPriceList = new PriceList 
-            { 
                 CarId = priceList.CarId,
-                DateFrom = priceList.DateFrom,
-                DateTo = priceList.DateTo,
+                Name = priceList.Name,
                 IsActive = true,
             };
 
@@ -50,7 +64,7 @@ namespace CarRent.Service.Service
             return newPriceList;
         }
 
-        public async Task AddPosition(NewtPricelistItemDto item)
+        public async Task<PricelistItem> AddPosition(NewtPricelistItemDto item)
         {
             var newItem = new PricelistItem
             {
@@ -62,36 +76,67 @@ namespace CarRent.Service.Service
 
             _repository.PricelistItem.Create(newItem);
             await _repository.SaveAsync();
+            return newItem;
         }
 
-        public async Task<IEnumerable<PricelistItemDto>> GetPriceList(int id, bool trackChanges)
+        public async Task AddCarlistDate(PricelistDateDto dateDto)
         {
-            var priceList = await _repository.PricelistItem
-                .FindByCondition(x => x.PriceListId == id && x.IsActive == true, trackChanges)
-                .Select(x => new PricelistItemDto(x.Id, x.Days, x.Price))
+            if(!await CarPriceListExistForThisDateTime(dateDto))
+            {
+                PricelistDate pricelistDate = new()
+                {
+                    PriceListId = dateDto.PriceId,
+                    DateFrom = dateDto.DateFrom,
+                    DateTo = dateDto.DateTo,
+                    IsActive = true,
+                };
+                _repository.PricelistDate.Create(pricelistDate);
+                await _repository.SaveAsync();
+            }
+            else
+            { 
+                throw new Exception("pricelist for this car for this DataTime already exist");
+            }
+        }
+
+        public async Task<bool> CarPriceListExistForThisDateTime(PricelistDateDto dateDto)
+        {
+            var result = await _repository.PricelistDate
+                .FindByCondition(
+                    x => x.PriceListId == dateDto.PriceId &&
+                    x.IsActive == true &&
+                    !((dateDto.DateFrom > x.DateTo && dateDto.DateTo > x.DateTo) ||
+                        (dateDto.DateFrom < x.DateFrom && dateDto.DateTo < x.DateFrom))
+                    , false)
                 .ToListAsync();
 
-            return priceList;
-        }
-
-        public async Task RemovePosition(int itemId)
-        {
-            //await _repository.PricelistItem.RemovePriceListPosition(itemId);
-            //await _repository.SaveAsync();
-        }
-
-        public async Task<bool> CarPriceListExistForThisDateTime(PriceListDto carList)
-        {
-               //GetPriceListForDateTime
-            var car = await _repository.PriceList
-                .GetPriceListForDateTime(carList.CarId, carList.DateFrom, carList.DateTo, false)
-                .ToListAsync();
-
-            if(car.IsNullOrEmpty())
+            if (result.IsNullOrEmpty())
             {
                 return false;
             }
             return true;
+        }
+
+        public async Task RemovePosition(int itemId)
+        {
+            var item = await 
+                _repository.PricelistItem
+                .FindByCondition(x => x.Id == itemId, true)
+                .SingleOrDefaultAsync();
+            
+            item.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        public async Task RemovePriceListDate(int itemId)
+        {
+            var item = await
+               _repository.PricelistDate
+               .FindByCondition(x => x.Id == itemId, true)
+               .SingleOrDefaultAsync();
+
+            item.IsActive = false;
+            await _repository.SaveAsync();
         }
     }
 }

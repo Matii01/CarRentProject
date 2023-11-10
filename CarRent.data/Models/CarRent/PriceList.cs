@@ -11,9 +11,8 @@ namespace CarRent.data.Models.CarRent
     {
         [Key]
         public int Id { get; set; }
+        public string? Name { get; set; }
         public int CarId { get; set; }
         public Car Car { get; set; } = null!;
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
     }
 }

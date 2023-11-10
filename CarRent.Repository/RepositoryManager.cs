@@ -18,6 +18,7 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<GearboxType>> _gearboxTypeRepository;
         private readonly Lazy<IGenericRepository<KilometrLimit>> _kilometrLimitRepository;
         private readonly Lazy<IGenericRepository<PricelistItem>> _priceListItemRepository;
+        private readonly Lazy<IGenericRepository<PricelistDate>> _pricelistDateRepository;
 
 
         public RepositoryManager(CarRentContext context)
@@ -52,6 +53,9 @@ namespace CarRent.Repository
 
             _priceListItemRepository = new Lazy<IGenericRepository<PricelistItem>>(() =>
                 new GenericRepository<PricelistItem>(_context));
+
+            _pricelistDateRepository = new Lazy<IGenericRepository<PricelistDate>>(() =>
+                new GenericRepository<PricelistDate>(_context));
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -64,6 +68,7 @@ namespace CarRent.Repository
         public IGenericRepository<GearboxType> GearboxType => _gearboxTypeRepository.Value;
         public IGenericRepository<KilometrLimit> KilometrLimit => _kilometrLimitRepository.Value;
         public IGenericRepository<PricelistItem> PricelistItem => _priceListItemRepository.Value;
+        public IGenericRepository<PricelistDate> PricelistDate => _pricelistDateRepository.Value;
 
         public async Task SaveAsync()
         {

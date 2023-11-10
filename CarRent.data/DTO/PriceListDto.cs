@@ -9,7 +9,8 @@ namespace CarRent.data.DTO
     public record PricelistItemDto(int Id,int Days, decimal Price);
     public record NewtPricelistItemDto(int PriceListId, int Days, decimal Price);
 
-    public record PriceListDto(int Id, int CarId, DateTime DateFrom, DateTime DateTo);
+    public record PriceListDto(int Id, int CarId, string? Name);
+    public record PricelistDateDto(int Id, int PriceId, DateTime DateFrom, DateTime DateTo);
 
     /*
     int Id { get; set; }
