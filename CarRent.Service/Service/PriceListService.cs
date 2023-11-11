@@ -34,7 +34,7 @@ namespace CarRent.Service.Service
         {
             var priceListItem = await _repository.PricelistItem
                 .FindByCondition(x => x.PriceListId == priceListId && x.IsActive == true, false)
-                .Select(x => new PricelistItemDto(x.Id, x.Days, x.Price))
+                .Select(x => new PricelistItemDto(x.Id, x.Days, x.Price, x.OverlimitFee))
                 .ToListAsync();
 
             return priceListItem;
@@ -64,6 +64,17 @@ namespace CarRent.Service.Service
             return newPriceList;
         }
 
+        public async Task<PriceList> UpdatePriceListAsync(PriceListDto priceList)
+        {
+            var toUpdate = await _repository.PriceList
+                .GetPriceListsById(priceList.Id, true)
+                .SingleOrDefaultAsync();
+
+            toUpdate.Name = priceList.Name;
+            await _repository.SaveAsync();
+            return toUpdate;
+        }
+
         public async Task<PricelistItem> AddPosition(NewtPricelistItemDto item)
         {
             var newItem = new PricelistItem
@@ -71,6 +82,7 @@ namespace CarRent.Service.Service
                 PriceListId = item.PriceListId,
                 Days = item.Days,
                 Price = item.Price,
+                OverlimitFee = item.OverlimitFee,
                 IsActive = true
             };
 
@@ -138,5 +150,7 @@ namespace CarRent.Service.Service
             item.IsActive = false;
             await _repository.SaveAsync();
         }
+
+     
     }
 }

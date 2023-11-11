@@ -18,8 +18,8 @@
 
 .table th,
 .table td {
-  text-align: left;
-  padding: 8px;
+  text-align: center;
+  padding: 2px;
 }
 
 .table tr:nth-child(even) {

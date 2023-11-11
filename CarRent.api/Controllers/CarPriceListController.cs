@@ -9,7 +9,7 @@ namespace CarRent.api.Controllers
     [Route("[controller]")]
     public class CarPriceListController : BaseController
     {
-        public CarPriceListController(IServiceManager serviceManager) 
+        public CarPriceListController(IServiceManager serviceManager)
             : base(serviceManager)
         {
         }
@@ -20,11 +20,6 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .GetPriceListsForCar(carId, false);
 
-            if (result.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
             return Ok(result);
         }
 
@@ -33,11 +28,6 @@ namespace CarRent.api.Controllers
         {
             var result = await _services.PriceListService
                 .GetPricelistDate(priceListId);
-
-            if (result.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
 
             return Ok(result);
         }
@@ -62,7 +52,7 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .AddPosition(newItem);
 
-            
+
             return Ok(result);
         }
 
@@ -85,6 +75,21 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .CreatePriceListForCarAsync(priceList);
 
+            return Ok(result);
+        }
+
+        [HttpDelete("deletePricelistDate/{id:int}")]
+        public async Task<IActionResult> DeletePricelistDate(int id)
+        {
+            return NoContent();
+        }
+
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdatePricelist(PriceListDto priceList)
+        {
+            var result = await _services.PriceListService
+                .UpdatePriceListAsync(priceList);
+            
             return Ok(result);
         }
     }

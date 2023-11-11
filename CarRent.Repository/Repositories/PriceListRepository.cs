@@ -1,4 +1,5 @@
-﻿using CarRent.data.Models.CarRent;
+﻿using CarRent.data.Models;
+using CarRent.data.Models.CarRent;
 using CarRent.Repository.Abstract;
 using CarRent.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,12 @@ namespace CarRent.Repository.Repositories
         public IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges)
         {
             var priceList = FindByCondition(x => x.CarId == carId && x.IsActive == true, trackChanges);
+            return priceList;
+        }
+
+        public IQueryable<PriceList> GetPriceListsById(int pricelistId, bool trackChanges)
+        {
+            var priceList = FindByCondition(x => x.Id == pricelistId && x.IsActive == true, trackChanges);
             return priceList;
         }
 

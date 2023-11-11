@@ -15,6 +15,7 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<PricelistItemDto>> GetPricelistItems(int priceListId);
         Task<IEnumerable<PricelistDateDto>> GetPricelistDate(int priceListId);
         Task<PriceList> CreatePriceListForCarAsync(PriceListDto priceList);
+        Task<PriceList> UpdatePriceListAsync(PriceListDto priceList);
         Task RemovePosition(int itemId);
         Task RemovePriceListDate(int itemId);
         Task<PricelistItem> AddPosition(NewtPricelistItemDto item);

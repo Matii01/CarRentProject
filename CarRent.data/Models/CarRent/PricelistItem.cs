@@ -26,6 +26,10 @@ namespace CarRent.data.Models.CarRent
         [Precision(18, 2)]
         public decimal Price { get; set; }
 
+        [Range(0, int.MaxValue)]
+        [Precision(18, 2)]
+        public decimal OverlimitFee { get;set; }
+
         [NotMapped]
         public override string SortBy { get; set; } = "Id";
     }
