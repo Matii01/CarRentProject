@@ -1,10 +1,12 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import AddNewEvent from "../../components/CalendarEvent/AddNewEvent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function CarEventCalendar() {
   const [showAddEvent, setShowAddEvent] = useState(false);
+
+  useEffect(() => {}, []);
   const handleClick = () => {
     console.log("click");
   };

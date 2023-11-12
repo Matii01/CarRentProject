@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRent.data.Models.CarRent
+namespace CarRent.data.Models.User
 {
-    public class CalendarEvent
+    public class Address
     {
-
     }
 }

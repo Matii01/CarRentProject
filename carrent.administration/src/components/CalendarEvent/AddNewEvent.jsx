@@ -61,13 +61,11 @@ function AddNewEvent({ onCancel }) {
               <Card.Title as="h5">Wybierz</Card.Title>
             </Col>
             <Col>
+              <Button className="me-2" size="sm" onClick={setDefaultView}>
+                Back
+              </Button>
               <Button size="sm" onClick={handleClik}>
                 Anuluj
-              </Button>
-            </Col>
-            <Col>
-              <Button size="sm" onClick={setDefaultView}>
-                Back
               </Button>
             </Col>
           </Row>
