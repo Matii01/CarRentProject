@@ -17,6 +17,9 @@ const fetchData = async (url, options = {}) => {
     if (response.status === 201) {
       return 201;
     }
+    if (response.status === 204) {
+      return 204;
+    }
     const data = await response.json();
     return data;
   } catch (error) {
