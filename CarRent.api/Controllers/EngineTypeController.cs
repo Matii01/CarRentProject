@@ -50,9 +50,11 @@ namespace CarRent.api.Controllers
         }
 
         [HttpDelete("delete")]
-        public Task<IActionResult> DeleteEngineType(int id)
+        public async Task<IActionResult> DeleteEngineType(int id)
         {
-            throw new NotImplementedException();
+            //var engineType = await _services.EngineTypeService.GetAsync(id, true);
+            await _services.EngineTypeService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

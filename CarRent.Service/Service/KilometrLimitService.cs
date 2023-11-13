@@ -57,5 +57,13 @@ namespace CarRent.Service.Service
 
             await _repository.SaveAsync();
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            var engineType = await _repository.KilometrLimit.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            engineType.IsActive = false;
+
+            await _repository.SaveAsync();
+        }
     }
 }

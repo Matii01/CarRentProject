@@ -45,6 +45,11 @@ namespace CarRent.Repository.Repositories
         {
             return await FindByCondition(x => x.Id == id, trackChanges).SingleOrDefaultAsync();
         }
+
+        //public async Task DeleteAsync(int id)
+        //{
+        //
+        //}
     }
 }
 

@@ -34,7 +34,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Dodaj", path: "/cars/add" },
     { name: "Silniki", path: "/cars/engines" },
     { name: "Kalendarz", path: "/cars/calendar" },
-    { name: "Typy", path: "" },
+    { name: "Typy", path: "/cars/types" },
     { name: "Klimatyzacje", path: "" },
     { name: "Limity kilometrów", path: "" },
   ];

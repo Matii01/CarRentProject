@@ -35,6 +35,7 @@ import Calendar from "./pages/cars/Calendar";
 import CarDetails from "./pages/cars/CarDetails";
 import CarPriceList from "./pages/cars/CarPriceList";
 import CarEventCalendar from "./pages/cars/CarEventCalendar";
+import CarTypes from "./pages/cars/CarTypes";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "cars/engines",
         element: <Engines />,
+      },
+      {
+        path: "cars/types",
+        element: <CarTypes />,
       },
       {
         path: "cars/calendar",

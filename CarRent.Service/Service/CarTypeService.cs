@@ -61,9 +61,20 @@ namespace CarRent.Service.Service
             return catTypeDto;
         }
 
-        public  Task UpdateAsync(int id, CarTypeDto carMake, bool trackChanges)
+        public async Task UpdateAsync(int id, CarTypeDto carMake, bool trackChanges)
         {
-            throw new NotImplementedException();
+            var carDrive = await _repository.CarType.GetAsync(id, trackChanges) ?? throw new ArgumentException("CarDrive not found");
+            carDrive.Name = carMake.Name;
+
+            await _repository.SaveAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var engineType = await _repository.CarType.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            engineType.IsActive = false;
+
+            await _repository.SaveAsync();
         }
     }
 }

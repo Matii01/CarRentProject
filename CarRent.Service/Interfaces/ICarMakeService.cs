@@ -13,6 +13,7 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<CarMakeDto>> GetAllActiveCarMakesAsync(bool trackChanges);
         Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges);
         Task<CarMakeDto> CreateCarMakeAsync(CarMakeDto carMake);
+        Task DeleteAsync(int id);
         Task UpdateCarMakeAsync(int id, CarMakeDto carMake, bool trackChanges);
     }
 }

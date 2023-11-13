@@ -18,8 +18,8 @@ namespace CarRent.api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarTypes()
         {
-            var carTypes = await _services.CarTypeService.GetAllAsync(false); 
-
+            //var carTypes = await _services.CarTypeService.GetAllAsync(false); 
+            var carTypes = await _services.CarTypeService.GetAllActiveAsync(false); 
             return Ok(carTypes);
         }
 
@@ -28,22 +28,23 @@ namespace CarRent.api.Controllers
         {
             await _services.CarTypeService.CreateAsync(carType);
 
-            return Ok();
+            return Ok(carType);
         }
 
-        [HttpPut]
+        
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarTypes(int id, [FromBody] CarTypeDto carType)
         {
-            await _services.CarTypeService.UpdateAsync(id, carType, false);
+            await _services.CarTypeService.UpdateAsync(id, carType, true);
 
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCarTypes(int id)
         {
-            //return NoContent();
-            throw new NotImplementedException();
+            await _services.CarTypeService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

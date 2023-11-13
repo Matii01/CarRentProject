@@ -7,5 +7,6 @@
         Task<T> GetAsync(int id, bool trackChanges);
         Task<T> CreateAsync(T type);
         Task UpdateAsync(int id, T newValue, bool trackChanges);
+        Task DeleteAsync(int id);
     }
 }
