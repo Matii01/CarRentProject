@@ -50,10 +50,11 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("delete")]
-        public Task<IActionResult> DeleteCarDrive(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteCarDrive(int id)
         {
-            throw new NotImplementedException();
+            await _services.CarDriveService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

@@ -33,10 +33,11 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Samochody", path: "/cars" },
     { name: "Dodaj", path: "/cars/add" },
     { name: "Silniki", path: "/cars/engines" },
-    { name: "Kalendarz", path: "/cars/calendar" },
     { name: "Typy", path: "/cars/types" },
+    { name: "Typy napędu", path: "/cars/cardrives" },
     { name: "Klimatyzacje", path: "" },
     { name: "Limity kilometrów", path: "" },
+    { name: "Kalendarz", path: "/cars/calendar" },
   ];
 
   const usersPages = [
