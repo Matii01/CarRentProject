@@ -1,11 +1,42 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
-function EditCarMake({ editMake, onCancel }) {
+function EditCarMake({ editMake, onCancel, updateView }) {
+  const [editedMake, setEditedMake] = useState(editMake);
+
+  useEffect(() => {
+    setEditedMake(editMake);
+  }, [editMake]);
+
   const onSubmit = (event) => {
     event.preventDefault();
+    console.log(editedMake);
+    updateCarMake(editedMake);
   };
 
-  const handleChange = () => {};
+  const updateCarMake = () => {
+    axios
+      .put(
+        `https://localhost:7091/carmake/update/${editedMake.id}`,
+        JSON.stringify(editedMake),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        updateView(editedMake);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleChange = (event) => {
+    const { value, name } = event.target;
+    setEditedMake((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
     <Card className="p-2">
@@ -36,7 +67,7 @@ function EditCarMake({ editMake, onCancel }) {
             <Form.Control
               type="text"
               name="name"
-              value={editMake.name}
+              value={editedMake.name}
               onChange={handleChange}
             />
           </Form.Group>
@@ -45,7 +76,7 @@ function EditCarMake({ editMake, onCancel }) {
             <Form.Control
               type="text"
               name="description"
-              value={editMake.description ? editMake.description : ""}
+              value={editedMake.description ? editedMake.description : ""}
               onChange={handleChange}
             />
           </Form.Group>

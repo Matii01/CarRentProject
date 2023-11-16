@@ -1,7 +1,8 @@
+import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
-function AddCarMake() {
+function AddCarMake({ onAdd }) {
   const [newCarMake, setNewCarMake] = useState({ name: "", description: "" });
   const onSubmit = (event) => {
     event.preventDefault();
@@ -10,6 +11,21 @@ function AddCarMake() {
 
   const AddNewCarMake = () => {
     console.log(newCarMake);
+    axios
+      .post(
+        `https://localhost:7091/carmake/create`,
+        JSON.stringify(newCarMake),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        onAdd(data);
+      })
+      .catch((error) => console.log(error));
   };
 
   const handleCancel = () => {

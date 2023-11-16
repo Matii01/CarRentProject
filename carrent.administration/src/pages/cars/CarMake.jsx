@@ -43,6 +43,24 @@ function CarMakes() {
     event.preventDefault();
   };
 
+  const addElement = (carMake) => {
+    const newMakes = [...makes, { ...carMake }];
+    setMake(newMakes);
+  };
+
+  const updateView = (carMake) => {
+    const editedMakes = makes.map((x) => {
+      if (x.id === carMake.id) {
+        x.name = carMake.name;
+        x.description = carMake.description;
+      }
+      return x;
+    });
+
+    setMake(editedMakes);
+    setIsEditMode(false);
+  };
+
   return (
     <>
       <Container fluid>
@@ -112,9 +130,13 @@ function CarMakes() {
           </Col>
           <Col md="6">
             {isEditMode && selectedMake && (
-              <EditCarMake editMake={selectedMake} onCancel={onCancel} />
+              <EditCarMake
+                editMake={selectedMake}
+                onCancel={onCancel}
+                updateView={updateView}
+              />
             )}
-            {!isEditMode && <AddCarMake />}
+            {!isEditMode && <AddCarMake onAdd={addElement} />}
           </Col>
         </Row>
       </Container>
