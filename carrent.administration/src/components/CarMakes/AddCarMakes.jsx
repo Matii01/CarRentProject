@@ -22,8 +22,7 @@ function AddCarMake({ onAdd }) {
         }
       )
       .then((data) => {
-        console.log(data);
-        onAdd(data);
+        onAdd(data.data);
       })
       .catch((error) => console.log(error));
   };

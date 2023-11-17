@@ -8,6 +8,8 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [searchTerm, setSerachTerm] = useState("");
   const [selectedMake, setSelectedMake] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -17,6 +19,7 @@ function CarMakes() {
       .then((data) => {
         console.log(data);
         setMake(data.data);
+        setFilteredList(data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -34,18 +37,25 @@ function CarMakes() {
 
   const handleChange = (event) => {
     const { value } = event.target;
-  };
-  const handleDelete = (id) => {
-    console.log("delete");
+    setSerachTerm(value);
   };
 
   const handleSearch = (event) => {
     event.preventDefault();
+    const filtered = makes.filter((e) =>
+      e.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredList(filtered);
   };
 
   const addElement = (carMake) => {
     const newMakes = [...makes, { ...carMake }];
     setMake(newMakes);
+    setFilteredList(newMakes);
+  };
+
+  const handleDelete = (id) => {
+    deleteCarMake(id);
   };
 
   const updateView = (carMake) => {
@@ -59,6 +69,27 @@ function CarMakes() {
 
     setMake(editedMakes);
     setIsEditMode(false);
+  };
+
+  const filterList = (id) => {
+    console.log("id === " + id);
+    const filteredMap = makes.filter((x) => x.id !== id);
+    setMake(filteredMap);
+    setFilteredList(filteredMap);
+  };
+
+  const deleteCarMake = (id) => {
+    axios
+      .delete(`https://localhost:7091/carmake/${id}`)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 204) {
+          filterList(id);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -86,6 +117,7 @@ function CarMakes() {
                         placeholder="Search"
                         className="me-2"
                         aria-label="Search"
+                        value={searchTerm}
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
@@ -106,7 +138,7 @@ function CarMakes() {
                     </tr>
                   </thead>
                   <tbody>
-                    {makes.map((type) => (
+                    {filteredList.map((type) => (
                       <tr
                         key={type.id}
                         onDoubleClick={() => onDoubleClick(type)}
@@ -139,71 +171,18 @@ function CarMakes() {
             {!isEditMode && <AddCarMake onAdd={addElement} />}
           </Col>
         </Row>
+        <Row>
+          <CarInfoTable
+            thead={["Id", "Model", "Opis", "Actions"]}
+            items={makes}
+            item={["id", "name", "description"]}
+            searchTerm={searchTerm}
+            onDoubleClick={onDoubleClick}
+          />
+        </Row>
       </Container>
     </>
   );
 }
 
 export default CarMakes;
-
-/*
-<Col md="6">
-        <Card className="p-2">
-          <Card.Header>
-            <Card.Title as="h5">
-              Rodzaje napędu - {state.isEditMode ? "edycja" : "dodawanie"}
-            </Card.Title>
-          </Card.Header>
-          <Card.Body className="table-full-width table-responsive px-0">
-            <Form onSubmit={onSubmit}>
-              <Row>
-                <Col>
-                  <Button
-                    type="submit"
-                    className="m-2"
-                    variant="primary"
-                    size="sm"
-                  >
-                    Zapisz
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="secondary"
-                    size="sm"
-                    onClick={onCancel}
-                  >
-                    Anuluj
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-            <Form className="m-2">
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Nazwa</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={state.newCarDrive.name}
-                  onChange={handleDriveChange}
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput2"
-              >
-                <Form.Label>Opis</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="description"
-                  value={state.newCarDrive.description}
-                  onChange={handleDriveChange}
-                />
-              </Form.Group>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-*/

@@ -37,7 +37,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetActiveCarMakes()
         {
             // ToDo 
-            var list = await _services.CarMakeService.GetAllCarMakesAsync(false);
+            var list = await _services.CarMakeService.GetAllActiveCarMakesAsync(false);
 
             return Ok(list);
         }
@@ -46,9 +46,10 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateCarMake([FromBody] CarMakeDto carMake)
         {
             var createdCarMake = await _services.CarMakeService.CreateCarMakeAsync(carMake);
-           
 
-            return CreatedAtAction(nameof(CreateCarMake), new {Id = createdCarMake.Id}, createdCarMake);
+            var toReturn = new CarMakeDto(createdCarMake.Id, createdCarMake.Name, createdCarMake.Description);
+            
+            return CreatedAtAction(nameof(CreateCarMake), toReturn);
         }
 
         [HttpPut("update/{id:int}")]
@@ -59,12 +60,11 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCarMake(int id)
         {
-
-            //return NoContent();
-            throw new NotImplementedException();
+            await _services.CarMakeService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }
