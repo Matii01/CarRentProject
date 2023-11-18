@@ -11,6 +11,7 @@ namespace CarRent.Service.Interfaces
     public interface IPriceListService
     {
         //Task<IEnumerable<PricelistItemDto>> GetPriceList(int Id, bool trackChanges);
+        Task<IEnumerable<PricelistItemDto>> GetCarPricelistForClient(int carId);
         Task<IEnumerable<PriceListDto>> GetPriceListsForCar(int carId, bool trackChanges);
         Task<IEnumerable<PricelistItemDto>> GetPricelistItems(int priceListId);
         Task<IEnumerable<PricelistDateDto>> GetPricelistDate(int priceListId);

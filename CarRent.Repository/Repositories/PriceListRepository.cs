@@ -20,6 +20,19 @@ namespace CarRent.Repository.Repositories
         {
         }
 
+        public IQueryable<PriceList> GetCarPriceListForClient(int carId)
+        {
+            var currentData =  DateTime.Now;
+            var pricelist =  context.PricesList
+                .Include(x => x.PricelistDates)
+                .Include(x=>x.PricelistItems)
+                .Where(x =>x.CarId == carId )
+                .Where(x => x.PricelistDates
+                    .Any(x => x.DateFrom<=currentData && x.DateTo >= currentData));
+
+            return pricelist;
+        }
+
         public IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges)
         {
             var priceList = FindByCondition(x => x.CarId == carId && x.IsActive == true, trackChanges);

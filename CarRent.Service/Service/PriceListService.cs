@@ -20,6 +20,19 @@ namespace CarRent.Service.Service
         {
         }
 
+        public async Task<IEnumerable<PricelistItemDto>> GetCarPricelistForClient(int carId)
+        {
+            var pricelist = await _repository.PriceList
+                .GetCarPriceListForClient(carId)
+                .SingleOrDefaultAsync();
+
+            if (pricelist == null)
+            {
+                return null;
+            }
+            return await GetPricelistItems(pricelist.Id);
+        }
+
         public async Task<IEnumerable<PriceListDto>> GetPriceListsForCar(int carId, bool trackChanges)
         {
             var priceLists = await _repository.PriceList

@@ -24,36 +24,34 @@ namespace CarRent.api.Controllers
         {
             newUser.Roles = new string[] { "User" };
 
-            await Console.Out.WriteLineAsync("Try to add new user ");
-            await Console.Out.WriteLineAsync(newUser.FirstName.ToString());
-            await Console.Out.WriteLineAsync(newUser.LastName.ToString());
-            await Console.Out.WriteLineAsync(newUser.UserName.ToString());
-            await Console.Out.WriteLineAsync(newUser.Password.ToString());
-            await Console.Out.WriteLineAsync(newUser.Email.ToString());
-            await Console.Out.WriteLineAsync(newUser.PhoneNumber.ToString());
+            //await Console.Out.WriteLineAsync("Try to add new user ");
+            //await Console.Out.WriteLineAsync(newUser.FirstName.ToString());
+            //await Console.Out.WriteLineAsync(newUser.LastName.ToString());
+            //await Console.Out.WriteLineAsync(newUser.UserName.ToString());
+            //await Console.Out.WriteLineAsync(newUser.Password.ToString());
+            //await Console.Out.WriteLineAsync(newUser.Email.ToString());
+            //await Console.Out.WriteLineAsync(newUser.PhoneNumber.ToString());
 
-            foreach(var role in newUser.Roles)
-            {
-                await Console.Out.WriteLineAsync(role);
-            }
-
-
-            //await Console.Out.WriteLineAsync(newUser.Roles.ToString());
-            
-            //var result = await _authenticationService.RegisterUser(newUser);
-            //if(!result.Succeeded)
+            //foreach(var role in newUser.Roles)
             //{
-            //    foreach(var error in result.Errors)
-            //    {
-            //        ModelState.TryAddModelError(error.Code, error.Description);
-            //    }
-            //    return BadRequest(ModelState);
+            //    await Console.Out.WriteLineAsync(role);
             //}
+            //await Console.Out.WriteLineAsync(newUser.Roles.ToString());
+
+            var result = await _authenticationService.RegisterUser(newUser);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
             return StatusCode(201);
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpPost("registerNewAdmin")]
+        [HttpPost("registerNewWorker")]
         public async Task<IActionResult> RegisterNewWorker([FromBody] UserForRegistrationDto newWorker)
         {
             return StatusCode(201);

@@ -116,8 +116,18 @@ namespace CarRent.Service.Helper
 
         public static CarDetailsDtoForClient MapCarToCarDetailsDtoForClient(Car car)
         {
-            throw new NotImplementedException();
-            // return new CarDetailsDtoForClient(car.Name);
+            return new CarDetailsDtoForClient
+            (
+                car.Id,
+                car.Name,
+                car.Description ?? "",
+                car.CarMake.Name,
+                car.CarImage ?? "",
+                car.EngineType.Name, 
+                car.GearBoxType.Name,
+                car.AirConditioningType.Name,
+                0
+            );
         }
 
         public static User MapUserForRegistrationDtoToUser(UserForRegistrationDto userForRegistration)

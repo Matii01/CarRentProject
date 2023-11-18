@@ -51,6 +51,17 @@ namespace CarRent.api.Controllers
             return Ok(car);
         }
 
+        [HttpGet("details/{id:int}")]
+        public async Task<IActionResult> GetCarDetailsForClient(int id)
+        {
+            var carDetails = await _services.CarService.GetCarDetailsForClientAsync(id);
+            if(carDetails is null)
+            {
+                return NotFound();
+            }
+            return Ok(carDetails);
+        }
+
         [HttpGet("CarSortingInfo")]
         public async Task<IActionResult> GetInfoForCarSorting()
         {

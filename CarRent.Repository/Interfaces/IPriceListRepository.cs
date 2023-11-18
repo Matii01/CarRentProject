@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IPriceListRepository
     {
+        IQueryable<PriceList> GetCarPriceListForClient(int carId);
         IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges);
         IQueryable<PriceList> GetPriceListsById(int pricelistId, bool trackChanges);
         IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges);

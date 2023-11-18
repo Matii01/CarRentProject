@@ -14,6 +14,15 @@ namespace CarRent.api.Controllers
         {
         }
 
+        [HttpGet("{carId:int}/carPricelist")]
+        public async Task<IActionResult> GetCarPriceListsForClient(int carId)
+        {
+            var result = await _services.PriceListService
+                .GetCarPricelistForClient(carId);
+
+            return Ok(result);
+        }
+
         [HttpGet("{carId:int}/PriceList")]
         public async Task<IActionResult> GetPriceListsForCar(int carId)
         {

@@ -12,8 +12,12 @@ namespace CarRent.data.Models.CarRent
         [Key]
         public int Id { get; set; }
         public int CarId { get; set; }
-        public Car Car { get; set; }
-        public string? Description { get; set; }
+        public Car Car { get; set; } = null!;
+
+        public Guid UserId { get; set; }
+        public User.User Worker { get; set; } = null!;
+
+        public string Description { get; set; } = null!;
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
         public decimal TotalCost { get; set; }

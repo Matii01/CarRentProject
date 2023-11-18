@@ -14,5 +14,7 @@ namespace CarRent.data.Models.CarRent
         public string? Name { get; set; }
         public int CarId { get; set; }
         public Car Car { get; set; } = null!;
+        public ICollection<PricelistDate>? PricelistDates { get;} 
+        public ICollection<PricelistItem>? PricelistItems { get;}
     }
 }

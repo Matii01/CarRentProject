@@ -95,6 +95,10 @@ namespace CarRent.Repository.Repositories
         public async Task<Car> GetCarForClientAsync(int id)
         {
             var car = await FindByCondition(x => x.Id == id, false)
+                .Include(x => x.CarMake)
+                .Include(x => x.EngineType)
+                .Include(x => x.GearBoxType)
+                .Include(x => x.AirConditioningType)
                 .SingleOrDefaultAsync();
             
             return car;
