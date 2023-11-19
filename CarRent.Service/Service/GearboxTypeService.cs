@@ -38,7 +38,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<GearboxTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var gearbox = await _repository.GearboxType.GetAllAsync(trackChanges);
+            var gearbox = await _repository.GearboxType.GetAllAsync(trackChanges, "Name");
 
             var gearboxDto = gearbox.Select(_mapper.Map<GearboxTypeDto>).ToList();
             return gearboxDto;

@@ -38,7 +38,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<KilometrLimitDto>> GetAllAsync(bool trackChanges)
         {
-            var kilometrLimit = await _repository.KilometrLimit.GetAllAsync(trackChanges);
+            var kilometrLimit = await _repository.KilometrLimit.GetAllAsync(trackChanges, "LimitValue");
 
             var kilometrLimitDto = kilometrLimit.Select(_mapper.Map<KilometrLimitDto>).ToList();
             return kilometrLimitDto;

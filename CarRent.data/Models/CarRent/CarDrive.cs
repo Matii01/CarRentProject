@@ -15,8 +15,6 @@ namespace CarRent.data.Models.CarRent
 
         [MaxLength(64)]
         public string? Description { get; set; }
-
-        [NotMapped]
-        public override string SortBy { get; set; } = "Name";
+       
     }
 }

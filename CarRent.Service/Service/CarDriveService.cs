@@ -42,7 +42,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarDriveDto>> GetAllAsync(bool trackChanges)
         {
-            var carDrives = await _repository.CarDrive.GetAllAsync(trackChanges);
+            var carDrives = await _repository.CarDrive.GetAllAsync(trackChanges, "Name");
 
             var carDrivesDto = carDrives.Select(_mapper.Map<CarDriveDto>).ToList();
             return carDrivesDto;

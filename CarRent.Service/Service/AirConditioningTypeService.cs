@@ -37,7 +37,7 @@ namespace CarRent.Service.Service
         }
         public async Task<IEnumerable<AirConditioningTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var airCondition = await _repository.AirConditioningType.GetAllAsync(trackChanges);
+            var airCondition = await _repository.AirConditioningType.GetAllAsync(trackChanges, "Name");
 
             var airConditionDto = airCondition.Select(_mapper.Map<AirConditioningTypeDto>).ToList();
             return airConditionDto;

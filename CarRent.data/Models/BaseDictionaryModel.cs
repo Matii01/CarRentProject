@@ -9,6 +9,5 @@ namespace CarRent.data.Models
     public abstract class BaseDictionaryModel : BaseModel
     {
         public abstract int Id { get; set; }
-        public abstract string SortBy { get; set; }
     }
 }

@@ -21,12 +21,10 @@ namespace CarRent.Repository.Repositories
         {
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges)
+        public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges, string sortByProperty)
         {
             var query = All(trackChanges);
-
            
-            var sortByProperty = (Activator.CreateInstance<T>()).SortBy;
             
             if (!string.IsNullOrEmpty(sortByProperty) && typeof(T).GetProperty(sortByProperty) != null)
             {

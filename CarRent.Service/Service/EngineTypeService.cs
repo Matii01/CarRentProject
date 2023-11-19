@@ -33,7 +33,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<EngineTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var engineTypes = await _repository.EngineType.GetAllAsync(trackChanges);
+            var engineTypes = await _repository.EngineType.GetAllAsync(trackChanges, "Name");
 
             var engineTypesDto = engineTypes.Select(_mapper.Map<EngineTypeDto>).ToList();
             return engineTypesDto;

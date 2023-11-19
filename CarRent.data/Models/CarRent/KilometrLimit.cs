@@ -18,7 +18,5 @@ namespace CarRent.data.Models.CarRent
         [Precision(18, 2)]
         public decimal LimitValue { get; set; }
 
-        [NotMapped]
-        public override string SortBy { get; set; } = "LimitValue";
     }
 }

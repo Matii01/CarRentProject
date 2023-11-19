@@ -21,7 +21,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllCarMakesAsync(bool trackChanges)
         {
-            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges);
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name");
 
             var carMakesDto = carMakes
                 .Select(x => new CarMakeDto(x.Id, x.Name, x.Description))
@@ -31,7 +31,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllActiveCarMakesAsync(bool trackChanges)
         {
-            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges);
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name");
 
             var carMakesDto = carMakes
                 .Where(x => x.IsActive == true)

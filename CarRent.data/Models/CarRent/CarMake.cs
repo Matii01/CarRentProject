@@ -13,7 +13,5 @@ namespace CarRent.data.Models.CarRent
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 
-        [NotMapped]
-        public override string SortBy { get; set; } = "Name";
     }
 }

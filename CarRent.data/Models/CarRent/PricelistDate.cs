@@ -18,7 +18,5 @@ namespace CarRent.data.Models.CarRent
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
 
-        [NotMapped]
-        public override string SortBy { get; set; } = "Id";
     }
 }
