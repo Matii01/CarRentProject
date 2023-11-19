@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.Models.CarRent
 {
-    public class OrdererDetails : BaseDictionaryModel
+    public class ClientDetails : BaseDictionaryModel
     {
         [Key]
         public override int Id { get; set; }

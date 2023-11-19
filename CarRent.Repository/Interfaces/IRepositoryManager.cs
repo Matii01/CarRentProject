@@ -20,6 +20,10 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<KilometrLimit> KilometrLimit { get; }
         IGenericRepository<PricelistItem> PricelistItem {  get; }
         IGenericRepository<PricelistDate> PricelistDate { get; }
+
+        // Rental 
+        IGenericRepository<Rental> Rental { get; }
+
         Task SaveAsync();
     }
 }
