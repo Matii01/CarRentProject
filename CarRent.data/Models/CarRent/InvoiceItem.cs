@@ -35,7 +35,7 @@ namespace CarRent.data.Models.CarRent
         [Precision(18, 2)]
         [Range(0, double.MaxValue)]
         public decimal VATValue { get; set; }
-        public int RentalId { get; set; }
-        public Rental Rental { get; set; } 
+        public int RentalId { get;set; }
+        public Rental? Rental { get; set; } 
     }
 }

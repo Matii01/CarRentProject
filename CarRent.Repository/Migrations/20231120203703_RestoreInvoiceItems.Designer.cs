@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20231120203703_RestoreInvoiceItems")]
+    partial class RestoreInvoiceItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -430,9 +433,6 @@ namespace CarRent.Repository.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("RentalId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("VAT")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -444,9 +444,6 @@ namespace CarRent.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
-
-                    b.HasIndex("RentalId")
-                        .IsUnique();
 
                     b.ToTable("InvoicesItems");
                 });
@@ -723,19 +720,19 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "67e2c7b7-4779-46bc-bf31-0c8a3f20fec8",
+                            Id = "f7dac01e-edfc-4b8b-87af-1043ff2cc235",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "aa336f36-bcf1-4a5c-8ade-b0c5a41eb9f1",
+                            Id = "5292d8dc-b8e9-40e0-a218-8487b7bdeed2",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "0edf4df3-d754-4d88-8db9-968ec17d7c6e",
+                            Id = "3f22d9f3-a26c-4efb-99d0-a59e054a3513",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -952,15 +949,7 @@ namespace CarRent.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRent.data.Models.CarRent.Rental", "Rental")
-                        .WithOne("InvoiceItem")
-                        .HasForeignKey("CarRent.data.Models.CarRent.InvoiceItem", "RentalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Invoice");
-
-                    b.Navigation("Rental");
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.PriceList", b =>
@@ -1080,11 +1069,6 @@ namespace CarRent.Repository.Migrations
                     b.Navigation("PricelistDates");
 
                     b.Navigation("PricelistItems");
-                });
-
-            modelBuilder.Entity("CarRent.data.Models.CarRent.Rental", b =>
-                {
-                    b.Navigation("InvoiceItem");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,6 +23,11 @@ namespace CarRent.Repository.Interfaces
 
         // Rental 
         IGenericRepository<Rental> Rental { get; }
+        IGenericRepository<ClientDetails> ClientDetails { get; }
+        IGenericRepository<Invoice> Invoice { get; }
+        IGenericRepository<InvoiceItem> InvoiceItem { get; }
+        IGenericRepository<InvoiceClient> InvoiceClient { get; }
+        IGenericRepository<UserRental> UserRental { get; }
 
         Task SaveAsync();
     }

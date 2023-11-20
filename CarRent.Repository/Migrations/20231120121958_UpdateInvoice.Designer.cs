@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20231120121958_UpdateInvoice")]
+    partial class UpdateInvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -407,10 +410,7 @@ namespace CarRent.Repository.Migrations
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceItem", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Gross")
                         .HasPrecision(18, 2)
@@ -445,10 +445,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.HasIndex("RentalId")
-                        .IsUnique();
-
-                    b.ToTable("InvoicesItems");
+                    b.ToTable("InvoiceItems");
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.KilometrLimit", b =>
@@ -566,6 +563,9 @@ namespace CarRent.Repository.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
+                    b.Property<int>("InvoiceItemId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -600,8 +600,8 @@ namespace CarRent.Repository.Migrations
                     b.Property<int>("RentalId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserAccountId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserAccountId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -723,19 +723,19 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "67e2c7b7-4779-46bc-bf31-0c8a3f20fec8",
+                            Id = "16289721-d55f-416b-973a-7c729e31f23a",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "aa336f36-bcf1-4a5c-8ade-b0c5a41eb9f1",
+                            Id = "864d7dae-0eb7-4685-bb4e-84a6ecc20d75",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "0edf4df3-d754-4d88-8db9-968ec17d7c6e",
+                            Id = "ecbcad93-dc61-4e00-ac74-3f19b7dbc237",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -946,15 +946,15 @@ namespace CarRent.Repository.Migrations
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceItem", b =>
                 {
+                    b.HasOne("CarRent.data.Models.CarRent.Rental", "Rental")
+                        .WithOne("InvoiceItem")
+                        .HasForeignKey("CarRent.data.Models.CarRent.InvoiceItem", "Id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("CarRent.data.Models.CarRent.Invoice", "Invoice")
                         .WithMany()
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarRent.data.Models.CarRent.Rental", "Rental")
-                        .WithOne("InvoiceItem")
-                        .HasForeignKey("CarRent.data.Models.CarRent.InvoiceItem", "RentalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1084,7 +1084,8 @@ namespace CarRent.Repository.Migrations
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.Rental", b =>
                 {
-                    b.Navigation("InvoiceItem");
+                    b.Navigation("InvoiceItem")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

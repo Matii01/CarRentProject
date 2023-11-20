@@ -26,11 +26,11 @@ namespace CarRent.Repository
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             modelBuilder.Entity<Rental>()
-                .HasOne<InvoiceItem>(x => x.InvoiceItem)
+                .HasOne(x => x.InvoiceItem)
                 .WithOne(i => i.Rental)
-                .HasForeignKey<InvoiceItem>(i => i.Id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
+                .HasForeignKey<InvoiceItem>(i => i.RentalId);
+//                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
         public DbSet<Car> Cars { get; set; }
@@ -54,7 +54,7 @@ namespace CarRent.Repository
         public DbSet<InvoiceCompanyClient> InvoiceCompanyClients { get; set; }
         public DbSet<CompanyClientDetails> CompanyClientsDetails { get; set;}
         public DbSet<ClientDetails> ClientDetails { get; set; }
-        public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        public DbSet<InvoiceItem> InvoicesItems { get; set; }
        
 
     }

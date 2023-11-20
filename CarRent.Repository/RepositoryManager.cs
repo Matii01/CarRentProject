@@ -22,6 +22,11 @@ namespace CarRent.Repository
 
         // Rental 
         private readonly Lazy<IGenericRepository<Rental>> _rentalRepository;
+        private readonly Lazy<IGenericRepository<ClientDetails>> _clientDetailsRepository;
+        private readonly Lazy<IGenericRepository<Invoice>> _invoiceRepository;
+        private readonly Lazy<IGenericRepository<InvoiceItem>> _invoiceItemRepository;
+        private readonly Lazy<IGenericRepository<InvoiceClient>> _invoiceClientRepository;
+        private readonly Lazy<IGenericRepository<UserRental>> _userRentalRepository;
 
         public RepositoryManager(CarRentContext context)
         {
@@ -58,10 +63,24 @@ namespace CarRent.Repository
 
             _pricelistDateRepository = new Lazy<IGenericRepository<PricelistDate>>(() =>
                 new GenericRepository<PricelistDate>(_context));
-            
-            _rentalRepository = new Lazy<IGenericRepository<Rental>>(() => 
+
+            _rentalRepository = new Lazy<IGenericRepository<Rental>>(() =>
                 new GenericRepository<Rental>(_context));
-        
+
+            _clientDetailsRepository = new Lazy<IGenericRepository<ClientDetails>>(() =>
+                new GenericRepository<ClientDetails>(_context));
+
+            _invoiceClientRepository = new Lazy<IGenericRepository<InvoiceClient>>(() =>
+                new GenericRepository<InvoiceClient>(_context));
+
+            _invoiceItemRepository = new Lazy<IGenericRepository<InvoiceItem>>(() =>
+                new GenericRepository<InvoiceItem>(_context));
+
+            _invoiceRepository = new Lazy<IGenericRepository<Invoice>>(() =>
+                new GenericRepository<Invoice>(_context));
+
+            _userRentalRepository = new Lazy<IGenericRepository<UserRental>>(() =>
+               new GenericRepository<UserRental>(_context));
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -76,6 +95,11 @@ namespace CarRent.Repository
         public IGenericRepository<PricelistItem> PricelistItem => _priceListItemRepository.Value;
         public IGenericRepository<PricelistDate> PricelistDate => _pricelistDateRepository.Value;
         public IGenericRepository<Rental> Rental => _rentalRepository.Value;
+        public IGenericRepository<ClientDetails> ClientDetails => _clientDetailsRepository.Value;
+        public IGenericRepository<Invoice> Invoice => _invoiceRepository.Value;
+        public IGenericRepository<InvoiceItem> InvoiceItem => _invoiceItemRepository.Value;
+        public IGenericRepository<InvoiceClient> InvoiceClient => _invoiceClientRepository.Value;
+        public IGenericRepository<UserRental> UserRental => _userRentalRepository.Value;
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

@@ -11,6 +11,7 @@ namespace CarRent.data.DTO
 
     public record PriceListDto(int Id, int CarId, string? Name);
     public record PricelistDateDto(int Id, int PriceId, DateTime DateFrom, DateTime DateTo);
+    public record PriceForCar(decimal Rabat, decimal Net, decimal Gross, decimal VAT, decimal VATValue);
 
     /*
     int Id { get; set; }

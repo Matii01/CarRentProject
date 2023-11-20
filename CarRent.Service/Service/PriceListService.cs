@@ -164,6 +164,10 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-     
+        public PriceForCar GetPriceForCar(int carId, DateTime from, DateTime to)
+        {
+            PriceForCar priceForCar = new PriceForCar(0, 100, 123, 23, 23);
+            return  priceForCar;
+        }
     }
 }
