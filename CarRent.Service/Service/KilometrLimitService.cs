@@ -3,6 +3,7 @@ using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,29 +31,38 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<KilometrLimitDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var kilometrLimit = await _repository.KilometrLimit.GetAllActiveAsync(trackChanges);
+            var kilometrLimit = await _repository.KilometrLimit
+                .GetAllActiveAsync(trackChanges)
+                .Select(x => _mapper.Map<KilometrLimitDto>(x))
+                .ToListAsync();
 
-            var kilometrLimitDto = kilometrLimit.Select(_mapper.Map<KilometrLimitDto>).ToList();
-            return kilometrLimitDto;
+            return kilometrLimit;
         }
 
         public async Task<IEnumerable<KilometrLimitDto>> GetAllAsync(bool trackChanges)
         {
-            var kilometrLimit = await _repository.KilometrLimit.GetAllAsync(trackChanges, "LimitValue");
+            var kilometrLimit = await _repository.KilometrLimit
+                .GetAllAsync(trackChanges, "LimitValue")
+                .Select(x => _mapper.Map<KilometrLimitDto>(x))
+                .ToListAsync();
 
-            var kilometrLimitDto = kilometrLimit.Select(_mapper.Map<KilometrLimitDto>).ToList();
-            return kilometrLimitDto;
+            return kilometrLimit;
         }
 
         public async Task<KilometrLimitDto> GetAsync(int id, bool trackChanges)
         {
-            var kilometrLimit = await _repository.KilometrLimit.GetAsync(id, trackChanges);
-            return _mapper.Map<KilometrLimitDto>(kilometrLimit);
+            var kilometrLimit = await _repository.KilometrLimit
+                .GetAsync(id, trackChanges)
+                .Select(x => _mapper.Map<KilometrLimitDto>(x))
+                .SingleOrDefaultAsync();
+            return kilometrLimit;
         }
 
         public async Task UpdateAsync(int id, KilometrLimitDto newValue, bool trackChanges)
         {
-            var kilometrLimit = await _repository.KilometrLimit.GetAsync(id, trackChanges) ?? throw new ArgumentException("not found");
+            var kilometrLimit = await _repository.KilometrLimit
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             kilometrLimit.LimitValue = newValue.LimitValue;
 
             await _repository.SaveAsync();
@@ -60,7 +70,9 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.KilometrLimit.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.KilometrLimit
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

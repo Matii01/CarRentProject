@@ -3,6 +3,7 @@ using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,29 +31,39 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<GearboxTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var gearbox = await _repository.GearboxType.GetAllActiveAsync(trackChanges);
+            var gearbox = await _repository.GearboxType
+                .GetAllActiveAsync(trackChanges)
+                .Select(x => _mapper.Map<GearboxTypeDto>(x))
+                .ToListAsync();
 
-            var gearboxDto = gearbox.Select(_mapper.Map<GearboxTypeDto>).ToList();
-            return gearboxDto;
+            return gearbox;
         }
 
         public async Task<IEnumerable<GearboxTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var gearbox = await _repository.GearboxType.GetAllAsync(trackChanges, "Name");
+            var gearbox = await _repository.GearboxType
+                .GetAllAsync(trackChanges, "Name")
+                .Select(x => _mapper.Map<GearboxTypeDto>(x))
+                .ToListAsync();
 
-            var gearboxDto = gearbox.Select(_mapper.Map<GearboxTypeDto>).ToList();
-            return gearboxDto;
+            return gearbox;
         }
 
         public async Task<GearboxTypeDto> GetAsync(int id, bool trackChanges)
         {
-            var gearbox = await _repository.GearboxType.GetAsync(id, trackChanges);
-            return _mapper.Map<GearboxTypeDto>(gearbox);
+            var gearbox = await _repository.GearboxType
+                .GetAsync(id, trackChanges)
+                .Select(x => _mapper.Map<GearboxTypeDto>(x))
+                .SingleOrDefaultAsync();
+
+            return gearbox;
         }
 
         public async Task UpdateAsync(int id, GearboxTypeDto newValue, bool trackChanges)
         {
-            var gearbox = await _repository.GearboxType.GetAsync(id, trackChanges) ?? throw new ArgumentException("not found");
+            var gearbox = await _repository.GearboxType
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             gearbox.Name = newValue.Name;
 
             await _repository.SaveAsync();
@@ -60,7 +71,9 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.GearboxType.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.GearboxType
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

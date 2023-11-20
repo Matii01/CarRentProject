@@ -3,6 +3,7 @@ using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Service.Service
 {
@@ -25,29 +26,39 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<EngineTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var engineTypes = await _repository.EngineType.GetAllActiveAsync(trackChanges);
+            var engineTypes = await _repository.EngineType
+                .GetAllActiveAsync(trackChanges)
+                .Select(x => _mapper.Map<EngineTypeDto>(x))
+                .ToListAsync();
 
-            var engineTypesDto = engineTypes.Select(_mapper.Map<EngineTypeDto>).ToList();
-            return engineTypesDto;
+            return engineTypes;
         }
 
         public async Task<IEnumerable<EngineTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var engineTypes = await _repository.EngineType.GetAllAsync(trackChanges, "Name");
+            var engineTypes = await _repository.EngineType
+                .GetAllAsync(trackChanges, "Name")
+                .Select(x => _mapper.Map<EngineTypeDto>(x))
+                .ToListAsync();
 
-            var engineTypesDto = engineTypes.Select(_mapper.Map<EngineTypeDto>).ToList();
-            return engineTypesDto;
+            return engineTypes;
         }
 
         public async Task<EngineTypeDto> GetAsync(int id, bool trackChanges)
         {
-            var engineType = await _repository.EngineType.GetAsync(id, trackChanges);
-            return _mapper.Map<EngineTypeDto>(engineType);
+            var engineType = await _repository.EngineType
+                .GetAsync(id, trackChanges)
+                .Select(x => _mapper.Map<EngineTypeDto>(x))
+                .SingleOrDefaultAsync();
+        
+            return engineType;
         }
 
         public async Task UpdateAsync(int id, EngineTypeDto newEngineType, bool trackChanges)
         {
-            var engineType = await _repository.EngineType.GetAsync(id, trackChanges) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.EngineType
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.Name = newEngineType.Name;
 
             await _repository.SaveAsync();
@@ -55,7 +66,9 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.EngineType.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.EngineType
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

@@ -3,6 +3,7 @@ using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,28 +31,39 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<AirConditioningTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var airCondition = await _repository.AirConditioningType.GetAllActiveAsync(trackChanges);
+            var airCondition = await _repository.AirConditioningType
+                .GetAllActiveAsync(trackChanges)
+                .Select(x => _mapper.Map<AirConditioningTypeDto>(x))
+                .ToListAsync();
 
-            var airConditionDto = airCondition.Select(_mapper.Map<AirConditioningTypeDto>).ToList();
-            return airConditionDto;
+            return airCondition;
         }
         public async Task<IEnumerable<AirConditioningTypeDto>> GetAllAsync(bool trackChanges)
         {
-            var airCondition = await _repository.AirConditioningType.GetAllAsync(trackChanges, "Name");
+            var airCondition = await _repository.AirConditioningType
+                .GetAllAsync(trackChanges, "Name")
+                .Select(x => _mapper.Map<AirConditioningTypeDto>(x))
+                .ToListAsync();
 
-            var airConditionDto = airCondition.Select(_mapper.Map<AirConditioningTypeDto>).ToList();
-            return airConditionDto;
+            return airCondition;
         }
 
         public async Task<AirConditioningTypeDto> GetAsync(int id, bool trackChanges)
         {
-            var airCondition = await _repository.AirConditioningType.GetAsync(id, trackChanges);
-            return _mapper.Map<AirConditioningTypeDto>(airCondition);
+            var airCondition = await _repository.AirConditioningType
+                .GetAsync(id, trackChanges)
+                .Select(x => _mapper.Map<AirConditioningTypeDto>(x))
+                .SingleOrDefaultAsync();
+
+            return airCondition;
         }
 
         public async Task UpdateAsync(int id, AirConditioningTypeDto newValue, bool trackChanges)
         {
-            var airCondition = await _repository.AirConditioningType.GetAsync(id, trackChanges) ?? throw new ArgumentException("not found");
+            var airCondition = await _repository.AirConditioningType
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+            
             airCondition.Name = newValue.Name;
 
             await _repository.SaveAsync();
@@ -59,7 +71,10 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.AirConditioningType.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.AirConditioningType
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+ 
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

@@ -21,7 +21,7 @@ namespace CarRent.Repository.Repositories
         {
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges, string sortByProperty)
+        public IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty)
         {
             var query = All(trackChanges);
            
@@ -31,17 +31,17 @@ namespace CarRent.Repository.Repositories
                 query = query.OrderByField(sortByProperty, true);
             }
 
-            return await query.ToListAsync();
+            return query;
         }
 
-        public async Task<IEnumerable<T>> GetAllActiveAsync(bool trackChanges)
+        public IQueryable<T> GetAllActiveAsync(bool trackChanges)
         {
-            return await FindByCondition(x => x.IsActive == true, trackChanges).ToListAsync();
+            return FindByCondition(x => x.IsActive == true, trackChanges);
         }
 
-        public async Task<T> GetAsync(int id, bool trackChanges)
+        public IQueryable<T> GetAsync(int id, bool trackChanges)
         {
-            return await FindByCondition(x => x.Id == id, trackChanges).SingleOrDefaultAsync();
+            return FindByCondition(x => x.Id == id, trackChanges);
         }
 
         //public async Task DeleteAsync(int id)

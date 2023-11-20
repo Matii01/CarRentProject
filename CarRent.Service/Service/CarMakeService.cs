@@ -2,6 +2,7 @@
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllCarMakesAsync(bool trackChanges)
         {
-            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name");
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name").ToListAsync();
 
             var carMakesDto = carMakes
                 .Select(x => new CarMakeDto(x.Id, x.Name, x.Description))
@@ -31,7 +32,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarMakeDto>> GetAllActiveCarMakesAsync(bool trackChanges)
         {
-            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name");
+            var carMakes = await _repository.CarMake.GetAllAsync(trackChanges, "Name").ToListAsync();
 
             var carMakesDto = carMakes
                 .Where(x => x.IsActive == true)
@@ -44,7 +45,9 @@ namespace CarRent.Service.Service
         }
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {
-            var carMake = await _repository.CarMake.GetAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
+            var carMake = await _repository.CarMake
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new Exception("CarMake not found");
             var carMakeDto = new CarMakeDto(carMake.Id, carMake.Name, carMake.Description);
 
             return carMakeDto;
@@ -66,7 +69,9 @@ namespace CarRent.Service.Service
 
         public async Task UpdateCarMakeAsync(int id, CarMakeDto carMake, bool trackChanges)
         {
-            var carMakeEntity = await _repository.CarMake.GetAsync(id, trackChanges) ?? throw new Exception("CarMake not found");
+            var carMakeEntity = await _repository.CarMake
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new Exception("CarMake not found");
 
             carMakeEntity.Name = carMake.Name;
             carMakeEntity.Description = carMake.Description;
@@ -76,7 +81,9 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.CarMake.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.CarMake
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

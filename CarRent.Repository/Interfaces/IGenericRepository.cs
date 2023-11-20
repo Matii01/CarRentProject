@@ -10,10 +10,10 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IGenericRepository<T>
     {
-        Task<IEnumerable<T>> GetAllAsync(bool trackChanges, string sortByProperty);
-        Task<IEnumerable<T>> GetAllActiveAsync(bool trackChanges);
+        IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty);
+        IQueryable<T> GetAllActiveAsync(bool trackChanges);
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
-        Task<T> GetAsync(int id, bool trackChanges);
+        IQueryable<T> GetAsync(int id, bool trackChanges);
         void Create(T carMake);
         void Delete(T carMake);
     }

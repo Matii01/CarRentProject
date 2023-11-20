@@ -3,6 +3,7 @@ using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,15 +35,20 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<CarDriveDto>> GetAllActiveAsync(bool trackChanges)
         {
-            var carDrives = await _repository.CarDrive.GetAllActiveAsync(trackChanges);
+            var carDrives = await _repository.CarDrive
+                .GetAllActiveAsync(trackChanges)
+                .Select(x => _mapper.Map<CarDriveDto>(x))
+                .ToListAsync();
 
-            var carDrivesDto = carDrives.Select(_mapper.Map<CarDriveDto>).ToList();   
-            return carDrivesDto;
+            return carDrives;
         }
 
         public async Task<IEnumerable<CarDriveDto>> GetAllAsync(bool trackChanges)
         {
-            var carDrives = await _repository.CarDrive.GetAllAsync(trackChanges, "Name");
+            var carDrives = await _repository.CarDrive
+                .GetAllAsync(trackChanges, "Name")
+                .Select(x => _mapper.Map<CarDriveDto>(x))
+                .ToListAsync();
 
             var carDrivesDto = carDrives.Select(_mapper.Map<CarDriveDto>).ToList();
             return carDrivesDto;
@@ -50,13 +56,19 @@ namespace CarRent.Service.Service
 
         public async Task<CarDriveDto> GetAsync(int id, bool trackChanges)
         {
-            var carDrive = await _repository.CarDrive.GetAsync(id, trackChanges);
-            return _mapper.Map<CarDriveDto>(carDrive);
+            var carDrive = await _repository.CarDrive
+                .GetAsync(id, trackChanges)
+                .Select(x => _mapper.Map<CarDriveDto>(x))
+                .SingleOrDefaultAsync();
+
+            return carDrive;
         }
 
         public async Task UpdateAsync(int id, CarDriveDto newCarDrive, bool trackChanges)
         {
-            var carDrive = await _repository.CarDrive.GetAsync(id, trackChanges) ?? throw new ArgumentException("CarDrive not found");
+            var carDrive = await _repository.CarDrive
+                .GetAsync(id, trackChanges)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("CarDrive not found");
             carDrive.Name = newCarDrive.Name;
             carDrive.Description = newCarDrive.Description;
 
@@ -65,7 +77,9 @@ namespace CarRent.Service.Service
 
         public async Task DeleteAsync(int id)
         {
-            var engineType = await _repository.CarDrive.GetAsync(id, true) ?? throw new ArgumentException("not found");
+            var engineType = await _repository.CarDrive
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();
