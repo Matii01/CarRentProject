@@ -19,10 +19,18 @@ namespace CarRent.Service.Interfaces
         /// <param name="newRental"></param>
         /// <param name="price"></param>
         /// <returns></returns>
-        Task<Rental> CreateInvoiceAndAddRental(
-              string? uerId,
-              InvoiceDto invoiceDto,
-              NewRentalForClient newRental,
-              PriceForCar price);
+        //Task<Rental> CreateInvoiceAndAddRental(
+        //      string? uerId,
+        //      InvoiceDto invoiceDto,
+        //      NewRentalForClient newRental,
+        //      PriceForCar price);
+
+        Task<bool> CarHaveRentalInThisDate(NewRentalForClient rental);
+        Task<string> CreateRentalAndInvoiceAndAssignUser(
+                string userId, 
+                InvoiceDto invoiceDto,
+                NewRentalForClient newRental,
+                ClientDetailsDto clientDetails,
+                PriceForCar price);
     }
 }

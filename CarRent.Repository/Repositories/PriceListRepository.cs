@@ -22,7 +22,10 @@ namespace CarRent.Repository.Repositories
 
         public IQueryable<PriceList> GetCarPriceListForClient(int carId)
         {
-            var currentData =  DateTime.Now;
+            return GetCarPriceListForClient(carId, DateTime.Now);
+        }
+        public IQueryable<PriceList> GetCarPriceListForClient(int carId, DateTime currentData)
+        {
             var pricelist =  context.PricesList
                 .Include(x => x.PricelistDates)
                 .Include(x=>x.PricelistItems)

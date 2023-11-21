@@ -26,4 +26,6 @@ namespace CarRent.data.DTO
         NewRentalForClient NewRentalForClient, 
         ClientDetailsDto ClientDetails, 
         InvoiceDto Invoice);
+
+    
 }

@@ -22,7 +22,7 @@ namespace CarRent.Service.Interfaces
         Task<PricelistItem> AddPosition(NewtPricelistItemDto item);
         Task AddCarlistDate(PricelistDateDto dateDto);
         Task<bool> CarPriceListExistForThisDateTime(PricelistDateDto priceListDate);
-        PriceForCar GetPriceForCar(int carId, DateTime from, DateTime to);
+        Task<PriceForCar?> GetPriceForCarForDate(NewRentalForClient rental);
 
         /*
         Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);

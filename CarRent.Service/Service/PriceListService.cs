@@ -164,10 +164,43 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        public PriceForCar GetPriceForCar(int carId, DateTime from, DateTime to)
+        public async Task<PriceForCar?> GetPriceForCarForDate(NewRentalForClient rental)
         {
-            PriceForCar priceForCar = new PriceForCar(0, 100, 123, 23, 23);
-            return  priceForCar;
+            var item = await GetPriceListItemForCarAndDate(rental);
+
+            if (item == null)
+            {
+                return null;
+            }
+            await Console.Out.WriteLineAsync(item.Price.ToString());
+
+            decimal total = item.Price * CalculateRentalDays(rental);
+            decimal net = total * 0.77m;
+            
+            PriceForCar priceForCar = new (0, net, total, 23, total - net);
+
+            return priceForCar;
+        }
+
+        private async Task<PricelistItem?> GetPriceListItemForCarAndDate(NewRentalForClient rental)
+        {
+            var priceList = await _repository.PriceList
+                .GetCarPriceListForClient(rental.CarId, rental.DateFrom)
+                .SingleOrDefaultAsync();
+
+            if (priceList == null || priceList.PricelistItems == null)
+            {
+                return null;
+            }
+
+            int days = CalculateRentalDays(rental);
+            return priceList.PricelistItems.Where(x => x.Days <= days).MaxBy(x => x.Days);
+        }
+
+        private int CalculateRentalDays(NewRentalForClient rental)
+        {
+            TimeSpan difference = rental.DateTo - rental.DateFrom;
+            return (int)difference.TotalDays;
         }
     }
 }

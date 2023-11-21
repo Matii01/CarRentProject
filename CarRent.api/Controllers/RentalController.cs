@@ -24,38 +24,41 @@ namespace CarRent.api.Controllers
         [HttpPost("AddNewUserRental")]
         public async Task<IActionResult> AddRental([FromBody] object allRentalData)
         {
-            await Console.Out.WriteLineAsync(allRentalData.ToString());
-
             var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
-            //var temp = JObject.Parse(allRentalData.ToString());
+            
             if(temp == null)
             {
                 return Ok(false);
             }
-            await Console.Out.WriteLineAsync(temp.ToString());
 
             var user = await _authenticationService.RetrieveData(temp.Token);
+            if(user == null)
+            {
+                return Ok(false);
+            }
 
-            var price = _services
+            var price = await _services
                 .PriceListService
-                .GetPriceForCar(
-                    temp.NewRentalForClient.CarId,
-                    temp.NewRentalForClient.DateFrom,
-                    temp.NewRentalForClient.DateTo);
+                .GetPriceForCarForDate(temp.NewRentalForClient);
 
-            await _services.RentalService
-                    .CreateInvoiceAndAddRental(
-                        user.UserId,
-                        temp.Invoice,
-                        temp.NewRentalForClient,
-                        price);
+            if(price == null)
+            {
+                return Ok(false);
+            }
 
+            var result = await _services.RentalService.CreateRentalAndInvoiceAndAssignUser
+                (user.UserId,
+                temp.Invoice,
+                temp.NewRentalForClient,
+                temp.ClientDetails,
+                price
+                );
 
             return Ok(true);
         }
 
         [HttpPost("IsDateAvailable")]
-        public async Task<IActionResult> IsDateAvailable(RentalDates dates)
+        public async Task<IActionResult> IsDateAvailable(NewRentalForClient dates)
         {
             return Ok(true);
         }
