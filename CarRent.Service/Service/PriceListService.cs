@@ -168,6 +168,8 @@ namespace CarRent.Service.Service
         {
             var item = await GetPriceListItemForCarAndDate(rental);
 
+            // TODO GET Rabats 
+
             if (item == null)
             {
                 return null;

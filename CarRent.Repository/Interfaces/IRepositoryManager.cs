@@ -29,6 +29,10 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<InvoiceClient> InvoiceClient { get; }
         IGenericRepository<UserRental> UserRental { get; }
 
+        // Rabat 
+        IGenericRepository<Rabat> Rabat { get; }
+        IGenericRepository<RabatForUser> RabatForUser { get; }
+
         Task SaveAsync();
     }
 }

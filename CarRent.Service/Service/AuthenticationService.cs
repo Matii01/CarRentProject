@@ -41,6 +41,11 @@ namespace CarRent.Service.Service
         {
             var user = MapHelper.MapUserForRegistrationDtoToUser(userForRegistration);
 
+            foreach (var t in userForRegistration.Roles)
+            {
+                await Console.Out.WriteLineAsync(t);
+            }
+
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (result.Succeeded)
             {

@@ -22,7 +22,6 @@ namespace CarRent.data.DTO
     public record InvoiceDto(string Number, string? Comment);
 
     public record AllRentalDataDto(
-        TokenDto Token,
         NewRentalForClient NewRentalForClient, 
         ClientDetailsDto ClientDetails, 
         InvoiceDto Invoice);
