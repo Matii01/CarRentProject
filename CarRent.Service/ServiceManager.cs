@@ -19,6 +19,7 @@ namespace CarRent.Service
         public readonly Lazy<IPriceListService> _priceListService;
         public readonly Lazy<IRentalService> _rentalService;
         public readonly Lazy<IRabatService> _rabatService;
+        public readonly Lazy<ICarMaintenanceService> _carMaintenanceService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -46,6 +47,9 @@ namespace CarRent.Service
             _rabatService =new Lazy<IRabatService>(() =>
                new RabatService(repositoryManager, mapper));
 
+            _carMaintenanceService = new Lazy<ICarMaintenanceService>(() =>
+                new CarMaintenanceService(repositoryManager, RentalService, mapper));
+
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
 
@@ -70,6 +74,7 @@ namespace CarRent.Service
         public IPriceListService PriceListService => _priceListService.Value;
         public IRentalService RentalService => _rentalService.Value;    
         public IRabatService RabatService => _rabatService.Value;
+        public ICarMaintenanceService CarMaintenanceService => _carMaintenanceService.Value;
 
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;

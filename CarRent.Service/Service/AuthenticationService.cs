@@ -202,5 +202,11 @@ namespace CarRent.Service.Service
             };
             return data;
         }
+
+        public async Task<string> FindUserByUserName(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            return user.Id;
+        }
     }
 }
