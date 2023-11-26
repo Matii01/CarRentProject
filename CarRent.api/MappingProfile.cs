@@ -44,6 +44,15 @@ namespace CarRent.api
             CreateMap<ClientDetailsDto, ClientDetails>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
+            CreateMap<CarMaintenance, CarMaintenanceDto>()
+                .ForMember(x => x.WorkerId, opt => opt.MapFrom(x => x.UserId));
+
+            CreateMap<CarMaintenanceDto, CarMaintenance>()
+                .ForMember(x => x.UserId, opt => opt.MapFrom(x => x.WorkerId))
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+
+
             /*
                 CreateMap<Company, CompanyDto>()
                     .ForMember(c => c.FullAddress,

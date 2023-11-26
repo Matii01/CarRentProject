@@ -105,8 +105,9 @@ namespace CarRent.api.Controllers
         [HttpPost("priceForDates/{carId:int}")]
         public async Task<IActionResult> CalculatePrice ([FromBody] NewRentalForClient rental)
         {
-            var result = await _services.PriceListService.GetPriceForCarForDate(rental);
-            return Ok(result);
+            //var result = await _services.PriceListService.GetPriceForCarForDate(rental);
+            //return Ok(result);
+            throw new NotImplementedException();
         } 
     }
 }

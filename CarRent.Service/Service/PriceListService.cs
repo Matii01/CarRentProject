@@ -15,9 +15,15 @@ namespace CarRent.Service.Service
 {
     public class PriceListService : ServiceBase, IPriceListService
     {
-        public PriceListService(IRepositoryManager repository, IMapper mapper)
+        private readonly IRabatService _rabat;
+
+        public PriceListService(
+            IRepositoryManager repository,
+            IRabatService rabat, 
+            IMapper mapper)
             : base(repository, mapper)
         {
+            _rabat = rabat;
         }
 
         public async Task<IEnumerable<PricelistItemDto>> GetCarPricelistForClient(int carId)
@@ -164,11 +170,11 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        public async Task<PriceForCar?> GetPriceForCarForDate(NewRentalForClient rental)
+        public async Task<PriceForCar?> GetPriceForCarForDate(string? userId, NewRentalForClient rental)
         {
             var item = await GetPriceListItemForCarAndDate(rental);
 
-            // TODO GET Rabats 
+            var rabat = await _rabat.CalculateRabat(rental.CarId, userId);
 
             if (item == null)
             {
@@ -177,9 +183,9 @@ namespace CarRent.Service.Service
             await Console.Out.WriteLineAsync(item.Price.ToString());
 
             decimal total = item.Price * CalculateRentalDays(rental);
-            decimal net = total * 0.77m;
+            decimal net = total * 0.77m; // 23% vat 
             
-            PriceForCar priceForCar = new (0, net, total, 23, total - net);
+            PriceForCar priceForCar = new (rabat.RabatPercentValue, net, total, 23, total - net);
 
             return priceForCar;
         }

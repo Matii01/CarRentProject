@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    internal class CarMaintenanceDto
-    {
-    }
+    public record CarMaintenanceDto(
+        int Id, 
+        int CarId, 
+        string WorkerId,
+        string Description, 
+        DateTime DateStart, 
+        DateTime DateEnd, 
+        decimal TotalCost);
 }

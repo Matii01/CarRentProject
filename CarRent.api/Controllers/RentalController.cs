@@ -41,9 +41,10 @@ namespace CarRent.api.Controllers
                 return Ok(false);
             }
 
+
             var price = await _services
                 .PriceListService
-                .GetPriceForCarForDate(temp.NewRentalForClient);
+                .GetPriceForCarForDate(user.Id, temp.NewRentalForClient);
 
             if(price == null)
             {

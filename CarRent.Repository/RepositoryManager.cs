@@ -20,6 +20,10 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<PricelistItem>> _priceListItemRepository;
         private readonly Lazy<IGenericRepository<PricelistDate>> _pricelistDateRepository;
 
+        //CarMaintenances
+        private readonly Lazy<IGenericRepository<CarMaintenance>> _carMaintenancesRepository;
+
+
         // Rental 
         private readonly Lazy<IGenericRepository<Rental>> _rentalRepository;
         private readonly Lazy<IGenericRepository<ClientDetails>> _clientDetailsRepository;
@@ -91,6 +95,9 @@ namespace CarRent.Repository
 
             _rabatForUserRepository = new Lazy<IGenericRepository<RabatForUser>>(() =>
                 new GenericRepository<RabatForUser>(_context));
+
+            _carMaintenancesRepository = new Lazy<IGenericRepository<CarMaintenance>>(() =>
+                new GenericRepository<CarMaintenance>(_context));
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -112,6 +119,7 @@ namespace CarRent.Repository
         public IGenericRepository<UserRental> UserRental => _userRentalRepository.Value;
         public IGenericRepository<Rabat> Rabat => _rabatRepository.Value;
         public IGenericRepository<RabatForUser> RabatForUser => _rabatForUserRepository.Value;
+        public IGenericRepository<CarMaintenance> CarMaintenances => _carMaintenancesRepository.Value;
         
         public async Task SaveAsync()
         {
