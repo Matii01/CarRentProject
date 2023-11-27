@@ -37,9 +37,12 @@ namespace CarRent.api
 
             CreateMap<GearboxType, GearboxTypeDto>();
             CreateMap<KilometrLimit, KilometrLimitDto>();
+
             CreateMap<AirConditioningType, AirConditioningTypeDto>();
-            
-            
+            CreateMap<AirConditioningTypeDto, AirConditioningType>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+
             CreateMap<ClientDetails, ClientDetailsDto>();
             CreateMap<ClientDetailsDto, ClientDetails>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));

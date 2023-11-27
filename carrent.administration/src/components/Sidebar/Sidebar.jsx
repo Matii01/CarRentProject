@@ -36,6 +36,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Silniki", path: "/cars/engines" },
     { name: "Typy", path: "/cars/types" },
     { name: "Typy napędu", path: "/cars/cardrives" },
+    { name: "Skrzynia biegów", path: "/cars/gearbox" },
     { name: "Klimatyzacje", path: "" },
     { name: "Limity kilometrów", path: "" },
     { name: "Kalendarz", path: "/cars/calendar" },

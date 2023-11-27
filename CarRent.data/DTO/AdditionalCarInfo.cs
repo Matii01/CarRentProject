@@ -13,7 +13,7 @@ namespace CarRent.data.DTO
     public record GearboxTypeDto(int Id, string Name);
     public record KilometrLimitDto(int Id, decimal LimitValue);
     public record CarDriveDto(int Id, string Name, string? Description);
-    public record AirConditioningTypeDto(int Id, string Name, string SortBy);
+    public record AirConditioningTypeDto(int Id, string Name);
     public record AllInfoForNewCar
     (
         IEnumerable<CarMakeDto> CarMakes,

@@ -38,6 +38,7 @@ import CarEventCalendar from "./pages/cars/CarEventCalendar";
 import CarTypes from "./pages/cars/CarTypes";
 import CarDrives from "./pages/cars/CarDrives";
 import CarMakes from "./pages/cars/CarMake";
+import GearboxType from "./pages/cars/GearboxType";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "cars/calendar",
         element: <Calendar />,
+      },
+      {
+        path: "cars/gearbox",
+        element: <GearboxType />,
       },
       {
         path: "car/:carId/calendar",
