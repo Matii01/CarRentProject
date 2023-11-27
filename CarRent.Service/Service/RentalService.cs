@@ -15,22 +15,30 @@ namespace CarRent.Service.Service
 {
     public class RentalService : ServiceBase, IRentalService
     {
-        public RentalService(IRepositoryManager repository, IMapper mapper) 
+        private readonly IPriceListService _priceList;
+        private readonly ICarMaintenanceService _carMaintenance;
+
+        public RentalService(
+            IRepositoryManager repository,
+            IPriceListService priceList,
+            ICarMaintenanceService carMaintenance,
+            IMapper mapper) 
             : base(repository, mapper)
         {
-
+           _priceList = priceList;
+           _carMaintenance = carMaintenance;
         }
 
         public async Task<string> CreateRentalAndInvoiceAndAssignUser(string userId,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
-                ClientDetailsDto clientDetails,
-                PriceForCar price)
+                ClientDetailsDto clientDetails)
         {
-            if (await CarHaveRentalInThisDate(newRental))
+            if (await CarIsBusy(newRental))
             {
                 throw new Exception("Car have rental in this time");
             }
+            var price = await _priceList.GetPriceForCarForDate(userId, newRental);
 
             string invoiceNumber = await GetInvoiceNumber();
             var Invoice = new Invoice { Number = invoiceNumber, Comment = invoiceDto.Comment, IsActive = true, };
@@ -137,6 +145,20 @@ namespace CarRent.Service.Service
             }
 
             return true;
+        }
+
+        private async Task<bool> CarIsBusy(NewRentalForClient newRental)
+        {
+            if (await CarHaveRentalInThisDate(newRental) || 
+                await _carMaintenance.CarHaveMaintenanceInThisDate(
+                    newRental.CarId, 
+                    newRental.DateFrom, 
+                    newRental.DateTo)
+                )
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

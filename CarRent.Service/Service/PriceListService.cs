@@ -170,18 +170,17 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        public async Task<PriceForCar?> GetPriceForCarForDate(string? userId, NewRentalForClient rental)
+        public async Task<PriceForCar> GetPriceForCarForDate(string? userId, NewRentalForClient rental)
         {
             var item = await GetPriceListItemForCarAndDate(rental);
-
             var rabat = await _rabat.CalculateRabat(rental.CarId, userId);
 
             if (item == null)
             {
-                return null;
+                throw new Exception("No pricelist for car for this date");
             }
-            await Console.Out.WriteLineAsync(item.Price.ToString());
 
+            await Console.Out.WriteLineAsync(item.Price.ToString());
             decimal total = item.Price * CalculateRentalDays(rental);
             decimal net = total * 0.77m; // 23% vat 
             

@@ -10,5 +10,10 @@ namespace CarRent.Service.Interfaces
     public interface ICarMaintenanceService
     {
         Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance);
+        Task<bool> CarHaveMaintenanceInThisDate(
+                int CarId,
+                DateTime DateStart,
+                DateTime DateEnd
+            );
     }
 }

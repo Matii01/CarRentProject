@@ -32,7 +32,7 @@ namespace CarRent.Service.Service
             var carHaveRental = await _rentalService.CarHaveRentalInThisDate(new(
                 carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd));
 
-            if (carHaveRental || await CarHaveMaintenanceInThisDate(carMaintenance))
+            if (carHaveRental || await CarHaveMaintenanceInThisDate(carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd))
             {
                 throw new Exception("The car is occupied on this date");
             }
@@ -44,13 +44,17 @@ namespace CarRent.Service.Service
             return _mapper.Map<CarMaintenanceDto>(newMaintenance);
         }
 
-        public async Task<bool> CarHaveMaintenanceInThisDate(CarMaintenanceDto carMaintenance)
+        public async Task<bool> CarHaveMaintenanceInThisDate(
+                int CarId, 
+                DateTime DateStart, 
+                DateTime DateEnd
+            )     
         {
             var result = await _repository.CarMaintenances
-                .FindByCondition(x => x.CarId == carMaintenance.CarId &&
+                .FindByCondition(x => x.CarId == CarId &&
                     x.IsActive == true &&
-                    !((carMaintenance.DateStart > x.DateEnd && carMaintenance.DateEnd > x.DateEnd) ||
-                        (carMaintenance.DateStart < x.DateStart && carMaintenance.DateEnd < x.DateStart))
+                    !((DateStart > x.DateEnd && DateEnd > x.DateEnd) ||
+                        (DateStart < x.DateStart && DateEnd < x.DateStart))
                     , false)
                 .ToListAsync();
 

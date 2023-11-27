@@ -30,7 +30,7 @@ namespace CarRent.Service.Interfaces
                 string userId, 
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
-                ClientDetailsDto clientDetails,
-                PriceForCar price);
+                ClientDetailsDto clientDetails
+                );
     }
 }

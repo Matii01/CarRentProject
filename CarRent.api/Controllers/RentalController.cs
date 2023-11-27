@@ -41,22 +41,11 @@ namespace CarRent.api.Controllers
                 return Ok(false);
             }
 
-
-            var price = await _services
-                .PriceListService
-                .GetPriceForCarForDate(user.Id, temp.NewRentalForClient);
-
-            if(price == null)
-            {
-                return Ok(false);
-            }
-
             var result = await _services.RentalService.CreateRentalAndInvoiceAndAssignUser
                 (user.Id,
                 temp.Invoice,
                 temp.NewRentalForClient,
-                temp.ClientDetails,
-                price
+                temp.ClientDetails
                 );
 
             return Ok(true);
