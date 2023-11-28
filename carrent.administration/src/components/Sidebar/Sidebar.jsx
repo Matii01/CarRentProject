@@ -43,9 +43,8 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   ];
 
   const usersPages = [
-    { name: "Samochody", path: "/cars" },
-    { name: "Dodaj", path: "/cars/add" },
-    { name: "Action", path: "" },
+    { name: "Użytkownicy", path: "/users/users" },
+    { name: "Pracownicy", path: "/users/workers" },
   ];
 
   const location = useLocation();
@@ -96,8 +95,15 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
           >
             <NavLink to={"#"} className="nav-link">
               <i className={"nc-icon nc-alien-33"} />
-              <p>Użytkownicy</p>
+              <p>Zamówienia</p>
             </NavLink>
+          </li>
+          <li>
+            <DropdownList
+              title="Użytkownicy"
+              icon="nc-icon nc-alien-33"
+              pages={usersPages}
+            />
           </li>
           <li>
             <DropdownList

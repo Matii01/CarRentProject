@@ -49,7 +49,11 @@ namespace CarRent.Service.Service
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+                foreach(var t in userForRegistration.Roles)
+                {
+                    await _userManager.AddToRoleAsync(user, t);
+                }
+                //await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             }
 
             return result;

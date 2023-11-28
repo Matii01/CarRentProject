@@ -39,6 +39,8 @@ import CarTypes from "./pages/cars/CarTypes";
 import CarDrives from "./pages/cars/CarDrives";
 import CarMakes from "./pages/cars/CarMake";
 import GearboxType from "./pages/cars/GearboxType";
+import UsersPage from "./pages/users/Users";
+import WorkersPage from "./pages/users/Workers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -85,6 +87,8 @@ const router = createBrowserRouter([
       },
       { path: "car/details/:carId", element: <CarDetails /> },
       { path: "car/details/:carId/pricelist", element: <CarPriceList /> },
+      { path: "users/users", element: <UsersPage /> },
+      { path: "users/workers", element: <WorkersPage /> },
     ],
   },
 ]);
