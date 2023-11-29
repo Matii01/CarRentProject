@@ -46,5 +46,19 @@ namespace CarRent.api.Controllers
             return Ok(usersInRole);
             //throw new NotImplementedException();
         }
+
+        [HttpGet("userDetails")]
+        public async Task<IActionResult> GetUserDetailByUserName([FromQuery] string userName)
+        {
+            //var user = await _userManager.FindByLoginAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if(user == null)
+            {
+                return NotFound();
+
+            }
+            return Ok(user);
+        }
     }
 }
