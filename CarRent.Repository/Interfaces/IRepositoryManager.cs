@@ -25,7 +25,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<CarMaintenance> CarMaintenances {  get; }
 
         // Rental 
-        IGenericRepository<Rental> Rental { get; }
+        IGenericRepository<Rental> Rentals { get; }
         IGenericRepository<ClientDetails> ClientDetails { get; }
         IGenericRepository<Invoice> Invoice { get; }
         IGenericRepository<InvoiceItem> InvoiceItem { get; }

@@ -114,7 +114,7 @@ namespace CarRent.Repository
         public IGenericRepository<KilometrLimit> KilometrLimit => _kilometrLimitRepository.Value;
         public IGenericRepository<PricelistItem> PricelistItem => _priceListItemRepository.Value;
         public IGenericRepository<PricelistDate> PricelistDate => _pricelistDateRepository.Value;
-        public IGenericRepository<Rental> Rental => _rentalRepository.Value;
+        public IGenericRepository<Rental> Rentals => _rentalRepository.Value;
         public IGenericRepository<RentalStatus> RentalStatus => _rentalStatusRepository.Value;
         public IGenericRepository<ClientDetails> ClientDetails => _clientDetailsRepository.Value;
         public IGenericRepository<Invoice> Invoice => _invoiceRepository.Value;

@@ -16,17 +16,14 @@ namespace CarRent.Service.Service
     public class RentalService : ServiceBase, IRentalService
     {
         private readonly IPriceListService _priceList;
-        private readonly ICarMaintenanceService _carMaintenance;
 
         public RentalService(
             IRepositoryManager repository,
             IPriceListService priceList,
-            ICarMaintenanceService carMaintenance,
             IMapper mapper) 
             : base(repository, mapper)
         {
            _priceList = priceList;
-           _carMaintenance = carMaintenance;
         }
 
         public async Task<string> CreateRentalAndInvoiceAndAssignUser(string userId,
@@ -36,7 +33,7 @@ namespace CarRent.Service.Service
         {
             if (await CarIsBusy(newRental))
             {
-                throw new Exception("Car have rental in this time");
+                throw new Exception("Car have rental on this time");
             }
             var price = await _priceList.GetPriceForCarForDate(userId, newRental);
 
@@ -64,7 +61,7 @@ namespace CarRent.Service.Service
                 IsActive = true,
             };
 
-            _repository.Rental.Create(Rental);
+            _repository.Rentals.Create(Rental);
             await _repository.SaveAsync();
             await CreateUserRental(userId, Rental.Id);
 
@@ -78,6 +75,7 @@ namespace CarRent.Service.Service
                 CarId = newRental.CarId,
                 RentalStart = newRental.DateFrom,
                 RentalEnd = newRental.DateTo,
+                IsActive = true
             };
             return rental;
         }
@@ -129,16 +127,20 @@ namespace CarRent.Service.Service
             return userRental;
         }
 
-        public async Task<bool> CarHaveRentalInThisDate(NewRentalForClient rental)
+        public async Task<bool> CarHaveRentalInThisDate(int CarId,
+                DateTime DateStart,
+                DateTime DateEnd)
         {
-            var result = await _repository.Rental.FindByCondition(
-                x => x.CarId == rental.CarId && 
-                x.IsActive == true &&
-                !((rental.DateFrom > x.RentalEnd && rental.DateTo > x.RentalEnd) ||
-                        (rental.DateFrom < x.RentalStart && rental.DateTo < x.RentalStart))
-                , false)
+
+            var result = await _repository.Rentals
+                .FindByCondition(x => x.CarId == CarId &&
+                    x.IsActive == true &&
+                    !((DateStart > x.RentalEnd && DateEnd > x.RentalEnd) ||
+                        (DateStart < x.RentalStart && DateEnd < x.RentalStart))
+                    , false)
                 .ToListAsync();
 
+      
             if (result.IsNullOrEmpty())
             {
                 return false;
@@ -147,18 +149,57 @@ namespace CarRent.Service.Service
             return true;
         }
 
+        public async Task<bool> IsAvailable(NewRentalForClient newRental)
+        {
+            if(newRental.DateFrom > newRental.DateTo)
+            {
+                return false;
+            }
+
+            var isBusy = await CarIsBusy(newRental);
+            return !isBusy;
+        }
+
         private async Task<bool> CarIsBusy(NewRentalForClient newRental)
         {
-            if (await CarHaveRentalInThisDate(newRental) || 
-                await _carMaintenance.CarHaveMaintenanceInThisDate(
-                    newRental.CarId, 
-                    newRental.DateFrom, 
-                    newRental.DateTo)
-                )
+            var haveRental = await CarHaveRentalInThisDate(newRental.CarId,
+                    newRental.DateFrom,
+                    newRental.DateTo);
+
+            var haveMaintenance = await CarHaveMaintenanceInThisDate(
+                    newRental.CarId,
+                    newRental.DateFrom,
+                    newRental.DateTo);
+
+            if (haveRental || haveMaintenance)
             {
+                await Console.Out.WriteLineAsync("car is busy");
                 return true;
             }
+            await Console.Out.WriteLineAsync("car is free");
+
             return false;
+        }
+
+        private async Task<bool> CarHaveMaintenanceInThisDate(
+                int CarId,
+                DateTime DateStart,
+                DateTime DateEnd
+            )
+        {
+            var result = await _repository.CarMaintenances
+                .FindByCondition(x => x.CarId == CarId &&
+                    x.IsActive == true &&
+                    !((DateStart > x.DateEnd && DateEnd > x.DateEnd) ||
+                        (DateStart < x.DateStart && DateEnd < x.DateStart))
+                    , false)
+                .ToListAsync();
+
+            if (result.IsNullOrEmpty())
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

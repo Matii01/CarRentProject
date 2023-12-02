@@ -10,6 +10,7 @@ namespace CarRent.Service.Interfaces
 {
     public interface IRentalService
     {
+        Task<bool> IsAvailable(NewRentalForClient newRental);
         Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId);
 
         /// <summary>
@@ -25,7 +26,11 @@ namespace CarRent.Service.Interfaces
         //      NewRentalForClient newRental,
         //      PriceForCar price);
 
-        Task<bool> CarHaveRentalInThisDate(NewRentalForClient rental);
+        //Task<bool> CarHaveRentalInThisDate(NewRentalForClient rental);
+        Task<bool> CarHaveRentalInThisDate(int CarId,
+                DateTime DateStart,
+                DateTime DateEnd);
+
         Task<string> CreateRentalAndInvoiceAndAssignUser(
                 string userId, 
                 InvoiceDto invoiceDto,

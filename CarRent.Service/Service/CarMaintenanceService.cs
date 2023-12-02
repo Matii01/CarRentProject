@@ -29,8 +29,8 @@ namespace CarRent.Service.Service
         public async Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance)
         {
 
-            var carHaveRental = await _rentalService.CarHaveRentalInThisDate(new(
-                carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd));
+            var carHaveRental = await _rentalService.CarHaveRentalInThisDate(
+                carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd);
 
             if (carHaveRental || await CarHaveMaintenanceInThisDate(carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd))
             {
