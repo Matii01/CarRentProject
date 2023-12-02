@@ -26,5 +26,7 @@ namespace CarRent.data.DTO
         ClientDetailsDto ClientDetails, 
         InvoiceDto Invoice);
 
+    public record RentalStatusDto(int Id, string Status, string? Remarks);
+
     
 }

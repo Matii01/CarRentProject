@@ -23,7 +23,6 @@ namespace CarRent.Repository
         //CarMaintenances
         private readonly Lazy<IGenericRepository<CarMaintenance>> _carMaintenancesRepository;
 
-
         // Rental 
         private readonly Lazy<IGenericRepository<Rental>> _rentalRepository;
         private readonly Lazy<IGenericRepository<ClientDetails>> _clientDetailsRepository;
@@ -31,6 +30,7 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<InvoiceItem>> _invoiceItemRepository;
         private readonly Lazy<IGenericRepository<InvoiceClient>> _invoiceClientRepository;
         private readonly Lazy<IGenericRepository<UserRental>> _userRentalRepository;
+        private readonly Lazy<IGenericRepository<RentalStatus>> _rentalStatusRepository;
 
         //Rabat 
         private readonly Lazy<IGenericRepository<Rabat>> _rabatRepository;
@@ -90,6 +90,9 @@ namespace CarRent.Repository
             _userRentalRepository = new Lazy<IGenericRepository<UserRental>>(() =>
                new GenericRepository<UserRental>(_context));
 
+            _rentalStatusRepository = new Lazy<IGenericRepository<RentalStatus>>(() =>
+                new GenericRepository<RentalStatus>(_context));
+
             _rabatRepository = new Lazy<IGenericRepository<Rabat>>(() =>
                 new  GenericRepository<Rabat>(_context));
 
@@ -112,6 +115,7 @@ namespace CarRent.Repository
         public IGenericRepository<PricelistItem> PricelistItem => _priceListItemRepository.Value;
         public IGenericRepository<PricelistDate> PricelistDate => _pricelistDateRepository.Value;
         public IGenericRepository<Rental> Rental => _rentalRepository.Value;
+        public IGenericRepository<RentalStatus> RentalStatus => _rentalStatusRepository.Value;
         public IGenericRepository<ClientDetails> ClientDetails => _clientDetailsRepository.Value;
         public IGenericRepository<Invoice> Invoice => _invoiceRepository.Value;
         public IGenericRepository<InvoiceItem> InvoiceItem => _invoiceItemRepository.Value;

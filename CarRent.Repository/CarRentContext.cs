@@ -51,7 +51,7 @@ namespace CarRent.Repository
         //Rentals
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<UserRental> UserRentals { get; set; }
-
+        public DbSet<RentalStatus> RentalStatuses { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceClient> InvoiceClients { get; set; }
         public DbSet<InvoiceCompanyClient> InvoiceCompanyClients { get; set; }

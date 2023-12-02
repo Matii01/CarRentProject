@@ -27,7 +27,8 @@ namespace CarRent.Service
         public readonly Lazy<IGenericService<AirConditioningTypeDto>> _airConditioningService;
         public readonly Lazy<IGenericService<KilometrLimitDto>> _kilometrLimitService;
         public readonly Lazy<IGenericService<GearboxTypeDto>> _gearboxTypeService;
-
+        public readonly Lazy<IGenericService<RentalStatusDto>> _rentalStatusService;
+        
 
 
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper)
@@ -67,6 +68,9 @@ namespace CarRent.Service
 
             _gearboxTypeService = new Lazy<IGenericService<GearboxTypeDto>>(()
                 => new GearboxTypeService(repositoryManager, mapper));
+
+            _rentalStatusService = new Lazy<IGenericService<RentalStatusDto>>(()
+                => new RentalStatusService(repositoryManager, mapper));
         }
 
         public ICarService CarService => _carService.Value;
@@ -82,5 +86,6 @@ namespace CarRent.Service
         public IGenericService<AirConditioningTypeDto> AirConditioningTypeService => _airConditioningService.Value;
         public IGenericService<KilometrLimitDto> KilometrLimitService => _kilometrLimitService.Value;
         public IGenericService<GearboxTypeDto> GearboxTypeService => _gearboxTypeService.Value;
+        public IGenericService<RentalStatusDto> RentalStatusService => _rentalStatusService.Value;
     }
 }

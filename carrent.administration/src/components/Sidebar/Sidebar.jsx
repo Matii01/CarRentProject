@@ -47,6 +47,8 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Pracownicy", path: "/users/workers" },
   ];
 
+  const managment = [{ name: "Statusy Wypozyczeń", path: "/rental/status" }];
+
   const location = useLocation();
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -119,7 +121,13 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               pages={pages}
             />
           </li>
-
+          <li>
+            <DropdownList
+              title="Ustawienia"
+              icon="fa-regular fa-file-lines"
+              pages={managment}
+            />
+          </li>
           <li>
             <NavLink to={"#"} className="nav-link">
               <i className={"nc-icon nc-alien-33"} />

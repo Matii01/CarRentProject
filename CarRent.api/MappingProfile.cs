@@ -54,6 +54,10 @@ namespace CarRent.api
                 .ForMember(x => x.UserId, opt => opt.MapFrom(x => x.WorkerId))
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
+            CreateMap<RentalStatus, RentalStatusDto>();
+            CreateMap<RentalStatusDto, RentalStatus>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
 
 
             /*
