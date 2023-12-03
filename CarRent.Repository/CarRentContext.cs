@@ -29,7 +29,14 @@ namespace CarRent.Repository
                 .HasOne(x => x.InvoiceItem)
                 .WithOne(i => i.Rental)
                 .HasForeignKey<InvoiceItem>(i => i.RentalId);
-//                .OnDelete(DeleteBehavior.NoAction);
+            //                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Invoice>()
+                .HasMany(e => e.InvoicesItems)
+                .WithOne(e => e.Invoice)
+                .HasForeignKey(e => e.InvoiceId)
+                .HasPrincipalKey(e => e.Id);
+
 
         }
 

@@ -42,7 +42,7 @@ namespace CarRent.Repository.Repositories
             //     ));
             
 
-            var list = await context.Cars
+            var list = context.Cars
              .Search(parameters)
              .Select(x => new CarListDtoForClient(
                  x.Id,
@@ -53,10 +53,9 @@ namespace CarRent.Repository.Repositories
                  x.GearBoxType.Name,
                  x.AirConditioningType.Name,
                  0
-                 ))
-             .ToListAsync();
+                 ));
 
-            var pagedList = PagedList<CarListDtoForClient>
+            var pagedList = await PagedList<CarListDtoForClient>
                 .ToPagedList(list /*newList*/, parameters.PageNumber, parameters.PageSize);
 
             return pagedList;

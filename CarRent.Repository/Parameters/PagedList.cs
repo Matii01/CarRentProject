@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,11 +25,11 @@ namespace CarRent.Repository.Parameters
             //AddRange(items);
         }
 
-        public static PagedList<T> ToPagedList(IEnumerable<T> items, int pageNumber, int pageSize)
+        public static async Task<PagedList<T>> ToPagedList(IQueryable<T> items, int pageNumber, int pageSize)
         {
-            var count = items.Count();
-            var it = items.Skip((pageNumber -1) * pageSize)
-                .Take(pageSize).ToList();
+            var count = await items.CountAsync();
+            var it = await items.Skip((pageNumber -1) * pageSize)
+                .Take(pageSize).ToListAsync();
 
 
             return new PagedList<T>(it, count, pageNumber, pageSize);

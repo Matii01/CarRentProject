@@ -1,6 +1,7 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models.User;
 using CarRent.Repository;
+using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,6 +25,20 @@ namespace CarRent.api.Controllers
         {
             _userManager = userManager;
             _db = db;
+        }
+
+        [HttpGet("AllRentals")]
+        public async Task<IActionResult> AllRentals(RentalParameters param)
+        {
+            var list = await _services.RentalService.GetRentalsListAsync(param, false);
+            return Ok(list);
+        }
+
+        [HttpGet("AllOrders")]
+        public async Task<IActionResult> AllOrders([FromQuery] OrderParameters param)
+        {
+            var list = await _services.RentalService.GetRentalsListAsync(param, false);
+            return Ok(list);
         }
 
         [Authorize(Roles = "User")]
@@ -52,7 +67,7 @@ namespace CarRent.api.Controllers
                 temp.ClientDetails
                 );
 
-            return Ok(true);
+            return Ok(result);
         }
 
        
@@ -82,10 +97,12 @@ namespace CarRent.api.Controllers
         [HttpPost("AddNewUserRentalTest")]
         public async Task<IActionResult> AddRentalTest([FromBody] object allRentalData)
         {
-            var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
-            await Console.Out.WriteLineAsync(temp.ToString());
-            await Console.Out.WriteLineAsync("asdasdasd");
-            return Ok(true);
+            return Ok(1);
+
+            //var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
+            //await Console.Out.WriteLineAsync(temp.ToString());
+            //await Console.Out.WriteLineAsync("asdasdasd");
+            //return Ok(1);
         }
     }
 }

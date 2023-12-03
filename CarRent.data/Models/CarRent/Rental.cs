@@ -16,6 +16,8 @@ namespace CarRent.data.Models.CarRent
         
         public int CarId { get; set; }
         public Car Car { get; set; } = null!;
+        public int? RentalStatusId { get; set; }
+        public RentalStatus? RentalStatus { get; set; }
         public InvoiceItem? InvoiceItem { get; set; } 
         public DateTime RentalStart { get; set; }
         public DateTime RentalEnd { get; set; }

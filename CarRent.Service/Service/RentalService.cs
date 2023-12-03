@@ -2,6 +2,7 @@
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
+using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,19 @@ namespace CarRent.Service.Service
            _priceList = priceList;
         }
 
-        public async Task<string> CreateRentalAndInvoiceAndAssignUser(string userId,
+        public async Task<PagedList<RentalListData>> GetRentalsListAsync(RentalParameters param, bool tractChanges)
+        {
+            var list = await _repository.Rentals.GetPagedListRentalActiveAsync(param, tractChanges);
+            return list;
+        }
+
+        public async Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges)
+        {
+            var list = await _repository.Rentals.GetInvoicesDataAsync(param, tractChanges);
+            return list;
+        }
+
+        public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
                 ClientDetailsDto clientDetails)
@@ -37,7 +50,7 @@ namespace CarRent.Service.Service
             }
             var price = await _priceList.GetPriceForCarForDate(userId, newRental);
 
-            string invoiceNumber = await GetInvoiceNumber();
+            string invoiceNumber = await GenerateInvoiceNumber();
             var Invoice = new Invoice { Number = invoiceNumber, Comment = invoiceDto.Comment, IsActive = true, };
             var ClientDetails = GetClientDetails(clientDetails);
 
@@ -48,7 +61,7 @@ namespace CarRent.Service.Service
             var invoiceClient = new InvoiceClient { InvoiceId = Invoice.Id, ClientDetailsId = ClientDetails.Id, IsActive = true, };
             _repository.InvoiceClient.Create(invoiceClient);
 
-            var Rental = CreateRental(newRental);
+            var Rental = await CreateRental(newRental);
             Rental.InvoiceItem = new InvoiceItem
             {
                 Rabat = price.Rabat,
@@ -64,42 +77,20 @@ namespace CarRent.Service.Service
             _repository.Rentals.Create(Rental);
             await _repository.SaveAsync();
             await CreateUserRental(userId, Rental.Id);
+            
+            var carName = await _repository.Car.GetCarAsync(newRental.CarId, false);
+            var rentalInfo = new RentalDataForClientDto(
+                    clientDetails.FirstName + " " + clientDetails.LastName,
+                    newRental.DateFrom,
+                    newRental.DateTo,
+                    carName.Name,
+                    carName.CarImage,
+                    Rental.InvoiceItem.Gross
+                    ); 
 
-            return "OK";
+            return rentalInfo;
         }
 
-        private Rental CreateRental(NewRentalForClient newRental)
-        {
-            Rental rental = new()
-            {
-                CarId = newRental.CarId,
-                RentalStart = newRental.DateFrom,
-                RentalEnd = newRental.DateTo,
-                IsActive = true
-            };
-            return rental;
-        }
-
-        private async Task<string> GetInvoiceNumber()
-        {
-            string number = "NR/12";
-            return number;
-        }
-
-        private ClientDetails GetClientDetails(ClientDetailsDto clientDetails)
-        {
-            return new ClientDetails
-            {
-                FirstName =clientDetails.FirstName ,
-                LastName =clientDetails.LastName,
-                Email = clientDetails.Email,
-                PhoneNumber = clientDetails.PhoneNumber,
-                Address = clientDetails.Address,
-                PostCode = clientDetails.PostCode,
-                City = clientDetails.City,
-                IsActive = true,
-            };
-        }
         public async Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId)
         {
             InvoiceClient client = new()
@@ -113,23 +104,7 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
             return client;
         }
-        private async Task<UserRental> CreateUserRental(string? userId, int rentalId)
-        {
-            UserRental userRental = new()
-            {
-                UserAccountId = userId,
-                RentalId = rentalId,
-                IsActive = true,
-            };
-            _repository.UserRental.Create(userRental);
-            await _repository.SaveAsync();
-
-            return userRental;
-        }
-
-        public async Task<bool> CarHaveRentalInThisDate(int CarId,
-                DateTime DateStart,
-                DateTime DateEnd)
+        public async Task<bool> CarHaveRentalInThisDate(int CarId, DateTime DateStart, DateTime DateEnd)
         {
 
             var result = await _repository.Rentals
@@ -148,7 +123,6 @@ namespace CarRent.Service.Service
 
             return true;
         }
-
         public async Task<bool> IsAvailable(NewRentalForClient newRental)
         {
             if(newRental.DateFrom > newRental.DateTo)
@@ -159,7 +133,47 @@ namespace CarRent.Service.Service
             var isBusy = await CarIsBusy(newRental);
             return !isBusy;
         }
+        
+        private async Task<Rental> CreateRental(NewRentalForClient newRental)
+        {
+            var RentalStatusId = await GetDefaultRentalStatus();
+            Rental rental = new()
+            {
+                CarId = newRental.CarId,
+                RentalStart = newRental.DateFrom,
+                RentalEnd = newRental.DateTo,
+                IsActive = true,
+                RentalStatusId = RentalStatusId,
+            };
+            return rental;
+        }
+        private ClientDetails GetClientDetails(ClientDetailsDto clientDetails)
+        {
+            return new ClientDetails
+            {
+                FirstName = clientDetails.FirstName,
+                LastName = clientDetails.LastName,
+                Email = clientDetails.Email,
+                PhoneNumber = clientDetails.PhoneNumber,
+                Address = clientDetails.Address,
+                PostCode = clientDetails.PostCode,
+                City = clientDetails.City,
+                IsActive = true,
+            };
+        }
+        private async Task<UserRental> CreateUserRental(string? userId, int rentalId)
+        {
+            UserRental userRental = new()
+            {
+                UserAccountId = userId,
+                RentalId = rentalId,
+                IsActive = true,
+            };
+            _repository.UserRental.Create(userRental);
+            await _repository.SaveAsync();
 
+            return userRental;
+        }
         private async Task<bool> CarIsBusy(NewRentalForClient newRental)
         {
             var haveRental = await CarHaveRentalInThisDate(newRental.CarId,
@@ -180,12 +194,7 @@ namespace CarRent.Service.Service
 
             return false;
         }
-
-        private async Task<bool> CarHaveMaintenanceInThisDate(
-                int CarId,
-                DateTime DateStart,
-                DateTime DateEnd
-            )
+        private async Task<bool> CarHaveMaintenanceInThisDate( int CarId, DateTime DateStart,DateTime DateEnd)
         {
             var result = await _repository.CarMaintenances
                 .FindByCondition(x => x.CarId == CarId &&
@@ -200,6 +209,57 @@ namespace CarRent.Service.Service
                 return false;
             }
             return true;
+        }  
+        private async Task<int?> GetDefaultRentalStatus()
+        {
+            var result = await _repository.RentalStatus
+                .FindByCondition(x => x.IsDefault == true && x.IsActive == true, false)
+                .SingleOrDefaultAsync();
+
+            if(result == null)
+            {
+                return null;
+            }
+            return result.Id;
+        }
+        private async Task<string> GetInvoiceNumber()
+        {
+            string number = "NR/12";
+            return number;
+        }
+        private async Task<string> GenerateInvoiceNumber()
+        {
+            var lastInvoiceNumber = await _repository.Invoice
+                .FindByCondition(x => x.IsActive == true, false)
+                .OrderBy(x => x.Id)
+                .Select(x=> x.Number)
+                .LastOrDefaultAsync();
+
+            if(lastInvoiceNumber == null)
+            {
+                return "NR/1";
+            }
+
+            var invoice = lastInvoiceNumber.Split('/');
+
+            try
+            {
+                int num = Int32.Parse(invoice[^1]);
+                int next = num + 1;
+                
+                StringBuilder newInvoiceNum = new ("");
+                for(int i = 0; i < invoice.Length-1; i++)
+                {
+                    newInvoiceNum.Append(invoice[i]);
+                    newInvoiceNum.Append('/');
+                }
+                newInvoiceNum.Append(newInvoiceNum.ToString());
+                return newInvoiceNum.ToString();
+            }
+            catch (Exception ex)
+            {
+                return "NR/1";
+            }
         }
     }
 }

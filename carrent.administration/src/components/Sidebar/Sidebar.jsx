@@ -95,7 +95,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               false ? "active active-pro" : activeRoute("admin/upgrade")
             }
           >
-            <NavLink to={"#"} className="nav-link">
+            <NavLink to={"/rentals"} className="nav-link">
               <i className={"nc-icon nc-alien-33"} />
               <p>Zamówienia</p>
             </NavLink>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarRent.data.Models.CarRent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,33 @@ namespace CarRent.data.DTO
         string City
     );
 
-    public record InvoiceDto(string Number, string? Comment);
+    
+    public record InvoiceDto(int Id, string Number, string? Comment, List<InvoiceItemDto> InvoiceItems);
+    public record InvoiceItemDto(
+        int InvoiceId,
+        decimal Rabat,
+        decimal Net,
+         decimal Gross,
+         decimal VAT,
+         decimal VATValue
+        ,Rental? Rental
+        );
 
     public record AllRentalDataDto(
         NewRentalForClient NewRentalForClient, 
         ClientDetailsDto ClientDetails, 
         InvoiceDto Invoice);
 
-    public record RentalStatusDto(int Id, string Status, string? Remarks);
+    public record RentalStatusDto(int Id, string Status, string? Remarks, bool? IsDefault);
 
-    
+    public record RentalListData();
+    public record RentalDataForClientDto(
+        string ClientName, 
+        DateTime DateFrom, 
+        DateTime DateTo, 
+        string CarName,
+        string CarImage,
+        decimal TotalCost
+        );
+
 }

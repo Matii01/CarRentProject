@@ -3,7 +3,11 @@ import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
 function AddRentalStatus({ onAdd }) {
-  const [newStatus, setNewStatus] = useState({ status: "", remarks: "" });
+  const [newStatus, setNewStatus] = useState({
+    status: "",
+    remarks: "",
+    isDefault: false,
+  });
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -37,6 +41,12 @@ function AddRentalStatus({ onAdd }) {
   const handleChange = (event) => {
     const { value, name } = event.target;
     setNewStatus((prev) => ({ ...prev, [name]: value }));
+    console.log(value);
+  };
+
+  const handleCheckboxChange = (event) => {
+    setNewStatus((prev) => ({ ...prev, isDefault: event.target.checked }));
+    console.log(event.target.checked);
   };
 
   return (
@@ -71,6 +81,14 @@ function AddRentalStatus({ onAdd }) {
               value={newStatus.status}
               onChange={handleChange}
             />
+          </Form.Group>
+          <Form.Group className="" controlId="formBasicCheckbox">
+            <input
+              type="checkbox"
+              checked={newStatus.isDefault}
+              onChange={handleCheckboxChange}
+            />
+            <label className="p-2">Domyślne</label>
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
             <Form.Label>Uwagi</Form.Label>

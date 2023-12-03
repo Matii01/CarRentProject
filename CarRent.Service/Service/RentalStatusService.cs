@@ -33,8 +33,6 @@ namespace CarRent.Service.Service
             return _mapper.Map<RentalStatusDto>(rentalStatus);
         }
 
-       
-
         public async Task<IEnumerable<RentalStatusDto>> GetAllActiveAsync(bool trackChanges)
         {
             var rentalStatus = await _repository.RentalStatus
@@ -72,6 +70,7 @@ namespace CarRent.Service.Service
                 .SingleOrDefaultAsync() ?? throw new ArgumentException("Rental Status not found");
             rentalStatus.Status = newValue.Status;
             rentalStatus.Remarks = newValue.Remarks;
+            rentalStatus.IsDefault = newValue.IsDefault;
 
             await _repository.SaveAsync();
         }

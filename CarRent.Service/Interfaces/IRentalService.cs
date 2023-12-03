@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
+using CarRent.Repository.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace CarRent.Service.Interfaces
     {
         Task<bool> IsAvailable(NewRentalForClient newRental);
         Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId);
-
+        Task<PagedList<RentalListData>> GetRentalsListAsync(RentalParameters param, bool tractChanges);
+        Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges);
         /// <summary>
         /// Create Invoice 
         /// </summary>
@@ -31,7 +33,7 @@ namespace CarRent.Service.Interfaces
                 DateTime DateStart,
                 DateTime DateEnd);
 
-        Task<string> CreateRentalAndInvoiceAndAssignUser(
+        Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(
                 string userId, 
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,

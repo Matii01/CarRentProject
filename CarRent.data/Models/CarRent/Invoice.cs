@@ -13,5 +13,7 @@ namespace CarRent.data.Models.CarRent
         public override int Id { get; set; }
         public string Number { get; set; } = null!;
         public string? Comment {  get; set; }
+        //public ICollection<InvoiceItem> invoices { get; set; } 
+        public ICollection<InvoiceItem> InvoicesItems { get; set;} 
     }
 }

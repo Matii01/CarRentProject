@@ -52,6 +52,11 @@ function RentalStatus() {
 
   const refreshView = () => {
     getStatuses();
+    setIsEditMode(false);
+  };
+
+  const onDeleteClick = (itemId) => {
+    console.log(itemId);
   };
 
   return (
@@ -96,6 +101,7 @@ function RentalStatus() {
                   item={["id", "status", "remarks"]}
                   searchTerm={searchTerm}
                   onDoubleClick={onDoubleClick}
+                  handleDelete={onDeleteClick}
                 />
               </Card.Body>
             </Card>

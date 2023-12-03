@@ -37,6 +37,10 @@ function EditRentalStatus({ editStatus, onCancel, updateView }) {
     setEditedStatus((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCheckboxChange = (event) => {
+    setEditedStatus((prev) => ({ ...prev, isDefault: event.target.checked }));
+  };
+
   return (
     <Card className="p-2">
       <Card.Header>
@@ -69,6 +73,15 @@ function EditRentalStatus({ editStatus, onCancel, updateView }) {
               value={editedStatus.status}
               onChange={handleChange}
             />
+          </Form.Group>
+          <Form.Group className="" controlId="formBasicCheckbox">
+            <input
+              type="checkbox"
+              name="isDefault"
+              checked={editedStatus.isDefault}
+              onChange={handleCheckboxChange}
+            />
+            <label className="p-2">Domyślne</label>
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
             <Form.Label>Uwagi</Form.Label>
