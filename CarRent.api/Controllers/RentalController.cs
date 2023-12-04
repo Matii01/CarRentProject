@@ -28,7 +28,7 @@ namespace CarRent.api.Controllers
         }
 
         [HttpGet("AllRentals")]
-        public async Task<IActionResult> AllRentals(RentalParameters param)
+        public async Task<IActionResult> AllRentals([FromQuery] RentalParameters param)
         {
             var list = await _services.RentalService.GetRentalsListAsync(param, false);
             return Ok(list);
@@ -39,6 +39,23 @@ namespace CarRent.api.Controllers
         {
             var list = await _services.RentalService.GetRentalsListAsync(param, false);
             return Ok(list);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("UserRental")]
+        public async Task<IActionResult> GetUserRental()
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var items = await _services.RentalService.GetUserRentalAsync(user.Id);
+
+            return Ok(items);
         }
 
         [Authorize(Roles = "User")]

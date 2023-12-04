@@ -38,8 +38,9 @@ namespace CarRent.data.DTO
         InvoiceDto Invoice);
 
     public record RentalStatusDto(int Id, string Status, string? Remarks, bool? IsDefault);
-
-    public record RentalListData();
+    public record RentalListDto(int Id, Client Client,string CarName, DateTime RentalStart, DateTime RentalEnd);
+    public record RentalListDataDto(int Id, string Name, string CarName, DateTime RentalStart, DateTime RentalEnd);
+    
     public record RentalDataForClientDto(
         string ClientName, 
         DateTime DateFrom, 
@@ -48,5 +49,4 @@ namespace CarRent.data.DTO
         string CarImage,
         decimal TotalCost
         );
-
 }

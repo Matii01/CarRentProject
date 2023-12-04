@@ -21,7 +21,7 @@ function RentalsList() {
     const queryString = new URLSearchParams(filteredParams).toString();
 
     axios
-      .get(`https://localhost:7091/Rental/AllOrders?${queryString}`)
+      .get(`https://localhost:7091/Rental/AllRentals?${queryString}`)
       .then((data) => {
         setItems(data.data);
         console.log(data);
@@ -46,16 +46,20 @@ function RentalsList() {
                   <thead>
                     <tr>
                       <th>Id</th>
-                      <th>Numer</th>
-                      <th>Uwagi</th>
+                      <th>Klient</th>
+                      <th>Samochód</th>
+                      <th>Od</th>
+                      <th>Do</th>
                     </tr>
                   </thead>
                   <tbody>
                     {items.items.map((item) => (
                       <tr key={item.id}>
                         <td>{item.id}</td>
-                        <td>{item.number}</td>
-                        <td>{item.comment}</td>
+                        <td>{item.name}</td>
+                        <td>{item.carName}</td>
+                        <td>{item.rentalStart}</td>
+                        <td>{item.rentalEnd}</td>
                       </tr>
                     ))}
                   </tbody>

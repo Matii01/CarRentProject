@@ -17,6 +17,16 @@ namespace CarRent.Repository.Extensions
     {
         public static IQueryable<Car> Search(this IQueryable<Car> cars, CarParameters param)
         {
+            if(param.PriceMin.HasValue)
+            {
+
+            }
+
+            if(param.PriceMax.HasValue)
+            {
+
+            }
+
             if (param.GearboxTypeId.HasValue)
             {
                 cars = cars.Where(x => x.GearBoxTypeId == param.GearboxTypeId);

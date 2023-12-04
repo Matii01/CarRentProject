@@ -27,7 +27,7 @@ namespace CarRent.Service.Service
            _priceList = priceList;
         }
 
-        public async Task<PagedList<RentalListData>> GetRentalsListAsync(RentalParameters param, bool tractChanges)
+        public async Task<PagedList<RentalListDataDto>> GetRentalsListAsync(RentalParameters param, bool tractChanges)
         {
             var list = await _repository.Rentals.GetPagedListRentalActiveAsync(param, tractChanges);
             return list;
@@ -36,6 +36,12 @@ namespace CarRent.Service.Service
         public async Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges)
         {
             var list = await _repository.Rentals.GetInvoicesDataAsync(param, tractChanges);
+            return list;
+        }
+
+        public async Task<IEnumerable<RentalListDataDto>> GetUserRentalAsync(string userId)
+        {
+            var list = await _repository.Rentals.GetUserRental(userId);
             return list;
         }
 

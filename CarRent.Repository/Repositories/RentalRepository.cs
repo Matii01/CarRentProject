@@ -77,15 +77,70 @@ namespace CarRent.Repository.Repositories
                 );
         }
 
-        public async Task<PagedList<RentalListData>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)
+        public async Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)
         {
-            var list = context.Rentals.Search(context, param)
-                .Select(x => new RentalListData());
+             //.Select(x => new RentalListData(
+             //       (x.InvoiceItem.Invoice.Client as IndividualClient).FirstName + " "+ (x.InvoiceItem.Invoice.Client as IndividualClient).LastName,
+             //       x.Car.Name, x.RentalStart, x.RentalEnd));
 
-            var pagedList = await PagedList<RentalListData>
+            var list = context.Rentals
+                .Include(c => c.Car)
+                .Include(x => x.InvoiceItem)
+                .ThenInclude(i => i.Invoice)
+                .ThenInclude(i => i.Client)
+                .Search(context, param)
+                .Select(x => new RentalListDto(
+                        x.Id,
+                        x.InvoiceItem.Invoice.Client,
+                        x.Car.Name, 
+                        x.RentalStart, 
+                        x.RentalEnd)
+                );
+
+            var pagedList = await PagedList<RentalListDto>
                 .ToPagedList(list, param.PageNumber, param.PageSize);
 
-            return pagedList;
+            
+            return GetTransformedPagedList(pagedList);
+        }
+
+        public async Task<IEnumerable<RentalListDataDto>> GetUserRental(string userId)
+        {
+            var items = await context.UserRentals
+                .Where(x => x.UserAccountId == userId)
+                .Include(x => x.Rental)
+                .ThenInclude(x => x.Car)
+                .Select(x => new RentalListDataDto(
+                        x.Id,
+                        x.Rental.RentalStatus.Status,
+                        x.Rental.Car.Name,
+                        x.Rental.RentalStart,
+                        x.Rental.RentalEnd)
+                ).ToListAsync();
+
+            return items;
+        }
+
+        private static PagedList<RentalListDataDto> GetTransformedPagedList(PagedList<RentalListDto> pagedList)
+        {
+            var newItems = new List<RentalListDataDto>();
+            foreach (var item in pagedList.Items)
+            {
+                if (item.Client is IndividualClient)
+                {
+                    var c = item.Client as IndividualClient;
+                    newItems.Add(new RentalListDataDto(c.Id, c.FirstName +" "+ c.LastName, item.CarName, item.RentalStart, item.RentalEnd));
+                }
+                else if (item.Client is FirmClient)
+                {
+                    var c = item.Client as FirmClient;
+                    newItems.Add(new RentalListDataDto(c.Id, c.CompanyName, item.CarName, item.RentalStart, item.RentalEnd));
+                }
+            }
+
+            var newPagedList = new PagedList<RentalListDataDto>(newItems, newItems.Count, pagedList.MetaData.CurrentPage, pagedList.MetaData.PageSize);
+
+            return newPagedList;
         }
     }
 }
