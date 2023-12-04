@@ -31,6 +31,10 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<InvoiceClient>> _invoiceClientRepository;
         private readonly Lazy<IGenericRepository<UserRental>> _userRentalRepository;
         private readonly Lazy<IGenericRepository<RentalStatus>> _rentalStatusRepository;
+        
+        private readonly Lazy<IGenericRepository<UserInvoice>> _userInvoiceRepository;
+        private readonly Lazy<IGenericRepository<IndividualClient>> _individualClientRepository;
+        private readonly Lazy<IGenericRepository<FirmClient>> _firmClientRepository;
 
         //Rabat 
         private readonly Lazy<IGenericRepository<Rabat>> _rabatRepository;
@@ -94,13 +98,22 @@ namespace CarRent.Repository
                 new GenericRepository<RentalStatus>(_context));
 
             _rabatRepository = new Lazy<IGenericRepository<Rabat>>(() =>
-                new  GenericRepository<Rabat>(_context));
+                new GenericRepository<Rabat>(_context));
 
             _rabatForUserRepository = new Lazy<IGenericRepository<RabatForUser>>(() =>
                 new GenericRepository<RabatForUser>(_context));
 
             _carMaintenancesRepository = new Lazy<IGenericRepository<CarMaintenance>>(() =>
                 new GenericRepository<CarMaintenance>(_context));
+
+            _firmClientRepository = new Lazy<IGenericRepository<FirmClient>>(() =>
+                new GenericRepository<FirmClient>(_context));
+
+            _individualClientRepository = new Lazy<IGenericRepository<IndividualClient>>(() =>
+                new GenericRepository<IndividualClient>(_context));
+
+            _userInvoiceRepository = new Lazy<IGenericRepository<UserInvoice>>(() =>
+                new GenericRepository<UserInvoice>(_context));
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -121,6 +134,7 @@ namespace CarRent.Repository
         public IGenericRepository<InvoiceItem> InvoiceItem => _invoiceItemRepository.Value;
         public IGenericRepository<InvoiceClient> InvoiceClient => _invoiceClientRepository.Value;
         public IGenericRepository<UserRental> UserRental => _userRentalRepository.Value;
+        public IGenericRepository<UserInvoice> UserInvoice => _userInvoiceRepository.Value;
         public IGenericRepository<Rabat> Rabat => _rabatRepository.Value;
         public IGenericRepository<RabatForUser> RabatForUser => _rabatForUserRepository.Value;
         public IGenericRepository<CarMaintenance> CarMaintenances => _carMaintenancesRepository.Value;

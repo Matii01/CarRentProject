@@ -60,11 +60,15 @@ namespace CarRent.Repository
         public DbSet<UserRental> UserRentals { get; set; }
         public DbSet<RentalStatus> RentalStatuses { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<InvoiceClient> InvoiceClients { get; set; }
-        public DbSet<InvoiceCompanyClient> InvoiceCompanyClients { get; set; }
-        public DbSet<CompanyClientDetails> CompanyClientsDetails { get; set;}
-        public DbSet<ClientDetails> ClientDetails { get; set; }
+        //public DbSet<InvoiceClient> InvoiceClients { get; set; }
+        //public DbSet<InvoiceCompanyClient> InvoiceCompanyClients { get; set; }
+        //public DbSet<CompanyClientDetails> CompanyClientsDetails { get; set;}
+        //public DbSet<ClientDetails> ClientDetails { get; set; }
         public DbSet<InvoiceItem> InvoicesItems { get; set; }
+        public DbSet<FirmClient> FirmClients { get; set; }
+        public DbSet<IndividualClient> IndividualClients { get; set; }
+        public DbSet<UserInvoice> UserInvoices { get; set; }
+
         // Rabat
         public DbSet<Rabat> Rabats { get; set; }
         public DbSet<RabatForUser> RabatForUsers { get; set; }

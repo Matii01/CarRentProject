@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20231204172425_NewTablesForInvoiceManagment")]
+    partial class NewTablesForInvoiceManagment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,6 +282,86 @@ namespace CarRent.Repository.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("CarRent.data.Models.CarRent.ClientDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientDetails");
+                });
+
+            modelBuilder.Entity("CarRent.data.Models.CarRent.CompanyClientDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAndNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyClientsDetails");
+                });
+
             modelBuilder.Entity("CarRent.data.Models.CarRent.EngineType", b =>
                 {
                     b.Property<int>("Id")
@@ -347,6 +430,58 @@ namespace CarRent.Repository.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientDetailsId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoiceClients");
+                });
+
+            modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceCompanyClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyClientDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyClientDetailsId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoiceCompanyClients");
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceItem", b =>
@@ -625,35 +760,6 @@ namespace CarRent.Repository.Migrations
                     b.ToTable("RentalStatuses");
                 });
 
-            modelBuilder.Entity("CarRent.data.Models.CarRent.UserInvoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserAccountId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserInvoices");
-                });
-
             modelBuilder.Entity("CarRent.data.Models.CarRent.UserRental", b =>
                 {
                     b.Property<int>("Id")
@@ -791,19 +897,19 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a02527b8-beac-447f-be7e-e064a0406c1a",
+                            Id = "a07ff006-69e3-41a2-8414-ac96ac3c5891",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "7c28c9bd-1458-45d4-bd1a-b2f8565d93cc",
+                            Id = "a2fc824d-e824-46a7-ba7d-ced23eed3cb0",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "ae727494-bf3a-4b0c-90e3-418d724059e9",
+                            Id = "d2241b54-29cb-4efb-9b06-4a126a31aba8",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -1048,6 +1154,44 @@ namespace CarRent.Repository.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceClient", b =>
+                {
+                    b.HasOne("CarRent.data.Models.CarRent.ClientDetails", "ClientDetails")
+                        .WithMany()
+                        .HasForeignKey("ClientDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarRent.data.Models.CarRent.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClientDetails");
+
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceCompanyClient", b =>
+                {
+                    b.HasOne("CarRent.data.Models.CarRent.CompanyClientDetails", "CompanyClientDetails")
+                        .WithMany()
+                        .HasForeignKey("CompanyClientDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarRent.data.Models.CarRent.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyClientDetails");
+
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceItem", b =>
                 {
                     b.HasOne("CarRent.data.Models.CarRent.Invoice", "Invoice")
@@ -1126,23 +1270,6 @@ namespace CarRent.Repository.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("RentalStatus");
-                });
-
-            modelBuilder.Entity("CarRent.data.Models.CarRent.UserInvoice", b =>
-                {
-                    b.HasOne("CarRent.data.Models.CarRent.Invoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarRent.data.Models.User.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Invoice");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.UserRental", b =>

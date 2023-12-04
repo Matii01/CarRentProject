@@ -14,6 +14,8 @@ namespace CarRent.data.Models.CarRent
         public string Number { get; set; } = null!;
         public string? Comment {  get; set; }
         //public ICollection<InvoiceItem> invoices { get; set; } 
+        public int ClientId { get; set; }
+        public Client Client { get; set; } = null!;
         public ICollection<InvoiceItem> InvoicesItems { get; set;} 
     }
 }

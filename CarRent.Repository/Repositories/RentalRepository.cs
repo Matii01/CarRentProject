@@ -22,7 +22,14 @@ namespace CarRent.Repository.Repositories
 
         public async Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges)
         {
+            /*
+             .Where(x => x.Client is IndividualClient 
+                    && (x.Client as IndividualClient).FirstName == "Adam")
+             */
+
             var list = context.Invoices
+                .Include(x => x.Client)
+                .Where(x => x.Client is IndividualClient)
                 .Include(x => x.InvoicesItems)
                 .ThenInclude(x => x.Rental)
                 .Search(context, param);
@@ -32,6 +39,7 @@ namespace CarRent.Repository.Repositories
                         x.Id,
                         x.Number,
                         x.Comment,
+                        x.Client as IndividualClient,
                         x.InvoicesItems.Select(y => new InvoiceItemDto(
                             y.InvoiceId,
                             y.Rabat,
@@ -47,6 +55,26 @@ namespace CarRent.Repository.Repositories
                  .ToPagedList(newList, param.PageNumber, param.PageSize);
 
             return pagedList;
+        }
+
+        private ClientDetailsDto GetClientDetailsDto(Client client)
+        {
+            var c = client as IndividualClient;
+
+            if(c == null)
+            {
+                throw new Exception("");
+            }
+
+            return new ClientDetailsDto(
+                c.FirstName,
+                c.LastName,
+                c.Email,
+                c.PhoneNumber,
+                c.Address,
+                c.PostCode,
+                c.City
+                );
         }
 
         public async Task<PagedList<RentalListData>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)

@@ -21,7 +21,7 @@ namespace CarRent.data.DTO
     );
 
     
-    public record InvoiceDto(int Id, string Number, string? Comment, List<InvoiceItemDto> InvoiceItems);
+    public record InvoiceDto(int Id, string Number, string? Comment, IndividualClient? Client, List<InvoiceItemDto> InvoiceItems);
     public record InvoiceItemDto(
         int InvoiceId,
         decimal Rabat,
