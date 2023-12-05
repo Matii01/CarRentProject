@@ -43,11 +43,11 @@ namespace CarRent.Repository.Extensions
             {
                 cars = cars.Where(x => x.CarTypeId == param.CarTypeId);
             }
-            if (param.MakeId.HasValue)
+            if (param.MakeId?.Length > 0)
             {
-                cars = cars.Where(x => x.CarMakeId == param.MakeId);
+                cars = cars.Where(x => param.MakeId.Contains(x.CarMakeId));
             }
-            if(param.MinSeatsNum.HasValue)
+            if (param.MinSeatsNum.HasValue)
             {
                 cars = cars.Where(x => x.NumberOfSeats >= param.MinSeatsNum);
             }

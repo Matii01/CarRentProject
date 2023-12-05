@@ -12,7 +12,7 @@ namespace CarRent.Repository.Parameters
         public int? ACTypeId { get; set; }
         public int? EngineTypeId { get; set; }
         public int? CarTypeId { get; set; }
-        public int? MakeId {  get; set; }
+        public int[]? MakeId {  get; set; }
         public double? PriceMin { get; set; }
         public double? PriceMax { get; set; }
         public int? MinSeatsNum { get; set; }

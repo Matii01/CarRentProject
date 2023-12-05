@@ -22,7 +22,7 @@ namespace CarRent.api.Controllers
         {
             var list = await _services.CarService.GetCarListForClientAsync(parameters, false);
 
-            if(list.Items.IsNullOrEmpty())
+            if (list.Items.IsNullOrEmpty())
             {
                 return NotFound();
             }

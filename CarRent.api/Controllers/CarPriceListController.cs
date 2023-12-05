@@ -55,6 +55,15 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{priceListId:int}/CheckPrices")]
+        public async Task<IActionResult> GetPriceForCarForDate(NewRentalForClient newRental)
+        {
+            var result = await _services.PriceListService
+                .GetPriceForCarForDate(null, newRental);
+
+            return Ok(result);
+        }
+
         [HttpPost("addItem")]
         public async Task<IActionResult> AddItemToPricelist(NewtPricelistItemDto newItem)
         {
