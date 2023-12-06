@@ -27,21 +27,21 @@ namespace CarRent.Repository.Extensions
 
             }
 
-            if (param.GearboxTypeId.HasValue)
+            if (param.GearboxTypeId?.Length > 0)
             {
-                cars = cars.Where(x => x.GearBoxTypeId == param.GearboxTypeId);
+                cars = cars.Where(x => param.GearboxTypeId.Contains(x.GearBoxTypeId));
             }
             if (param.ACTypeId.HasValue)
             {
                 cars = cars.Where(x => x.AirConditioningTypeId == param.ACTypeId);
             }
-            if (param.EngineTypeId.HasValue)
+            if (param.EngineTypeId?.Length > 0)
             {
-                cars = cars.Where(x => x.EngineTypeId == param.EngineTypeId);
+                cars = cars.Where(x => param.EngineTypeId.Contains(x.EngineTypeId));
             }
-            if (param.CarTypeId.HasValue)
+            if (param.CarTypeId?.Length > 0)
             {
-                cars = cars.Where(x => x.CarTypeId == param.CarTypeId);
+                cars = cars.Where(x => param.CarTypeId.Contains(x.CarTypeId));
             }
             if (param.MakeId?.Length > 0)
             {
