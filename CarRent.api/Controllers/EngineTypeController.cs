@@ -16,7 +16,8 @@ namespace CarRent.api.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllEngineTypes()
         {
-            var list = await _services.EngineTypeService.GetAllAsync(false);
+           // var list = await _services.EngineTypeService.GetAllAsync(false);
+            var list = await _services.EngineTypeService.GetAllActiveAsync(false);
             return Ok(list);
         }
 

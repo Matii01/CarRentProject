@@ -87,7 +87,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
           >
             <NavLink to={"#"} className="nav-link">
               <i className={"nc-icon nc-alien-33"} />
-              <p>Dashboard</p>
+              <p>Analizy</p>
             </NavLink>
           </li>
           <li
@@ -127,12 +127,6 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               icon="fa-regular fa-file-lines"
               pages={managment}
             />
-          </li>
-          <li>
-            <NavLink to={"#"} className="nav-link">
-              <i className={"nc-icon nc-alien-33"} />
-              <p>Strona</p>
-            </NavLink>
           </li>
         </Nav>
       </div>
