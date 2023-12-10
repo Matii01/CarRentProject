@@ -81,6 +81,37 @@ function AddCar() {
     }));
   };
 
+  const handleImage = async (event) => {
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+
+    fetch("https://localhost:7091/car/uploadCarImage", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log(response);
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCarImage(data.path);
+      })
+      .catch((error) => {
+        console.log("error fetching the makes: ", error);
+      });
+  };
+
+  const setCarImage = (path) => {
+    console.log(path);
+    setCar((prevState) => ({
+      ...prevState,
+      CarImage: path,
+    }));
+  };
+
   if (loading) {
     return <p>Loading ... </p>;
   }
@@ -400,7 +431,11 @@ function AddCar() {
                   <Col>
                     <Form.Group controlId="carImage">
                       <Form.Label>Car Image</Form.Label>
-                      <Form.Control type="file" name="CarImage"></Form.Control>
+                      <Form.Control
+                        type="file"
+                        name="CarImage"
+                        onChange={handleImage}
+                      ></Form.Control>
                     </Form.Group>
                   </Col>
                 </Row>

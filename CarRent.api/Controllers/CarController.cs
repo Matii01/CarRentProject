@@ -127,8 +127,9 @@ namespace CarRent.api.Controllers
                 return BadRequest("No file is uploaded.");
             }
 
-            var path = "C:\\Users\\msi\\source\\repos\\Project\\CarRentProject\\CarRent.websiteTs\\public";
-            var targetDirectory = Path.Combine(path, "CarImages");
+            //var path = "C:\\Users\\msi\\source\\repos\\Project\\CarRentProject\\CarRent.websiteTs\\public";
+            var newPath = "D:\\React\\Tests\\react-app-test\\public";
+            var targetDirectory = Path.Combine(newPath, "CarImages");
             var filePath = Path.Combine(targetDirectory, file.FileName);
 
             if (!Directory.Exists(targetDirectory))

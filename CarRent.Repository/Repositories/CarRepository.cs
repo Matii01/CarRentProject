@@ -52,6 +52,8 @@ namespace CarRent.Repository.Repositories
                  x.EngineType.Name,
                  x.GearBoxType.Name,
                  x.AirConditioningType.Name,
+                 x.Acceleration0to100,
+                 x.Horsepower,
                  0
                  ));
 
