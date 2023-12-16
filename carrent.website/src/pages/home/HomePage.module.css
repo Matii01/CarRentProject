@@ -1,0 +1,13 @@
+.imageContainer {
+  position: relative;
+  display: inline-block; /* or another display type depending on your layout */
+}
+
+.textOverlay {
+  position: absolute;
+  top: 50%; /* Adjust these values to position your text */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* or any color you prefer */
+  /* Add more styling for your text here (e.g., font-size, font-weight) */
+}

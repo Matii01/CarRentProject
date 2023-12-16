@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Container,
   Navbar,
@@ -7,36 +7,80 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import SetLocalStorage from "../../hooks/SetLocalStorage";
+import styles from "./NavBar.module.css";
+import { useEffect } from "react";
 
 function NavBar() {
+  const user = useSelector((state) => state.user);
+  const [a, b, logout] = SetLocalStorage();
+  const userName = user.name;
+
+  const handleLogout = () => {
+    console.log("log out !!!!");
+    logout();
+  };
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
-    <Navbar expand="lg" className="bg-body-tertiary p-3" sticky="top">
+    <Navbar
+      expand="lg"
+      sticky="top"
+      className={`bg-body-tertiary p-3 ${styles.customNavbar}`}
+    >
       <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Brand href="#">Car Rental</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
-            className="me-auto my-2 my-lg-0 fs-5"
+            className="ms-auto me-auto my-2 my-lg-0 fs-5"
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/cars">Cars</NavLink>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/temp">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
+            <Nav.Link to="/" as={NavLink}>
+              Home
+            </Nav.Link>
+            <Nav.Link to="/car/cars" as={NavLink}>
+              Cars
+            </Nav.Link>
+            <Nav.Link to="/contact" as={NavLink}>
+              Contact
+            </Nav.Link>
+            {/* <NavDropdown title="Client" id="">
+              <NavDropdown.Item to="/car/cars" as={NavLink}>
+                Car List Client
+              </NavDropdown.Item>
+              <NavDropdown.Item to="/user" as={NavLink}>
+                User
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action5">
                 Something else here
               </NavDropdown.Item>
-            </NavDropdown>
-            <NavLink href="#" disabled>
-              Link
-            </NavLink>
+            </NavDropdown> */}
           </Nav>
-          <Form className="d-flex">
+          <Nav>
+            {!user.isLogin && (
+              <Nav.Link to={"/login"} as={NavLink}>
+                Login
+              </Nav.Link>
+            )}
+            {!user.isLogin && (
+              <Nav.Link to={"/register"} as={NavLink}>
+                Register
+              </Nav.Link>
+            )}
+            <Nav.Link to="/user" as={NavLink}>
+              {user.isLogin ? userName : ""}
+            </Nav.Link>
+            {user.isLogin && (
+              <Nav.Link onClick={handleLogout}>Log out</Nav.Link>
+            )}
+          </Nav>
+
+          {/* <Form className="d-flex">
             <Form.Control
               type="search"
               placeholder="Search"
@@ -44,7 +88,7 @@ function NavBar() {
               aria-label="Search"
             />
             <Button variant="outline-success">Search</Button>
-          </Form>
+          </Form> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

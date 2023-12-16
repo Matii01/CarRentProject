@@ -1,0 +1,8 @@
+.customPagination .page-item .page-link {
+  background-color: #343a40 !important;
+  color: white !important;
+}
+
+.customPagination .page-item.active .page-link {
+  background-color: #52585d !important;
+}

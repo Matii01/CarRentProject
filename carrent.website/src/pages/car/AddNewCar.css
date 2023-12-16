@@ -1,0 +1,13 @@
+@media (max-width: 575.98px) {
+  /* this corresponds to Bootstrap's xs breakpoint */
+  .custom-mt-xs {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 576px) {
+  /* this corresponds to Bootstrap's sm breakpoint */
+  .custom-mt-xs {
+    margin-top: 0;
+  }
+}

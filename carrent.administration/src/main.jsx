@@ -44,6 +44,8 @@ import WorkersPage from "./pages/users/Workers";
 import UserDetail from "./pages/users/UserDetails";
 import RentalStatus from "./pages/managment/RentalStatus";
 import RentalsList from "./pages/managment/RentalsList";
+import KilometreLimit from "./pages/cars/KilometreLimit";
+import AirConditioning from "./pages/cars/AirConditioning";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -83,6 +85,14 @@ const router = createBrowserRouter([
       {
         path: "cars/gearbox",
         element: <GearboxType />,
+      },
+      {
+        path: "cars/limits",
+        element: <KilometreLimit />,
+      },
+      {
+        path: "cars/AirConditioning",
+        element: <AirConditioning />,
       },
       {
         path: "car/:carId/calendar",

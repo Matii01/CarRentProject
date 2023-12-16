@@ -37,8 +37,8 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Typy", path: "/cars/types" },
     { name: "Typy napędu", path: "/cars/cardrives" },
     { name: "Skrzynia biegów", path: "/cars/gearbox" },
-    { name: "Klimatyzacje", path: "" },
-    { name: "Limity kilometrów", path: "" },
+    { name: "Klimatyzacje", path: "/cars/AirConditioning" },
+    { name: "Limity kilometrów", path: "/cars/limits" },
     { name: "Kalendarz", path: "/cars/calendar" },
   ];
 

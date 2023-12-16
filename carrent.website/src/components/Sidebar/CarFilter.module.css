@@ -1,0 +1,46 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -360px; /* Assuming the width of the sidebar to be 250px */
+  width: 350px;
+  height: 100%;
+  /* background-color: rgb(53, 54, 58); */
+  /* background-color: #212529; */
+  background-color: #fff;
+  transition: left 0.7s ease;
+  overflow-y: auto;
+  scrollbar-width: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 5px grey; */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  /* background: #52585d; */
+  background: #a7a7a7;
+  border-radius: 10px;
+  max-height: 25px;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+/* .accordionButton {
+  background-color: #ffffff !important;
+}
+
+.accordionButton:focus {
+  box-shadow: none !important;
+}
+
+.accordionButton:not(.collapsed) {
+  color: #212529;
+} */

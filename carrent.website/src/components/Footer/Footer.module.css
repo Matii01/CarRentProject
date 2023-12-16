@@ -1,0 +1,16 @@
+.list {
+  list-style: none;
+  color: #52585d;
+}
+
+.footerText {
+  color: #52585d;
+}
+
+.listTitle {
+  color: #343a40;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: large;
+  margin-left: 30px;
+}

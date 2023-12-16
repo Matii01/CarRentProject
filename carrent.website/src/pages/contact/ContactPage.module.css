@@ -1,0 +1,19 @@
+.title {
+  text-transform: uppercase;
+  font-size: 3rem;
+  letter-spacing: 2px;
+}
+
+.contactTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.contactFormText,
+.text {
+  color: #52585d;
+}
+
+.additional {
+  color: #52585d;
+}

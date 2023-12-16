@@ -2,6 +2,9 @@ import { useNavigate } from "react-router";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import fetchData from "./../../functions/fetchData";
+import { storage } from "./../../hooks/useFirebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 const initialState = {
   Name: "",
@@ -32,6 +35,7 @@ function AddCar() {
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [imageUpload, setImageUpload] = useState(null);
 
   useEffect(() => {
     fetchData("https://localhost:7091/car/AllInfoForCar")
@@ -69,7 +73,7 @@ function AddCar() {
         navigate("/cars");
       })
       .catch((error) => {
-        console.log("", error);
+        console.log(error);
       });
   };
 
@@ -81,31 +85,27 @@ function AddCar() {
     }));
   };
 
-  const handleImage = async (event) => {
-    const formData = new FormData();
-    formData.append("file", event.target.files[0]);
+  const uploadImage = () => {
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `${v4() + imageUpload.name}`);
 
-    fetch("https://localhost:7091/car/uploadCarImage", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.log(response);
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCarImage(data.path);
-      })
-      .catch((error) => {
-        console.log("error fetching the makes: ", error);
+    uploadBytes(imageRef, imageUpload).then((response) => {
+      getDownloadURL(response.ref).then((url) => {
+        console.log(url);
+        setCarImage(url);
       });
+    });
   };
 
+  const handleFirebaseImage = (event) => {
+    setImageUpload(event.target.files[0]);
+  };
+
+  useEffect(() => {
+    uploadImage();
+  }, [imageUpload]);
+
   const setCarImage = (path) => {
-    console.log(path);
     setCar((prevState) => ({
       ...prevState,
       CarImage: path,
@@ -434,7 +434,7 @@ function AddCar() {
                       <Form.Control
                         type="file"
                         name="CarImage"
-                        onChange={handleImage}
+                        onChange={handleFirebaseImage}
                       ></Form.Control>
                     </Form.Group>
                   </Col>
