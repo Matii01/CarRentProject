@@ -172,13 +172,13 @@ function CarMakes() {
           </Col>
         </Row>
         <Row>
-          <CarInfoTable
+          {/* <CarInfoTable
             thead={["Id", "Model", "Opis", "Actions"]}
             items={makes}
             item={["id", "name", "description"]}
             searchTerm={searchTerm}
             onDoubleClick={onDoubleClick}
-          />
+          /> */}
         </Row>
       </Container>
     </>

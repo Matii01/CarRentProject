@@ -41,14 +41,16 @@ function App() {
             onClick={toggleSidebar}
             style={{
               position: "absolute",
-              backgroundColor: "lightgray",
+              backgroundColor: "transparent",
+              borderColor: "transparent",
+              color: "black",
               opacity: "1",
               top: "15px",
               left: "0px",
               zIndex: 1,
             }}
           >
-            Click
+            <i className="fa-solid fa-bars"></i>
           </Button>
           <AdminNavbar />
           <div className="content">

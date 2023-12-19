@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarRent.data.Models.User;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -44,9 +45,29 @@ namespace CarRent.data.DTO
 
     public record UserLoginData
     {
-        public string? UserId {  get; init; }
+        public string? UserId { get; init; }
         public string? UserName { get; init; }
         public string? Role { get; init; }
         public TokenDto? Token { get; init; }
     }
+
+    public record AddressDto
+    (
+        int Id,
+        string? Name,
+        string? Address1,
+        string? Address2,
+        string? City,
+        string? State,
+        string? Zip,
+        bool? IsDefault
+
+    );
+
+    public record UserAddressDto
+    (
+        int Id ,
+        int AddressId,
+        string? UserAccountId 
+    );
 }

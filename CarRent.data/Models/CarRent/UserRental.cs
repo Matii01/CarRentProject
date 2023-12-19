@@ -14,6 +14,5 @@ namespace CarRent.data.Models.CarRent
         public Rental Rental { get; set; } = null!;
         public string? UserAccountId { get; set; }
         public User.User User { get; set; } = null!;
-
     }
 }

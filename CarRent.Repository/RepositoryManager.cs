@@ -1,4 +1,5 @@
 ﻿using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Repositories;
 
@@ -39,6 +40,10 @@ namespace CarRent.Repository
         //Rabat 
         private readonly Lazy<IGenericRepository<Rabat>> _rabatRepository;
         private readonly Lazy<IGenericRepository<RabatForUser>> _rabatForUserRepository;
+
+        // User address
+        private readonly Lazy<IGenericRepository<Address>> _addressRepository;
+        private readonly Lazy<IGenericRepository<UserAddress>> _userAddressRepository;
 
         public RepositoryManager(CarRentContext context)
         {
@@ -114,6 +119,13 @@ namespace CarRent.Repository
 
             _userInvoiceRepository = new Lazy<IGenericRepository<UserInvoice>>(() =>
                 new GenericRepository<UserInvoice>(_context));
+
+            _addressRepository = new Lazy<IGenericRepository<Address>>(() => 
+                new GenericRepository<Address>(_context));
+
+            _userAddressRepository = new Lazy<IGenericRepository<UserAddress>>(() =>
+                new GenericRepository<UserAddress>(_context));
+
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -138,7 +150,9 @@ namespace CarRent.Repository
         public IGenericRepository<Rabat> Rabat => _rabatRepository.Value;
         public IGenericRepository<RabatForUser> RabatForUser => _rabatForUserRepository.Value;
         public IGenericRepository<CarMaintenance> CarMaintenances => _carMaintenancesRepository.Value;
-        
+        public IGenericRepository<Address> Address => _addressRepository.Value;
+        public IGenericRepository<UserAddress> UserAddress => _userAddressRepository.Value;
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

@@ -2,6 +2,7 @@
 using CarRent.data.DTO;
 using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 
 namespace CarRent.api
 {
@@ -56,6 +57,18 @@ namespace CarRent.api
 
             CreateMap<RentalStatus, RentalStatusDto>();
             CreateMap<RentalStatusDto, RentalStatus>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+            CreateMap<Address, AddressDto>();
+            CreateMap<AddressDto, Address>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+            CreateMap<UserAddress, UserAddressDto>();
+            CreateMap<UserAddressDto, UserAddress>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+            CreateMap<KilometrLimit, KilometrLimitDto>();
+            CreateMap<KilometrLimitDto, KilometrLimit>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
 

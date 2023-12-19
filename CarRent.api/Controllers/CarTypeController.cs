@@ -40,7 +40,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> DeleteCarTypes(int id)
         {
             await _services.CarTypeService.DeleteAsync(id);

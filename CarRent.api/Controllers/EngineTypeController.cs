@@ -50,7 +50,7 @@ namespace CarRent.api.Controllers
             return StatusCode(201);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteEngineType(int id)
         {
             //var engineType = await _services.EngineTypeService.GetAsync(id, true);

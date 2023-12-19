@@ -1,5 +1,7 @@
-﻿using CarRent.data.Models.User;
+﻿using CarRent.data.DTO;
+using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +61,54 @@ namespace CarRent.api.Controllers
 
             }
             return Ok(user);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("GetUserAddresses")]
+        public async Task<IActionResult> GetUserAddresses()
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var items = await _services.UserAddressService.GetAddressesAsync(user.Id);
+            return Ok(items);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("AddUserAddresses")]
+        public async Task<IActionResult> AddUserAddresses([FromBody] AddressDto address)
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _services.UserAddressService.AddAddressesAsync(user.Id, address);
+            return CreatedAtAction("AddUserAddresses", address);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPut("UpdateUserAddresses/{id:int}")]
+        public async Task<IActionResult> UpdateUserAddresses(int id, [FromBody] AddressDto address)
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _services.UserAddressService.UpdateAddressesAsync(id, address);
+            return Ok(address);
         }
     }
 }

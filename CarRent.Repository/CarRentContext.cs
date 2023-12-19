@@ -73,5 +73,9 @@ namespace CarRent.Repository
         public DbSet<Rabat> Rabats { get; set; }
         public DbSet<RabatForUser> RabatForUsers { get; set; }
 
+        // User
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+
     }
 }

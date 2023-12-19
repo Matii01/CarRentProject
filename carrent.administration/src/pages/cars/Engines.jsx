@@ -4,6 +4,7 @@ import styles from "./../../components/Table/Table.module.css";
 // react-bootstrap components
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import fetchData from "../../functions/fetchData";
+import axios from "axios";
 
 const initialState = {
   newEngine: { id: 0, name: "" },
@@ -193,6 +194,20 @@ function Engines() {
       });
   };
 
+  const handleDelete = (id) => {
+    console.log("delete");
+    axios
+      .delete(`https://localhost:7091/EngineType/${id}`)
+      .then(() => {
+        getData();
+        onCancel();
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error);
+      });
+  };
+
   if (state.loading) {
     return <p>Lodaing</p>;
   }
@@ -245,7 +260,13 @@ function Engines() {
                       >
                         <td>{engine.id}</td>
                         <td>{engine.name}</td>
-                        <td></td>
+                        <td>
+                          <i
+                            className="fa-solid fa-trash"
+                            onClick={() => handleDelete(engine.id)}
+                            style={{ cursor: "pointer" }}
+                          ></i>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

@@ -24,7 +24,7 @@ function AddKilometreLimit({ onAdd }) {
   };
 
   const handleCancel = () => {
-    setNewItem({ name: "" });
+    setNewItem({ limitValue: "" });
   };
 
   const handleChange = (event) => {
@@ -63,9 +63,9 @@ function AddKilometreLimit({ onAdd }) {
           </Form>
           <Form className="m-2">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Nazwa</Form.Label>
+              <Form.Label>Wartość</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 name="limitValue"
                 value={newItem.limitValue}
                 onChange={handleChange}

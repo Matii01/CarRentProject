@@ -96,9 +96,10 @@ function KilometreLimit() {
               <Card.Body>
                 <CarInfoTable
                   items={items}
-                  thead={["Id", "Model"]}
+                  thead={["Id", "Wartość", "Actions"]}
                   item={["id", "limitValue"]}
                   searchTerm={searchTerm}
+                  filterBy="name"
                   onDoubleClick={onDoubleClick}
                   handleDelete={handleDelete}
                 />

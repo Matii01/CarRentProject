@@ -35,7 +35,7 @@ function EditConditioning({ editItem, onCancel, updateView }) {
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setEditedMake((prev) => ({ ...prev, [name]: value }));
+    setEditedItem((prev) => ({ ...prev, [name]: value }));
   };
 
   if (editedItem == null) {

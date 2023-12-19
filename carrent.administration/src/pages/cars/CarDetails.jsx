@@ -10,6 +10,7 @@ import {
   Container,
   Row,
   Col,
+  Image,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import fetchData from "../../functions/fetchData";
@@ -111,10 +112,14 @@ function CarDetails() {
             <p>Car details for {param.carId}</p>
           </Col>
           <Col>
-            <NavLink to={`pricelist`}>Cennik</NavLink>
+            <Nav.Link as={NavLink} to={`pricelist`}>
+              Cennik
+            </Nav.Link>
           </Col>
           <Col>
-            <NavLink to={`/car/${param.carId}/calendar`}>Kalendarz</NavLink>
+            <Nav.Link as={NavLink} to={`/car/${param.carId}/calendar`}>
+              Kalendarz
+            </Nav.Link>
           </Col>
         </Row>
         <Row>
@@ -383,9 +388,9 @@ function CarDetails() {
                       <Form.Group>
                         <label>Description</label>
                         <Form.Control
+                          as="textarea"
                           cols="80"
                           rows="5"
-                          as="textarea"
                           name="description"
                           value={car.description}
                           onChange={handleChange}
@@ -398,7 +403,7 @@ function CarDetails() {
                     type="submit"
                     variant="info"
                   >
-                    Update Profile
+                    Aktualizuj
                   </Button>
                   <div className="clearfix"></div>
                 </Form>
@@ -407,21 +412,12 @@ function CarDetails() {
           </Col>
           <Col md="4">
             <Card className="card-user">
-              <div className="card-image">
-                <img alt="..."></img>
+              <div className="card-image h-100">
+                <Image src={car.carImage} />
               </div>
               <Card.Body>
-                <div className="author">
-                  <a href="#pablo">
-                    <img alt="..." className="avatar border-gray"></img>
-                    <h5 className="title">Mike Andrew</h5>
-                  </a>
-                  <p className="description">michael24</p>
-                </div>
-                <p className="description text-center">
-                  "Lamborghini Mercy <br></br>
-                  Your chick she so thirsty <br></br>
-                  I'm in that two seat Lambo"
+                <p className="description text-center mt-2">
+                  {car.description}
                 </p>
               </Card.Body>
               <hr></hr>

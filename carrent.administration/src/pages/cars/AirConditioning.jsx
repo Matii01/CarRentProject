@@ -96,7 +96,7 @@ function AirConditioning() {
               <Card.Body>
                 <CarInfoTable
                   items={items}
-                  thead={["Id", "Model"]}
+                  thead={["Id", "Model", "Actions"]}
                   item={["id", "name"]}
                   searchTerm={searchTerm}
                   onDoubleClick={onDoubleClick}

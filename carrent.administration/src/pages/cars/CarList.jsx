@@ -35,7 +35,6 @@ function CarList() {
               <th>Engine</th>
               <th>Gearbox</th>
               <th>Ac</th>
-              <th>Price</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +50,6 @@ function CarList() {
                   <td>{car.engine}</td>
                   <td>{car.gearbox}</td>
                   <td>{car.ac}</td>
-                  <td>{car.price}</td>
                 </tr>
               ))}
           </tbody>
