@@ -6,14 +6,29 @@ import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import MyDatePicker from "../DatePicker/MyDatePicker";
 
 function BookCar({ carId, excludedDates }) {
-  const [error, setError] = useState({ isError: false });
+  const [error, setError] = useState(false);
   const [cost, setCost] = useState("");
   const [reservationData, setReservationDate] = useState({
     carId: carId,
     DateFrom: "",
     DateTo: "",
   });
+
   const navigation = useNavigate();
+
+  useEffect(() => {
+    if (reservationData.DateFrom < reservationData.DateTo) {
+      console.log(reservationData);
+      checkPrice();
+      isDatesValid();
+    }
+  }, [reservationData.DateFrom, reservationData.DateTo]);
+
+  useEffect(() => {
+    console.log(error);
+    if (error) {
+    }
+  }, [error]);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -50,13 +65,6 @@ function BookCar({ carId, excludedDates }) {
       .catch((error) => console.log(error));
   };
 
-  useEffect(() => {
-    if (reservationData.DateFrom < reservationData.DateTo) {
-      console.log(reservationData);
-      checkPrice();
-    }
-  }, [reservationData.DateFrom, reservationData.DateTo]);
-
   const checkPrice = () => {
     const queryString = transformObjectToQueryString(reservationData);
     axios
@@ -75,16 +83,10 @@ function BookCar({ carId, excludedDates }) {
         new Date(reservationData.DateFrom) <= new Date(element.rentalStart) &&
         new Date(reservationData.DateTo) >= new Date(element.rentalEnd)
       ) {
-        setError((prev) => ({
-          ...prev,
-          isError: true,
-        }));
+        setError(true);
         return;
       } else {
-        setError((prev) => ({
-          ...prev,
-          isError: false,
-        }));
+        setError(false);
       }
     });
   };
@@ -94,7 +96,6 @@ function BookCar({ carId, excludedDates }) {
       ...prev,
       [name]: value,
     }));
-    isDatesValid();
   };
 
   return (
@@ -105,6 +106,7 @@ function BookCar({ carId, excludedDates }) {
           <Row>
             <Col>
               <MyDatePicker
+                onBlur={isDatesValid}
                 onChange={handleDate}
                 excludedDate={excludedDates}
               />
@@ -117,12 +119,12 @@ function BookCar({ carId, excludedDates }) {
         <Card.Body>
           <Button
             type="submit"
-            className="w-100 customButton"
-            disabled={error.isError}
+            className={`w-100 customButton ${error ? "errorButton" : ""}`}
+            disabled={error}
           >
             Book
           </Button>
-          {error.isError && <p>error</p>}
+          {error && <p>Includes exemptions</p>}
         </Card.Body>
       </Form>
     </Card>

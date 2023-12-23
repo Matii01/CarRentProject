@@ -3,7 +3,7 @@ import { Col, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MyDatePicker({ onChange, excludedDate }) {
+function MyDatePicker({ onChange, excludedDate, onBlur }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [excludedDateIntervals, setExcludedDateIntervals] = useState({});

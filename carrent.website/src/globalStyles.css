@@ -34,6 +34,10 @@
   border-radius: 20;
 }
 
+.errorButton {
+  background-color: #b2b2b3 !important;
+}
+
 .customButton:hover {
   background-color: #52585d;
 }
