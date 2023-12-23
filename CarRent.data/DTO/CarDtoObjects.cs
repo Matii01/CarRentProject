@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    public record CarListDtoForClient(int Id, string Name, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, double Acceleration, double Horsepower, decimal Price);
+    public record CarListDtoForClient(int Id, string Name, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, double Acceleration, double Horsepower)
+    {
+        public decimal Price { get; set; }
+    }
     public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
 
     public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
@@ -57,6 +60,12 @@ namespace CarRent.data.DTO
         string CarDrive,
         bool IsActive
         );
+
+    public record CarDetailsPage(
+        int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price)
+    {
+        public IEnumerable<RentalDatesDto> ExcludedDates { get; set; }
+    }
 
     //public record UpdateCar(int id);
 }

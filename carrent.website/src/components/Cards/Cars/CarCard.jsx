@@ -78,13 +78,18 @@ function CarCard({ car }) {
           </Row>
           <Row className="mt-2">
             <Col>Cena</Col>
-            <Col className="text-end me-3 fs-5">500zł</Col>
+            <Col className="text-end me-3 fs-5">{`${car.price} zł`}</Col>
           </Row>
         </Card.Body>
         <Card.Footer>
           <Row>
             <Col className="text-center p-1">
-              <Button className="customButton w-75">Details</Button>
+              <Button
+                className="customButton w-75"
+                onClick={() => handleCarClick(car.id)}
+              >
+                Details
+              </Button>
             </Col>
             <Col className="text-center p-1">
               <Button className="customButton w-75">Rental</Button>

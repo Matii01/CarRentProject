@@ -14,6 +14,7 @@ namespace CarRent.Repository.Interfaces
     {
         IQueryable<Rental> GetAllAsync(bool trackChanges, string sortByProperty);
         IQueryable<Rental> GetAllActiveAsync(bool trackChanges);
+        IQueryable<Rental> GetRentalForCar(int carId);
         Task<IEnumerable<RentalListDataDto>> GetUserRental(string userId);
         Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges);
         Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges);

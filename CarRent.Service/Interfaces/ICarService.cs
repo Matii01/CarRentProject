@@ -13,7 +13,7 @@ namespace CarRent.Service.Interfaces
     {
         Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);
         Task<List<CarListDto>> GetCarsAsync(CarParameters carParameters, bool trackChanges);
-        Task<CarDetailsDtoForClient> GetCarDetailsForClientAsync(int id);
+        Task<CarDetailsPage> GetCarDetailsForClientAsync(int id);
         Task<NewCarDto?> GetCarById(int id, bool trackChanges);
 
         Task<Car> CreateCarAsync(NewCarDto car);

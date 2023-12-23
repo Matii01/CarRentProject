@@ -45,6 +45,14 @@ namespace CarRent.Service.Service
             return list;
         }
 
+        public async Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId)
+        {
+            return await _repository.Rentals
+                .GetRentalForCar(CarId)
+                .Select(x => new RentalDatesDto(x.RentalStart, x.RentalEnd))
+                .ToListAsync();
+        }
+
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
@@ -152,7 +160,6 @@ namespace CarRent.Service.Service
             var isBusy = await CarIsBusy(newRental);
             return !isBusy;
         }
-        
         private async Task<Rental> CreateRental(NewRentalForClient newRental)
         {
             var RentalStatusId = await GetDefaultRentalStatus();

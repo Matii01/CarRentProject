@@ -39,7 +39,6 @@ namespace CarRent.Service.Helper
                 car.IsActive
                 );
         }
-
         public static NewCarDto MapCarToNewCarDto(Car car)
         {
             return new NewCarDto(
@@ -65,7 +64,6 @@ namespace CarRent.Service.Helper
                 car.CarDrive.Id
                 );
         }
-
         public static void UpdateCar(ref Car toUpdate, NewCarDto carDto)
         {
             toUpdate.Name = carDto.Name;
@@ -100,10 +98,8 @@ namespace CarRent.Service.Helper
                 x.GearBoxType.Name,
                 x.AirConditioningType.Name,
                 x.Acceleration0to100,
-                x.Horsepower,
-                0)).ToList();
+                x.Horsepower)).ToList();
         }
-
         public static List<CarListDto> MapCarToCarListDto(IEnumerable<Car> list)
         { 
             return list.Select(x => new CarListDto(
@@ -115,10 +111,9 @@ namespace CarRent.Service.Helper
                 x.AirConditioningType.Name,
                 0)).ToList();
         }
-
-        public static CarDetailsDtoForClient MapCarToCarDetailsDtoForClient(Car car)
+        public static CarDetailsPage MapCarToCarDetailsPageForClient(Car car)
         {
-            return new CarDetailsDtoForClient
+            return new CarDetailsPage
             (
                 car.Id,
                 car.Name,
@@ -131,7 +126,6 @@ namespace CarRent.Service.Helper
                 0
             );
         }
-
         public static User MapUserForRegistrationDtoToUser(UserForRegistrationDto userForRegistration)
         {
             return new User()

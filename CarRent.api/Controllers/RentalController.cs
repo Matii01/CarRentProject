@@ -110,6 +110,15 @@ namespace CarRent.api.Controllers
             return Ok(isAvailable);
         }
 
+        [HttpGet("CheckPrice")]
+        public async Task<IActionResult> CheckPrice([FromQuery] NewRentalForClient dates)
+        {
+            await Console.Out.WriteLineAsync("param");
+            await Console.Out.WriteLineAsync(dates.ToString());
+            return Ok(269);
+        }
+
+
         [Authorize(Roles = "User")]
         [HttpPost("AddNewUserRentalTest")]
         public async Task<IActionResult> AddRentalTest([FromBody] object allRentalData)

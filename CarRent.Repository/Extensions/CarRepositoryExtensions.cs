@@ -72,8 +72,7 @@ namespace CarRent.Repository.Extensions
                     x.GearBoxType.Name,
                     x.AirConditioningType.Name,
                     x.Acceleration0to100,
-                    x.Horsepower,
-                    0
+                    x.Horsepower
                     ))
                 .ToListAsync();
             

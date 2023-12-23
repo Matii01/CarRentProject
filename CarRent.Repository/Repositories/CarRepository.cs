@@ -15,10 +15,11 @@ namespace CarRent.Repository.Repositories
 {
     public class CarRepository : RepositoryBase<Car>, ICarRepository
     {
-        public CarRepository(CarRentContext context) 
+        private readonly IPriceListRepository priceList;
+        public CarRepository(CarRentContext context, IPriceListRepository priceList) 
             : base(context)
         {
-
+            this.priceList = priceList;
         }
 
         public async Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
@@ -40,7 +41,8 @@ namespace CarRent.Repository.Repositories
             //     x.AirConditioningType.Name,
             //     0
             //     ));
-            
+
+            var currentData = DateTime.Now;
 
             var list = context.Cars
              .Search(parameters)
@@ -53,12 +55,16 @@ namespace CarRent.Repository.Repositories
                  x.GearBoxType.Name,
                  x.AirConditioningType.Name,
                  x.Acceleration0to100,
-                 x.Horsepower,
-                 0
+                 x.Horsepower
                  ));
 
             var pagedList = await PagedList<CarListDtoForClient>
                 .ToPagedList(list /*newList*/, parameters.PageNumber, parameters.PageSize);
+
+            foreach (var item in pagedList.Items) 
+            {
+                item.Price = await priceList.GetCarPriceForOneDay(item.Id);
+            }
 
             return pagedList;
         }

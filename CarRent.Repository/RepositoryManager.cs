@@ -50,7 +50,7 @@ namespace CarRent.Repository
             _context = context;
 
             _carRepository = new Lazy<ICarRepository>(() =>
-                new CarRepository(_context));
+                new CarRepository(_context, PriceList));
             _priceListRepository = new Lazy<IPriceListRepository>(() =>
                 new PriceListRepository(_context));
 

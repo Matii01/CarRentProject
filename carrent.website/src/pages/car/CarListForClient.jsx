@@ -7,6 +7,7 @@ import CarFilter from "../../components/Sidebar/CarFilter";
 import CarPagination from "../../components/Pagination/CarPagination";
 import CarsGridView from "../../components/Cars/CarsGridView";
 import CarsListView from "../../components/Cars/CarsListView";
+import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 
 function CarListForClient() {
   const defaultParams = { PageNumber: 1, PageSize: 10 };
@@ -37,33 +38,8 @@ function CarListForClient() {
     getFilteredCars(filterInfo);
   }, [filterInfo.PageNumber, filterInfo.PageSize]);
 
-  const transformObjectToQueryString = (object) => {
-    const obectToString = Object.entries(object)
-      .map(([key, value]) => {
-        if (key !== null && value !== undefined && value !== null) {
-          if (Array.isArray(value)) {
-            return value.map((x) => `${key}=${x}&`).join("");
-          } else {
-            return `${key}=${value}&`;
-          }
-        }
-        return "";
-      })
-      .join("");
-    return obectToString.slice(0, obectToString.length - 1);
-  };
-
-  const getFilteredCars = (parameters) => {
-    const filteredParams = Object.keys(parameters).reduce((acc, key) => {
-      if (parameters[key] !== null && parameters[key] !== undefined) {
-        acc[key] = parameters[key];
-      }
-      return acc;
-    }, {});
-    //const queryString = new URLSearchParams(filteredParams).toString();
-
+  const getFilteredCars = () => {
     const queryString = transformObjectToQueryString(filterInfo);
-
     fetch(`https://localhost:7091/car/cars?${queryString}`)
       .then((response) => {
         if (!response.ok) {

@@ -33,10 +33,10 @@ namespace CarRent.Service.Service
             return items;
         }
 
-        public async Task<CarDetailsDtoForClient> GetCarDetailsForClientAsync(int id)
+        public async Task<CarDetailsPage> GetCarDetailsForClientAsync(int id)
         {
             var item = await _repository.Car.GetCarForClientAsync(id);
-            return MapHelper.MapCarToCarDetailsDtoForClient(item);
+            return MapHelper.MapCarToCarDetailsPageForClient(item);
         }
 
         public async Task<NewCarDto?> GetCarById(int id, bool trackChanges)

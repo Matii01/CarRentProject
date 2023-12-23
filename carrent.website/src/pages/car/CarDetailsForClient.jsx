@@ -84,7 +84,7 @@ function CarDetailsForClient() {
             </Row>
           </Col>
           <Col>
-            <BookCar carId={param.carId} />
+            <BookCar carId={param.carId} excludedDates={car.excludedDates} />
           </Col>
         </Row>
       </Container>

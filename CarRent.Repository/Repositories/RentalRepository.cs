@@ -20,6 +20,13 @@ namespace CarRent.Repository.Repositories
         {
         }
 
+        public IQueryable<Rental> GetRentalForCar(int carId)
+        {
+            var currentDate = DateTime.Now;
+            return FindByCondition(
+                x => x.CarId == carId && x.RentalStart >= currentDate, false);
+        }
+
         public async Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges)
         {
             /*

@@ -36,6 +36,36 @@ namespace CarRent.Repository.Repositories
             return pricelist;
         }
 
+        public async Task <decimal> GetCarPriceForOneDay(int carId)
+        {
+            var currentData = DateTime.Now;
+
+            var pricelist = context.PricesList
+                .Include(x => x.PricelistDates)
+                .Include(x => x.PricelistItems)
+                .Where(x => x.CarId == carId)
+                .Where(x => x.PricelistDates
+                    .Any(x => x.DateFrom <= currentData && x.DateTo >= currentData));
+
+            var listItem = await pricelist
+                .Select(x => x.PricelistItems.Where(x => x.Days == 1))
+                .SingleOrDefaultAsync();
+
+            if(listItem == null)
+            {
+                return 0;
+            }
+
+            var item = listItem.SingleOrDefault();
+
+            if(item == null)
+            {
+                return 0;
+            }
+
+            return item.Price;
+        }
+
         public IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges)
         {
             var priceList = FindByCondition(x => x.CarId == carId && x.IsActive == true, trackChanges);

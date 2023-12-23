@@ -10,6 +10,7 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IPriceListRepository
     {
+        Task<decimal> GetCarPriceForOneDay(int carId);
         IQueryable<PriceList> GetCarPriceListForClient(int carId);
         IQueryable<PriceList> GetCarPriceListForClient(int carId, DateTime currentData);
         IQueryable<PriceList> GetPriceListsForCar(int carId, bool trackChanges);
@@ -17,6 +18,7 @@ namespace CarRent.Repository.Interfaces
         IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges);
         void Create(PriceList priceList);
         void Delete(PriceList priceList);
+
         /*
         Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges);
         Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges);
