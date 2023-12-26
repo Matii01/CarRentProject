@@ -54,14 +54,14 @@ namespace CarRent.data.DTO
     public record AddressDto
     (
         int Id,
-        string? Name,
+        string? FirstName,
+        string? LastName,
         string? Address1,
         string? Address2,
         string? City,
         string? State,
         string? Zip,
         bool? IsDefault
-
     );
 
     public record UserAddressDto
@@ -77,4 +77,24 @@ namespace CarRent.data.DTO
         string? NewPassword,
         string? RetypePassword
     );
+
+    /*ClientDetails: {
+         FirstName: "",
+         LastName: "",
+         Email: "",
+         PhoneNumber: "",
+         Address: "",
+         PostCode: "",
+         City: "",
+       }, */
+    public record DefaultRentalData
+    {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? PostCode { get; set; }
+        public string? City { get; set; }
+    }
 }

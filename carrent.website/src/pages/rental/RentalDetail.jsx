@@ -1,17 +1,18 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axiosInstance from "./../../utils/axiosConfig";
+import { useSelector } from "react-redux";
 
 function RentalDetail() {
   const param = useParams();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams("");
   const [isLoading, setIsLoading] = useState(false);
   const from = searchParams.get("from");
   const to = searchParams.get("to");
-
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
   const [allRentalData, setAllRentalData] = useState({
     NewRentalForClient: {
       CarId: param.carId,
@@ -32,6 +33,35 @@ function RentalDetail() {
       Comment: "brak uwag",
     },
   });
+
+  useEffect(() => {
+    if (user.isLogin) {
+      getUserDate();
+    }
+  }, [user.isLogin]);
+
+  const getUserDate = () => {
+    axiosInstance
+      .get(`https://localhost:7091/Users/GetDefaultDataForRental`)
+      .then((response) => {
+        setAllRentalData((prev) => ({
+          ...prev,
+          ClientDetails: {
+            ...prev.ClientDetails,
+            FirstName: response.data.firstName,
+            LastName: response.data.lastName,
+            Email: response.data.email,
+            PhoneNumber: response.data.phoneNumber,
+            Address: response.data.address,
+            PostCode: response.data.postCode,
+            City: response.data.city,
+          },
+        }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const addRental = (event) => {
     event.preventDefault();
@@ -153,7 +183,7 @@ function RentalDetail() {
                     />
                   </Form.Group>
                   <Row className="mb-3">
-                    <Form.Group as={Col}>
+                    <Form.Group as={Col} xs={12} xl={6}>
                       <Form.Label>Kod Pocztowy</Form.Label>
                       <Form.Control
                         required
@@ -164,7 +194,7 @@ function RentalDetail() {
                         onChange={handleChange}
                       />
                     </Form.Group>
-                    <Form.Group as={Col}>
+                    <Form.Group as={Col} xl={6} className="mt-xd-2">
                       <Form.Label>City</Form.Label>
                       <Form.Control
                         required
@@ -227,7 +257,7 @@ function RentalDetail() {
                   </Card.Subtitle>
                   <Card.Body>
                     <Row className="mt-2">
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} xl={6}>
                         <Form.Label>Nazwa firmy</Form.Label>
                         <Form.Control type="text" name="Nazwa firmy" />
                       </Form.Group>
@@ -243,7 +273,7 @@ function RentalDetail() {
                       </Form.Group>
                     </Row>
                     <Row className="mt-3">
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} xl={6}>
                         <Form.Label>Kod pocztowy</Form.Label>
                         <Form.Control type="text" name="Kod pocztowy" />
                       </Form.Group>

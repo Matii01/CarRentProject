@@ -116,6 +116,7 @@ namespace CarRent.api.Controllers
             var cost = await _services.PriceListService.GetPriceForCarForDate(null, dates);
             var total = cost.Gross - cost.Rabat;
 
+            await Console.Out.WriteLineAsync("logged off");
             return Ok(total);
         }
 
@@ -123,7 +124,7 @@ namespace CarRent.api.Controllers
         [HttpGet("CheckPriceForClient")]
         public async Task<IActionResult> CheckPriceForClient([FromQuery] NewRentalForClient dates)
         {
-            if(User == null || User.Identity == null)
+            if (User == null || User.Identity == null)
             {
                 throw new Exception();
             }
@@ -132,6 +133,7 @@ namespace CarRent.api.Controllers
             var user = await _userManager.FindByNameAsync(username) ?? throw new Exception("");
             var cost = await _services.PriceListService.GetPriceForCarForDate(user.Id, dates);
             var total = cost.Gross - cost.Rabat;
+            await Console.Out.WriteLineAsync("logged in");
 
             return Ok(total);
         }

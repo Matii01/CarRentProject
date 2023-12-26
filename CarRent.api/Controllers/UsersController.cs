@@ -2,6 +2,7 @@
 using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +68,7 @@ namespace CarRent.api.Controllers
         [HttpGet("GetUserAddresses")]
         public async Task<IActionResult> GetUserAddresses()
         {
-            var username = User.Identity.Name;
+            var username = User?.Identity?.Name ?? throw new Exception("");
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
@@ -77,6 +78,37 @@ namespace CarRent.api.Controllers
 
             var items = await _services.UserAddressService.GetAddressesAsync(user.Id);
             return Ok(items);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("GetDefaultDataForRental")]
+        public async Task<IActionResult> GetDefaultDataForRental()
+        {
+            var username = User?.Identity?.Name ?? throw new Exception("");
+            var user = await _userManager.FindByNameAsync(username);
+            
+            if (user is null) {
+                return NotFound();
+            }
+
+            var item = await _services.UserAddressService.GetDefaultAddressesAsync(user.Id);
+            
+            if(item is null) {
+                return NotFound();
+            }
+
+            var defaultDate = new DefaultRentalData
+            {
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = $"{item.Address1}, nr: {item.Address2}",
+                PostCode = item.Zip,
+                City = item.City,
+            };
+
+            return Ok(defaultDate);
         }
 
         [Authorize(Roles = "User")]

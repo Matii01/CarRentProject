@@ -4,7 +4,8 @@ import axiosInstance from "../../utils/axiosConfig";
 
 function AddressComponent({ address, onAdd }) {
   const [updateAddress, setUpdatedAddress] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     address1: "",
     address2: "",
     city: "",
@@ -90,13 +91,23 @@ function AddressComponent({ address, onAdd }) {
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label>Full Name</Form.Label>
+              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Full name"
-                name="name"
+                name="firstName"
                 onChange={handleChange}
-                value={updateAddress.name}
+                value={updateAddress.firstName}
+              />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Last name"
+                name="lastName"
+                onChange={handleChange}
+                value={updateAddress.lastName}
               />
             </Form.Group>
           </Row>

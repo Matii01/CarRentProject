@@ -11,6 +11,7 @@ namespace CarRent.Service.Interfaces
     {
         Task AddAddressesAsync(string id, AddressDto address);
         Task<IEnumerable<AddressDto>> GetAddressesAsync(string userId);
+        Task<AddressDto?> GetDefaultAddressesAsync(string userId);
         Task UpdateAddressesAsync(int id, AddressDto address);
     }
 }

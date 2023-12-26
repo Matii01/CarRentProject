@@ -21,7 +21,7 @@ function ChangePersonalDetails() {
           <Row className="mb-3">
             <Form.Group as={Col}>
               <Form.Label>User Name</Form.Label>
-              <Form.Control type="text" placeholder="User name" />
+              <Form.Control type="text" placeholder="User name" disabled />
             </Form.Group>
 
             <Form.Group as={Col}>

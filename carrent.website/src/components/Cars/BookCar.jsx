@@ -4,6 +4,8 @@ import { Button, Card, Col, Form, ListGroup, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import MyDatePicker from "../DatePicker/MyDatePicker";
+import axiosInstance from "../../utils/axiosConfig";
+import { useSelector } from "react-redux";
 
 function BookCar({ carId, excludedDates }) {
   const [error, setError] = useState(false);
@@ -14,6 +16,7 @@ function BookCar({ carId, excludedDates }) {
     DateTo: "",
   });
 
+  const user = useSelector((state) => state.user);
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -66,6 +69,26 @@ function BookCar({ carId, excludedDates }) {
   };
 
   const checkPrice = () => {
+    if (user.isLogin) {
+      checkPriceForUser();
+    } else {
+      checkPriceForLoggedOff();
+    }
+  };
+
+  const checkPriceForUser = () => {
+    const queryString = transformObjectToQueryString(reservationData);
+    axiosInstance
+      .get(`https://localhost:7091/Rental/CheckPriceForClient?${queryString}`)
+      .then((data) => {
+        setCost(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const checkPriceForLoggedOff = () => {
     const queryString = transformObjectToQueryString(reservationData);
     axios
       .get(`https://localhost:7091/Rental/CheckPrice?${queryString}`)

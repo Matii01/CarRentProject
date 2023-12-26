@@ -28,7 +28,8 @@ namespace CarRent.Service.Service
                 IsActive = true,
                 Address = new Address
                 {
-                    Name = address.Name,
+                    FirstName = address.FirstName,
+                    LastName = address.LastName,
                     Address1 = address.Address1,
                     Address2 = address.Address2,
                     City = address.City,
@@ -52,6 +53,18 @@ namespace CarRent.Service.Service
             return items;
         }
 
+        public async Task<AddressDto?> GetDefaultAddressesAsync(string userId)
+        {
+            var items = await _repository.UserAddress
+                .FindByCondition(x => x.UserAccountId == userId, false)
+                .Select(x => _mapper.Map<AddressDto>(x.Address)).ToListAsync();
+
+            var address = items.Where(x => x.IsDefault == true)
+                .SingleOrDefault();
+
+            return address;
+        }
+
         public async Task UpdateAddressesAsync(int id, AddressDto address)
         {
             var items = await _repository.Address
@@ -60,7 +73,8 @@ namespace CarRent.Service.Service
 
             if(items != null)
             {
-                items.Name = address.Name;
+                items.FirstName = address.FirstName;
+                items.LastName = address.LastName;
                 items.Address1 = address.Address1;
                 items.Address2 = address.Address2;
                 items.City = address.City;
