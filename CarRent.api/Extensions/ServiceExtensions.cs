@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System.Text;
 
 namespace CarRent.api.Extensions
@@ -49,6 +50,7 @@ namespace CarRent.api.Extensions
             //services.AddScoped<ICarMakeService, CarMakeService>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             // Bind the JwtSettings section and add it do DI
             //services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
@@ -58,8 +60,6 @@ namespace CarRent.api.Extensions
             // Bind the JwtSettings section and add it do DI
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         }
-
-
 
         public static void ConfigureAuthentication(this IServiceCollection services)
         {
@@ -94,6 +94,14 @@ namespace CarRent.api.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+        }
+
+        public static void ConfigureStripe(this IServiceCollection services, IConfiguration configuration)
+        {
+            var config = configuration.GetSection("SecretKey");
+            StripeConfiguration.ApiKey = config["SecretKey"];
+            Console.WriteLine("Configure api key");
+            Console.WriteLine(StripeConfiguration.ApiKey);
         }
     }
 }

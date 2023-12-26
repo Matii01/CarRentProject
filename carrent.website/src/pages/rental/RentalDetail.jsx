@@ -4,6 +4,23 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axiosInstance from "./../../utils/axiosConfig";
 import { useSelector } from "react-redux";
+import CheckoutForm from "../../components/Payment/CheckoutForm";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51ORfB9CVslDt3sXBnA5naMHNVkFLkJ7NO0b6ZOsxgPRvizzp2qtLHvgqwgTVIDU5uk5DHy5gKDD0lmBEz4lQ5WS100g3zcYTo0"
+);
+
+const options = {
+  mode: "payment",
+  amount: 1099,
+  currency: "usd",
+  // Fully customizable with appearance API.
+  appearance: {
+    /*...*/
+  },
+};
 
 function RentalDetail() {
   const param = useParams();
@@ -114,6 +131,24 @@ function RentalDetail() {
   if (isLoading) {
     return <p>loading ... </p>;
   }
+
+  // stripe tests ↓↓↓↓↓
+
+  const testPayment = () => {
+    console.log("test payment");
+    //JSON.stringify(allRentalData),
+
+    axios
+      .post(`https://localhost:7091/Payment/NewPayment`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
@@ -305,11 +340,21 @@ function RentalDetail() {
                       </Button>
                     </Col>
                   </Row>
+
+                  <Row className="mt-5">
+                    <Button onClick={testPayment}>Test</Button>
+                  </Row>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
         </Form>
+        <Row className="mt-4">
+          {/* <Elements stripe={stripePromise} options={options}> */}
+          <Elements stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
+        </Row>
       </Container>
     </>
   );

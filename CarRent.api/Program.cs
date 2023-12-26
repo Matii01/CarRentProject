@@ -15,8 +15,6 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureJwtSettings(builder.Configuration);
 builder.Services.ConfigureServices();
 builder.Services.AddAutoMapper(typeof(Program));
-
-
 // Add db connection
 builder.Services.ConfigureDbContext(builder.Configuration);
 
