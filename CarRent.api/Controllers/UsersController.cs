@@ -13,9 +13,9 @@ namespace CarRent.api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public UsersController(
-            IServiceManager serviceManager, 
-            UserManager<User> userManager, 
-            RoleManager<IdentityRole> roleManager) 
+            IServiceManager serviceManager,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
             : base(serviceManager)
         {
             _userManager = userManager;
@@ -26,7 +26,7 @@ namespace CarRent.api.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetUsersList([FromQuery] string roleName)
         {
-            
+
             if (!await _roleManager.RoleExistsAsync(roleName))
             {
                 await Console.Out.WriteLineAsync("no role");
@@ -55,7 +55,7 @@ namespace CarRent.api.Controllers
             //var user = await _userManager.FindByLoginAsync(userName);
             var user = await _userManager.FindByNameAsync(userName);
 
-            if(user == null)
+            if (user == null)
             {
                 return NotFound();
 
@@ -94,6 +94,33 @@ namespace CarRent.api.Controllers
             await _services.UserAddressService.AddAddressesAsync(user.Id, address);
             return CreatedAtAction("AddUserAddresses", address);
         }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword passwords)
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (passwords.RetypePassword != passwords.NewPassword)
+            {
+                return BadRequest(new { message = "New password and confirm password do not match." });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, passwords.OldPassword, passwords.NewPassword);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Current password is incorrect." });
+
+            }
+            return Ok(new { message = "Password changed successfully." });
+        }
+
 
         [Authorize(Roles = "User")]
         [HttpPut("UpdateUserAddresses/{id:int}")]

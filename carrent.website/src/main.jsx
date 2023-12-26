@@ -3,9 +3,6 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Root from "./root";
 import CarsPage from "./pages/CarsPage";
-import AddNewCar from "./pages/car/AddNewCar";
-import UpdateCar from "./pages/car/UpdateCar";
-import CarListForWorker from "./pages/car/CarListForWorker";
 import CarListForClient from "./pages/car/CarListForClient";
 import CarDetailsForClient from "./pages/car/CarDetailsForClient";
 import { Provider } from "react-redux";
@@ -29,15 +26,6 @@ const router = createBrowserRouter([
         path: "cars",
         element: <CarsPage />,
       },
-      {
-        path: "addCar",
-        element: <AddNewCar />,
-      },
-      {
-        path: "car/:carId",
-        element: <UpdateCar />,
-      },
-      { path: "car/carslist", element: <CarListForWorker /> },
       { path: "car/cars", element: <CarListForClient /> },
       { path: "car/details/:carId", element: <CarDetailsForClient /> },
       { path: "car/reservation/:carId", element: <RentalDetail /> },

@@ -66,8 +66,15 @@ namespace CarRent.data.DTO
 
     public record UserAddressDto
     (
-        int Id ,
+        int Id,
         int AddressId,
         string? UserAccountId 
+    );
+
+    public record ChangePassword
+    (
+        string? OldPassword,
+        string? NewPassword,
+        string? RetypePassword
     );
 }

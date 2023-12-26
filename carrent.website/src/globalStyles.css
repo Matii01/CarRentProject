@@ -34,12 +34,16 @@
   border-radius: 20;
 }
 
+.customButton:hover {
+  background-color: #52585d;
+}
+
 .errorButton {
   background-color: #b2b2b3 !important;
 }
 
-.customButton:hover {
-  background-color: #52585d;
+.errorText {
+  color: rgb(218, 69, 69);
 }
 
 .customCard {
