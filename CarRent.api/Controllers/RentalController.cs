@@ -113,9 +113,27 @@ namespace CarRent.api.Controllers
         [HttpGet("CheckPrice")]
         public async Task<IActionResult> CheckPrice([FromQuery] NewRentalForClient dates)
         {
-            await Console.Out.WriteLineAsync("param");
-            await Console.Out.WriteLineAsync(dates.ToString());
-            return Ok(269);
+            var cost = await _services.PriceListService.GetPriceForCarForDate(null, dates);
+            var total = cost.Gross - cost.Rabat;
+
+            return Ok(total);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("CheckPriceForClient")]
+        public async Task<IActionResult> CheckPriceForClient([FromQuery] NewRentalForClient dates)
+        {
+            if(User == null || User.Identity == null)
+            {
+                throw new Exception();
+            }
+
+            var username = User.Identity.Name ?? throw new Exception("");
+            var user = await _userManager.FindByNameAsync(username) ?? throw new Exception("");
+            var cost = await _services.PriceListService.GetPriceForCarForDate(user.Id, dates);
+            var total = cost.Gross - cost.Rabat;
+
+            return Ok(total);
         }
 
 
