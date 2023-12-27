@@ -68,6 +68,7 @@ namespace CarRent.Repository
         public DbSet<FirmClient> FirmClients { get; set; }
         public DbSet<IndividualClient> IndividualClients { get; set; }
         public DbSet<UserInvoice> UserInvoices { get; set; }
+        public DbSet<DataForRental> DataForRentals { get; set; }
 
         // Rabat
         public DbSet<Rabat> Rabats { get; set; }

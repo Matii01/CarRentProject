@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
+using CarRent.Repository.Migrations;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -14,35 +19,59 @@ namespace CarRent.Service.Service
 {
     public class PaymentService : ServiceBase, IPaymentService
     {
+        private readonly IRepositoryManager repository;
+        private readonly IMapper mapper;
         private readonly IConfiguration _config;
+        private readonly IPriceListService _priceList;
+        private readonly IRentalService _rental;
 
-        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config) : base(repository, mapper)
+        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental) : base(repository, mapper)
         {
+            this.repository = repository;
+            this.mapper = mapper;
             _config = config;
+            _priceList = priceList;
+            _rental = rental;
         }
 
-        public async Task<PaymentIntent> CreatePayment(string? dataForRental)
+        public async Task<PaymentIntent> CreatePayment(string? userId, string? dataForRental)
         {
-            //var service = new ChargeService();
             StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
             await Console.Out.WriteLineAsync(StripeConfiguration.ApiKey);
+
+            var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(dataForRental);
+            var price = await _priceList.GetPriceForCarForDate(userId, allRentalData.NewRentalForClient);
 
             var service = new PaymentIntentService();
             var options = new PaymentIntentCreateOptions
             {
-                Amount = 200,
+                Amount = (long)price.Gross * 100,
                 Currency = "pln",
                 PaymentMethodTypes = new List<string> { "card"}
             };
             var paymentIntent = await service.CreateAsync(options);
-            await SaveRentalData(dataForRental, paymentIntent.Id);
+            await SaveRentalData(userId, dataForRental, paymentIntent.Id);
+
             return paymentIntent;
         }
 
-        public Task UpdatePaymentSucceeded(string intentId)
+        public async Task UpdatePaymentSucceeded(string intentId)
         {
             Console.WriteLine("PAYMENT SUCCEEDED !!!!!!!!!!!!!!");
-            return Task.CompletedTask;
+
+            var rentalData = await _repository.DataForRental
+                .FindByCondition(x => x.PaymentIntentId == intentId, false)
+                .SingleOrDefaultAsync() ?? throw new Exception("");
+
+            var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
+
+            var result = await _rental.CreateRentalAndInvoiceAndAssignUser
+                (rentalData.UserId,
+                rentalData.PaymentIntentId,
+                    allRentalData.Invoice,
+                    allRentalData.NewRentalForClient,
+                    allRentalData.ClientDetails);
+            
         }
 
         public Task UpdatePaymentFailed(string intentId)
@@ -51,7 +80,7 @@ namespace CarRent.Service.Service
             Console.WriteLine("PAYMENT FAILED ");
             return Task.CompletedTask;
         }
-        private async Task SaveRentalData(string? dataForRental, string paymentIntentId)
+        private async Task SaveRentalData(string? userId, string? dataForRental, string paymentIntentId)
         {
             if (dataForRental == null)
             {
@@ -60,6 +89,7 @@ namespace CarRent.Service.Service
 
             var data = new DataForRental
             {
+                UserId = userId,
                 RentalData = dataForRental,
                 PaymentIntentId = paymentIntentId
             };

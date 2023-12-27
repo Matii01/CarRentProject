@@ -41,6 +41,14 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+        //[HttpGet("details/{id:int}")]
+        [HttpGet("rentalDetail/{paymentId}")]
+        public async Task<IActionResult> GetRentalDetailsByPaymentId(string paymentId)
+        {
+            var item = await _services.RentalService.GetRentalInfoByPaymentIdAsync(paymentId);
+            return Ok(item);
+        }
+
         [Authorize(Roles = "User")]
         [HttpGet("UserRental")]
         public async Task<IActionResult> GetUserRental()
@@ -58,6 +66,7 @@ namespace CarRent.api.Controllers
             return Ok(items);
         }
 
+        /*
         [Authorize(Roles = "User")]
         [HttpPost("AddNewUserRental")]
         public async Task<IActionResult> AddRental([FromBody] object allRentalData)
@@ -85,7 +94,7 @@ namespace CarRent.api.Controllers
                 );
 
             return Ok(result);
-        }
+        }*/
 
        
         [HttpPost("IsDateAvailable")]

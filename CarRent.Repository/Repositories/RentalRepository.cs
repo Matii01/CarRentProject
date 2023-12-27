@@ -22,7 +22,7 @@ namespace CarRent.Repository.Repositories
 
         public IQueryable<Rental> GetRentalForCar(int carId)
         {
-            var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now.AddDays(-1);
             return FindByCondition(
                 x => x.CarId == carId && x.RentalStart >= currentDate, false);
         }
@@ -62,6 +62,32 @@ namespace CarRent.Repository.Repositories
                  .ToPagedList(newList, param.PageNumber, param.PageSize);
 
             return pagedList;
+        }
+
+        public async Task<InvoiceDto> GetRentalInfoByPaymentId(string paymentId)
+        {
+            var newList = await context.Invoices
+                .Include(x => x.InvoicesItems)
+                .ThenInclude(x => x.Rental)
+                .Where(x => x.PaymentIntentId == paymentId)
+                .Select(x => new InvoiceDto(
+                        x.Id,
+                        x.Number,
+                        x.Comment,
+                        x.Client as IndividualClient,
+                        x.InvoicesItems.Select(y => new InvoiceItemDto(
+                            y.InvoiceId,
+                            y.Rabat,
+                            y.Net,
+                            y.Gross,
+                            y.VAT,
+                            y.VATValue,
+                            y.Rental)
+                        ).ToList()
+                    ))
+                .SingleOrDefaultAsync();
+
+            return newList;
         }
 
         private ClientDetailsDto GetClientDetailsDto(Client client)

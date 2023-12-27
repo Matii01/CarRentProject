@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20231227132053_AddDataForRental")]
+    partial class AddDataForRental
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +370,6 @@ namespace CarRent.Repository.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -890,19 +890,19 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8d516388-48b2-4168-93b7-de668e3310be",
+                            Id = "e8c270e3-8bfb-4fa8-ab20-03c728b38aad",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "d0ea2ff3-e6f5-45b0-8e09-7d9545554a6a",
+                            Id = "75cda635-69da-480c-ab4c-7a6565bdbad0",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "7edf95d7-44f2-4395-8a03-50a95f38d738",
+                            Id = "41a754df-fb86-49ad-a387-085d9698f6f4",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

@@ -1,11 +1,53 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
 function RentalConfirmation() {
-  const loaction = useLocation();
-  const rentalDetails = loaction.state?.details;
-  console.log("rental data = " + rentalDetails);
+  const location = useLocation();
+  const data = location.state.paymentId;
+  const [rentalData, setRentalData] = useState(null);
 
-  return <p>Your rental was added = {rentalDetails.totalCost}</p>;
+  useEffect(() => {
+    axios
+      .get(`https://localhost:7091/Rental/rentalDetail/${data}`)
+      .then((response) => {
+        console.log(response);
+        setRentalData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return (
+    <Container className="text-center">
+      <Row className="m-5">
+        <Col className="text-center">
+          <h2>ORDER CONFIRMED</h2>
+        </Col>
+      </Row>
+      <Row>
+        <Col></Col>
+      </Row>
+      <Row>
+        <Col>
+          {rentalData && (
+            <p>
+              Thank you, {rentalData.client.firstName}. Your rental is
+              confirmed.
+            </p>
+          )}
+          <p>{data}</p>
+        </Col>
+      </Row>
+      <Row className="mt-5 mb-5">
+        <Col>
+          <Button className="customButton w-25">View Your Rental</Button>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 export default RentalConfirmation;
 

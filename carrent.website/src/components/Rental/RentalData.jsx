@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import axiosInstance from "./../../utils/axiosConfig";
 import { useSelector } from "react-redux";
 
 function RentalData({ allRentalData, setAllRentalData }) {
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user.isLogin) {

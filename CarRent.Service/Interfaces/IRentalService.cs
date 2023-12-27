@@ -18,6 +18,7 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<RentalListDataDto>> GetUserRentalAsync(string userId);
         Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId);
         Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges);
+        Task<InvoiceDto> GetRentalInfoByPaymentIdAsync(string paymentId);
         /// <summary>
         /// Create Invoice 
         /// </summary>
@@ -38,6 +39,7 @@ namespace CarRent.Service.Interfaces
 
         Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(
                 string userId, 
+                string? paymentIntentId,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
                 ClientDetailsDto clientDetails

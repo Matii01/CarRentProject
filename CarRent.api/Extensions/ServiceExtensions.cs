@@ -50,11 +50,11 @@ namespace CarRent.api.Extensions
             //services.AddScoped<ICarMakeService, CarMakeService>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IPaymentService, PaymentService>();
 
             // Bind the JwtSettings section and add it do DI
             //services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         }
+
         public static void ConfigureJwtSettings(this IServiceCollection services, IConfiguration configuration)
         {
             // Bind the JwtSettings section and add it do DI

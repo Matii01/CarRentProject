@@ -2,8 +2,13 @@ import axios from "axios";
 import axiosInstance from "./../../utils/axiosConfig";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import RentalData from "../../components/Rental/RentalData";
 
 import {
@@ -12,10 +17,15 @@ import {
   PaymentElement,
   CardElement,
 } from "@stripe/react-stripe-js";
+import { updateLoading } from "../../features/loading/loadingSlice";
 
 function RentalDetail() {
   const param = useParams();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const [allRentalData, setAllRentalData] = useState({
@@ -43,11 +53,17 @@ function RentalDetail() {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentIntentId, setPaymentIntentId] = useState("");
+  const dispatch = useDispatch();
   ///
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(allRentalData);
+
+    dispatch(
+      updateLoading({
+        isLoading: true,
+      })
+    );
 
     if (!stripe || !elements) {
       console.log("stripe or element");
@@ -79,11 +95,19 @@ function RentalDetail() {
         console.log(result.error.message);
       } else {
         setPaymentIntentId(result.paymentIntent.id);
-        // Show a success message or update the UI
+        navigate("/car/reservation/confirm", {
+          state: { paymentId: result.paymentIntent.id },
+        });
       }
     } catch (error) {
       console.log("Error", error);
       setError("Payment failed");
+    } finally {
+      dispatch(
+        updateLoading({
+          isLoading: false,
+        })
+      );
     }
   };
 

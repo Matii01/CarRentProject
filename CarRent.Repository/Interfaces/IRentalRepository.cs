@@ -22,5 +22,6 @@ namespace CarRent.Repository.Interfaces
         IQueryable<Rental> GetAsync(int id, bool trackChanges);
         void Create(Rental carMake);
         void Delete(Rental carMake);
+        Task<InvoiceDto> GetRentalInfoByPaymentId(string paymentId);
     }
 }

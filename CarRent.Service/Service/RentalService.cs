@@ -53,7 +53,13 @@ namespace CarRent.Service.Service
                 .ToListAsync();
         }
 
+        public async Task<InvoiceDto> GetRentalInfoByPaymentIdAsync(string paymentId)
+        {
+            return await _repository.Rentals.GetRentalInfoByPaymentId(paymentId);
+        }
+
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
+            string? paymentIntent,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
                 ClientDetailsDto clientDetails)
@@ -69,6 +75,7 @@ namespace CarRent.Service.Service
             { 
                 Number = invoiceNumber, 
                 Comment = invoiceDto.Comment, 
+                PaymentIntentId = paymentIntent,
                 IsActive = true, 
                 Client = new IndividualClient
                 {
@@ -285,5 +292,6 @@ namespace CarRent.Service.Service
                 return "NR/1";
             }
         }
+
     }
 }

@@ -9,6 +9,7 @@ namespace CarRent.data.Models.CarRent
     public class DataForRental : BaseDictionaryModel
     {
         public override int Id { get; set ; }
+        public string? UserId { get; set; } = null!;
         public string PaymentIntentId { get; set; } = null!;
         public string RentalData { get; set; } = null!;
     }

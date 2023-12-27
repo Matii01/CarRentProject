@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 
@@ -45,6 +46,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<Address> Address { get; }
         IGenericRepository<UserAddress> UserAddress { get; }
 
+      
         Task SaveAsync();
     }
 }
