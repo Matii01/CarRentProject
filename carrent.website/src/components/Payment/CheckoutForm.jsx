@@ -5,13 +5,13 @@ import {
   PaymentElement,
   CardElement,
 } from "@stripe/react-stripe-js";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const [error, setError] = useState(null);
-  const [paymentIntentId, setPaymentIntentId] = useState(null);
+  const [error, setError] = useState("");
+  const [paymentIntentId, setPaymentIntentId] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,7 +29,7 @@ const CheckoutForm = () => {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 200 }), // Amount in cents
+        body: JSON.stringify(allRentalData), // Amount in cents
       }
     ).then((r) => r.json());
 
@@ -49,14 +49,16 @@ const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    // <form onSubmit={handleSubmit}>
+    <>
       <CardElement />
       <Button type="submit" disabled={!stripe}>
         Pay
       </Button>
       {error && <div>{error}</div>}
       {paymentIntentId && <div>Payment Successful: {paymentIntentId}</div>}
-    </form>
+    </>
+    // </form>
   );
 };
 

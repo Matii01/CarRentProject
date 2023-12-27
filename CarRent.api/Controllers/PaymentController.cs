@@ -1,27 +1,28 @@
-﻿using CarRent.Service.Interfaces;
+﻿using CarRent.data.DTO;
+using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Stripe;
 
 namespace CarRent.api.Controllers
 {
     [Route("[controller]")]
-    public class PaymentController : ControllerBase
+    public class PaymentController : BaseController
     {
         private const string WhSecret = "whsec_61de8ec88cb683302205c12bc3749d33dbf237cd2429bb4c3a721ecb879953f5";
-        private readonly IPaymentService _paymentService;
 
-        public PaymentController(IPaymentService paymentService) 
-            : base()
+        public PaymentController(IServiceManager serviceManager) 
+            : base(serviceManager)
         {
-            _paymentService = paymentService;
         }
 
-       //[Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         [HttpPost("NewPayment")]
         public async Task<IActionResult> CreateCharge([FromBody] object allRentalData)
         {
-            var intent = await _paymentService.CreatePayment();
+
+            var intent = await _services.PaymentService.CreatePayment(allRentalData.ToString());
 
             return Ok(new { ClientSecret = intent.ClientSecret });
         }
@@ -38,10 +39,13 @@ namespace CarRent.api.Controllers
             switch (stripeEvent.Type) 
             {
                 case "payment_intent.succeeded":
-                    //await _services.RentalService.CreateRentalAndInvoiceAndAssignUser();
+                    intent = (PaymentIntent)stripeEvent.Data.Object;
+                    await _services.PaymentService.UpdatePaymentSucceeded(intent.Id);
                     break;
 
                 case "payment_intent.payment_failed":
+                    intent = (PaymentIntent)stripeEvent.Data.Object;
+                    await _services.PaymentService.UpdatePaymentFailed(intent.Id);
                     break;
             }
 

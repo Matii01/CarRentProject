@@ -4,6 +4,7 @@ using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace CarRent.Service
         public readonly Lazy<IRabatService> _rabatService;
         public readonly Lazy<ICarMaintenanceService> _carMaintenanceService;
         public readonly Lazy<IUserAddressService> _userAddressService;
+        public readonly Lazy<IPaymentService> _paymentService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -32,7 +34,7 @@ namespace CarRent.Service
         
 
 
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper)
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration)
         {
             _carService = new Lazy<ICarService>(() =>
                 new CarService(repositoryManager, mapper));    
@@ -48,6 +50,9 @@ namespace CarRent.Service
 
             _rentalService = new Lazy<IRentalService>(()
                 => new RentalService(repositoryManager, PriceListService,  mapper));
+
+            _paymentService = new Lazy<IPaymentService>(() =>
+                new PaymentService(repositoryManager, mapper, configuration));
 
             _carMaintenanceService = new Lazy<ICarMaintenanceService>(() =>
                 new CarMaintenanceService(repositoryManager, RentalService, mapper));
@@ -84,6 +89,7 @@ namespace CarRent.Service
         public IRabatService RabatService => _rabatService.Value;
         public ICarMaintenanceService CarMaintenanceService => _carMaintenanceService.Value;
         public IUserAddressService UserAddressService => _userAddressService.Value;
+        public IPaymentService PaymentService => _paymentService.Value;
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
         public IGenericService<EngineTypeDto> EngineTypeService => _engineTypeService.Value;

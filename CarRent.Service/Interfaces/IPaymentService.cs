@@ -9,6 +9,8 @@ namespace CarRent.Service.Interfaces
 {
     public interface IPaymentService
     {
-        Task<PaymentIntent> CreatePayment();
-    }
+        Task<PaymentIntent> CreatePayment(string? dataForRental);
+        Task UpdatePaymentSucceeded(string intentId);
+        Task UpdatePaymentFailed(string intentId);
+    } 
 }

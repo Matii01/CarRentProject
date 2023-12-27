@@ -34,6 +34,8 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<UserRental> UserRental { get; }
         IGenericRepository<RentalStatus> RentalStatus {  get; }
         IGenericRepository<UserInvoice> UserInvoice { get; }
+        IGenericRepository<DataForRental> DataForRental { get; }
+
 
         // Rabat 
         IGenericRepository<Rabat> Rabat { get; }

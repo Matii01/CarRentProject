@@ -15,6 +15,7 @@ import RentalConfirmation from "./pages/rental/RentalConfirmation";
 import "./globalStyles.css";
 import ContactPage from "./pages/contact/ContactPage";
 import HomePage from "./pages/home/HomePage";
+import RentalPage from "./pages/rental/RentalPage";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       },
       { path: "car/cars", element: <CarListForClient /> },
       { path: "car/details/:carId", element: <CarDetailsForClient /> },
-      { path: "car/reservation/:carId", element: <RentalDetail /> },
+      { path: "car/reservation/:carId", element: <RentalPage /> },
       {
         path: "car/reservation/confirm",
         element: <RentalConfirmation />,
