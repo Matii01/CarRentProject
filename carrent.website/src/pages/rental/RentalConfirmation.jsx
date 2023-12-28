@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 function RentalConfirmation() {
   const location = useLocation();
-  const data = location.state.paymentId;
+  const rentalId = location.state.paymentId;
   const [rentalData, setRentalData] = useState(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function RentalConfirmation() {
     <Container className="text-center">
       <Row className="m-5">
         <Col className="text-center">
-          <h2>ORDER CONFIRMED</h2>
+          <h2>RENTAL CONFIRMED</h2>
         </Col>
       </Row>
       <Row>
@@ -38,7 +38,7 @@ function RentalConfirmation() {
               confirmed.
             </p>
           )}
-          <p>{data}</p>
+          <p>Rental nr: {rentalId}</p>
         </Col>
       </Row>
       <Row className="mt-5 mb-5">

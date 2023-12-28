@@ -89,26 +89,7 @@ namespace CarRent.Repository.Repositories
 
             return newList;
         }
-
-        private ClientDetailsDto GetClientDetailsDto(Client client)
-        {
-            var c = client as IndividualClient;
-
-            if(c == null)
-            {
-                throw new Exception("");
-            }
-
-            return new ClientDetailsDto(
-                c.FirstName,
-                c.LastName,
-                c.Email,
-                c.PhoneNumber,
-                c.Address,
-                c.PostCode,
-                c.City
-                );
-        }
+        
 
         public async Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)
         {
@@ -137,21 +118,80 @@ namespace CarRent.Repository.Repositories
             return GetTransformedPagedList(pagedList);
         }
 
-        public async Task<IEnumerable<RentalListDataDto>> GetUserRental(string userId)
+        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
         {
             var items = await context.UserRentals
                 .Where(x => x.UserAccountId == userId)
                 .Include(x => x.Rental)
                 .ThenInclude(x => x.Car)
-                .Select(x => new RentalListDataDto(
-                        x.Id,
+                .Select(x => new UserRentalListDto(
+                        x.RentalId,
+                        x.Rental.InvoiceItem.InvoiceId,
                         x.Rental.RentalStatus.Status,
                         x.Rental.Car.Name,
                         x.Rental.RentalStart,
                         x.Rental.RentalEnd)
                 ).ToListAsync();
 
+            //var itemsDa = context.UserRentals
+            //   .Where(x => x.UserAccountId == userId)
+            //   .Include(x => x.Rental)
+            //   .ThenInclude(x => x.Car);
+
             return items;
+        }
+
+        //public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)
+        public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int rentalId)
+        {
+            var invoiceId = await GetInvoiceByRentalId(rentalId);
+
+            if (!await IsUserRentalByInvoiceId(userId, invoiceId))
+            {
+                throw new Exception("User do not have permission");
+            }
+
+            var item = await context.Rentals
+                .Where(x => x.Id == rentalId)
+                .Include(x => x.InvoiceItem)
+                .Include(x => x.Car)
+                .Include(x => x.RentalStatus)
+                .SingleOrDefaultAsync();
+
+
+            var userRental = new UserRentalDetailDto(
+                    rentalId,invoiceId,
+                    "",
+                    item.Car.Name,
+                    item.Car.CarImage,
+                    item.RentalStatus.Status,
+                    item.InvoiceItem.Gross - item.InvoiceItem.Rabat,
+                    item.InvoiceItem.VAT,
+                    item.RentalStart,
+                    item.RentalEnd
+                );
+
+            return userRental;
+        }
+
+        private async Task<int> GetInvoiceByRentalId(int rentalId)
+        {
+            return await context.Rentals
+                .Where(x => x.Id == rentalId)
+                .Include(x => x.InvoiceItem)
+                .Select(x => x.InvoiceItem.InvoiceId)
+                .SingleOrDefaultAsync();
+        } 
+
+        private async Task<bool> IsUserRentalByInvoiceId(string userId, int invoiceId)
+        {
+            var item = await context
+                .UserInvoices
+                .Where(x => x.InvoiceId == invoiceId)
+                .Select(x => x.UserAccountId)
+                .SingleOrDefaultAsync();
+
+            return userId.Equals(item);
         }
 
         private static PagedList<RentalListDataDto> GetTransformedPagedList(PagedList<RentalListDto> pagedList)
@@ -174,6 +214,38 @@ namespace CarRent.Repository.Repositories
             var newPagedList = new PagedList<RentalListDataDto>(newItems, newItems.Count, pagedList.MetaData.CurrentPage, pagedList.MetaData.PageSize);
 
             return newPagedList;
+        }
+        private async Task<bool> IsUserRentalByRentalId(string userId, int rentalId)
+        {
+            var invoiceId = await GetInvoiceByRentalId(rentalId);
+
+            var item = await context
+                .UserInvoices
+                .Where(x => x.InvoiceId == invoiceId)
+                .Select(x => x.UserAccountId)
+                .SingleOrDefaultAsync();
+
+            return userId.Equals(item);
+        }
+
+        private ClientDetailsDto GetClientDetailsDto(Client client)
+        {
+            var c = client as IndividualClient;
+
+            if (c == null)
+            {
+                throw new Exception("");
+            }
+
+            return new ClientDetailsDto(
+                c.FirstName,
+                c.LastName,
+                c.Email,
+                c.PhoneNumber,
+                c.Address,
+                c.PostCode,
+                c.City
+                );
         }
     }
 }

@@ -10,7 +10,6 @@ import store from "./app/store";
 import RegisterPage from "./pages/user/RegisterPage";
 import LoginPage from "./pages/user/LoginPage";
 import UserPage from "./pages/user/UserPage";
-import RentalDetail from "./pages/rental/RentalDetail";
 import RentalConfirmation from "./pages/rental/RentalConfirmation";
 import "./globalStyles.css";
 import ContactPage from "./pages/contact/ContactPage";

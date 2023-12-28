@@ -20,28 +20,77 @@ namespace CarRent.data.DTO
         string City
     );
 
+    public record InvoiceDto(
+        int Id, 
+        string Number, 
+        string? Comment, 
+        IndividualClient? Client, 
+        List<InvoiceItemDto> InvoiceItems);
     
-    public record InvoiceDto(int Id, string Number, string? Comment, IndividualClient? Client, List<InvoiceItemDto> InvoiceItems);
     public record InvoiceItemDto(
         int InvoiceId,
         decimal Rabat,
         decimal Net,
-         decimal Gross,
-         decimal VAT,
-         decimal VATValue
+        decimal Gross,
+        decimal VAT,
+        decimal VATValue
         ,Rental? Rental
-        );
+    );
 
     public record AllRentalDataDto(
         NewRentalForClient NewRentalForClient, 
         ClientDetailsDto ClientDetails, 
         InvoiceDto Invoice);
 
-    public record RentalStatusDto(int Id, string Status, string? Remarks, bool? IsDefault);
-    public record RentalListDto(int Id, Client Client,string CarName, DateTime RentalStart, DateTime RentalEnd);
-    public record RentalListDataDto(int Id, string Name, string CarName, DateTime RentalStart, DateTime RentalEnd);
-    public record RentalDatesDto(DateTime RentalStart, DateTime RentalEnd);
+    public record RentalStatusDto(
+        int Id, 
+        string Status, 
+        string? Remarks, 
+        bool? IsDefault
+    );
+    
+    public record RentalListDto(
+        int Id, 
+        Client Client,
+        string CarName, 
+        DateTime RentalStart, 
+        DateTime RentalEnd
+    );
 
+    public record RentalListDataDto(
+        int Id, 
+        string Name,
+        string CarName, 
+        DateTime RentalStart, 
+        DateTime RentalEnd
+    );
+
+    public record UserRentalListDto(
+        int Id,
+        int InvoiceId,
+        string Name,
+        string CarName,
+        DateTime RentalStart,
+        DateTime RentalEnd
+    );
+
+    public record UserRentalDetailDto(
+        int Id,
+        int InvoiceId,
+        string Name,
+        string CarName,
+        string CarImg,
+        string Status,
+        decimal TotalPrice,
+        decimal Vat,
+        DateTime RentalStart,
+        DateTime RentalEnd
+    );
+
+    public record RentalDatesDto(
+        DateTime RentalStart, 
+        DateTime RentalEnd
+    );
 
     public record RentalDataForClientDto(
         string ClientName, 

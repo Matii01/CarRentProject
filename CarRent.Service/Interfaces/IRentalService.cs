@@ -15,7 +15,8 @@ namespace CarRent.Service.Interfaces
         Task<bool> IsAvailable(NewRentalForClient newRental);
         Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId);
         Task<PagedList<RentalListDataDto>> GetRentalsListAsync(RentalParameters param, bool tractChanges);
-        Task<IEnumerable<RentalListDataDto>> GetUserRentalAsync(string userId);
+        Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId);
+        Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id);
         Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId);
         Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges);
         Task<InvoiceDto> GetRentalInfoByPaymentIdAsync(string paymentId);

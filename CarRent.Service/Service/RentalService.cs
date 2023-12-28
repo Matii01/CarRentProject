@@ -39,10 +39,18 @@ namespace CarRent.Service.Service
             return list;
         }
 
-        public async Task<IEnumerable<RentalListDataDto>> GetUserRentalAsync(string userId)
+        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
         {
-            var list = await _repository.Rentals.GetUserRental(userId);
+            var list = await _repository.Rentals.GetUserRentalsAsync(userId);
             return list;
+        }
+
+        public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)
+        {
+            var item = await _repository.Rentals
+                .GetUserRentalDetailAsync(userId, id);
+
+            return item;
         }
 
         public async Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId)

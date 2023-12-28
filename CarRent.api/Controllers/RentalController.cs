@@ -61,9 +61,28 @@ namespace CarRent.api.Controllers
                 return NotFound();
             }
 
-            var items = await _services.RentalService.GetUserRentalAsync(user.Id);
+            var items = await _services.RentalService.GetUserRentalsAsync(user.Id);
 
             return Ok(items);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("UserRental/{id}")]
+        public async Task<IActionResult> GetUserRentalDetail(int id)
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await Console.Out.WriteLineAsync($"{user.Id} : {id}");
+
+            var item = await _services.RentalService.GetUserRentalDetailAsync(user.Id, id);
+
+            return Ok(item);
         }
 
         /*
@@ -96,7 +115,7 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }*/
 
-       
+
         [HttpPost("IsDateAvailable")]
         public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
         {
