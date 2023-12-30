@@ -2,6 +2,7 @@
 using CarRent.data.Models.CarRent;
 using CarRent.Repository;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ namespace CarRent.api.Controllers
             return Ok(carTypes);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPost]
         public async Task<IActionResult> CreateCarTypes([FromBody] CarTypeDto carType)
         {
@@ -31,7 +33,7 @@ namespace CarRent.api.Controllers
             return Ok(carType);
         }
 
-        
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarTypes(int id, [FromBody] CarTypeDto carType)
         {
@@ -40,6 +42,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> DeleteCarTypes(int id)
         {

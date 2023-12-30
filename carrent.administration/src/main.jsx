@@ -17,7 +17,12 @@
 */
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -46,6 +51,9 @@ import RentalStatus from "./pages/managment/RentalStatus";
 import RentalsList from "./pages/managment/RentalsList";
 import KilometreLimit from "./pages/cars/KilometreLimit";
 import AirConditioning from "./pages/cars/AirConditioning";
+import Login from "./pages/login/Login";
+import { Provider } from "react-redux";
+import store from "./shared/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -107,10 +115,16 @@ const router = createBrowserRouter([
       { path: "rentals", element: <RentalsList /> },
     ],
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

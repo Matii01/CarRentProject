@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -42,6 +43,7 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateCarMake([FromBody] CarMakeDto carMake)
         {
@@ -52,6 +54,7 @@ namespace CarRent.api.Controllers
             return CreatedAtAction(nameof(CreateCarMake), toReturn);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarMake(int id, [FromBody] CarMakeDto carMake)
         {
@@ -60,6 +63,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCarMake(int id)
         {

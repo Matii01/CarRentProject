@@ -16,11 +16,26 @@
 
 */
 import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { setUserName, setUserRoles } from "../../shared/userSlice";
 
 function Header() {
   const location = useLocation();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    console.log("logout");
+    localStorage.setItem("accessToken", "");
+    localStorage.setItem("refreshToken", "");
+    dispatch(setUserName({ userName: "" }));
+    dispatch(setUserRoles({ role: [] }));
+    navigate("/login");
+  };
 
   return (
     <Navbar bg="light" expand="lg">
@@ -50,6 +65,21 @@ function Header() {
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>
+            </Nav.Item>
+            {/* 
+            <NavLink to={"#"} className="nav-link">
+              <i className={"nc-icon nc-alien-33"} />
+              <p>Analizy</p>
+            </NavLink>*/}
+            <Nav.Item>
+              <NavLink
+                to="#"
+                className="nav-link m-0"
+                as={Nav.Link}
+                onClick={onLogout}
+              >
+                <span className="no-icon">Logout</span>
+              </NavLink>
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>

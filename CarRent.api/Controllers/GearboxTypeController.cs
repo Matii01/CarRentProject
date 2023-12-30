@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -33,6 +34,7 @@ namespace CarRent.api.Controllers
             return Ok(gearbox);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateGearboxType([FromBody] GearboxTypeDto gearboxType)
         {
@@ -40,6 +42,7 @@ namespace CarRent.api.Controllers
             return CreatedAtAction(nameof(CreateGearboxType), new { createdGearbox });
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateGearboxType(int id, [FromBody] GearboxTypeDto gearboxType)
         {
@@ -47,6 +50,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpDelete("delete")]
         public Task<IActionResult> DeleteGearboxType(int id)
         {

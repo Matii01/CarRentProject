@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -19,6 +20,7 @@ namespace CarRent.api.Controllers
             return Ok(items);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPost]
         public async Task<IActionResult> CreateAirConditioning([FromBody] KilometrLimitDto limit)
         {
@@ -26,6 +28,7 @@ namespace CarRent.api.Controllers
             return Ok(limit);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateAirConditioning(int id, [FromBody] KilometrLimitDto limit)
         {
@@ -34,6 +37,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAirConditioning(int id)
         {

@@ -49,7 +49,7 @@ namespace CarRent.Service.Service
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (result.Succeeded)
             {
-                foreach(var t in userForRegistration.Roles)
+                foreach (var t in userForRegistration.Roles)
                 {
                     await _userManager.AddToRoleAsync(user, t);
                 }
@@ -69,14 +69,15 @@ namespace CarRent.Service.Service
 
         public async Task<UserLoginData> Login(bool populateExp)
         {
+
             var loginData = new UserLoginData {
                 UserId = _user.Id,
                 UserName = _user.UserName,
-                Role = "",
+                Role = await _userManager.GetRolesAsync(_user),
                 Token = await CreateToken(populateExp)
             };
-            
-            return loginData;   
+
+            return loginData;
         }
 
         public async Task<TokenDto> CreateToken(bool populateExp)
@@ -158,6 +159,8 @@ namespace CarRent.Service.Service
 
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
+
+
             var principial = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -182,17 +185,17 @@ namespace CarRent.Service.Service
             {
                 UserId = _user.Id,
                 UserName = _user.UserName,
-                Role = "",
+                Role = await _userManager.GetRolesAsync(_user),
                 Token = await CreateToken(populateExp: false)
             };
             return data;
-        }
+        } 
 
         public async Task<UserLoginData> RetrieveData(TokenDto tokenDto)
         {
             var principial = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
             var user = await _userManager.FindByNameAsync(principial.Identity.Name);
-            if(user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <=DateTime.Now)
+            if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 throw new Exception("Fail during retrieved from token");
             }
@@ -201,7 +204,7 @@ namespace CarRent.Service.Service
             {
                 UserId = _user.Id,
                 UserName = _user.UserName,
-                Role = "",
+                Role = await _userManager.GetRolesAsync(_user),
                 Token = tokenDto
             };
             return data;

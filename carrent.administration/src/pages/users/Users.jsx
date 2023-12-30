@@ -13,6 +13,7 @@ import styles from "./../../components/Table/Table.module.css";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditGearboxType from "../../components/Gearbox/EditGearbox";
 import { useNavigate } from "react-router";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
@@ -24,8 +25,8 @@ function UsersPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`https://localhost:7091/Users/all?roleName=User`)
+    jwtInterceptor
+      .get(`Users/allUsers`)
       .then((data) => {
         console.log(data);
         setUsersList(data.data);

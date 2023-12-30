@@ -27,6 +27,46 @@ namespace CarRent.Repository.Configuration
                 {
                     Name = "Administrator",
                     NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Name = "UserViewer",
+                    NormalizedName = "USERVIEWER",
+                }
+                ,
+                new IdentityRole
+                {
+                    Name = "UserEditor",
+                    NormalizedName = "USEREDITOR",
+                }
+                ,
+                new IdentityRole
+                {
+                    Name = "PriceListEditor",
+                    NormalizedName = "PRICELISTEDITOR",
+                }
+                ,
+                new IdentityRole
+                {
+                    Name = "PageEditor",
+                    NormalizedName = "PAGEEDITOR",
+                },
+                new IdentityRole
+                {
+                    Name = "CarAdd",
+                    NormalizedName = "CARADD",
+                }
+                ,
+                new IdentityRole
+                {
+                    Name = "CarEditor",
+                    NormalizedName = "CAREDITOR",
+                }
+                ,
+                new IdentityRole
+                {
+                    Name = "CarDetailsEditor",
+                    NormalizedName = "CARDETAILSEDITOR",
                 }
             );
         }

@@ -23,11 +23,38 @@ namespace CarRent.api.Controllers
             _roleManager = roleManager;
         }
 
-        //[Route("all/{roleName:string}")]
-        [HttpGet("all")]
-        public async Task<IActionResult> GetUsersList([FromQuery] string roleName)
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpGet("allUsers")]
+        public async Task<IActionResult> GetUsersList()
         {
+            const string roleName = "User";
+            if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                await Console.Out.WriteLineAsync("no role");
+                return BadRequest("this role do not exist");
+            }
 
+            var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
+
+            foreach (var user in usersInRole)
+            {
+                await Console.Out.WriteLineAsync(user.UserName);
+            }
+
+            if (usersInRole == null || !usersInRole.Any())
+            {
+                await Console.Out.WriteLineAsync("not found");
+                return NotFound();
+            }
+            return Ok(usersInRole);
+            //throw new NotImplementedException();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("allWorkers")]
+        public async Task<IActionResult> GetWorkersList()
+        {
+            const string roleName = "Worker";
             if (!await _roleManager.RoleExistsAsync(roleName))
             {
                 await Console.Out.WriteLineAsync("no role");
@@ -168,6 +195,35 @@ namespace CarRent.api.Controllers
 
             await _services.UserAddressService.UpdateAddressesAsync(id, address);
             return Ok(address);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("AddPermission")]
+        public async Task<IActionResult> AddPermission(string userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.AddToRoleAsync(user, role);
+            return Ok("");
+        }
+
+        
+        [Authorize(Roles = "Administrator")]
+        [HttpPost("RemovePermission")]
+        public async Task<IActionResult> RemovePermission(string userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.RemoveFromRoleAsync(user, role);
+            return Ok("");
         }
     }
 }

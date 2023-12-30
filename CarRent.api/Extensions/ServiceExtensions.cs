@@ -5,6 +5,7 @@ using CarRent.Repository.Interfaces;
 using CarRent.Service;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -63,12 +64,24 @@ namespace CarRent.api.Extensions
 
         public static void ConfigureAuthentication(this IServiceCollection services)
         {
-            services.AddAuthentication();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    //options.LoginPath = 
+                });
             services.AddIdentity<User, IdentityRole>(o =>
             {
 
             }).AddEntityFrameworkStores<CarRentContext>()
               .AddDefaultTokenProviders();
+
+            //services.AddAuthentication();
+            //services.AddIdentity<User, IdentityRole>(o =>
+            //{
+
+            //}).AddEntityFrameworkStores<CarRentContext>()
+            //  .AddDefaultTokenProviders();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)

@@ -94,6 +94,7 @@ namespace CarRent.api.Controllers
             return Ok(allCarInfo);
         }
 
+        [Authorize(Roles = "Administrator,CarAdd")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {
@@ -102,6 +103,7 @@ namespace CarRent.api.Controllers
             return Ok(car); 
         }
 
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPut("edit/{id:int}")]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
@@ -110,6 +112,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpDelete("delete")]
         public Task<IActionResult> DeleteCar(int id)
         {
@@ -121,6 +124,7 @@ namespace CarRent.api.Controllers
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPost("uploadCarImage")]
         public async Task<IActionResult> UploadCarImage([FromForm] IFormFile file)
         {

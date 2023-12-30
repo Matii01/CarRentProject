@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -21,6 +22,7 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetActiveEngineTypes()
         {
@@ -35,6 +37,7 @@ namespace CarRent.api.Controllers
             return Ok(engineType);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateEngineType([FromBody] EngineTypeDto engineType)
         {
@@ -42,6 +45,8 @@ namespace CarRent.api.Controllers
             return CreatedAtAction(nameof(CreateEngineType), new { createdEngineType.Id, engineType });
         }
 
+
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdateCarDrive(int id, [FromBody] EngineTypeDto EngineType)
         {
@@ -50,6 +55,7 @@ namespace CarRent.api.Controllers
             return StatusCode(201);
         }
 
+        [Authorize(Roles = "Administrator,CarDetailsEditor")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteEngineType(int id)
         {

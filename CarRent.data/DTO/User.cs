@@ -47,7 +47,7 @@ namespace CarRent.data.DTO
     {
         public string? UserId { get; init; }
         public string? UserName { get; init; }
-        public string? Role { get; init; }
+        public IList<string>? Role { get; init; }
         public TokenDto? Token { get; init; }
     }
 

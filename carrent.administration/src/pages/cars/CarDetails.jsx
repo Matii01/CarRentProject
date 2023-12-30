@@ -13,7 +13,7 @@ import {
   Image,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import fetchData from "../../functions/fetchData";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function CarDetails() {
   const initialState = {
@@ -48,9 +48,10 @@ function CarDetails() {
   }, []);
 
   const fetchCarInfo = () => {
-    fetchData("https://localhost:7091/car/AllInfoForCar")
+    jwtInterceptor
+      .get("car/AllInfoForCar")
       .then((data) => {
-        setCarInfo(data);
+        setCarInfo(data.data);
         //setLoading(false);
       })
       .catch((error) => {
@@ -58,19 +59,40 @@ function CarDetails() {
         //setError(error);
         //setLoading(false);
       });
+
+    // fetchData("https://localhost:7091/car/AllInfoForCar")
+    //   .then((data) => {
+    //     setCarInfo(data);
+    //     //setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log("error fetching the makes: ", error);
+    //     //setError(error);
+    //     //setLoading(false);
+    //   });
   };
 
   const fetchCar = () => {
-    fetchData(`https://localhost:7091/car/${param.carId}`)
+    jwtInterceptor
+      .get(`car/${param.carId}`)
       .then((data) => {
         console.log(data);
-        setCar(data);
+        setCar(data.data);
       })
       .catch((error) => {
-        //setError(error);
-        //setLoading(false);
         console.log(error);
       });
+
+    // fetchData(`https://localhost:7091/car/${param.carId}`)
+    //   .then((data) => {
+    //     console.log(data);
+    //     setCar(data);
+    //   })
+    //   .catch((error) => {
+    //     //setError(error);
+    //     //setLoading(false);
+    //     console.log(error);
+    //   });
   };
 
   const handleChange = (event) => {
@@ -82,17 +104,30 @@ function CarDetails() {
   };
 
   const updateCar = () => {
-    fetchData(`https://localhost:7091/car/edit/${param.carId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: car,
-    })
-      .then(() => {})
+    jwtInterceptor
+      .put(`car/edit/${param.carId}`, JSON.stringify(car), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        console.log("car updated");
+      })
       .catch((error) => {
         console.log(error);
       });
+
+    // fetchData(`https://localhost:7091/car/edit/${param.carId}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: car,
+    // })
+    //   .then(() => {})
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const handleSubmit = (event) => {

@@ -24,20 +24,6 @@ namespace CarRent.api.Controllers
         {
             newUser.Roles = new string[] { "User" };
 
-            //await Console.Out.WriteLineAsync("Try to add new user ");
-            //await Console.Out.WriteLineAsync(newUser.FirstName.ToString());
-            //await Console.Out.WriteLineAsync(newUser.LastName.ToString());
-            //await Console.Out.WriteLineAsync(newUser.UserName.ToString());
-            //await Console.Out.WriteLineAsync(newUser.Password.ToString());
-            //await Console.Out.WriteLineAsync(newUser.Email.ToString());
-            //await Console.Out.WriteLineAsync(newUser.PhoneNumber.ToString());
-
-            //foreach(var role in newUser.Roles)
-            //{
-            //    await Console.Out.WriteLineAsync(role);
-            //}
-            //await Console.Out.WriteLineAsync(newUser.Roles.ToString());
-
             var result = await _authenticationService.RegisterUser(newUser);
             if (!result.Succeeded)
             {
@@ -66,6 +52,8 @@ namespace CarRent.api.Controllers
 
             var loginDate = await _authenticationService.Login(true);
             // var tokenDto = await _authenticationService.CreateToken(true);
+
+           // Response.Cookies.Append("")
             return Ok(loginDate);
         }
     }
