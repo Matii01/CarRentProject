@@ -1,51 +1,210 @@
-import { useEffect } from "react";
-import { Card, Form, Row, Col, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Card, Form, Row, Col, Button, Table } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function Permissions({ workerId }) {
+  const [workerPermissions, setWorkerPermissions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    //jwtInterceptor.get()
+    jwtInterceptor
+      .get(`Users/GetWorkerPermissions/${workerId}`)
+      .then((data) => {
+        console.log(data);
+        setWorkerPermissions(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [workerId]);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log(workerPermissions);
+  };
+
+  const addPermission = (name) => {
+    setIsLoading(true);
+    jwtInterceptor
+      .post(
+        "Users/AddPermission",
+        JSON.stringify({
+          workerId: workerId,
+          permission: name,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        setWorkerPermissions(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  const removePermission = (name) => {
+    setIsLoading(true);
+    jwtInterceptor
+      .post(
+        "Users/RemovePermission",
+        JSON.stringify({
+          workerId: workerId,
+          permission: name,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        setWorkerPermissions(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleCheckboxChange = (event) => {
+    console.log(event.target.checked + " " + event.target.name);
+
+    if (event.target.checked) {
+      addPermission(event.target.name);
+    } else {
+      removePermission(event.target.name);
+    }
+  };
 
   return (
     <Card>
       <Card.Header>Edytuj uprawnienia</Card.Header>
       <Card.Body>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-            </Form.Group>
-          </Row>
-
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label>City</Form.Label>
-              <Form.Control />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>State</Form.Label>
-              <Form.Select defaultValue="Choose...">
-                <option>Choose...</option>
-                <option>...</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridZip">
+            <Form.Group as={Col}>
               <Form.Label>Zip</Form.Label>
-              <Form.Control />
+              <Form.Check type="checkbox" label="Check me out" />
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label>Zip</Form.Label>
+              <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
           </Row>
 
           <Form.Group className="mb-3" id="formGridCheckbox">
-            <input type="checkbox" />
+            <Form.Label>Zip</Form.Label>
+            <input className="m-2" type="checkbox" />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Zapisz
-          </Button>
+          {!isLoading && (
+            <Table bordered>
+              <tbody className="text-center fs-6">
+                <tr>
+                  <td>Wyświetlanie użytkowników</td>
+                  <td>
+                    <input
+                      className="m-2 btn-group-lg"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="UserViewer"
+                      checked={workerPermissions.includes("UserViewer")}
+                      onChange={handleCheckboxChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Edycja użytkowników</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="UserEditor"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("UserEditor")}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Zarządzanie stroną</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="PageEditor"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("PageEditor")}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Edycja cenników</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="PriceListEditor"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("PriceListEditor")}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dodawanie samochodów</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="CarAdd"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("CarAdd")}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Edycja samochodów</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="CarEditor"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("CarEditor")}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Edycja szczegółów</td>
+                  <td>
+                    <input
+                      className="m-2"
+                      type="checkbox"
+                      style={{ width: "15px", height: "15px" }}
+                      name="CarDetailsEditor"
+                      onChange={handleCheckboxChange}
+                      checked={workerPermissions.includes("CarDetailsEditor")}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          )}
         </Form>
       </Card.Body>
     </Card>
@@ -53,3 +212,17 @@ function Permissions({ workerId }) {
 }
 
 export default Permissions;
+
+/* 
+const handleCheckboxChange = (event) => {
+    console.log(event.target.checked + " " + event.target.name);
+    const newValue = event.target.name;
+
+    if (event.target.checked) {
+      setWorkerPermissions([...workerPermissions, newValue]);
+    } else {
+      const newList = [...workerPermissions.filter((x) => x == newValue)];
+      setWorkerPermissions(newList);
+    }
+  };
+*/

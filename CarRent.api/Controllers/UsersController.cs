@@ -199,31 +199,53 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("AddPermission")]
-        public async Task<IActionResult> AddPermission(string userId, string role)
+        public async Task<IActionResult> AddPermission([FromBody] NewPermission permission)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(permission.WorkerId);
             if (user == null)
             {
                 return NotFound();
             }
 
-            await _userManager.AddToRoleAsync(user, role);
-            return Ok("");
+            await _userManager.AddToRoleAsync(user, permission.Permission);
+            var role = await _userManager.GetRolesAsync(user);
+
+            return Ok(role);
         }
 
         
         [Authorize(Roles = "Administrator")]
         [HttpPost("RemovePermission")]
-        public async Task<IActionResult> RemovePermission(string userId, string role)
+        public async Task<IActionResult> RemovePermission([FromBody] NewPermission permission)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(permission.WorkerId);
             if (user == null)
             {
                 return NotFound();
             }
 
-            await _userManager.RemoveFromRoleAsync(user, role);
-            return Ok("");
+            await _userManager.RemoveFromRoleAsync(user, permission.Permission);
+            var role = await _userManager.GetRolesAsync(user);
+
+            return Ok(role);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("GetWorkerPermissions/{userId}")]
+        public async Task<IActionResult> GetWorkerPermissions(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            
+            }
+
+            var role = await _userManager.GetRolesAsync(user);
+
+            return Ok(role);
+        }
+
     }
 }
