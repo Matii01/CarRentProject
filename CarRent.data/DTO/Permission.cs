@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    public record NewPermission(
+    public record PermissionDto(
         string WorkerId,
         string Permission
     );

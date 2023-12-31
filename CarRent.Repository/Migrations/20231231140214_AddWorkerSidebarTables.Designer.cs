@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20231231140214_AddWorkerSidebarTables")]
+    partial class AddWorkerSidebarTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -905,13 +908,18 @@ namespace CarRent.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserAccountId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("WorkerPathsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("WorkerPathsId");
 
@@ -973,61 +981,61 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b5aaf80a-3528-46cd-b405-f7f4ea34f5b8",
+                            Id = "5c17d8aa-e9c2-4564-85b7-c9510f77ef3e",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "4e5bd8c1-36dc-4625-af41-af55dd873bb4",
+                            Id = "c804b1b4-e393-4152-b51a-40eace3f7215",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "76ce29ce-e613-4b6a-893e-39d3750c38af",
+                            Id = "1a827e1e-0f9a-42e5-9ee4-e9cee0bbede7",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "4b60cba8-d426-446f-85fe-7d61abdcb4d5",
+                            Id = "c98796de-df8f-4f34-9ea6-53861bb49982",
                             Name = "UserViewer",
                             NormalizedName = "USERVIEWER"
                         },
                         new
                         {
-                            Id = "75a5b415-930b-4637-ac5a-a42faeb0364b",
+                            Id = "815386ee-462f-4422-ae76-18247f2bd0a8",
                             Name = "UserEditor",
                             NormalizedName = "USEREDITOR"
                         },
                         new
                         {
-                            Id = "26ec4a71-2f07-4024-b6f9-801490ba7928",
+                            Id = "45a4b583-89e9-452d-9cd9-28003ff99dbd",
                             Name = "PriceListEditor",
                             NormalizedName = "PRICELISTEDITOR"
                         },
                         new
                         {
-                            Id = "eba39d31-9174-491d-81c8-515cb0e38300",
+                            Id = "d40b2d1f-efd7-49b2-b773-2d53b042936b",
                             Name = "PageEditor",
                             NormalizedName = "PAGEEDITOR"
                         },
                         new
                         {
-                            Id = "d4aeabc3-0326-4125-9af5-7b85dfc164f1",
+                            Id = "d9ca792a-8c35-4d26-8589-d7b4a048ea23",
                             Name = "CarAdd",
                             NormalizedName = "CARADD"
                         },
                         new
                         {
-                            Id = "89b39094-795f-4471-ad15-597bce5783e0",
+                            Id = "01d3d8e1-9ff0-4646-858b-a6b55f6a705d",
                             Name = "CarEditor",
                             NormalizedName = "CAREDITOR"
                         },
                         new
                         {
-                            Id = "ff76b202-e589-4414-87c9-563d9260e500",
+                            Id = "f6968fee-2d80-4dfe-b161-7dd940d77a7c",
                             Name = "CarDetailsEditor",
                             NormalizedName = "CARDETAILSEDITOR"
                         });
@@ -1416,11 +1424,19 @@ namespace CarRent.Repository.Migrations
 
             modelBuilder.Entity("CarRent.data.Models.Workers.UserWorkerPaths", b =>
                 {
+                    b.HasOne("CarRent.data.Models.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CarRent.data.Models.Workers.WorkerPaths", "WorkerPaths")
                         .WithMany()
                         .HasForeignKey("WorkerPathsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
 
                     b.Navigation("WorkerPaths");
                 });

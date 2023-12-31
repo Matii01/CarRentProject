@@ -92,7 +92,7 @@ function WorkersPage() {
                 <Tab eventKey="pe" title="Uprawnienia">
                   <Permissions workerId={selectedWorker} />
                 </Tab>
-                <Tab eventKey="sidebar" title="Sidebar">
+                <Tab eventKey="sidebar" title="Meu boczne">
                   <EditWorkerSidebar workerId={selectedWorker} />
                 </Tab>
               </Tabs>

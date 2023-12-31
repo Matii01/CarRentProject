@@ -12,7 +12,6 @@ namespace CarRent.data.Models.Workers
         public override int Id { get; set; }
         public int WorkerPathsId { get; set; }
         public WorkerPaths WorkerPaths { get; set; } = null!;
-        public string? UserAccountId { get; set; }
-        public User.User User { get; set; } = null!;
+        public string UserAccountId { get; set; } = null!;
     }
 }

@@ -11,7 +11,7 @@ namespace CarRent.data.Models.Workers
         public override int Id { get; set ; }
         public string Title { get; set; } = null!;
         public string? Icon { get; set; }
-        public int Position { get; set; }
+        public int? Position { get; set; }
         public ICollection<PathItem>? Paths { get; set; }
     }
 }

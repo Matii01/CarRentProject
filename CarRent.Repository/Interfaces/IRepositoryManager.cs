@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
+using CarRent.data.Models.Workers;
 
 namespace CarRent.Repository.Interfaces
 {
@@ -46,7 +47,12 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<Address> Address { get; }
         IGenericRepository<UserAddress> UserAddress { get; }
 
-      
+        // Sidebar 
+        IGenericRepository<UserWorkerPaths> UserWorkerPaths { get; }
+        IGenericRepository<WorkerPaths> WorkerPaths { get; }
+        IGenericRepository<PathItem> PathItem { get; }
+
+
         Task SaveAsync();
     }
 }

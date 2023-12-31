@@ -19,6 +19,7 @@ namespace CarRent.Service.Interfaces
         ICarMaintenanceService CarMaintenanceService {get;}
         IUserAddressService UserAddressService {  get; }
         IPaymentService PaymentService { get; }
+        IWorkerSidebarService WorkerSidebar {  get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }

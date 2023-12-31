@@ -1,6 +1,7 @@
 ﻿using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
+using CarRent.data.Models.Workers;
 using CarRent.Repository.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +78,11 @@ namespace CarRent.Repository
         // User
         public DbSet<Address> Addresses { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+
+        //Sidebar 
+        public DbSet<PathItem> PathItems { get; set; }
+        public DbSet<UserWorkerPaths> UserWorkerPaths { get; set; }
+        public DbSet<WorkerPaths> WorkerPaths { get; set; }
 
     }
 }

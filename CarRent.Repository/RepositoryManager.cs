@@ -1,5 +1,6 @@
 ﻿using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
+using CarRent.data.Models.Workers;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Repositories;
 
@@ -45,6 +46,14 @@ namespace CarRent.Repository
         // User address
         private readonly Lazy<IGenericRepository<Address>> _addressRepository;
         private readonly Lazy<IGenericRepository<UserAddress>> _userAddressRepository;
+
+        // Sidebar 
+
+        private readonly Lazy<IGenericRepository<WorkerPaths>> _workerPathRepository;
+        private readonly Lazy<IGenericRepository<PathItem>> _pathItemRepository;
+        private readonly Lazy<IGenericRepository<UserWorkerPaths>> _userWorkerPathRepository;
+
+
 
         public RepositoryManager(CarRentContext context)
         {
@@ -129,7 +138,17 @@ namespace CarRent.Repository
 
             _dataForRentalRepository = new Lazy<IGenericRepository<DataForRental>>(() =>
                 new GenericRepository<DataForRental>(_context));
-        }
+
+            _workerPathRepository = new  Lazy<IGenericRepository<WorkerPaths>> (()=>
+                new GenericRepository<WorkerPaths>(_context));
+
+            _pathItemRepository = new Lazy<IGenericRepository<PathItem>>(() =>
+                new GenericRepository<PathItem>(_context));
+
+            _userWorkerPathRepository = new Lazy<IGenericRepository<UserWorkerPaths>>(() =>
+                new GenericRepository<UserWorkerPaths>(_context));
+
+    }
 
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
@@ -156,6 +175,9 @@ namespace CarRent.Repository
         public IGenericRepository<Address> Address => _addressRepository.Value;
         public IGenericRepository<UserAddress> UserAddress => _userAddressRepository.Value;
         public IGenericRepository<DataForRental> DataForRental => _dataForRentalRepository.Value;
+        public IGenericRepository<UserWorkerPaths> UserWorkerPaths => _userWorkerPathRepository.Value;
+        public IGenericRepository<WorkerPaths> WorkerPaths => _workerPathRepository.Value;
+        public IGenericRepository<PathItem> PathItem => _pathItemRepository.Value;
 
 
         public async Task SaveAsync()

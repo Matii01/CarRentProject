@@ -199,7 +199,7 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("AddPermission")]
-        public async Task<IActionResult> AddPermission([FromBody] NewPermission permission)
+        public async Task<IActionResult> AddPermission([FromBody] PermissionDto permission)
         {
             var user = await _userManager.FindByIdAsync(permission.WorkerId);
             if (user == null)
@@ -216,7 +216,7 @@ namespace CarRent.api.Controllers
         
         [Authorize(Roles = "Administrator")]
         [HttpPost("RemovePermission")]
-        public async Task<IActionResult> RemovePermission([FromBody] NewPermission permission)
+        public async Task<IActionResult> RemovePermission([FromBody] PermissionDto permission)
         {
             var user = await _userManager.FindByIdAsync(permission.WorkerId);
             if (user == null)
