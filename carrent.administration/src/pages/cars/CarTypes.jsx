@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import axios from "axios";
 import styles from "./../../components/Table/Table.module.css";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 const initialState = {
   newCarType: { id: 0, name: "" },
@@ -65,7 +66,7 @@ function CarTypes() {
   }, []);
 
   const getData = () => {
-    axios
+    jwtInterceptor
       .get("https://localhost:7091/CarType")
       .then((data) => {
         console.log(data);
@@ -142,7 +143,7 @@ function CarTypes() {
   };
 
   const editCarType = (id) => {
-    axios
+    jwtInterceptor
       .put(
         `https://localhost:7091/cartype/update/${id}`,
         JSON.stringify(state.newCarType),
@@ -169,7 +170,7 @@ function CarTypes() {
   };
 
   const addNewCarType = () => {
-    axios
+    jwtInterceptor
       .post(
         "https://localhost:7091/cartype",
         JSON.stringify(state.newCarType),
@@ -197,7 +198,7 @@ function CarTypes() {
 
   const handleDelete = (id) => {
     console.log("delete");
-    axios
+    jwtInterceptor
       .delete(`https://localhost:7091/cartype/${id}`)
       .then(() => {
         getData();

@@ -5,6 +5,7 @@ import styles from "./../../components/Table/Table.module.css";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import fetchData from "../../functions/fetchData";
 import axios from "axios";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 const initialState = {
   newEngine: { id: 0, name: "" },
@@ -68,11 +69,12 @@ function Engines() {
   }, []);
 
   const getData = () => {
-    fetchData("https://localhost:7091/EngineType/all")
+    jwtInterceptor
+      .get("EngineType/all")
       .then((data) => {
         dispatch({
           type: "SET_ENGINES",
-          payload: data,
+          payload: data.data,
         });
       })
       .catch((error) => {
@@ -143,15 +145,14 @@ function Engines() {
   };
 
   const editEngine = (id) => {
-    fetchData(`https://localhost:7091/EngineType/update/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: state.newEngine,
-    })
+    jwtInterceptor
+      .put(`EngineType/update/${id}`, JSON.stringify(state.newEngine), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
-        if (data === 201) {
+        if (data.status === 201) {
           getData();
           onCancel();
         }
@@ -169,15 +170,14 @@ function Engines() {
   };
 
   const addNewEngine = () => {
-    fetchData("https://localhost:7091/EngineType/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: state.newEngine,
-    })
+    jwtInterceptor
+      .post("EngineType/create", JSON.stringify(state.newEngine), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
-        if (data === 201) {
+        if (data.status === 201) {
           getData();
           onCancel();
         }
@@ -196,7 +196,7 @@ function Engines() {
 
   const handleDelete = (id) => {
     console.log("delete");
-    axios
+    jwtInterceptor
       .delete(`https://localhost:7091/EngineType/${id}`)
       .then(() => {
         getData();

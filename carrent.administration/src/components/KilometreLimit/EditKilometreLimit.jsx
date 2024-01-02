@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function EditKilometreLimit({ editItem, onCancel, updateView }) {
   const [editedItem, setEditedItem] = useState(editItem);
@@ -16,7 +16,7 @@ function EditKilometreLimit({ editItem, onCancel, updateView }) {
   };
 
   const updateItem = () => {
-    axios
+    jwtInterceptor
       .put(
         `https://localhost:7091/KilometrLimit/update/${editedItem.id}`,
         JSON.stringify(editedItem),

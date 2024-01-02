@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function EditCarMake({ editMake, onCancel, updateView }) {
   const [editedMake, setEditedMake] = useState(editMake);
@@ -16,7 +16,7 @@ function EditCarMake({ editMake, onCancel, updateView }) {
   };
 
   const updateCarMake = () => {
-    axios
+    jwtInterceptor
       .put(
         `https://localhost:7091/carmake/update/${editedMake.id}`,
         JSON.stringify(editedMake),

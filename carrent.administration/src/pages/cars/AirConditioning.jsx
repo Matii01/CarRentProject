@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Button, Form } from "react-bootstrap";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditConditioning from "../../components/AirConditioning/EditConditioning";
 import AddConditioning from "../../components/AirConditioning/AddConditioning";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function AirConditioning() {
   const [items, setItems] = useState();
@@ -16,10 +16,12 @@ function AirConditioning() {
   }, []);
 
   const getData = () => {
-    axios.get("https://localhost:7091/AirConditioning").then((results) => {
-      console.log(results);
-      setItems(results.data);
-    });
+    jwtInterceptor
+      .get("https://localhost:7091/AirConditioning")
+      .then((results) => {
+        console.log(results);
+        setItems(results.data);
+      });
   };
 
   const onDoubleClick = (item) => {
@@ -29,7 +31,7 @@ function AirConditioning() {
 
   const handleDelete = (id) => {
     console.log("delete: " + id);
-    axios
+    jwtInterceptor
       .delete(`https://localhost:7091/AirConditioning/${id}`)
       .then((results) => {
         getData();

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function AddCarMake({ onAdd }) {
   const [newCarMake, setNewCarMake] = useState({ name: "", description: "" });
@@ -11,7 +11,7 @@ function AddCarMake({ onAdd }) {
 
   const AddNewCarMake = () => {
     console.log(newCarMake);
-    axios
+    jwtInterceptor
       .post(
         `https://localhost:7091/carmake/create`,
         JSON.stringify(newCarMake),

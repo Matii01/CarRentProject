@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
-import axios from "axios";
 import styles from "./../../components/Table/Table.module.css";
 import EditCarMake from "../../components/CarMakes/EditCarMakes";
 import AddCarMake from "../../components/CarMakes/AddCarMakes";
 import CarInfoTable from "../../components/Table/CarInfoTable";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
@@ -14,7 +14,7 @@ function CarMakes() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    axios
+    jwtInterceptor
       .get("https://localhost:7091/CarMake")
       .then((data) => {
         console.log(data);
@@ -79,7 +79,7 @@ function CarMakes() {
   };
 
   const deleteCarMake = (id) => {
-    axios
+    jwtInterceptor
       .delete(`https://localhost:7091/carmake/${id}`)
       .then((response) => {
         console.log(response);

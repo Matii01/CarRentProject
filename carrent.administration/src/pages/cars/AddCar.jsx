@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import fetchData from "./../../functions/fetchData";
 import { storage } from "./../../hooks/useFirebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 const initialState = {
   Name: "",
@@ -38,10 +38,11 @@ function AddCar() {
   const [imageUpload, setImageUpload] = useState(null);
 
   useEffect(() => {
-    fetchData("https://localhost:7091/car/AllInfoForCar")
+    jwtInterceptor
+      .get(`car/AllInfoForCar`)
       .then((data) => {
         console.log(data);
-        setCarData(data);
+        setCarData(data.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -54,19 +55,12 @@ function AddCar() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("add new car");
-    fetch("https://localhost:7091/car/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(car),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.log(response);
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+
+    jwtInterceptor
+      .post("car/create", JSON.stringify(car), {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then(() => {
         setCar(initialState);

@@ -4,6 +4,7 @@ import { Card, Col, Container, Row, Button, Form } from "react-bootstrap";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditKilometreLimit from "../../components/KilometreLimit/EditKilometreLimit";
 import AddKilometreLimit from "../../components/KilometreLimit/AddKilometreLimit";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function KilometreLimit() {
   const [items, setItems] = useState();
@@ -16,10 +17,12 @@ function KilometreLimit() {
   }, []);
 
   const getData = () => {
-    axios.get("https://localhost:7091/KilometrLimit").then((results) => {
-      console.log(results);
-      setItems(results.data);
-    });
+    jwtInterceptor
+      .get("https://localhost:7091/KilometrLimit")
+      .then((results) => {
+        console.log(results);
+        setItems(results.data);
+      });
   };
 
   const onDoubleClick = (item) => {
@@ -29,7 +32,7 @@ function KilometreLimit() {
 
   const handleDelete = (id) => {
     console.log("delete: " + id);
-    axios
+    jwtInterceptor
       .delete(`https://localhost:7091/KilometrLimit/${id}`)
       .then((results) => {
         getData();

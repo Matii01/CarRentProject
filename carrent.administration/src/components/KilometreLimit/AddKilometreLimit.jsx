@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function AddKilometreLimit({ onAdd }) {
   const [newItem, setNewItem] = useState({ limitValue: "" });
@@ -11,7 +11,7 @@ function AddKilometreLimit({ onAdd }) {
 
   const AddNewItem = () => {
     console.log(newItem);
-    axios
+    jwtInterceptor
       .post(`https://localhost:7091/KilometrLimit`, JSON.stringify(newItem), {
         headers: {
           "Content-Type": "application/json",
