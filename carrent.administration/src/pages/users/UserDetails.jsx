@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect } from "react";
 import {
   Card,
@@ -10,12 +9,13 @@ import {
   Tabs,
 } from "react-bootstrap";
 import { useParams } from "react-router";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function UserDetail() {
   const param = useParams();
 
   useEffect(() => {
-    axios
+    jwtInterceptor
       .get(
         `https://localhost:7091/Users/userDetails?userName=${param.userName}`
       )

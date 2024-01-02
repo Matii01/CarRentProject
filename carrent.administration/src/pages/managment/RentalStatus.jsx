@@ -5,6 +5,7 @@ import styles from "./../../components/Table/Table.module.css";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddRentalStatus from "../../components/RentalStatus/AddRentalStatus";
 import EditRentalStatus from "../../components/RentalStatus/EditRentalStatus";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function RentalStatus() {
   const [statuses, setStatuses] = useState([]);
@@ -17,7 +18,7 @@ function RentalStatus() {
   }, []);
 
   const getStatuses = () => {
-    axios
+    jwtInterceptor
       .get("https://localhost:7091/RentalStatus")
       .then((data) => {
         console.log(data);

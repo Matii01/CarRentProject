@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function RentalsList() {
   const [items, setItems] = useState([]);
@@ -20,7 +21,7 @@ function RentalsList() {
 
     const queryString = new URLSearchParams(filteredParams).toString();
 
-    axios
+    jwtInterceptor
       .get(`https://localhost:7091/Rental/AllRentals?${queryString}`)
       .then((data) => {
         setItems(data.data);
