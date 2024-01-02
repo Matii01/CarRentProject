@@ -51,10 +51,12 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,CarDetailsEditor")]
-        [HttpDelete("delete")]
-        public Task<IActionResult> DeleteGearboxType(int id)
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteGearboxType(int id)
         {
-            throw new NotImplementedException();
+            await Console.Out.WriteLineAsync("try to delete " +id);
+            await _services.GearboxTypeService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

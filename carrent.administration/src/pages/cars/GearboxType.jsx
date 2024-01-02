@@ -4,6 +4,8 @@ import { Container, Card, Row, Col, Button, Form } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditGearboxType from "../../components/Gearbox/EditGearbox";
+import AddGearbox from "../../components/Gearbox/AddGearbox";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function GearboxType() {
   const [gearboxList, setGearboxList] = useState();
@@ -12,8 +14,8 @@ function GearboxType() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`https://localhost:7091/GearboxType/all`)
+    jwtInterceptor
+      .get(`https://localhost:7091/GearboxType`)
       .then((data) => {
         console.log(data);
         setGearboxList(data.data);
@@ -41,7 +43,40 @@ function GearboxType() {
     event.preventDefault();
   };
 
-  const updateView = () => {};
+  const addElement = (gearbox) => {
+    const newMakes = [...gearboxList, { ...gearbox }];
+    setGearboxList(newMakes);
+  };
+
+  const onDeleteClick = (id) => {
+    jwtInterceptor
+      .delete(`https://localhost:7091/GearboxType/delete/${id}`)
+      .then((data) => {
+        if (data.status === 204) {
+          filterView(id);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const filterView = (id) => {
+    const newList = gearboxList.filter((x) => x.id !== id);
+    setGearboxList(newList);
+  };
+
+  const updateView = (gearbox) => {
+    const edited = gearboxList.map((x) => {
+      if (x.id === gearbox.id) {
+        x.name = gearbox.name;
+      }
+      return x;
+    });
+
+    setGearboxList(edited);
+    setIsEditMode(false);
+  };
 
   if (!gearboxList) {
     return <p>Loading ...</p>;
@@ -91,6 +126,7 @@ function GearboxType() {
                   item={["id", "name"]}
                   searchTerm={searchTerm}
                   onDoubleClick={onDoubleClick}
+                  handleDelete={onDeleteClick}
                 />
               </Card.Body>
             </Card>
@@ -103,6 +139,7 @@ function GearboxType() {
                 updateView={updateView}
               />
             )}
+            {!isEditMode && <AddGearbox onAdd={addElement} />}
           </Col>
         </Row>
       </Container>

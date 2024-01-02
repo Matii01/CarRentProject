@@ -59,8 +59,6 @@ function EditWorkerSidebar({ workerId }) {
   const onSaveClick = () => {
     console.log(allPages);
 
-    //const url = `WorkerSidebar/GenerateWorkerSidebar/${workerId}`;
-    //EditWorkerSidebar/{workerId}
     const url = `WorkerSidebar/EditWorkerSidebar/${workerId}`;
 
     jwtInterceptor

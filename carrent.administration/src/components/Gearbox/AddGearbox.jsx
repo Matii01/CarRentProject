@@ -1,25 +1,20 @@
-import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { useState } from "react";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
-function EditGearboxType({ gearbox, onCancel, updateView }) {
-  const [editedGearbox, setEditedGearbox] = useState(gearbox);
-
-  useEffect(() => {
-    setEditedGearbox(gearbox);
-  }, [gearbox]);
-
+function AddGearbox({ onAdd }) {
+  const [newGearbox, setNewGerabox] = useState({ name: "" });
   const onSubmit = (event) => {
     event.preventDefault();
-    updateGearbox(editedGearbox);
+    AddNewCarMake();
   };
 
-  const updateGearbox = () => {
-    console.log("todo: update");
+  const AddNewCarMake = () => {
+    console.log(newGearbox);
     jwtInterceptor
-      .put(
-        `https://localhost:7091/GearboxType/update/${editedGearbox.id}`,
-        JSON.stringify(editedGearbox),
+      .post(
+        `https://localhost:7091/GearboxType/create`,
+        JSON.stringify(newGearbox),
         {
           headers: {
             "Content-Type": "application/json",
@@ -27,21 +22,25 @@ function EditGearboxType({ gearbox, onCancel, updateView }) {
         }
       )
       .then((data) => {
-        console.log(data);
-        updateView(editedGearbox);
+        onAdd(data.data.createdGearbox);
+        console.log(data.data);
       })
       .catch((error) => console.log(error));
   };
 
+  const handleCancel = () => {
+    setNewGerabox({ name: "", description: "" });
+  };
+
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setEditedGearbox((prev) => ({ ...prev, [name]: value }));
+    setNewGerabox((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <Card>
+    <Card className="p-2">
       <Card.Header>
-        <Card.Title as="h5">Gearbox - edycja</Card.Title>
+        <Card.Title as="h5">Skrzynia biegów - dodawanie</Card.Title>
       </Card.Header>
       <Card.Body className="table-full-width table-responsive px-0">
         <Form onSubmit={onSubmit}>
@@ -54,7 +53,7 @@ function EditGearboxType({ gearbox, onCancel, updateView }) {
                 className="m-2"
                 variant="secondary"
                 size="sm"
-                onClick={onCancel}
+                onClick={handleCancel}
               >
                 Anuluj
               </Button>
@@ -67,7 +66,7 @@ function EditGearboxType({ gearbox, onCancel, updateView }) {
             <Form.Control
               type="text"
               name="name"
-              value={editedGearbox.name}
+              value={newGearbox.name}
               onChange={handleChange}
             />
           </Form.Group>
@@ -77,4 +76,4 @@ function EditGearboxType({ gearbox, onCancel, updateView }) {
   );
 }
 
-export default EditGearboxType;
+export default AddGearbox;
