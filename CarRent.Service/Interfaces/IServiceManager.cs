@@ -20,6 +20,7 @@ namespace CarRent.Service.Interfaces
         IUserAddressService UserAddressService {  get; }
         IPaymentService PaymentService { get; }
         IWorkerSidebarService WorkerSidebar {  get; }
+        IContentManagementService ContentManagementService  {  get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }

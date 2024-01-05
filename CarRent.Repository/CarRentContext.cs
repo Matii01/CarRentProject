@@ -1,5 +1,6 @@
 ﻿using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.CMS;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Configuration;
@@ -84,5 +85,7 @@ namespace CarRent.Repository
         public DbSet<UserWorkerPaths> UserWorkerPaths { get; set; }
         public DbSet<WorkerPaths> WorkerPaths { get; set; }
 
+        // CMS 
+        public DbSet<ContactPage> ContactPage { get; set; }
     }
 }

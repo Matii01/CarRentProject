@@ -27,7 +27,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Strona Główna", path: "" },
     { name: "Menu", path: "" },
     { name: "Footer", path: "" },
-    { name: "Footer", path: "" },
+    { name: "Kontakt", path: "/cms/contact" },
   ];
   const carPages = [
     { name: "Samochody", path: "/cars" },

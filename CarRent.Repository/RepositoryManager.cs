@@ -1,8 +1,10 @@
 ﻿using CarRent.data.Models.CarRent;
+using CarRent.data.Models.CMS;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Repositories;
+using System;
 
 namespace CarRent.Repository
 {
@@ -53,6 +55,8 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<PathItem>> _pathItemRepository;
         private readonly Lazy<IGenericRepository<UserWorkerPaths>> _userWorkerPathRepository;
 
+        // CMS
+        private readonly Lazy<IGenericRepository<ContactPage>> _contactPageRepository;
 
 
         public RepositoryManager(CarRentContext context)
@@ -148,7 +152,10 @@ namespace CarRent.Repository
             _userWorkerPathRepository = new Lazy<IGenericRepository<UserWorkerPaths>>(() =>
                 new GenericRepository<UserWorkerPaths>(_context));
 
-    }
+            _contactPageRepository =  new Lazy <IGenericRepository<ContactPage>> (()=>
+                new GenericRepository<ContactPage>(_context));
+
+        }
 
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
@@ -178,7 +185,7 @@ namespace CarRent.Repository
         public IGenericRepository<UserWorkerPaths> UserWorkerPaths => _userWorkerPathRepository.Value;
         public IGenericRepository<WorkerPaths> WorkerPaths => _workerPathRepository.Value;
         public IGenericRepository<PathItem> PathItem => _pathItemRepository.Value;
-
+        public IGenericRepository<ContactPage> ContactPage => _contactPageRepository.Value;
 
         public async Task SaveAsync()
         {

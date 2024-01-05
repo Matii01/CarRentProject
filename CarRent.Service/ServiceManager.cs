@@ -24,6 +24,7 @@ namespace CarRent.Service
         public readonly Lazy<IUserAddressService> _userAddressService;
         public readonly Lazy<IPaymentService> _paymentService;
         public readonly Lazy<IWorkerSidebarService> _workerSidebarService;
+        public readonly Lazy<IContentManagementService> _contentManagementService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -64,6 +65,9 @@ namespace CarRent.Service
             _userAddressService = new Lazy<IUserAddressService> (() =>
                 new UserAddressService(repositoryManager, mapper));
 
+            _contentManagementService = new Lazy<IContentManagementService>(
+               () => new ContentManagementService(repositoryManager, mapper));
+
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
 
@@ -84,6 +88,7 @@ namespace CarRent.Service
 
             _rentalStatusService = new Lazy<IGenericService<RentalStatusDto>>(()
                 => new RentalStatusService(repositoryManager, mapper));
+
         }
 
         public ICarService CarService => _carService.Value;
@@ -95,6 +100,7 @@ namespace CarRent.Service
         public IUserAddressService UserAddressService => _userAddressService.Value;
         public IPaymentService PaymentService => _paymentService.Value;
         public IWorkerSidebarService WorkerSidebar => _workerSidebarService.Value;
+        public IContentManagementService ContentManagementService => _contentManagementService.Value;
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
         public IGenericService<EngineTypeDto> EngineTypeService => _engineTypeService.Value;
@@ -102,5 +108,6 @@ namespace CarRent.Service
         public IGenericService<KilometrLimitDto> KilometrLimitService => _kilometrLimitService.Value;
         public IGenericService<GearboxTypeDto> GearboxTypeService => _gearboxTypeService.Value;
         public IGenericService<RentalStatusDto> RentalStatusService => _rentalStatusService.Value;
+
     }
 }

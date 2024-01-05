@@ -59,17 +59,6 @@ function CarDetails() {
         //setError(error);
         //setLoading(false);
       });
-
-    // fetchData("https://localhost:7091/car/AllInfoForCar")
-    //   .then((data) => {
-    //     setCarInfo(data);
-    //     //setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error fetching the makes: ", error);
-    //     //setError(error);
-    //     //setLoading(false);
-    //   });
   };
 
   const fetchCar = () => {
@@ -82,17 +71,6 @@ function CarDetails() {
       .catch((error) => {
         console.log(error);
       });
-
-    // fetchData(`https://localhost:7091/car/${param.carId}`)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setCar(data);
-    //   })
-    //   .catch((error) => {
-    //     //setError(error);
-    //     //setLoading(false);
-    //     console.log(error);
-    //   });
   };
 
   const handleChange = (event) => {
@@ -116,18 +94,6 @@ function CarDetails() {
       .catch((error) => {
         console.log(error);
       });
-
-    // fetchData(`https://localhost:7091/car/edit/${param.carId}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: car,
-    // })
-    //   .then(() => {})
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   const handleSubmit = (event) => {

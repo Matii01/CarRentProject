@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.CMS;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 
@@ -51,6 +52,9 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<UserWorkerPaths> UserWorkerPaths { get; }
         IGenericRepository<WorkerPaths> WorkerPaths { get; }
         IGenericRepository<PathItem> PathItem { get; }
+
+        // CMS 
+        IGenericRepository<ContactPage> ContactPage {get; }
 
 
         Task SaveAsync();

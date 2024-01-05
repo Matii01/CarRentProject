@@ -2,6 +2,7 @@
 using CarRent.data.DTO;
 using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.CMS;
 using CarRent.data.Models.User;
 
 namespace CarRent.api
@@ -75,6 +76,9 @@ namespace CarRent.api
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
 
+            CreateMap<ContactPage, ContactPageDto>();
+            CreateMap<ContactPageDto, ContactPage>()
+                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
             /*
                 CreateMap<Company, CompanyDto>()

@@ -18,3 +18,29 @@
   max-height: 25px;
 }
 /* scrollbar end */
+
+/* Select color */
+::selection {
+  background: #ffb7b7;
+  color: #000000;
+}
+
+::-moz-selection {
+  background: #ffb7b7;
+  color: #000000;
+}
+/* Select color end*/
+
+/* form */
+.form {
+}
+
+.form-group {
+  color: #888888;
+}
+
+.form-control {
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+/* form end*/

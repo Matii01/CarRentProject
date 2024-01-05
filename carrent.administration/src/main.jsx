@@ -54,6 +54,7 @@ import AirConditioning from "./pages/cars/AirConditioning";
 import Login from "./pages/login/Login";
 import { Provider } from "react-redux";
 import store from "./shared/store";
+import EditContactPage from "./pages/cms/EditContactPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -113,6 +114,7 @@ const router = createBrowserRouter([
       { path: "users/workers", element: <WorkersPage /> },
       { path: "rental/status", element: <RentalStatus /> },
       { path: "rentals", element: <RentalsList /> },
+      { path: "cms/contact", element: <EditContactPage /> },
     ],
   },
   {

@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20240105113233_AddContactPage")]
+    partial class AddContactPage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,9 +67,6 @@ namespace CarRent.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneIcon")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneTitle")
@@ -1034,61 +1034,61 @@ namespace CarRent.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "147e588b-d49c-47ea-8133-6eb68c43cc22",
+                            Id = "05fed02c-4851-4a79-869d-742ae86279ba",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "fa9d5c8f-285f-4d6f-a7b4-d12419856994",
+                            Id = "400b6485-6513-4326-96f6-edac6fb68ace",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "af627e7a-b03e-4198-9532-f4ac93f77fb4",
+                            Id = "27fb550f-79f7-469d-b39c-63cc18fd7b08",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "f620fb79-061a-4f34-9999-bae6370b3bf3",
+                            Id = "e4754024-7a25-4967-9a8c-f99654314184",
                             Name = "UserViewer",
                             NormalizedName = "USERVIEWER"
                         },
                         new
                         {
-                            Id = "a5765ad1-5305-4593-92bd-e369bf138aae",
+                            Id = "2593320b-a1f8-4114-81a9-c33cb418b7e9",
                             Name = "UserEditor",
                             NormalizedName = "USEREDITOR"
                         },
                         new
                         {
-                            Id = "8d031df9-e269-4197-950c-ada2ba74f1b3",
+                            Id = "cbb1c02d-e92e-4747-a4aa-f6dbca801a40",
                             Name = "PriceListEditor",
                             NormalizedName = "PRICELISTEDITOR"
                         },
                         new
                         {
-                            Id = "59f0b515-c0df-4403-8e44-2b1190d4dfda",
+                            Id = "6f3da4b1-b75c-47c6-877f-888e0e55c44a",
                             Name = "PageEditor",
                             NormalizedName = "PAGEEDITOR"
                         },
                         new
                         {
-                            Id = "f4526255-71a9-42d0-bcd8-dd2225366bdb",
+                            Id = "869a1157-2c1b-4ae5-992d-fd3ca9f4a298",
                             Name = "CarAdd",
                             NormalizedName = "CARADD"
                         },
                         new
                         {
-                            Id = "cb3c8192-8bee-45cd-916d-70b42d548a76",
+                            Id = "7f1b4ffd-7d19-4341-915a-64b98736bbdb",
                             Name = "CarEditor",
                             NormalizedName = "CAREDITOR"
                         },
                         new
                         {
-                            Id = "019c09e1-8ea9-4adb-91cd-e51fce5d1ab6",
+                            Id = "73ac13af-8cfd-4437-b439-0ebd7a565bc6",
                             Name = "CarDetailsEditor",
                             NormalizedName = "CARDETAILSEDITOR"
                         });
