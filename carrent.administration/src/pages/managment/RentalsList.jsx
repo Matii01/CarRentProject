@@ -1,10 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import TablePagination from "../../components/Pagination/TablePagination";
+import { useNavigate } from "react-router";
 
 function RentalsList() {
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [filterInfo, setFilterInfo] = useState({
     PageNumber: 1,
@@ -32,6 +35,30 @@ function RentalsList() {
       });
   }, [filterInfo.PageNumber, filterInfo.PageSize]);
 
+  const formatDate = (date) => {
+    return date.slice(0, 10);
+  };
+
+  const onDoubleClik = (id) => {
+    console.log(id);
+    navigate(`details/${id}`);
+  };
+
+  const handlePageChange = (num) => {
+    setFilterInfo((prev) => ({
+      ...prev,
+      PageNumber: num,
+    }));
+  };
+
+  const handlePageSizeChange = (event) => {
+    const { value } = event.target;
+    setFilterInfo((prev) => ({
+      ...prev,
+      PageSize: value,
+    }));
+  };
+
   if (!items.items) {
     return <p>"Loading"</p>;
   }
@@ -49,22 +76,52 @@ function RentalsList() {
                       <th>Id</th>
                       <th>Klient</th>
                       <th>Samochód</th>
+                      <th>Status</th>
                       <th>Od</th>
                       <th>Do</th>
                     </tr>
                   </thead>
                   <tbody>
                     {items.items.map((item) => (
-                      <tr key={item.id}>
+                      <tr
+                        key={item.id}
+                        onDoubleClick={() => onDoubleClik(item.id)}
+                      >
                         <td>{item.id}</td>
                         <td>{item.name}</td>
                         <td>{item.carName}</td>
-                        <td>{item.rentalStart}</td>
-                        <td>{item.rentalEnd}</td>
+                        <td>{item.status}</td>
+                        <td>{formatDate(item.rentalStart)}</td>
+                        <td>{formatDate(item.rentalEnd)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <Row>
+                  <Col className="mt-2 d-flex justify-content-start">
+                    <Form>
+                      <Form.Select
+                        size="sm"
+                        onChange={handlePageSizeChange}
+                        defaultValue={10}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={items.metaData.totalCount}>
+                          Wszystkie
+                        </option>
+                      </Form.Select>
+                    </Form>
+                  </Col>
+                  <Col className="mt-2 d-flex justify-content-end">
+                    <TablePagination
+                      paginationData={items.metaData}
+                      pageChange={handlePageChange}
+                    />
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>

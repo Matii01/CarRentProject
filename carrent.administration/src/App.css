@@ -44,3 +44,15 @@
   border-radius: 5px;
 }
 /* form end*/
+
+/* pagination */
+.page-item .page-link {
+  background-color: #343a40;
+  color: white;
+}
+
+.page-item.active .page-link {
+  background-color: #52585d;
+  border-color: #212529;
+}
+/* pagination end */

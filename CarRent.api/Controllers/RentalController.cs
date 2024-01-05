@@ -49,6 +49,14 @@ namespace CarRent.api.Controllers
             return Ok(item);
         }
 
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRentalDetailsById(int id)
+        {
+            var item = await _services.RentalService.GetRentalDetailsAsync(id);
+            return Ok(item);
+        }
+
         [Authorize(Roles = "User")]
         [HttpGet("UserRental")]
         public async Task<IActionResult> GetUserRental()

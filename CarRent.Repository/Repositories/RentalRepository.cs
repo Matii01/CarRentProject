@@ -29,11 +29,6 @@ namespace CarRent.Repository.Repositories
 
         public async Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges)
         {
-            /*
-             .Where(x => x.Client is IndividualClient 
-                    && (x.Client as IndividualClient).FirstName == "Adam")
-             */
-
             var list = context.Invoices
                 .Include(x => x.Client)
                 .Where(x => x.Client is IndividualClient)
@@ -93,11 +88,8 @@ namespace CarRent.Repository.Repositories
 
         public async Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)
         {
-             //.Select(x => new RentalListData(
-             //       (x.InvoiceItem.Invoice.Client as IndividualClient).FirstName + " "+ (x.InvoiceItem.Invoice.Client as IndividualClient).LastName,
-             //       x.Car.Name, x.RentalStart, x.RentalEnd));
-
             var list = context.Rentals
+                .Include(x => x.RentalStatus)
                 .Include(c => c.Car)
                 .Include(x => x.InvoiceItem)
                 .ThenInclude(i => i.Invoice)
@@ -107,13 +99,13 @@ namespace CarRent.Repository.Repositories
                         x.Id,
                         x.InvoiceItem.Invoice.Client,
                         x.Car.Name, 
+                        x.RentalStatus.Status,
                         x.RentalStart, 
                         x.RentalEnd)
                 );
 
             var pagedList = await PagedList<RentalListDto>
                 .ToPagedList(list, param.PageNumber, param.PageSize);
-
             
             return GetTransformedPagedList(pagedList);
         }
@@ -202,16 +194,16 @@ namespace CarRent.Repository.Repositories
                 if (item.Client is IndividualClient)
                 {
                     var c = item.Client as IndividualClient;
-                    newItems.Add(new RentalListDataDto(c.Id, c.FirstName +" "+ c.LastName, item.CarName, item.RentalStart, item.RentalEnd));
+                    newItems.Add(new RentalListDataDto(item.Id, c.FirstName +" "+ c.LastName, item.CarName, item.Status, item.RentalStart, item.RentalEnd));
                 }
                 else if (item.Client is FirmClient)
                 {
                     var c = item.Client as FirmClient;
-                    newItems.Add(new RentalListDataDto(c.Id, c.CompanyName, item.CarName, item.RentalStart, item.RentalEnd));
+                    newItems.Add(new RentalListDataDto(item.Id, c.CompanyName, item.CarName, item.Status, item.RentalStart, item.RentalEnd));
                 }
             }
 
-            var newPagedList = new PagedList<RentalListDataDto>(newItems, newItems.Count, pagedList.MetaData.CurrentPage, pagedList.MetaData.PageSize);
+            var newPagedList = new PagedList<RentalListDataDto>(newItems, pagedList.MetaData.TotalCount, pagedList.MetaData.CurrentPage, pagedList.MetaData.PageSize);
 
             return newPagedList;
         }

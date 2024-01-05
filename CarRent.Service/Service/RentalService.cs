@@ -53,6 +53,19 @@ namespace CarRent.Service.Service
             return item;
         }
 
+        public async Task<RentalDetailsDto> GetRentalDetailsAsync(int id)
+        {
+            var item = await _repository.Rentals
+                .FindByCondition(x => x.Id == id, false)
+                .Include(x => x.RentalStatus)
+                .Include(x => x.Car)
+                .Include(x => x.InvoiceItem)
+                .Select(x => new RentalDetailsDto())
+                .SingleOrDefaultAsync();
+
+            return item;
+        }
+
         public async Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId)
         {
             return await _repository.Rentals
@@ -300,6 +313,5 @@ namespace CarRent.Service.Service
                 return "NR/1";
             }
         }
-
     }
 }

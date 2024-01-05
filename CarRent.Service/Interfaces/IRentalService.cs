@@ -20,6 +20,7 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId);
         Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges);
         Task<InvoiceDto> GetRentalInfoByPaymentIdAsync(string paymentId);
+        Task<RentalDetailsDto> GetRentalDetailsAsync(int id);
         /// <summary>
         /// Create Invoice 
         /// </summary>

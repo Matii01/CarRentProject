@@ -53,6 +53,7 @@ namespace CarRent.data.DTO
         int Id, 
         Client Client,
         string CarName, 
+        string Status, 
         DateTime RentalStart, 
         DateTime RentalEnd
     );
@@ -60,7 +61,8 @@ namespace CarRent.data.DTO
     public record RentalListDataDto(
         int Id, 
         string Name,
-        string CarName, 
+        string CarName,
+        string Status,
         DateTime RentalStart, 
         DateTime RentalEnd
     );
@@ -100,4 +102,6 @@ namespace CarRent.data.DTO
         string CarImage,
         decimal TotalCost
         );
+
+    public record RentalDetailsDto();
 }

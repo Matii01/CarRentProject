@@ -55,6 +55,7 @@ import Login from "./pages/login/Login";
 import { Provider } from "react-redux";
 import store from "./shared/store";
 import EditContactPage from "./pages/cms/EditContactPage";
+import RentalDetails from "./pages/managment/RentalDetails";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -114,6 +115,7 @@ const router = createBrowserRouter([
       { path: "users/workers", element: <WorkersPage /> },
       { path: "rental/status", element: <RentalStatus /> },
       { path: "rentals", element: <RentalsList /> },
+      { path: "rentals/details/:rentalId", element: <RentalDetails /> },
       { path: "cms/contact", element: <EditContactPage /> },
     ],
   },
