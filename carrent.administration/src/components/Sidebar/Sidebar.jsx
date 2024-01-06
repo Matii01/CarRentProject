@@ -26,7 +26,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   const pages = [
     { name: "Strona Główna", path: "" },
     { name: "Menu", path: "" },
-    { name: "Footer", path: "" },
+    { name: "Footer", path: "/cms/footer" },
     { name: "Kontakt", path: "/cms/contact" },
   ];
   const carPages = [

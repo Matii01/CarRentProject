@@ -22,7 +22,7 @@ namespace CarRent.Repository.Repositories
             this.priceList = priceList;
         }
 
-        public async Task<PagedList<CarListDtoForClient>> GetAllActiveCarAsync(CarParameters parameters, bool trackChanges)
+        public async Task<PagedList<CarListDtoForClient>> GetCarsForClientAsync(CarParameters parameters, bool trackChanges)
         {
             //TODO można lepiej 
 
@@ -69,19 +69,24 @@ namespace CarRent.Repository.Repositories
             return pagedList;
         }
 
-        public async Task<IEnumerable<Car>> GetAllCarAsync(CarParameters parameters, bool trackChanges)
+        public async Task<PagedList<CarListDto>> GetCarsForWorkerAsync(CarParameters parameters, bool trackChanges)
         {
-            //var list = await GetAllCarAsync(parameters, trackChanges);
-            var list = All(trackChanges)
-                .Include(x => x.CarMake)
-                .Include(x => x.GearBoxType)
-                .Include(x => x.EngineType)
-                .Include(x => x.AirConditioningType)
+            var list = context.Cars
+            .Search(parameters)
+            .Select(x => new CarListDto(
+                x.Id,
+                x.Name,
+                x.CarMake.Name,
+                x.EngineType.Name,
+                x.GearBoxType.Name,
+                x.AirConditioningType.Name,
+                0
+                ));
 
-                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                .Take(parameters.PageSize);
+            var pagedList = await PagedList<CarListDto>
+                .ToPagedList(list, parameters.PageNumber, parameters.PageSize);
 
-            return list;
+            return pagedList;
         }
 
         public async Task<Car?> GetCarAsync(int id, bool trackChanges)

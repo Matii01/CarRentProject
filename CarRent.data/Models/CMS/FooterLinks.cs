@@ -14,6 +14,7 @@ namespace CarRent.data.Models.CMS
 
         public string Name { get; set; }
         public string Path { get; set; }
+        public string RowTitle { get; set; }
         public int DisplayPosition {  get; set; }
     }
 }

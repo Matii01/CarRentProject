@@ -30,11 +30,16 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+        [Authorize(Roles = "Administrator,Worker")]
         [HttpGet("workerCars")]
-        public async Task<IActionResult> GetCars()
+        public async Task<IActionResult> GetCars([FromQuery] CarParameters parameters)
         {
-            CarParameters param= new() { PageNumber = 1, PageSize = 10 };
-            var list = await _services.CarService.GetCarsAsync(param, false);
+            var list = await _services.CarService.GetCarsForWorkerAsync(parameters, false);
+
+            if (list.Items.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
 
             return Ok(list);
         }
