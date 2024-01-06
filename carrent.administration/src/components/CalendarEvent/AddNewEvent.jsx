@@ -27,13 +27,7 @@ function AddNewEvent({ onCancel }) {
       <ListGroup.Item as="li" action onClick={() => changeView(RENT)}>
         Wynajem
       </ListGroup.Item>
-      <ListGroup.Item
-        as="li"
-        action
-        onClick={() => changeView(VEHICLEINSPECTION)}
-      >
-        Przegląd
-      </ListGroup.Item>
+
       <ListGroup.Item as="li" action onClick={() => changeView(SERVICE)}>
         Serwis
       </ListGroup.Item>

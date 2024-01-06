@@ -14,4 +14,11 @@ namespace CarRent.data.DTO
         DateTime DateStart, 
         DateTime DateEnd, 
         decimal TotalCost);
+
+    public record NewCarMaintenanceDto(
+       int CarId,
+       string Description,
+       DateTime DateStart,
+       DateTime DateEnd,
+       decimal TotalCost);
 }

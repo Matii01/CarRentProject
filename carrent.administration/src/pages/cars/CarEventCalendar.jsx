@@ -45,12 +45,12 @@ function CarEventCalendar() {
                   <tbody>
                     <tr>
                       <td>1</td>
-                      <td>2</td>
-                      <td>2</td>
-                      <td>3</td>
+                      <td>Wynajem</td>
+                      <td>12-02-2024</td>
+                      <td>16-02-2024</td>
                       <td>
                         <Button size="sm" onClick={() => handleClick()}>
-                          Details
+                          Edit
                         </Button>
                       </td>
                     </tr>
@@ -60,7 +60,7 @@ function CarEventCalendar() {
             </Card>
           </Col>
           {showAddEvent && (
-            <Col md={4}>
+            <Col md={6}>
               <AddNewEvent onCancel={hide} />
             </Col>
           )}

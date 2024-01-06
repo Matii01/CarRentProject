@@ -18,6 +18,18 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize]
+        [HttpPost("AddMaintenance1")]
+        public async Task<IActionResult> CarTestMaintenance([FromBody] NewCarMaintenanceDto carMaintenance)
+        {
+            var user = User.Identity.Name;
+            var userId = await _authentication.FindUserByUserName(user);
+
+            await Console.Out.WriteLineAsync(carMaintenance.ToString());
+            await Console.Out.WriteLineAsync(userId);
+            return Ok("temp");
+        }
+
+        [Authorize]
         [HttpPost("AddMaintenance")]
         public async Task<IActionResult> CarMaintenance([FromBody] CarMaintenanceDto carMaintenance)
         {
@@ -28,17 +40,19 @@ namespace CarRent.api.Controllers
             await Console.Out.WriteLineAsync(userId);
 
 
-            var item = new CarMaintenanceDto(
-                    0, carMaintenance.CarId,
-                    userId,
-                    carMaintenance.Description,
-                    carMaintenance.DateStart,
-                    carMaintenance.DateEnd,
-                    carMaintenance.TotalCost
-                );
+            return Ok("temp");
 
-            var result = await _services.CarMaintenanceService.CreateCarMaintenance(item);
-            return Ok(result);
+            //var item = new CarMaintenanceDto(
+            //        0, carMaintenance.CarId,
+            //        userId,
+            //        carMaintenance.Description,
+            //        carMaintenance.DateStart,
+            //        carMaintenance.DateEnd,
+            //        carMaintenance.TotalCost
+            //    );
+
+            //var result = await _services.CarMaintenanceService.CreateCarMaintenance(item);
+            //return Ok(result);
         }
     }
 }
