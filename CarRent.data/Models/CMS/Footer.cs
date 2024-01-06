@@ -11,8 +11,6 @@ namespace CarRent.data.Models.CMS
         public override int Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string? LinksTitleOne { get; set; }
-        public string? LinksTitleTwo { get; set; }
         public string? NewsLetterTitle { get; set; }
         public string? NewsLetterDescription { get; set; }
         public string? NewsLetterInfo { get; set; }
@@ -21,6 +19,6 @@ namespace CarRent.data.Models.CMS
         public string? InstagramLink { get; set; }
         public string? TikTokLink { get; set; }
         public string? Info { get; set; }
-        
+        public IEnumerable<FooterLinks> Links { get; set; }
     }
 }

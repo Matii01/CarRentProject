@@ -25,7 +25,7 @@ namespace CarRent.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             modelBuilder.Entity<Rental>()
                 .HasOne(x => x.InvoiceItem)
@@ -87,5 +87,9 @@ namespace CarRent.Repository
 
         // CMS 
         public DbSet<ContactPage> ContactPage { get; set; }
+        public DbSet<Footer> Footer { get; set; }
+        public DbSet<FooterLinks> FooterLinks { get; set; }
+        public DbSet<FooterLinksPaths> FooterLinksPaths { get; set; }
+
     }
 }

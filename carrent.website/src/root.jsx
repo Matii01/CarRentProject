@@ -8,14 +8,6 @@ import Footer from "./components/Footer/Footer";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "./components/Overlay/LoadingOverlay";
 
-// export async function loader() {
-//   const data = await fetch(
-//     "https://localhost:7091/ContentManagement/contact"
-//   ).then((res) => res.json());
-
-//   return { data };
-// }
-
 export default function Root() {
   const loading = useSelector((state) => state.loading);
   useRefreshToken();

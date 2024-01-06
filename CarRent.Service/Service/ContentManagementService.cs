@@ -52,5 +52,37 @@ namespace CarRent.Service.Service
 
             await _repository.SaveAsync();
         }
+
+        public async Task<FooterDto> GetFooter()
+        {
+            var item = await _repository.Footer
+                .FindByCondition(x => x.IsActive, true)
+                .Include(x => x.Links)
+                .ThenInclude(y => y.Paths)
+                .Select(x => new FooterDto(
+                    x.Title,
+                    x.Description,
+                    x.NewsLetterTitle,
+                    x.NewsLetterDescription,
+                    x.NewsLetterInfo,
+                    x.FacebookLink,
+                    x.YouTubeLink,
+                    x.InstagramLink,
+                    x.TikTokLink,
+                    x.Info,
+                    x.Links.Select(l => new FooterLinksDto(
+                        x.Id, 
+                        l.Title, 
+                        l.Paths.Select(p => new FooterLinksPathsDto(
+                            l.Id,
+                            p.Name,
+                            p.Path,
+                            p.DisplayPosition
+                            ))))
+                    ))
+                .SingleOrDefaultAsync();
+
+            return item;
+        }
     }
 }

@@ -1,5 +1,7 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import style from "./Footer.module.css";
+import axios from "axios";
+import { useState } from "react";
 
 function FooterList({ title, items }) {
   return (
@@ -75,6 +77,7 @@ function NewsLetter() {
 }
 
 function Footer() {
+  const [footer, setFooter] = useState({});
   const company = [
     { title: "Login", link: "Login" },
     { title: "Register", link: "Register" },
@@ -89,6 +92,15 @@ function Footer() {
     { title: "Recommend", link: "Latest" },
     { title: "Help", link: "Latest" },
   ];
+
+  axios
+    .get("https://localhost:7091/ContentManagement/footer")
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   return (
     <>

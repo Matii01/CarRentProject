@@ -9,12 +9,10 @@ namespace CarRent.data.Models.CMS
     public class FooterLinks : BaseDictionaryModel
     {
         public override int Id { get; set; }
+        public string Title { get; set; }
         public int FooterId {  get; set; }
         public Footer Footer { get; set; }
 
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public string RowTitle { get; set; }
-        public int DisplayPosition {  get; set; }
+        public IEnumerable<FooterLinksPaths> Paths { get; set; }
     }
 }

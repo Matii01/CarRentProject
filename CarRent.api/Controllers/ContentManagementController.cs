@@ -24,6 +24,14 @@ namespace CarRent.api.Controllers
             return Ok(contactPage);
         }
 
+        [AllowAnonymous]
+        [HttpGet("footer")]
+        public async Task<IActionResult> GetFooter()
+        {
+            var footer = await _services.ContentManagementService.GetFooter();
+            return Ok(footer);
+        }
+
         [HttpPost("editContact")]
         public async Task<IActionResult> EditContactPage([FromBody] ContactPageDto contact)
         {

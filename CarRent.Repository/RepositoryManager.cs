@@ -57,6 +57,9 @@ namespace CarRent.Repository
 
         // CMS
         private readonly Lazy<IGenericRepository<ContactPage>> _contactPageRepository;
+        private readonly Lazy<IGenericRepository<Footer>> _footerRepository;
+        private readonly Lazy<IGenericRepository<FooterLinks>> _footerLinksRepository;
+        private readonly Lazy<IGenericRepository<FooterLinksPaths>> _footerLinksPathsRepository;
 
 
         public RepositoryManager(CarRentContext context)
@@ -155,6 +158,15 @@ namespace CarRent.Repository
             _contactPageRepository =  new Lazy <IGenericRepository<ContactPage>> (()=>
                 new GenericRepository<ContactPage>(_context));
 
+            _footerRepository = new Lazy<IGenericRepository<Footer>>(() =>
+                new GenericRepository<Footer>(_context));
+
+            _footerLinksRepository = new Lazy<IGenericRepository<FooterLinks>>(() =>
+                new GenericRepository<FooterLinks>(_context));
+
+            _footerLinksPathsRepository = new Lazy<IGenericRepository<FooterLinksPaths>>(() =>
+                new GenericRepository<FooterLinksPaths>(_context));
+
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -186,6 +198,9 @@ namespace CarRent.Repository
         public IGenericRepository<WorkerPaths> WorkerPaths => _workerPathRepository.Value;
         public IGenericRepository<PathItem> PathItem => _pathItemRepository.Value;
         public IGenericRepository<ContactPage> ContactPage => _contactPageRepository.Value;
+        public IGenericRepository<Footer> Footer => _footerRepository.Value;
+        public IGenericRepository<FooterLinks> FooterLinks => _footerLinksRepository.Value;
+        public IGenericRepository<FooterLinksPaths> FooterLinksPaths => _footerLinksPathsRepository.Value;
 
         public async Task SaveAsync()
         {

@@ -55,7 +55,9 @@ namespace CarRent.Repository.Interfaces
 
         // CMS 
         IGenericRepository<ContactPage> ContactPage {get; }
-
+        IGenericRepository<Footer> Footer { get; }
+        IGenericRepository<FooterLinks> FooterLinks { get; }
+        IGenericRepository<FooterLinksPaths> FooterLinksPaths { get; }
 
         Task SaveAsync();
     }

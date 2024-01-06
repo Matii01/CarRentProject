@@ -28,8 +28,6 @@ namespace CarRent.data.DTO
     public record FooterDto(
         string? Title,
         string? Description,
-        string? LinksTitleOne,
-        string? LinksTitleTwo,
         string? NewsLetterTitle,
         string? NewsLetterDescription,
         string? NewsLetterInfo,
@@ -37,14 +35,20 @@ namespace CarRent.data.DTO
         string? YouTubeLink,
         string? InstagramLink,
         string? TikTokLink,
-        string? Info 
+        string? Info,
+        IEnumerable<FooterLinksDto> Links
     );
 
-    public record FooterLinkDto(
+    public record FooterLinksDto(
         int FooterId,
+        string Title,
+        IEnumerable<FooterLinksPathsDto> Paths
+    );
+
+    public record FooterLinksPathsDto(
+        int FooterLinksId,
         string Name,
         string Path,
-        string RowTitle,
         int DisplayPosition 
     );
 }

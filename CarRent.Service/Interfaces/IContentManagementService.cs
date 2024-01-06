@@ -11,5 +11,6 @@ namespace CarRent.Service.Interfaces
     {
         Task<ContactPageDto> GetContactPage();
         Task EditContactPage(ContactPageDto pageDto);
+        Task<FooterDto> GetFooter();
     }
 }
