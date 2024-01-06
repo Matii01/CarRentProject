@@ -33,8 +33,8 @@ namespace CarRent.data.DTO
         decimal Net,
         decimal Gross,
         decimal VAT,
-        decimal VATValue
-        ,Rental? Rental
+        decimal VATValue,
+        Rental? Rental
     );
 
     public record AllRentalDataDto(
@@ -103,5 +103,47 @@ namespace CarRent.data.DTO
         decimal TotalCost
         );
 
-    public record RentalDetailsDto();
+    public record FirmClientDto(
+            string PostCode ,
+            string City ,
+            string NIP ,
+            string CompanyName,
+            string StreetAndNumber 
+        );
+
+    public record InvoiceWithClient(
+        int Id,
+        string Number,
+        string? Comment,
+        Client? Client,
+        List<InvoiceItemDto> InvoiceItems);
+
+    public record InvoiceWithFirmClient(
+        int Id,
+        string Number,
+        string? Comment,
+        bool? IsIndividual,
+        FirmClientDto? Client,
+        List<InvoiceItemDto> InvoiceItems
+    );
+
+    public record InvoiceWithIndividualClient(
+        int Id,
+        string Number,
+        string? Comment,
+        bool? IsIndividual,
+        IndividualClient? Client,
+        List<InvoiceItemDto> InvoiceItems
+    );
+
+    public record NewInvoiceDto(
+        bool IsIndividual,
+        InvoiceWithFirmClient? InvoiceFirm, 
+        InvoiceWithIndividualClient? InvoiceIndividual
+    );
+
+    public record RentalDetailsForWorkerViewDto(
+        RentalDatesDto? RentalInfo, 
+        NewInvoiceDto? Invoice)
+    ;
 }

@@ -19,8 +19,10 @@ namespace CarRent.Repository.Interfaces
         Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int rentalId);
         Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges);
         Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges);
+        Task<NewInvoiceDto> GetInvoiceDataAsync(int invoiceId);
         IQueryable<Rental> FindByCondition(Expression<Func<Rental, bool>> expression, bool trackChanges);
         IQueryable<Rental> GetAsync(int id, bool trackChanges);
+        Task<int> GetInvoiceIdByRentalId(int rentalId);
         void Create(Rental carMake);
         void Delete(Rental carMake);
         Task<InvoiceDto> GetRentalInfoByPaymentId(string paymentId);

@@ -53,17 +53,13 @@ namespace CarRent.Service.Service
             return item;
         }
 
-        public async Task<RentalDetailsDto> GetRentalDetailsAsync(int id)
+        public async Task<NewInvoiceDto> GetInvoiceRentalDetailsAsync(int id)
         {
-            var item = await _repository.Rentals
-                .FindByCondition(x => x.Id == id, false)
-                .Include(x => x.RentalStatus)
-                .Include(x => x.Car)
-                .Include(x => x.InvoiceItem)
-                .Select(x => new RentalDetailsDto())
-                .SingleOrDefaultAsync();
+            var invoiceId = await _repository.Rentals.GetInvoiceIdByRentalId(id);
+            var invoice = await _repository.Rentals.GetInvoiceDataAsync(invoiceId);
 
-            return item;
+
+            return invoice;
         }
 
         public async Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId)

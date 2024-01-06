@@ -53,7 +53,7 @@ namespace CarRent.api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRentalDetailsById(int id)
         {
-            var item = await _services.RentalService.GetRentalDetailsAsync(id);
+            var item = await _services.RentalService.GetInvoiceRentalDetailsAsync(id);
             return Ok(item);
         }
 

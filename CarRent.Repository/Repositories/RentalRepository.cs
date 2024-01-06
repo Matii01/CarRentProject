@@ -27,6 +27,34 @@ namespace CarRent.Repository.Repositories
                 x => x.CarId == carId && x.RentalStart >= currentDate, false);
         }
 
+        public async Task<NewInvoiceDto> GetInvoiceDataAsync(int invoiceId)
+        {
+            var invoice = context.Invoices
+                .Where(x => x.Id == invoiceId)
+                .Include(x => x.Client)
+                .Include(x => x.InvoicesItems)
+                .ThenInclude(x => x.Rental);
+
+            var transformedData = await invoice
+                .Select(x => new InvoiceWithClient(
+                        x.Id,
+                        x.Number,
+                        x.Comment,
+                        x.Client,
+                        x.InvoicesItems.Select(y => new InvoiceItemDto(
+                            y.InvoiceId,
+                            y.Rabat,
+                            y.Net,
+                            y.Gross,
+                            y.VAT,
+                            y.VATValue,
+                            y.Rental)
+                        ).ToList()
+                    )).SingleOrDefaultAsync();
+
+            return TransformInvoiceClient(transformedData);
+        }
+
         public async Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges)
         {
             var list = context.Invoices
@@ -136,7 +164,7 @@ namespace CarRent.Repository.Repositories
         //public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)
         public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int rentalId)
         {
-            var invoiceId = await GetInvoiceByRentalId(rentalId);
+            var invoiceId = await GetInvoiceIdByRentalId(rentalId);
 
             if (!await IsUserRentalByInvoiceId(userId, invoiceId))
             {
@@ -166,7 +194,7 @@ namespace CarRent.Repository.Repositories
             return userRental;
         }
 
-        private async Task<int> GetInvoiceByRentalId(int rentalId)
+        public async Task<int> GetInvoiceIdByRentalId(int rentalId)
         {
             return await context.Rentals
                 .Where(x => x.Id == rentalId)
@@ -207,9 +235,41 @@ namespace CarRent.Repository.Repositories
 
             return newPagedList;
         }
+
+        private static NewInvoiceDto TransformInvoiceClient(InvoiceWithClient invoice)
+        {
+            if (invoice.Client is IndividualClient)
+            {
+                var c = invoice.Client as IndividualClient;
+                var newInvoice = new NewInvoiceDto(true, null, new InvoiceWithIndividualClient(
+                        invoice.Id,
+                        invoice.Number,
+                        invoice.Comment,
+                        true,
+                        invoice.Client as IndividualClient,
+                        invoice.InvoiceItems
+                    ));
+                return newInvoice;
+            }
+            else
+            {
+                var c = invoice.Client as FirmClient;
+                var newInvoice = new NewInvoiceDto(true, new InvoiceWithFirmClient(
+                        invoice.Id,
+                        invoice.Number,
+                        invoice.Comment,
+                        true,
+                        new FirmClientDto(c.PostCode,c.City, c.NIP, c.CompanyName, c.StreetAndNumber),
+                        invoice.InvoiceItems
+                    ), 
+                    null);
+                return newInvoice;
+            }
+        }
+
         private async Task<bool> IsUserRentalByRentalId(string userId, int rentalId)
         {
-            var invoiceId = await GetInvoiceByRentalId(rentalId);
+            var invoiceId = await GetInvoiceIdByRentalId(rentalId);
 
             var item = await context
                 .UserInvoices
