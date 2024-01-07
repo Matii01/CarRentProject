@@ -11,6 +11,7 @@ function AddService() {
     dateStart: "",
     dateEnd: "",
     description: "",
+    remark: "",
     totalCost: "",
   });
   const onSubmit = (event) => {
@@ -18,13 +19,14 @@ function AddService() {
     console.log("zapisz");
 
     jwtInterceptor
-      .post("/CarMaintenance/AddMaintenance1", JSON.stringify(item), {
+      .post("/CarMaintenance/AddMaintenance", JSON.stringify(item), {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((data) => {
         console.log(data);
+        //onCancelClik();
       })
       .catch((error) => {
         console.log(error);
@@ -45,6 +47,7 @@ function AddService() {
       dateStart: "",
       dateEnd: "",
       description: "",
+      remark: "",
       totalCost: "",
     });
   };
@@ -114,7 +117,20 @@ function AddService() {
                   name="description"
                   value={item.description}
                   onChange={handleChange}
-                  style={{ height: 150 }}
+                  style={{ height: 100 }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Label>Uwagi</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  type="test"
+                  name="remark"
+                  value={item.remark}
+                  onChange={handleChange}
+                  style={{ height: 100 }}
                 />
               </Col>
             </Row>

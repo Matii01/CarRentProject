@@ -93,59 +93,6 @@ namespace CarRent.api.Controllers
             return Ok(item);
         }
 
-        /*
-        [Authorize(Roles = "User")]
-        [HttpPost("AddNewUserRental")]
-        public async Task<IActionResult> AddRental([FromBody] object allRentalData)
-        {
-            var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
-            
-            if(temp == null)
-            {
-                return Ok(false);
-            }
-
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-            
-            if (user == null)
-            {
-                return Ok(false);
-            }
-
-            var result = await _services.RentalService.CreateRentalAndInvoiceAndAssignUser
-                (user.Id,
-                temp.Invoice,
-                temp.NewRentalForClient,
-                temp.ClientDetails
-                );
-
-            return Ok(result);
-        }*/
-
-
-        [HttpPost("IsDateAvailable")]
-        public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
-        {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var username = User.Identity.Name;
-            //var _user = await _userManager.FindByNameAsync(username);
-            //await Console.Out.WriteLineAsync("id: " + userId);
-            //await Console.Out.WriteLineAsync("username: "+ username);
-            //await Console.Out.WriteLineAsync("username: "+ _user.Id);
-
-            await Console.Out.WriteLineAsync("carId = ==="+dates.CarId);
-            if (dates.CarId == 0)
-            {
-                return NotFound();
-            }
-
-            await Console.Out.WriteLineAsync("data: " + dates);
-
-            var isAvailable = await _services.RentalService.IsAvailable(dates);
-            return Ok(isAvailable);
-        }
-
         [HttpGet("CheckPrice")]
         public async Task<IActionResult> CheckPrice([FromQuery] NewRentalForClient dates)
         {
@@ -174,6 +121,30 @@ namespace CarRent.api.Controllers
             return Ok(total);
         }
 
+        [HttpPost("IsDateAvailable")]
+        public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
+        {
+            await Console.Out.WriteLineAsync("carId = ===" + dates.CarId);
+            if (dates.CarId == 0)
+            {
+                return NotFound();
+            }
+
+            await Console.Out.WriteLineAsync("data: " + dates);
+
+            var isAvailable = await _services.RentalService.IsAvailable(dates);
+            return Ok(isAvailable);
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("")]
+        public async Task<IActionResult> ChangeRentalCar()
+        {
+            // new CarId, RentalId, Remark 
+            // Should first check if new car is available and only if it is, change car 
+
+            return Ok("");
+        }
 
         [Authorize(Roles = "User")]
         [HttpPost("AddNewUserRentalTest")]
@@ -186,5 +157,35 @@ namespace CarRent.api.Controllers
             //await Console.Out.WriteLineAsync("asdasdasd");
             //return Ok(1);
         }
+
+        /*
+       [Authorize(Roles = "User")]
+       [HttpPost("AddNewUserRental")]
+       public async Task<IActionResult> AddRental([FromBody] object allRentalData)
+       {
+           var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
+
+           if(temp == null)
+           {
+               return Ok(false);
+           }
+
+           var username = User.Identity.Name;
+           var user = await _userManager.FindByNameAsync(username);
+
+           if (user == null)
+           {
+               return Ok(false);
+           }
+
+           var result = await _services.RentalService.CreateRentalAndInvoiceAndAssignUser
+               (user.Id,
+               temp.Invoice,
+               temp.NewRentalForClient,
+               temp.ClientDetails
+               );
+
+           return Ok(result);
+       }*/
     }
 }

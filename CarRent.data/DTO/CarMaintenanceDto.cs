@@ -9,16 +9,28 @@ namespace CarRent.data.DTO
     public record CarMaintenanceDto(
         int Id, 
         int CarId, 
-        string WorkerId,
-        string Description, 
+        string? WorkerId,
+        string? Description, 
+        string? Remarks,
         DateTime DateStart, 
         DateTime DateEnd, 
-        decimal TotalCost);
+        decimal TotalCost
+    );
 
     public record NewCarMaintenanceDto(
        int CarId,
-       string Description,
+       string? Description,
+       string? Remarks,
        DateTime DateStart,
        DateTime DateEnd,
-       decimal TotalCost);
+       decimal TotalCost
+    );
+
+    public record CarMaintenanceListDto(
+        int Id,
+        string CarName,
+        DateTime DateStart,
+        DateTime DateEnd,
+        decimal TotalCost
+    );
 }

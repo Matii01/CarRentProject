@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { Card, Col, Container, Row, Form, Button } from "react-bootstrap";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import styles from "./../../components/Table/Table.module.css";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import MyVerticallyCenteredModal from "../../components/Modals/MyVerticallyCenteredModal";
 
 function RentalDetails() {
+  const [modalShow, setModalShow] = useState(false);
   const param = useParams();
 
   useEffect(() => {
@@ -33,16 +37,43 @@ function RentalDetails() {
     event.preventDefault();
   };
 
+  const printTooltip = (props) => <Tooltip {...props}>Drukuj</Tooltip>;
+
+  const Link = ({ id, children, title }) => (
+    <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
+      {children}
+    </OverlayTrigger>
+  );
+
   return (
     <>
       <Container>
         <Row>
           <Col>Szczegóły {param.rentalId}</Col>
           <Col>
+            <Button variant="primary" onClick={() => setModalShow(true)}>
+              Launch vertically centered modal
+            </Button>
+          </Col>
+          <Col>
             <Row className="d-flex justify-content-end">
-              <Col xs="auto">print</Col>
-              <Col xs="auto">refaund</Col>
-              <Col xs="auto">more actions</Col>
+              <Col xs="auto">
+                <Link title="Drukuj" id="t-1">
+                  <i className="fa-solid fa-print"></i>
+                </Link>{" "}
+              </Col>
+              <Col xs="auto">
+                <Link title="Zwrot" id="t-1">
+                  <i className="fa-solid fa-arrows-turn-right"></i>
+                </Link>{" "}
+              </Col>
+              <Col xs="auto">
+                <Form.Select aria-label="Default select example">
+                  <option>Więcej</option>
+                  <option value="1">Wymiana</option>
+                  <option value="2">Two</option>
+                </Form.Select>
+              </Col>
             </Row>
           </Col>
         </Row>
@@ -199,6 +230,10 @@ function RentalDetails() {
             </Row>
           </Col>
         </Row>
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
       </Container>
     </>
   );

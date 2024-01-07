@@ -9,6 +9,7 @@ function AddNewEvent({ onCancel }) {
   const RENT = "RENT";
   const VEHICLEINSPECTION = "VEHICLEINSPECTION";
   const SERVICE = "SERVICE";
+  const EditSERVICE = "EDITSERVICE";
 
   const setDefaultView = () => {
     setView("");
@@ -44,6 +45,10 @@ function AddNewEvent({ onCancel }) {
 
   if (view === SERVICE) {
     selectedView = <AddService />;
+  }
+
+  if (view === EditSERVICE) {
+    selectedView = <EditSERVICE />;
   }
 
   return (

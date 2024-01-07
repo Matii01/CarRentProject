@@ -1,4 +1,5 @@
 ﻿using CarRent.data.DTO;
+using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,8 +18,22 @@ namespace CarRent.api.Controllers
             _authentication = authentication;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMaintenanceByID(int id)
+        {
+            var item = await _services.CarMaintenanceService.GetCarMaintenanceByIdAsync(id, false);
+            return Ok(item);
+        }
+
+        [HttpGet("All")]
+        public async Task<IActionResult> AllMaintenance([FromQuery] MaintenanceParameters param)
+        {
+            var list = await _services.CarMaintenanceService.GetCarMaintenanceListAsync(param);
+            return Ok(list);
+        }
+
         [Authorize]
-        [HttpPost("AddMaintenance1")]
+        [HttpPost("AddMaintenance")]
         public async Task<IActionResult> CarTestMaintenance([FromBody] NewCarMaintenanceDto carMaintenance)
         {
             var user = User.Identity.Name;
@@ -26,33 +41,41 @@ namespace CarRent.api.Controllers
 
             await Console.Out.WriteLineAsync(carMaintenance.ToString());
             await Console.Out.WriteLineAsync(userId);
-            return Ok("temp");
+
+            var item = new CarMaintenanceDto(
+                    0, 
+                    carMaintenance.CarId,
+                    userId,
+                    carMaintenance.Description,
+                    carMaintenance.Remarks,
+                    carMaintenance.DateStart,
+                    carMaintenance.DateEnd,
+                    carMaintenance.TotalCost
+                );
+
+            var result = await _services.CarMaintenanceService.CreateCarMaintenance(item);
+            return Ok(result);
         }
 
         [Authorize]
-        [HttpPost("AddMaintenance")]
-        public async Task<IActionResult> CarMaintenance([FromBody] CarMaintenanceDto carMaintenance)
+        [HttpPost("EditMaintenance/{id}")]
+        public async Task<IActionResult> EditMaintenance(int id, [FromBody] CarMaintenanceDto carMaintenance)
         {
             var user = User.Identity.Name;
             var userId = await _authentication.FindUserByUserName(user);
 
-            await Console.Out.WriteLineAsync(carMaintenance.ToString());
-            await Console.Out.WriteLineAsync(userId);
+            var result = await _services.CarMaintenanceService.EditCarMaintenanceAsync(id, carMaintenance, userId);
+            return Ok(result);
+        }
 
-
-            return Ok("temp");
-
-            //var item = new CarMaintenanceDto(
-            //        0, carMaintenance.CarId,
-            //        userId,
-            //        carMaintenance.Description,
-            //        carMaintenance.DateStart,
-            //        carMaintenance.DateEnd,
-            //        carMaintenance.TotalCost
-            //    );
-
-            //var result = await _services.CarMaintenanceService.CreateCarMaintenance(item);
-            //return Ok(result);
+        [Authorize]
+        [HttpPost("EditMaintenance2/{id}")]
+        public async Task<IActionResult> EditMaintenance1(int id, [FromBody] CarMaintenanceDto carMaintenance)
+        {
+            await Console.Out.WriteLineAsync("id :: :  "+id);
+            await Console.Out.WriteLineAsync("Edit maintainmeaf adds");
+            return Ok("");
         }
     }
 }
+

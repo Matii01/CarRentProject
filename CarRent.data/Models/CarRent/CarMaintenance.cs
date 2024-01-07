@@ -19,6 +19,7 @@ namespace CarRent.data.Models.CarRent
         public User.User Worker { get; set; } = null!;
 
         public string Description { get; set; } = null!;
+        public string? Remarks { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
 

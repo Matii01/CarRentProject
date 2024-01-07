@@ -21,6 +21,7 @@ namespace CarRent.data.Models.CarRent
         public InvoiceItem? InvoiceItem { get; set; } 
         public DateTime RentalStart { get; set; }
         public DateTime RentalEnd { get; set; }
+        public string? Remark { get; set; }
 
         [Precision(18, 2)]
         [Range(0, double.MaxValue)]
