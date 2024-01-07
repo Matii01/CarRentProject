@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CarRent.data\CarRent.data.csproj" />
     <ProjectReference Include="..\CarRent.Repository\CarRent.Repository.csproj" />
+    <ProjectReference Include="..\CarRent.SendingEmail\CarRent.SendingEmail.csproj" />
   </ItemGroup>
 
 </Project>

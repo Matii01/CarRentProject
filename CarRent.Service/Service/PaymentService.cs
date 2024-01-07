@@ -4,6 +4,7 @@ using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Migrations;
+using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,14 +25,16 @@ namespace CarRent.Service.Service
         private readonly IConfiguration _config;
         private readonly IPriceListService _priceList;
         private readonly IRentalService _rental;
+        private readonly IEmailSender _emailSender;
 
-        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental) : base(repository, mapper)
+        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental, IEmailSender emailSender) : base(repository, mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
             _config = config;
             _priceList = priceList;
             _rental = rental;
+            _emailSender = emailSender;
         }
 
         public async Task<PaymentIntent> CreatePayment(string? userId, string? dataForRental)
@@ -71,6 +74,11 @@ namespace CarRent.Service.Service
                     allRentalData.Invoice,
                     allRentalData.NewRentalForClient,
                     allRentalData.ClientDetails);
+
+            _emailSender.SendEmailPaymentSucceeded(
+                allRentalData.ClientDetails,
+                allRentalData.NewRentalForClient,
+                allRentalData.Invoice.InvoiceItems);
             
         }
 

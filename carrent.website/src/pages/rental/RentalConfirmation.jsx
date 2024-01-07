@@ -10,7 +10,7 @@ function RentalConfirmation() {
 
   useEffect(() => {
     axios
-      .get(`https://localhost:7091/Rental/rentalDetail/${data}`)
+      .get(`https://localhost:7091/Rental/rentalDetail/${rentalId}`)
       .then((response) => {
         console.log(response);
         setRentalData(response.data);

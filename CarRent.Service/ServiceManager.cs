@@ -2,6 +2,7 @@
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
+using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +37,7 @@ namespace CarRent.Service
         
 
 
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration)
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
         {
             _carService = new Lazy<ICarService>(() =>
                 new CarService(repositoryManager, mapper));    
@@ -54,7 +55,7 @@ namespace CarRent.Service
                 => new RentalService(repositoryManager, PriceListService,  mapper));
 
             _paymentService = new Lazy<IPaymentService>(() =>
-                new PaymentService(repositoryManager, mapper, configuration, PriceListService, RentalService));
+                new PaymentService(repositoryManager, mapper, configuration, PriceListService, RentalService, emailSender));
 
             _workerSidebarService = new Lazy<IWorkerSidebarService>(() =>
                 new WorkerSidebarService(repositoryManager, mapper));

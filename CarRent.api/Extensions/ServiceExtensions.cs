@@ -2,6 +2,7 @@
 using CarRent.data.Models.User;
 using CarRent.Repository;
 using CarRent.Repository.Interfaces;
+using CarRent.SendingEmail;
 using CarRent.Service;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
@@ -45,12 +46,19 @@ namespace CarRent.api.Extensions
         public static void ConfigureRepositoryManager(this IServiceCollection service) =>
             service.AddScoped<IRepositoryManager, RepositoryManager>();
 
-        public static void ConfigureServices(this IServiceCollection services)
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddScoped<ICarService, CarService>();
             //services.AddScoped<ICarMakeService, CarMakeService>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            var emailConfig = configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
 
             // Bind the JwtSettings section and add it do DI
             //services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));

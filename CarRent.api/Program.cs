@@ -13,7 +13,7 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureJwtSettings(builder.Configuration);
-builder.Services.ConfigureServices();
+builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 // Add db connection
 builder.Services.ConfigureDbContext(builder.Configuration);
