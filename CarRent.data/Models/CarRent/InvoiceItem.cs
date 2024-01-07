@@ -30,6 +30,10 @@ namespace CarRent.data.Models.CarRent
 
         [Precision(18, 2)]
         [Range(0, double.MaxValue)]
+        public decimal PaidAmount { get; set; }
+
+        [Precision(18, 2)]
+        [Range(0, double.MaxValue)]
         public decimal VAT { get; set; }
 
         [Precision(18, 2)]

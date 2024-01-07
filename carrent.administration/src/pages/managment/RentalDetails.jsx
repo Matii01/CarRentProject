@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { Card, Col, Container, Row, Form, Button } from "react-bootstrap";
-import CarInfoTable from "../../components/Table/CarInfoTable";
 import styles from "./../../components/Table/Table.module.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import MyVerticallyCenteredModal from "../../components/Modals/MyVerticallyCenteredModal";
+import PaymentSummary from "../../components/RentalsManagment/PaymentSummary";
+import IndividualClientData from "../../components/RentalsManagment/IndividualClientData";
+import FirmClientData from "../../components/RentalsManagment/FirmClientData";
 
 function RentalDetails() {
-  const [modalShow, setModalShow] = useState(false);
   const param = useParams();
+  const [modalShow, setModalShow] = useState(false);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     getRentalData();
@@ -20,7 +23,8 @@ function RentalDetails() {
     jwtInterceptor
       .get(`Rental/${param.rentalId}`)
       .then((data) => {
-        console.log(data);
+        console.log(data.data);
+        setData(data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -80,73 +84,25 @@ function RentalDetails() {
         <Row className="mt-4">
           <Col xl={8} className="me-2">
             <Row>
-              <Card>
-                <Card.Body>
-                  <table className={`${styles.table}`}>
-                    <thead>
-                      <tr>
-                        <th> </th>
-                        <th>Samochód</th>
-                        <th>Marka</th>
-                        <th>Rabat</th>
-                        <th>Cena</th>
-                        <th>Całkowita</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <img
-                            src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-                            style={{ maxWidth: 150 }}
-                          />
-                        </td>
-                        <td>Skoda favia IV</td>
-                        <td>Skoda</td>
-                        <td>0</td>
-                        <td>2500</td>
-                        <td>2500</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img
-                            src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-                            style={{ maxWidth: 150 }}
-                          />
-                        </td>
-                        <td>Skoda favia IV</td>
-                        <td>Skoda</td>
-                        <td>0</td>
-                        <td>2500</td>
-                        <td>2500</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card.Body>
-              </Card>
+              {data.invoiceIndividual && (
+                <RentalDetailsTable
+                  items={data.invoiceIndividual.invoiceItems}
+                />
+              )}
+              {data.invoiceFirm && (
+                <RentalDetailsTable items={data.invoiceFirm.invoiceItems} />
+              )}
             </Row>
             <Row>
               <Col>
-                <Card>
-                  <Card.Header>Dane klienta</Card.Header>
-                  <Card.Body>
-                    <Row>
-                      <Col>Adam Nijaki</Col>
-                    </Row>
-                    <Row>
-                      <Col>795 Folsom Ave, Suite 600</Col>
-                    </Row>
-                    <Row>
-                      <Col>San Francisco, CA 94107</Col>
-                    </Row>
-                    <Row>
-                      <Col>P: (123) 456-7890</Col>
-                    </Row>
-                    <Row>
-                      <Col>M: (+01) 12345 67890</Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
+                {data.invoiceIndividual && (
+                  <IndividualClientData
+                    client={data.invoiceIndividual.client}
+                  />
+                )}
+                {data.invoiceFirm && (
+                  <FirmClientData client={data.invoiceFirm.client} />
+                )}
               </Col>
               <Col>
                 <Card>
@@ -175,32 +131,14 @@ function RentalDetails() {
           </Col>
           <Col>
             <Row>
-              <Card>
-                <Card.Header>Podsumowanie</Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Col>Items subtotal :</Col>
-                    <Col className="d-flex justify-content-end">150</Col>
-                  </Row>
-                  <Row>
-                    <Col>Tax :</Col>
-                    <Col className="d-flex justify-content-end">150</Col>
-                  </Row>
-                  <Row>
-                    <Col>Subtotal :</Col>
-                    <Col className="d-flex justify-content-end">150</Col>
-                  </Row>
-                  <Row>
-                    <Col>Shipping Cost:</Col>
-                    <Col className="d-flex justify-content-end">150</Col>
-                  </Row>
-                  <hr />
-                  <Row>
-                    <Col>Total: </Col>
-                    <Col className="d-flex justify-content-end">150</Col>
-                  </Row>
-                </Card.Body>
-              </Card>
+              {data.invoiceIndividual && (
+                <PaymentSummary
+                  invoiceItems={data.invoiceIndividual.invoiceItems}
+                />
+              )}
+              {data.invoiceFirm && (
+                <PaymentSummary invoiceItems={data.invoiceFirm.invoiceItems} />
+              )}
             </Row>
             <Row>
               <Card>
@@ -241,35 +179,93 @@ function RentalDetails() {
 
 export default RentalDetails;
 
-/* 
- <CarInfoTable
-    thead={["id", "name", "make", ""]}
-    item={["id", "name", "make"]}
-    items={items}
-    searchTerm={""}
-  />
-*/
+function RentalDetailsTable({ items }) {
+  return (
+    <>
+      <Card>
+        <Card.Body>
+          <table className={`${styles.table}`}>
+            <thead>
+              <tr>
+                <th> </th>
+                <th>Samochód</th>
+                <th>Marka</th>
+                <th>Rabat</th>
+                <th>Cena</th>
+                <th>Całkowita</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <img
+                    src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
+                    style={{ maxWidth: 150 }}
+                  />
+                </td>
+                <td>Skoda favia IV</td>
+                <td>Skoda</td>
+                <td>0</td>
+                <td>2500</td>
+                <td>2500</td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
+                    style={{ maxWidth: 150 }}
+                  />
+                </td>
+                <td>Skoda favia IV</td>
+                <td>Skoda</td>
+                <td>0</td>
+                <td>2500</td>
+                <td>2500</td>
+              </tr>
+              {items.map((it, key) => (
+                <tr key={key}>
+                  <td>
+                    <img src={it.rental.carImage} style={{ maxWidth: 150 }} />
+                  </td>
+                  <td>{it.rental.carName}</td>
+                  <td>{it.rental.carMark}</td>
+                  <td>{it.rabat}</td>
+                  <td>{it.gross}</td>
+                  <td>{it.gross}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card.Body>
+      </Card>
+    </>
+  );
+}
 
-/* 
-<Col>
-            <Card>
-              <Card.Header>Szczegóły wynajmu</Card.Header>
-              <Card.Body>
-                <Row>
-                  <Col>Od : xx-xx-xxxx</Col>
-                </Row>
-                <Row>
-                  <Col>Do : xx-xx-xxxx</Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col>Status: Zakończono</Col>
-                </Row>
-                <ListGroup variant="flush" className="mt-5">
-                  <ListGroup.Item>Od </ListGroup.Item>
-                  <ListGroup.Item>Do </ListGroup.Item>
-                  <ListGroup.Item>Płatność</ListGroup.Item>
-                </ListGroup>
-              </Card.Body>
-            </Card>
-          </Col>
-*/
+function PaymentData() {
+  return (
+    <>
+      <Card>
+        <Card.Header>Dane Płatności</Card.Header>
+        <Card.Body>
+          <Row>
+            <Col>Payment Type: </Col>
+            <Col>Credit Card</Col>
+          </Row>
+          <Row>
+            <Col>Provider: </Col>
+            <Col>Visa ending in 2851</Col>
+          </Row>
+          <Row>
+            <Col>Valid Date: </Col>
+            <Col>02/2020</Col>
+          </Row>
+          <Row>
+            <Col>CVV: </Col>
+            <Col>xxx</Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </>
+  );
+}

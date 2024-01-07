@@ -117,6 +117,7 @@ namespace CarRent.Service.Service
                 Rabat = price.Rabat,
                 Net = price.Net,
                 Gross = price.Gross,
+                PaidAmount = price.Gross,
                 VAT = price.VAT,
                 VATValue = price.VATValue,
                 InvoiceId = Invoice.Id,
@@ -155,6 +156,7 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
             return client;
         }
+
         public async Task<bool> CarHaveRentalInThisDate(int CarId, DateTime DateStart, DateTime DateEnd)
         {
 
@@ -174,6 +176,7 @@ namespace CarRent.Service.Service
 
             return true;
         }
+
         public async Task<bool> IsAvailable(NewRentalForClient newRental)
         {
             if(newRental.DateFrom > newRental.DateTo)
@@ -184,6 +187,7 @@ namespace CarRent.Service.Service
             var isBusy = await CarIsBusy(newRental);
             return !isBusy;
         }
+
         private async Task<Rental> CreateRental(NewRentalForClient newRental)
         {
             var RentalStatusId = await GetDefaultRentalStatus();
@@ -197,6 +201,7 @@ namespace CarRent.Service.Service
             };
             return rental;
         }
+
         private async Task<UserRental> CreateUserRentalAsync(string? userId, int rentalId)
         {
             UserRental userRental = new()
@@ -210,6 +215,7 @@ namespace CarRent.Service.Service
 
             return userRental;
         }
+
         private async Task<UserInvoice> CreateUserInvoiceAsync(string? userId, int invoiceId)
         {
             UserInvoice invoiceClient = new()
@@ -222,6 +228,7 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
             return invoiceClient;
         }
+
         private async Task<bool> CarIsBusy(NewRentalForClient newRental)
         {
             var haveRental = await CarHaveRentalInThisDate(newRental.CarId,
@@ -242,6 +249,7 @@ namespace CarRent.Service.Service
 
             return false;
         }
+
         private async Task<bool> CarHaveMaintenanceInThisDate( int CarId, DateTime DateStart,DateTime DateEnd)
         {
             var result = await _repository.CarMaintenances
@@ -258,6 +266,7 @@ namespace CarRent.Service.Service
             }
             return true;
         }  
+
         private async Task<int?> GetDefaultRentalStatus()
         {
             var result = await _repository.RentalStatus
@@ -270,11 +279,13 @@ namespace CarRent.Service.Service
             }
             return result.Id;
         }
+
         private async Task<string> GetInvoiceNumber()
         {
             string number = "NR/12";
             return number;
         }
+
         private async Task<string> GenerateInvoiceNumber()
         {
             var lastInvoiceNumber = await _repository.Invoice

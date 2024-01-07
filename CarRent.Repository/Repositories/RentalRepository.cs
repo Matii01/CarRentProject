@@ -33,7 +33,11 @@ namespace CarRent.Repository.Repositories
                 .Where(x => x.Id == invoiceId)
                 .Include(x => x.Client)
                 .Include(x => x.InvoicesItems)
-                .ThenInclude(x => x.Rental);
+                .ThenInclude(x => x.Rental)
+                .ThenInclude(x => x.Car)
+                .ThenInclude(x => x.CarMake);
+
+
 
             var transformedData = await invoice
                 .Select(x => new InvoiceWithClient(
@@ -41,14 +45,24 @@ namespace CarRent.Repository.Repositories
                         x.Number,
                         x.Comment,
                         x.Client,
-                        x.InvoicesItems.Select(y => new InvoiceItemDto(
+                        x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
                             y.InvoiceId,
                             y.Rabat,
                             y.Net,
                             y.Gross,
+                            y.PaidAmount,
                             y.VAT,
                             y.VATValue,
-                            y.Rental)
+                            new RentalDetailsDto(
+                                y.Rental.CarId, 
+                                y.Rental.Car.Name, 
+                                y.Rental.Car.CarImage, 
+                                y.Rental.Car.CarMake.Name,
+                                y.Rental.RentalStart,
+                                y.Rental.RentalEnd,
+                                y.Rental.RentalStatus.Status,
+                                y.Rental.RentalStatusId
+                                ))
                         ).ToList()
                     )).SingleOrDefaultAsync();
 
@@ -75,6 +89,7 @@ namespace CarRent.Repository.Repositories
                             y.Rabat,
                             y.Net,
                             y.Gross,
+                            y.PaidAmount,
                             y.VAT,
                             y.VATValue,
                             y.Rental)
@@ -103,6 +118,7 @@ namespace CarRent.Repository.Repositories
                             y.Rabat,
                             y.Net,
                             y.Gross,
+                            y.PaidAmount,
                             y.VAT,
                             y.VATValue,
                             y.Rental)

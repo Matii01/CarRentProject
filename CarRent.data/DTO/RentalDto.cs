@@ -32,6 +32,7 @@ namespace CarRent.data.DTO
         decimal Rabat,
         decimal Net,
         decimal Gross,
+        decimal PaidAmount,
         decimal VAT,
         decimal VATValue,
         Rental? Rental
@@ -111,12 +112,34 @@ namespace CarRent.data.DTO
             string StreetAndNumber 
         );
 
+    public record RentalDetailsDto (
+        int CarId,
+        string CarName,
+        string CarImage,
+        string CarMark,
+        DateTime RentalStart,
+        DateTime RentalEnd,
+        string RentalStatus,
+        int? RentalStatusId
+        );
+ 
+    public record InvoiceItemWithRentalDetailDto(
+       int InvoiceId,
+       decimal Rabat,
+       decimal Net,
+       decimal Gross,
+       decimal PaidAmount,
+       decimal VAT,
+       decimal VATValue,
+       RentalDetailsDto? Rental
+   );
+
     public record InvoiceWithClient(
         int Id,
         string Number,
         string? Comment,
         Client? Client,
-        List<InvoiceItemDto> InvoiceItems);
+        List<InvoiceItemWithRentalDetailDto> InvoiceItems);
 
     public record InvoiceWithFirmClient(
         int Id,
@@ -124,7 +147,7 @@ namespace CarRent.data.DTO
         string? Comment,
         bool? IsIndividual,
         FirmClientDto? Client,
-        List<InvoiceItemDto> InvoiceItems
+        List<InvoiceItemWithRentalDetailDto> InvoiceItems
     );
 
     public record InvoiceWithIndividualClient(
@@ -133,7 +156,7 @@ namespace CarRent.data.DTO
         string? Comment,
         bool? IsIndividual,
         IndividualClient? Client,
-        List<InvoiceItemDto> InvoiceItems
+        List<InvoiceItemWithRentalDetailDto> InvoiceItems
     );
 
     public record NewInvoiceDto(
