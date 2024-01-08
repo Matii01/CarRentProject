@@ -6,6 +6,7 @@ import ChangeAddress from "../../components/User/ChangeAddress";
 import UserOrders from "../../components/User/UserOrders";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import UserWishList from "../../components/User/UserWishlist";
 
 function UserPage() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function UserPage() {
   const order = "ORDER";
   const profile = "PROFILE";
   const address = "ADDRESS";
+  const wishlist = "WISHLIST";
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -50,6 +52,10 @@ function UserPage() {
     );
   }
 
+  if (view === wishlist) {
+    selectedView = <UserWishList />;
+  }
+
   return (
     <>
       <Container className="mt-5 mb-5" fluid="md">
@@ -77,6 +83,9 @@ function UserPage() {
                 <ListGroup className="list-group-flush">
                   <ListGroup.Item action onClick={() => changeView(order)}>
                     Orders
+                  </ListGroup.Item>
+                  <ListGroup.Item action onClick={() => changeView(wishlist)}>
+                    Wishlist
                   </ListGroup.Item>
                   <ListGroup.Item action onClick={() => changeView(profile)}>
                     Profile

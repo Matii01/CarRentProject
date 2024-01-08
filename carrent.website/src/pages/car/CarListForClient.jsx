@@ -8,13 +8,17 @@ import CarPagination from "../../components/Pagination/CarPagination";
 import CarsGridView from "../../components/Cars/CarsGridView";
 import CarsListView from "../../components/Cars/CarsListView";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
+import axiosInstance from "./../../utils/axiosConfig";
+import { useSelector } from "react-redux";
 
 function CarListForClient() {
+  const user = useSelector((state) => state.user);
   const defaultParams = { PageNumber: 1, PageSize: 10 };
   const [metaData, setMetaData] = useState();
   const [cars, setCars] = useState();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isGridView, setIsGridView] = useState(true);
+  const [userWishList, setUserWishList] = useState([]);
   const [filterInfo, setFilterInfo] = useState({
     PageNumber: 1,
     PageSize: 10,
@@ -33,6 +37,10 @@ function CarListForClient() {
   useEffect(() => {
     getFilteredCars(defaultParams);
   }, []);
+
+  useEffect(() => {
+    getClientWishList();
+  }, [user.isLogin]);
 
   useEffect(() => {
     getFilteredCars(filterInfo);
@@ -58,6 +66,21 @@ function CarListForClient() {
         console.log(error);
         setCars(null);
       });
+  };
+
+  const getClientWishList = () => {
+    if (user.isLogin) {
+      axiosInstance
+        .get("https://localhost:7091/Wishlist")
+        .then((data) => {
+          setUserWishList(data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("user is not login");
+    }
   };
 
   const closeFilters = () => {
@@ -158,14 +181,24 @@ function CarListForClient() {
             <hr className="mt-4" />
           </Row>
         </Form>
-        {cars && isGridView && <CarsGridView cars={cars} />}
+        {cars && isGridView && (
+          <CarsGridView
+            cars={cars}
+            isLogin={user.isLogin}
+            wishlist={userWishList}
+          />
+        )}
         {cars && !isGridView && (
           <>
             <Container>
               <Row>
                 <div style={{ width: 350 }}></div>
                 <Col>
-                  <CarsListView cars={cars} />
+                  <CarsListView
+                    cars={cars}
+                    isLogin={user.isLogin}
+                    wishlist={userWishList}
+                  />
                 </Col>
               </Row>
             </Container>

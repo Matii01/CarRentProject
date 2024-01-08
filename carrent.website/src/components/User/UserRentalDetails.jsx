@@ -1,17 +1,37 @@
+import { useState } from "react";
 import { Button, Card, Col, ListGroup, Row, Table } from "react-bootstrap";
+import AddCarOpinion from "./AddCarOpinion";
 
 function UserRentalDetails({ onGoBackClick, rentalDetail }) {
+  const [showAddOpinion, setShowAddOpinion] = useState(false);
   const formatDate = (date) => {
     return date.slice(0, 10);
+  };
+
+  const onInvoiceClick = () => {
+    console.log("click generate invoice");
   };
 
   return (
     <>
       <Card>
         <Card.Header className="cardHeader">
-          <Button variant="outline-light" size="sm" onClick={onGoBackClick}>
-            Go back
-          </Button>
+          <Row>
+            <Col>
+              <Button variant="outline-light" size="sm" onClick={onGoBackClick}>
+                Go back
+              </Button>
+            </Col>
+            <Col className="d-flex justify-content-end p-1 me-2">
+              <Button
+                variant="link"
+                style={{ color: "white" }}
+                onClick={onInvoiceClick}
+              >
+                <i className="fa-solid fa-file-invoice"></i>
+              </Button>
+            </Col>
+          </Row>
         </Card.Header>
         <Card.Body>
           <Card.Text>{rentalDetail.carName}</Card.Text>
@@ -47,11 +67,27 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
           </tbody>
         </Table>
         <Card.Body>
-          <Col className="text-center">
-            <Button className="customButton w-50">Invoice</Button>
-          </Col>
+          <Row>
+            <Col className="text-center">
+              <Button className="customButton w-50">Invoice</Button>
+            </Col>
+            <Col className="text-center">
+              <Button
+                className="customButton w-50"
+                onClick={() => setShowAddOpinion(true)}
+              >
+                Your opinion{" "}
+              </Button>
+            </Col>
+          </Row>
         </Card.Body>
       </Card>
+      {showAddOpinion && (
+        <AddCarOpinion
+          className="mt-4"
+          onCancel={() => setShowAddOpinion(false)}
+        />
+      )}
     </>
   );
 }

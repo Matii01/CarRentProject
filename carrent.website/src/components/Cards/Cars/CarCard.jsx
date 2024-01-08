@@ -1,40 +1,37 @@
 import { Button, Col, Row } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+import AddToWishList from "./../../WishList/AddToWishList";
+import LinkWithHint from "../../Hints/LinkWithHint";
 
-function CarColItem({ icon, value }) {
+function CarColItem({ icon, value, hint }) {
   return (
     <>
-      <div
-        className="p-1 m-2"
-        style={{
-          border: "1px solid lightgrey",
-          borderRadius: "5px",
-          color: "gray",
-        }}
-      >
-        <i className={icon}></i>
-        {value}
-      </div>
+      <LinkWithHint title={hint}>
+        <div
+          className="p-1 m-2"
+          style={{
+            border: "1px solid lightgrey",
+            borderRadius: "5px",
+            color: "gray",
+          }}
+        >
+          <i className={icon}></i>
+          {value}
+        </div>
+      </LinkWithHint>
     </>
   );
 }
 
-function CarCard({ car }) {
+function CarCard({ car, isLogin, wishlist }) {
   const navigate = useNavigate();
   const handleCarClick = (id) => {
     navigate(`/car/details/${id}`);
   };
 
-  const temp = {
-    ac: "manualna",
-    engine: "benzynowy",
-    gearbox: "manulana",
-    id: 1,
-    make: "Skoda",
-    name: "Skoda Fabia IV",
-    pictureUrl: "",
-    price: 0,
+  const goToReservation = (id) => {
+    navigate(`/car/reservation/${id}`);
   };
 
   if (car) {
@@ -56,24 +53,42 @@ function CarCard({ car }) {
         />
 
         <Card.Body>
-          <Card.Title>{car.name}</Card.Title>
+          <Card.Title>
+            <Row>
+              <Col xl={9}>{car.name}</Col>
+              <Col className="d-flex justify-content-end me-1">
+                {isLogin && (
+                  <AddToWishList carId={car.id} wishlist={wishlist} />
+                )}
+              </Col>
+            </Row>
+          </Card.Title>
           <Row>
             <Col className="text-center p-1">
-              <CarColItem icon="fa-solid fa-gears" value={car.engine} />
+              <CarColItem
+                icon="fa-solid fa-gears"
+                value={car.engine}
+                hint="engine type"
+              />
             </Col>
             <Col className="text-center p-1">
               <CarColItem
                 icon="fa-solid fa-gauge-simple-high"
                 value={car.acceleration}
+                hint="acceleration"
               />
             </Col>
           </Row>
           <Row>
             <Col className="text-center p-1">
-              <CarColItem text="gearbox" value={car.gearbox} />
+              <CarColItem text="gearbox" value={car.gearbox} hint="gearbox" />
             </Col>
             <Col className="text-center p-1">
-              <CarColItem text="napęd" value={`${car.horsepower} KM`} />
+              <CarColItem
+                text="napęd"
+                value={`${car.horsepower} HP`}
+                hint="horsepower"
+              />
             </Col>
           </Row>
           <Row className="mt-2">
@@ -92,7 +107,12 @@ function CarCard({ car }) {
               </Button>
             </Col>
             <Col className="text-center p-1">
-              <Button className="customButton w-75">Rental</Button>
+              <Button
+                className="customButton w-75"
+                onClick={() => goToReservation(car.id)}
+              >
+                Rental
+              </Button>
             </Col>
           </Row>
         </Card.Footer>

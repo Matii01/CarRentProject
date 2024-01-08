@@ -1,6 +1,7 @@
 import { Col, Image, Row } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+
 function CarCardForListView({ car }) {
   const navigate = useNavigate();
   const handleCarClick = (id) => {

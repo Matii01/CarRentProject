@@ -80,6 +80,7 @@ namespace CarRent.Repository
         // User
         public DbSet<Address> Addresses { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Wishlist> Wishlist { get; set; }
 
         //Sidebar 
         public DbSet<PathItem> PathItems { get; set; }

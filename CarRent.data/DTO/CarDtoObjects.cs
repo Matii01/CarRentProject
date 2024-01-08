@@ -67,5 +67,11 @@ namespace CarRent.data.DTO
         public IEnumerable<RentalDatesDto> ExcludedDates { get; set; }
     }
 
+    public record CarForWishlistDto(
+        int Id,
+        string Name,
+        string PictureUrl
+    );
+
     //public record UpdateCar(int id);
 }

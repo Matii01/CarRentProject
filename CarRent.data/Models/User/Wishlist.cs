@@ -10,7 +10,7 @@ namespace CarRent.data.Models.User
     {
         public override int Id { get; set; }
         public int CarId { get; set; }
-        public Car Car { get; set; } = null!;
+        public Car? Car { get; set; }
         public string UserId { get; set; } = null!;
     }
 }

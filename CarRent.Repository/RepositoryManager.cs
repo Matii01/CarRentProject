@@ -49,6 +49,7 @@ namespace CarRent.Repository
         // User address
         private readonly Lazy<IGenericRepository<Address>> _addressRepository;
         private readonly Lazy<IGenericRepository<UserAddress>> _userAddressRepository;
+        private readonly Lazy<IGenericRepository<Wishlist>> _wishListRepository;
 
         // Sidebar 
 
@@ -146,6 +147,9 @@ namespace CarRent.Repository
             _userAddressRepository = new Lazy<IGenericRepository<UserAddress>>(() =>
                 new GenericRepository<UserAddress>(_context));
 
+            _wishListRepository = new Lazy<IGenericRepository<Wishlist>>(() =>
+                new GenericRepository<Wishlist>(_context));
+
             _dataForRentalRepository = new Lazy<IGenericRepository<DataForRental>>(() =>
                 new GenericRepository<DataForRental>(_context));
 
@@ -199,6 +203,7 @@ namespace CarRent.Repository
         public IGenericRepository<UserAddress> UserAddress => _userAddressRepository.Value;
         public IGenericRepository<DataForRental> DataForRental => _dataForRentalRepository.Value;
         public IGenericRepository<UserWorkerPaths> UserWorkerPaths => _userWorkerPathRepository.Value;
+        public IGenericRepository<Wishlist> Wishlist => _wishListRepository.Value;
         public IGenericRepository<WorkerPaths> WorkerPaths => _workerPathRepository.Value;
         public IGenericRepository<PathItem> PathItem => _pathItemRepository.Value;
         public IGenericRepository<ContactPage> ContactPage => _contactPageRepository.Value;
