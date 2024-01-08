@@ -53,7 +53,7 @@ namespace CarRent.Repository
         public DbSet<PriceList> PricesList { get; set; }
         public DbSet<PricelistItem> PricelistItems { get; set; }
         public DbSet<PricelistDate> PricelistDates { get; set; }
-
+        public DbSet<CarOpinion> CarOpinions { get; set; }
         //CarMaintenance
         public DbSet<CarMaintenance> CarMaintenances { get; set; }
 

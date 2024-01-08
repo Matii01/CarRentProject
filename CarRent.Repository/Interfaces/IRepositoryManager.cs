@@ -24,6 +24,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<KilometrLimit> KilometrLimit { get; }
         IGenericRepository<PricelistItem> PricelistItem { get; }
         IGenericRepository<PricelistDate> PricelistDate { get; }
+        IGenericRepository<CarOpinion> CarOpinion { get; }
 
         // CarMaintenances
         IGenericRepository<CarMaintenance> CarMaintenances { get; }
