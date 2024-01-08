@@ -29,5 +29,6 @@ namespace CarRent.Service.Interfaces
         IGenericService<KilometrLimitDto> KilometrLimitService { get; }
         IGenericService<GearboxTypeDto> GearboxTypeService { get; }
         IGenericService<RentalStatusDto> RentalStatusService {  get; }
+        IGenericService<InvoiceStatusDto> InvoiceStatusService { get; }
     }
 }

@@ -47,7 +47,10 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Pracownicy", path: "/users/workers" },
   ];
 
-  const managment = [{ name: "Statusy Wypozyczeń", path: "/rental/status" }];
+  const managment = [
+    { name: "Statusy Wypozyczeń", path: "/rental/status" },
+    { name: "Statusy Faktur", path: "/invoice/status" },
+  ];
 
   const location = useLocation();
   const activeRoute = (routeName) => {

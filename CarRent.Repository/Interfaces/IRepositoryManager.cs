@@ -22,11 +22,11 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<EngineType> EngineType { get; }
         IGenericRepository<GearboxType> GearboxType { get; }
         IGenericRepository<KilometrLimit> KilometrLimit { get; }
-        IGenericRepository<PricelistItem> PricelistItem {  get; }
+        IGenericRepository<PricelistItem> PricelistItem { get; }
         IGenericRepository<PricelistDate> PricelistDate { get; }
 
         // CarMaintenances
-        IGenericRepository<CarMaintenance> CarMaintenances {  get; }
+        IGenericRepository<CarMaintenance> CarMaintenances { get; }
 
         // Rental 
         IRentalRepository Rentals { get; }
@@ -35,10 +35,10 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<InvoiceItem> InvoiceItem { get; }
         IGenericRepository<InvoiceClient> InvoiceClient { get; }
         IGenericRepository<UserRental> UserRental { get; }
-        IGenericRepository<RentalStatus> RentalStatus {  get; }
+        IGenericRepository<RentalStatus> RentalStatus { get; }
         IGenericRepository<UserInvoice> UserInvoice { get; }
         IGenericRepository<DataForRental> DataForRental { get; }
-
+        IGenericRepository<InvoiceStatus> InvoiceStatus {get;}
 
         // Rabat 
         IGenericRepository<Rabat> Rabat { get; }

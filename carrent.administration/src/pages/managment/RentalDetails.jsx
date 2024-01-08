@@ -196,32 +196,6 @@ function RentalDetailsTable({ items }) {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-                    style={{ maxWidth: 150 }}
-                  />
-                </td>
-                <td>Skoda favia IV</td>
-                <td>Skoda</td>
-                <td>0</td>
-                <td>2500</td>
-                <td>2500</td>
-              </tr>
-              <tr>
-                <td>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-                    style={{ maxWidth: 150 }}
-                  />
-                </td>
-                <td>Skoda favia IV</td>
-                <td>Skoda</td>
-                <td>0</td>
-                <td>2500</td>
-                <td>2500</td>
-              </tr>
               {items.map((it, key) => (
                 <tr key={key}>
                   <td>
@@ -269,3 +243,58 @@ function PaymentData() {
     </>
   );
 }
+
+/* 
+ <table className={`${styles.table}`}>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Samochód</th>
+      <th>Marka</th>
+      <th>Rabat</th>
+      <th>Cena</th>
+      <th>Całkowita</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <img
+          src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
+          style={{ maxWidth: 150 }}
+        />
+      </td>
+      <td>Skoda favia IV</td>
+      <td>Skoda</td>
+      <td>0</td>
+      <td>2500</td>
+      <td>2500</td>
+    </tr>
+    <tr>
+      <td>
+        <img
+          src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
+          style={{ maxWidth: 150 }}
+        />
+      </td>
+      <td>Skoda favia IV</td>
+      <td>Skoda</td>
+      <td>0</td>
+      <td>2500</td>
+      <td>2500</td>
+    </tr>
+    {items.map((it, key) => (
+      <tr key={key}>
+        <td>
+          <img src={it.rental.carImage} style={{ maxWidth: 150 }} />
+        </td>
+        <td>{it.rental.carName}</td>
+        <td>{it.rental.carMark}</td>
+        <td>{it.rabat}</td>
+        <td>{it.gross}</td>
+        <td>{it.gross}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+*/

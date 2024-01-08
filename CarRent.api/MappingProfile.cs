@@ -63,6 +63,10 @@ namespace CarRent.api
             CreateMap<RentalStatusDto, RentalStatus>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
+            CreateMap<InvoiceStatus, InvoiceStatusDto>();
+            CreateMap<InvoiceStatusDto, InvoiceStatus>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
             CreateMap<Address, AddressDto>();
             CreateMap<AddressDto, Address>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));

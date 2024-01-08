@@ -57,6 +57,7 @@ import store from "./shared/store";
 import EditContactPage from "./pages/cms/EditContactPage";
 import RentalDetails from "./pages/managment/RentalDetails";
 import EditFooter from "./pages/cms/EditFooter";
+import InvoiceStatus from "./pages/managment/InvoicStatus";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -114,6 +115,7 @@ const router = createBrowserRouter([
       { path: "users/users", element: <UsersPage /> },
       { path: "users/users/:userName", element: <UserDetail /> },
       { path: "users/workers", element: <WorkersPage /> },
+      { path: "invoice/status", element: <InvoiceStatus /> },
       { path: "rental/status", element: <RentalStatus /> },
       { path: "rentals", element: <RentalsList /> },
       { path: "rentals/details/:rentalId", element: <RentalDetails /> },
