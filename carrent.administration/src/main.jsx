@@ -58,6 +58,7 @@ import EditContactPage from "./pages/cms/EditContactPage";
 import RentalDetails from "./pages/managment/RentalDetails";
 import EditFooter from "./pages/cms/EditFooter";
 import InvoiceStatus from "./pages/managment/InvoicStatus";
+import Opinion from "./pages/managment/Opinion";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -121,6 +122,7 @@ const router = createBrowserRouter([
       { path: "rentals/details/:rentalId", element: <RentalDetails /> },
       { path: "cms/contact", element: <EditContactPage /> },
       { path: "cms/footer", element: <EditFooter /> },
+      { path: "opinion", element: <Opinion /> },
     ],
   },
   {

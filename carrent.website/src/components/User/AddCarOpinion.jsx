@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Form, Col, Row } from "react-bootstrap";
+import axiosInstance from "./../../utils/axiosConfig";
 
-function AddCarOpinion({ onCancel, ...props }) {
+function AddCarOpinion({ onCancel, carId, ...props }) {
   const [opinion, setOpinion] = useState({
+    carId: carId,
     title: "",
     text: "",
-    mark: 0,
+    mark: 6,
   });
 
   const handleChange = (event) => {
@@ -19,6 +21,23 @@ function AddCarOpinion({ onCancel, ...props }) {
   const onSubmit = (event) => {
     event.preventDefault();
     console.log(opinion);
+    axiosInstance
+      .post(
+        `https://localhost:7091/CarOpinion/create`,
+        JSON.stringify(opinion),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        onCancel();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -35,6 +54,7 @@ function AddCarOpinion({ onCancel, ...props }) {
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
+                  required
                   placeholder="title"
                   name="title"
                   type="text"
@@ -65,6 +85,7 @@ function AddCarOpinion({ onCancel, ...props }) {
           <Form.Group className="mb-3" controlId="formGroupPassword">
             <Form.Label>Opinion</Form.Label>
             <Form.Control
+              required
               as="textarea"
               placeholder="..."
               type="text"

@@ -16,21 +16,32 @@ namespace CarRent.data.DTO
         int Mark,
         int CarId 
     );
+
+    public record TemporaryOpinionDto(
+       int Id,
+       string? Title,
+       string? Text,
+       DateTime? AddedDate,
+       int Mark,
+       int CarId,
+       string? UserId
+   );
+
     public record OpinionDto(
         int Id,
         string? Title,
         string? Text,
-        string? UserName,
-        DataType? AddedDate,
+        DateTime? AddedDate,
         int Mark,
-        int CarId
+        int CarId,
+        string UserName
     );
 
     public record OpinionForAdminViewDto(
         int Id,
         string? Title,
         string? Text,
-        DataType? AddedDate,
+        DateTime? AddedDate,
         bool? IsAccepted,
         string? UserId,
         int Mark,

@@ -198,6 +198,7 @@ namespace CarRent.Repository.Repositories
             var userRental = new UserRentalDetailDto(
                     rentalId,invoiceId,
                     "",
+                    item.CarId,
                     item.Car.Name,
                     item.Car.CarImage,
                     item.RentalStatus.Status,

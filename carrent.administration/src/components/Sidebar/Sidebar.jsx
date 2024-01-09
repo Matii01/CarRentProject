@@ -47,6 +47,11 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Pracownicy", path: "/users/workers" },
   ];
 
+  const rentals = [
+    { name: "Zamówienia", path: "/rentals" },
+    { name: "Opinie", path: "/opinion" },
+  ];
+
   const managment = [
     { name: "Statusy Wypozyczeń", path: "/rental/status" },
     { name: "Statusy Faktur", path: "/invoice/status" },
@@ -93,15 +98,13 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               <p>Analizy</p>
             </NavLink>
           </li>
-          <li
-            className={
-              false ? "active active-pro" : activeRoute("admin/upgrade")
-            }
-          >
-            <NavLink to={"/rentals"} className="nav-link">
-              <i className={"nc-icon nc-alien-33"} />
-              <p>Zamówienia</p>
-            </NavLink>
+
+          <li>
+            <DropdownList
+              title="Zamówienia"
+              icon="nc-icon nc-alien-33"
+              pages={rentals}
+            />
           </li>
           <li>
             <DropdownList

@@ -22,6 +22,7 @@ namespace CarRent.Service.Interfaces
         IWorkerSidebarService WorkerSidebar {  get; }
         IContentManagementService ContentManagementService  {  get; }
         IWishlistService WishlistService { get; }
+        ICarOpinionService CarOpinionService {  get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }

@@ -84,6 +84,7 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
       </Card>
       {showAddOpinion && (
         <AddCarOpinion
+          carId={rentalDetail.carId}
           className="mt-4"
           onCancel={() => setShowAddOpinion(false)}
         />

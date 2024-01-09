@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,7 @@ namespace CarRent.Service
         public readonly Lazy<IWorkerSidebarService> _workerSidebarService;
         public readonly Lazy<IContentManagementService> _contentManagementService;
         public readonly Lazy<IWishlistService> _wishListService;
+        public readonly Lazy<ICarOpinionService> _carOpinionService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -39,7 +42,7 @@ namespace CarRent.Service
         
 
 
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
+        public ServiceManager(UserManager<User> userManager, IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
         {
             _carService = new Lazy<ICarService>(() =>
                 new CarService(repositoryManager, mapper));    
@@ -73,6 +76,9 @@ namespace CarRent.Service
 
             _wishListService = new Lazy<IWishlistService>(
                 () => new WishlistService(repositoryManager, mapper));
+
+            _carOpinionService = new Lazy<ICarOpinionService>(() =>
+                 new CarOpinionService(userManager, repositoryManager, mapper));
 
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
@@ -110,6 +116,7 @@ namespace CarRent.Service
         public IWorkerSidebarService WorkerSidebar => _workerSidebarService.Value;
         public IContentManagementService ContentManagementService => _contentManagementService.Value;
         public IWishlistService WishlistService => _wishListService.Value;
+        public ICarOpinionService CarOpinionService => _carOpinionService.Value;
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
         public IGenericService<EngineTypeDto> EngineTypeService => _engineTypeService.Value;

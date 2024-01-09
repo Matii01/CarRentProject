@@ -81,6 +81,7 @@ namespace CarRent.data.DTO
         int Id,
         int InvoiceId,
         string Name,
+        int CarId,
         string CarName,
         string CarImg,
         string Status,

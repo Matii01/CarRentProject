@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import TechDetailCard from "../../components/Cars/TechDetailCard";
 import BookCar from "../../components/Cars/BookCar";
 import Pricelist from "../../components/Cars/Pricelist";
+import CarOpinionList from "../../components/Cars/CarOpinionList";
 
 function CarDetailsForClient() {
   const [car, setCar] = useState({});
@@ -86,6 +87,10 @@ function CarDetailsForClient() {
           <Col>
             <BookCar carId={param.carId} excludedDates={car.excludedDates} />
           </Col>
+        </Row>
+        <Row className="mt-2">
+          <hr />
+          <CarOpinionList carid={param.carId} />
         </Row>
       </Container>
     </>
