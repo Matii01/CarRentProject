@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CarRent.data.DTO;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using System;
@@ -14,6 +15,16 @@ namespace CarRent.Service.Service
         public WorkOrderService(IRepositoryManager repository, IMapper mapper) 
             : base(repository, mapper)
         {
+        }
+
+        public async Task<WorkOrderDto> CreateWorkOrderAsync(WorkOrderDto workOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<WorkOrderToAssign> AssignWorkOrderAsync(WorkOrderToAssign workOrder)
+        {
+            throw new NotImplementedException();
         }
     }
 }

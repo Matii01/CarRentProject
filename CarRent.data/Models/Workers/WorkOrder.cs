@@ -14,8 +14,8 @@ namespace CarRent.data.Models.Workers
         public string Title { get; set; } = null!;
         public string? Description { get; set ; }
         public DateTime CreatedData {  get; set; }
-        public DateTime ScheduledDate {  get; set; }
-        public DateTime CompletedDate {  get; set; }
+        public DateTime? ScheduledDate {  get; set; }
+        public DateTime? CompletedDate {  get; set; }
         public int WorkOrderStatusId { get; set; }
         public WorkOrderStatus? WorkOrderStatus { get; set; }
         public int WorkOrderPriorityId { get; set; }

@@ -1,8 +1,8 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.Workers;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 namespace CarRent.api.Controllers
 {
     [Route("[controller]")]
