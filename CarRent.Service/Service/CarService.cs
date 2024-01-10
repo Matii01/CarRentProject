@@ -5,17 +5,21 @@ using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Service.Service
 {
     public class CarService : ServiceBase, ICarService
     {
-        public CarService(IRepositoryManager repository, IMapper mapper) 
+        private readonly IRentalService _rentals;
+        private readonly ICarMaintenanceService _maintenance;
+
+        public CarService(IRepositoryManager repository, IMapper mapper, IRentalService rentals, ICarMaintenanceService maintenance) 
             : base(repository, mapper)
         {
-
+            _rentals = rentals;
+            _maintenance = maintenance;
         }
-
         
         public async Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
         {
@@ -48,6 +52,17 @@ namespace CarRent.Service.Service
             }
             //return _mapper.Map<CarDto>(car);
             return MapHelper.MapCarToNewCarDto(car);
+        }
+
+        public async Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental)
+        {
+            var carsThatHaveRental = await _rentals.GetCarsThatHaveRentalInDates(rental);
+            var carThatHaveService = await _maintenance.GetCarsThatHaveServiceInDates(rental);
+
+            var excludedIds = carsThatHaveRental.Union(carThatHaveService).ToList();
+
+            var cars = await _repository.Car.GetCarsExcept(excludedIds).ToListAsync();
+            return cars;
         }
 
         public async Task<Car> CreateCarAsync(NewCarDto car)

@@ -89,6 +89,15 @@ namespace CarRent.Repository.Repositories
             return pagedList;
         }
 
+        public IQueryable<Car> GetCarsExcept(List<int> excludedIds)
+        {
+            var carList = context.Cars
+                .Where(x => x.IsActive)
+                .Where(x => !excludedIds.Contains(x.Id));
+
+            return carList;
+        }
+
         public async Task<Car?> GetCarAsync(int id, bool trackChanges)
         {
             var car = await FindByCondition(c => c.Id == id, trackChanges)

@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import jwtInterceptor from "../../utils/jwtInterceptor";
-import { Card, Col, Container, Row, Form, Button } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Row,
+  Form,
+  Button,
+  Modal,
+} from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -9,10 +17,14 @@ import MyVerticallyCenteredModal from "../../components/Modals/MyVerticallyCente
 import PaymentSummary from "../../components/RentalsManagment/PaymentSummary";
 import IndividualClientData from "../../components/RentalsManagment/IndividualClientData";
 import FirmClientData from "../../components/RentalsManagment/FirmClientData";
+import CarReplacementModal from "../../components/RentalsManagment/CarReplacementModal";
+import ConfirmOverlay from "../../components/Overlay/ConfirmOverlay";
 
 function RentalDetails() {
   const param = useParams();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [carReplacement, setCarReplacement] = useState(false);
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -31,17 +43,9 @@ function RentalDetails() {
       });
   };
 
-  const items = [
-    { id: 1, name: "name1", make: "make1" },
-    { id: 2, name: "name2", make: "make2" },
-    { id: 3, name: "name3", make: "make3" },
-  ];
-
   const handleSubmit = (event) => {
     event.preventDefault();
   };
-
-  const printTooltip = (props) => <Tooltip {...props}>Drukuj</Tooltip>;
 
   const Link = ({ id, children, title }) => (
     <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
@@ -49,16 +53,49 @@ function RentalDetails() {
     </OverlayTrigger>
   );
 
+  const onSelect = (event) => {
+    switch (event.target.value) {
+      case "replacement":
+        setCarReplacement(true);
+        break;
+      case "test":
+        setModalShow(true);
+        break;
+      default:
+        console.log("incorect");
+        break;
+    }
+  };
+
+  const onChangeCar = (rentalId, carId) => {
+    setShowConfirmModal(true);
+
+    //const Newasd = { RentalId: rentalId, NewCarId: carId }("Rental/replaceCar");
+
+    jwtInterceptor
+      .post(
+        "Rental/replaceCar",
+        JSON.stringify({ RentalId: rentalId, NewCarId: carId }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        getRentalData();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
-      <Container>
+      <Container style={{ position: "relative" }}>
         <Row>
           <Col>Szczegóły {param.rentalId}</Col>
-          <Col>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
-              Launch vertically centered modal
-            </Button>
-          </Col>
+          <Col></Col>
           <Col>
             <Row className="d-flex justify-content-end">
               <Col xs="auto">
@@ -72,10 +109,13 @@ function RentalDetails() {
                 </Link>{" "}
               </Col>
               <Col xs="auto">
-                <Form.Select aria-label="Default select example">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={onSelect}
+                >
                   <option>Więcej</option>
-                  <option value="1">Wymiana</option>
-                  <option value="2">Two</option>
+                  <option value="replacement">Wymiana</option>
+                  <option value="test">Two</option>
                 </Form.Select>
               </Col>
             </Row>
@@ -168,11 +208,28 @@ function RentalDetails() {
             </Row>
           </Col>
         </Row>
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
       </Container>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+
+      {data.invoiceIndividual && (
+        <CarReplacementModal
+          items={data.invoiceIndividual.invoiceItems}
+          show={carReplacement}
+          onHide={() => setCarReplacement(false)}
+          showConfirmModal={onChangeCar}
+        />
+      )}
+      {data.invoiceFirm && (
+        <CarReplacementModal
+          items={data.invoiceFirm.invoiceItems}
+          show={carReplacement}
+          onHide={() => setCarReplacement(false)}
+          showConfirmModal={onChangeCar}
+        />
+      )}
     </>
   );
 }
@@ -243,58 +300,3 @@ function PaymentData() {
     </>
   );
 }
-
-/* 
- <table className={`${styles.table}`}>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>Samochód</th>
-      <th>Marka</th>
-      <th>Rabat</th>
-      <th>Cena</th>
-      <th>Całkowita</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <img
-          src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-          style={{ maxWidth: 150 }}
-        />
-      </td>
-      <td>Skoda favia IV</td>
-      <td>Skoda</td>
-      <td>0</td>
-      <td>2500</td>
-      <td>2500</td>
-    </tr>
-    <tr>
-      <td>
-        <img
-          src="https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_640.jpg"
-          style={{ maxWidth: 150 }}
-        />
-      </td>
-      <td>Skoda favia IV</td>
-      <td>Skoda</td>
-      <td>0</td>
-      <td>2500</td>
-      <td>2500</td>
-    </tr>
-    {items.map((it, key) => (
-      <tr key={key}>
-        <td>
-          <img src={it.rental.carImage} style={{ maxWidth: 150 }} />
-        </td>
-        <td>{it.rental.carName}</td>
-        <td>{it.rental.carMark}</td>
-        <td>{it.rabat}</td>
-        <td>{it.gross}</td>
-        <td>{it.gross}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-*/

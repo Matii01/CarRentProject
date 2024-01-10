@@ -15,6 +15,7 @@ namespace CarRent.Service.Interfaces
         Task<CarMaintenanceDto> GetCarMaintenanceByIdAsync(int id, bool trackChanges);
         Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance);
         Task<CarMaintenanceDto> EditCarMaintenanceAsync(int id, CarMaintenanceDto carMaintenance, string userId);
+        Task<IEnumerable<int>> GetCarsThatHaveServiceInDates(NewRentalForClient dates);
         Task<bool> CarHaveMaintenanceInThisDate(
                 int CarId,
                 DateTime DateStart,

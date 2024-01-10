@@ -54,6 +54,7 @@ namespace CarRent.Repository.Repositories
                             y.VAT,
                             y.VATValue,
                             new RentalDetailsDto(
+                                y.Rental.Id,
                                 y.Rental.CarId, 
                                 y.Rental.Car.Name, 
                                 y.Rental.Car.CarImage, 

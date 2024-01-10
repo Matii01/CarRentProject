@@ -45,7 +45,7 @@ namespace CarRent.Service
         public ServiceManager(UserManager<User> userManager, IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
         {
             _carService = new Lazy<ICarService>(() =>
-                new CarService(repositoryManager, mapper));    
+                new CarService(repositoryManager, mapper, RentalService, CarMaintenanceService));    
 
             _carMakeService = new Lazy<ICarMakeService>(() 
                 => new CarMakeService(repositoryManager));

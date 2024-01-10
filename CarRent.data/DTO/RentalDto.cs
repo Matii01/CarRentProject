@@ -96,6 +96,8 @@ namespace CarRent.data.DTO
         DateTime RentalEnd
     );
 
+    public record ChangeRentedCar(int RentalId, int NewCarId);
+
     public record RentalDataForClientDto(
         string ClientName, 
         DateTime DateFrom, 
@@ -114,6 +116,7 @@ namespace CarRent.data.DTO
         );
 
     public record RentalDetailsDto (
+        int RentalId,
         int CarId,
         string CarName,
         string CarImage,

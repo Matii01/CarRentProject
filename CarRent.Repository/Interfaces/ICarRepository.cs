@@ -15,6 +15,7 @@ namespace CarRent.Repository.Interfaces
         Task<PagedList<CarListDtoForClient>> GetCarsForClientAsync(CarParameters parameters, bool trackChanges);
         Task<Car?> GetCarAsync(int id, bool trackChanges);
         Task<Car> GetCarForClientAsync(int id);
+        IQueryable<Car> GetCarsExcept(List<int> excludedIds);
         void Create(Car car);
         void Delete(Car car);
     }

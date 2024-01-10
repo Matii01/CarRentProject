@@ -121,6 +121,17 @@ namespace CarRent.Service.Service
             return true;
         }
 
+        public async Task<IEnumerable<int>> GetCarsThatHaveServiceInDates(NewRentalForClient dates)
+        {
+            var list = await _repository.CarMaintenances.FindByCondition(x => x.IsActive == true &&
+                    !((dates.DateFrom > x.DateEnd && dates.DateTo > x.DateEnd) ||
+                        (dates.DateFrom < x.DateStart && dates.DateTo < x.DateStart)), false)
+                .Select(x => x.CarId)
+                .ToListAsync();
+
+            return list;
+        }
+
         private async Task<bool> CanChangeDates(
                 int Id,
                 int CarId,

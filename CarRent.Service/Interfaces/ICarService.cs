@@ -15,7 +15,7 @@ namespace CarRent.Service.Interfaces
         Task<PagedList<CarListDto>> GetCarsForWorkerAsync(CarParameters carParameters, bool trackChanges);
         Task<CarDetailsPage> GetCarDetailsForClientAsync(int id);
         Task<NewCarDto?> GetCarById(int id, bool trackChanges);
-
+        Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental);
         Task<Car> CreateCarAsync(NewCarDto car);
         Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges);
         Task DeleteCar(int id);

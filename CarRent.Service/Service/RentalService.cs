@@ -75,6 +75,17 @@ namespace CarRent.Service.Service
             return await _repository.Rentals.GetRentalInfoByPaymentId(paymentId);
         }
 
+        public async Task<IEnumerable<int>> GetCarsThatHaveRentalInDates(NewRentalForClient dates)
+        {
+            var list = await _repository.Rentals.FindByCondition(x => x.IsActive == true &&
+                    !((dates.DateFrom > x.RentalEnd && dates.DateTo > x.RentalEnd) ||
+                        (dates.DateFrom < x.RentalStart && dates.DateTo < x.RentalStart)), false)
+                .Select(x => x.CarId)
+                .ToListAsync();
+
+            return list;
+        }
+
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
             string? paymentIntent,
                 InvoiceDto invoiceDto,
@@ -186,6 +197,21 @@ namespace CarRent.Service.Service
 
             var isBusy = await CarIsBusy(newRental);
             return !isBusy;
+        }
+
+        public async Task ChangeRentedCarAsync(ChangeRentedCar newCar)
+        {
+            var rental = await _repository.Rentals
+                .GetAsync(newCar.RentalId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("can not find rental");
+
+            if (!await IsAvailable(new NewRentalForClient(newCar.NewCarId, rental.RentalStart, rental.RentalEnd)))
+            {
+                throw new Exception("car is not free");
+            }
+
+            rental.CarId = newCar.NewCarId;
+            await _repository.SaveAsync();
         }
 
         private async Task<Rental> CreateRental(NewRentalForClient newRental)

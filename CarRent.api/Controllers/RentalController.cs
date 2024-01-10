@@ -137,12 +137,14 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,Worker")]
-        [HttpPost("")]
-        public async Task<IActionResult> ChangeRentalCar()
+        [HttpPost("replaceCar")]
+        public async Task<IActionResult> ChangeRentalCar([FromBody] ChangeRentedCar newData)
         {
             // new CarId, RentalId, Remark 
             // Should first check if new car is available and only if it is, change car 
+            //_services.RentalService.ChangeCar
 
+            await _services.RentalService.ChangeRentedCarAsync(newData);
             return Ok("");
         }
 

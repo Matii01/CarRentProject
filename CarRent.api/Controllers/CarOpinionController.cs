@@ -33,7 +33,6 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
-
         [Authorize(Roles = "Administrator,Worker")]
         [HttpPost("hide/{id:int}")]
         public async Task<IActionResult> HideOpinion(int id)
