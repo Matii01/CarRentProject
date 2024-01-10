@@ -39,7 +39,6 @@ namespace CarRent.Repository
                 .HasForeignKey(e => e.InvoiceId)
                 .HasPrincipalKey(e => e.Id);
 
-
         }
 
         public DbSet<Car> Cars { get; set; }
@@ -92,6 +91,13 @@ namespace CarRent.Repository
         public DbSet<Footer> Footer { get; set; }
         public DbSet<FooterLinks> FooterLinks { get; set; }
         public DbSet<FooterLinksPaths> FooterLinksPaths { get; set; }
+
+        //WorkOrder
+        public DbSet<WorkOrder> WorkOrder { get; set; }
+        public DbSet<WorkOrderStatus> WorkOrderStatus { get; set; }
+        public DbSet<WorkOrderPriority> WorkOrderPriority { get; set; }
+        public DbSet<WorkOrderWorker> WorkOrderWorker { get; set; }
+
 
     }
 }

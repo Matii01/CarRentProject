@@ -148,6 +148,18 @@ namespace CarRent.api.Controllers
             return Ok("");
         }
 
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("replaceCar/{rentalId:int}")]
+        public async Task<IActionResult> CancelRental(int rentalId)
+        {
+            // new CarId, RentalId, Remark 
+            // Should first check if new car is available and only if it is, change car 
+            //_services.RentalService.ChangeCar
+
+            //await _services.RentalService.ChangeRentedCarAsync(newData);
+            return Ok("");
+        }
+
         [Authorize(Roles = "User")]
         [HttpPost("AddNewUserRentalTest")]
         public async Task<IActionResult> AddRentalTest([FromBody] object allRentalData)

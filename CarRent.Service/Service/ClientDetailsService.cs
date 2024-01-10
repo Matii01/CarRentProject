@@ -65,7 +65,17 @@ namespace CarRent.Service.Service
                 .GetAsync(id, trackChanges)
                 .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
 
-            throw new NotImplementedException();
+            clientDetails.City = newValue.City;
+            clientDetails.Address = newValue.Address;
+            clientDetails.PhoneNumber = newValue.PhoneNumber;
+            clientDetails.LastName = newValue.LastName;
+            clientDetails.Email = newValue.Email;
+            clientDetails.FirstName = newValue.FirstName;
+            clientDetails.PostCode = newValue.PostCode;
+
+            await _repository.SaveAsync();
+
+            //throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(int id)

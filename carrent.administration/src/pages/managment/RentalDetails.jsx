@@ -19,11 +19,12 @@ import IndividualClientData from "../../components/RentalsManagment/IndividualCl
 import FirmClientData from "../../components/RentalsManagment/FirmClientData";
 import CarReplacementModal from "../../components/RentalsManagment/CarReplacementModal";
 import ConfirmOverlay from "../../components/Overlay/ConfirmOverlay";
+import CancelRental from "../../components/RentalsManagment/CancelRentalModal";
 
 function RentalDetails() {
   const param = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
+  const [showCancelModal, setCancelModal] = useState(false);
   const [carReplacement, setCarReplacement] = useState(false);
   const [data, setData] = useState({});
 
@@ -58,8 +59,8 @@ function RentalDetails() {
       case "replacement":
         setCarReplacement(true);
         break;
-      case "test":
-        setModalShow(true);
+      case "cancel":
+        setCancelModal(true);
         break;
       default:
         console.log("incorect");
@@ -115,7 +116,7 @@ function RentalDetails() {
                 >
                   <option>Więcej</option>
                   <option value="replacement">Wymiana</option>
-                  <option value="test">Two</option>
+                  <option value="cancel">Anuluj</option>
                 </Form.Select>
               </Col>
             </Row>
@@ -209,9 +210,10 @@ function RentalDetails() {
           </Col>
         </Row>
       </Container>
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
+      <CancelRental
+        rentalId={param.rentalId}
+        show={showCancelModal}
+        onHide={() => setCancelModal(false)}
       />
 
       {data.invoiceIndividual && (

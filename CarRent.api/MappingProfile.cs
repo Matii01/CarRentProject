@@ -4,6 +4,7 @@ using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
 using CarRent.data.Models.User;
+using CarRent.data.Models.Workers;
 
 namespace CarRent.api
 {
@@ -82,6 +83,14 @@ namespace CarRent.api
 
             CreateMap<ContactPage, ContactPageDto>();
             CreateMap<ContactPageDto, ContactPage>()
+                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+            CreateMap<WorkOrderStatus, WorkOrderStatusDto>();
+            CreateMap<WorkOrderStatusDto, WorkOrderStatus>()
+                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
+            CreateMap<WorkOrderPriority, WorkOrderPriorityDto>();
+            CreateMap<WorkOrderPriorityDto, WorkOrderPriority>()
                  .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
             /*

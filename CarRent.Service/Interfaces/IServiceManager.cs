@@ -23,6 +23,7 @@ namespace CarRent.Service.Interfaces
         IContentManagementService ContentManagementService  {  get; }
         IWishlistService WishlistService { get; }
         ICarOpinionService CarOpinionService {  get; }
+        IWorkOrderService WorkOrderService { get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }
@@ -32,5 +33,7 @@ namespace CarRent.Service.Interfaces
         IGenericService<GearboxTypeDto> GearboxTypeService { get; }
         IGenericService<RentalStatusDto> RentalStatusService {  get; }
         IGenericService<InvoiceStatusDto> InvoiceStatusService { get; }
+        IGenericService<WorkOrderPriorityDto> WorkOrderPriorityService { get; }
+        IGenericService<WorkOrderStatusDto> WorkOrderStatusService { get; }
     }
 }

@@ -30,6 +30,7 @@ namespace CarRent.Service
         public readonly Lazy<IContentManagementService> _contentManagementService;
         public readonly Lazy<IWishlistService> _wishListService;
         public readonly Lazy<ICarOpinionService> _carOpinionService;
+        public readonly Lazy<IWorkOrderService> _workOrderService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -39,6 +40,8 @@ namespace CarRent.Service
         public readonly Lazy<IGenericService<GearboxTypeDto>> _gearboxTypeService;
         public readonly Lazy<IGenericService<RentalStatusDto>> _rentalStatusService;
         public readonly Lazy<IGenericService<InvoiceStatusDto>> _invoiceStatusService;
+        public readonly Lazy<IGenericService<WorkOrderPriorityDto>> _workOrderPriorityService;
+        public readonly Lazy<IGenericService<WorkOrderStatusDto>> _workOrderStatusService;
         
 
 
@@ -80,6 +83,9 @@ namespace CarRent.Service
             _carOpinionService = new Lazy<ICarOpinionService>(() =>
                  new CarOpinionService(userManager, repositoryManager, mapper));
 
+            _workOrderService = new Lazy<IWorkOrderService>(() =>
+                 new WorkOrderService(repositoryManager, mapper));
+
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
 
@@ -103,6 +109,12 @@ namespace CarRent.Service
             
             _invoiceStatusService = new Lazy<IGenericService<InvoiceStatusDto>>(()
                 => new InvoiceStatusService(repositoryManager, mapper));
+
+            _workOrderPriorityService = new Lazy<IGenericService<WorkOrderPriorityDto>>(()
+                => new WorkOrderPriorityService(repositoryManager, mapper));
+
+            _workOrderStatusService = new Lazy<IGenericService<WorkOrderStatusDto>>(()
+                => new WorkOrderStatusService(repositoryManager, mapper));
         }
 
         public ICarService CarService => _carService.Value;
@@ -117,6 +129,8 @@ namespace CarRent.Service
         public IContentManagementService ContentManagementService => _contentManagementService.Value;
         public IWishlistService WishlistService => _wishListService.Value;
         public ICarOpinionService CarOpinionService => _carOpinionService.Value;
+        public IWorkOrderService WorkOrderService => _workOrderService.Value;
+        
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
         public IGenericService<EngineTypeDto> EngineTypeService => _engineTypeService.Value;
@@ -125,5 +139,7 @@ namespace CarRent.Service
         public IGenericService<GearboxTypeDto> GearboxTypeService => _gearboxTypeService.Value;
         public IGenericService<RentalStatusDto> RentalStatusService => _rentalStatusService.Value;
         public IGenericService<InvoiceStatusDto> InvoiceStatusService => _invoiceStatusService.Value;
+        public IGenericService<WorkOrderPriorityDto> WorkOrderPriorityService => _workOrderPriorityService.Value;
+        public IGenericService<WorkOrderStatusDto> WorkOrderStatusService => _workOrderStatusService.Value;
     }
 }

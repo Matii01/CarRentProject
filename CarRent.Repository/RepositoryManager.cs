@@ -53,7 +53,6 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<Wishlist>> _wishListRepository;
 
         // Sidebar 
-
         private readonly Lazy<IGenericRepository<WorkerPaths>> _workerPathRepository;
         private readonly Lazy<IGenericRepository<PathItem>> _pathItemRepository;
         private readonly Lazy<IGenericRepository<UserWorkerPaths>> _userWorkerPathRepository;
@@ -63,6 +62,12 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<Footer>> _footerRepository;
         private readonly Lazy<IGenericRepository<FooterLinks>> _footerLinksRepository;
         private readonly Lazy<IGenericRepository<FooterLinksPaths>> _footerLinksPathsRepository;
+
+        // WorkOrder
+        private readonly Lazy<IGenericRepository<WorkOrder>> _workOrderRepository;
+        private readonly Lazy<IGenericRepository<WorkOrderStatus>> _workOrderStatusRepository;
+        private readonly Lazy<IGenericRepository<WorkOrderPriority>> _workOrderPriorityRepository;
+        private readonly Lazy<IGenericRepository<WorkOrderWorker>> _workOrderWorkerRepository;
 
 
         public RepositoryManager(CarRentContext context)
@@ -178,6 +183,18 @@ namespace CarRent.Repository
             _footerLinksPathsRepository = new Lazy<IGenericRepository<FooterLinksPaths>>(() =>
                 new GenericRepository<FooterLinksPaths>(_context));
 
+            _workOrderRepository =  new Lazy<IGenericRepository<WorkOrder>>(() =>
+                new GenericRepository<WorkOrder>(_context)); ;
+            
+            _workOrderStatusRepository = new Lazy<IGenericRepository<WorkOrderStatus>>(() =>
+                new GenericRepository<WorkOrderStatus>(_context));
+            
+            _workOrderPriorityRepository = new Lazy<IGenericRepository<WorkOrderPriority>>(() =>
+                new GenericRepository<WorkOrderPriority>(_context));
+
+            
+            _workOrderWorkerRepository = new Lazy<IGenericRepository<WorkOrderWorker>>(() =>
+                new GenericRepository<WorkOrderWorker>(_context));
         }
 
         public ICarRepository Car => _carRepository.Value;
@@ -216,7 +233,11 @@ namespace CarRent.Repository
         public IGenericRepository<Footer> Footer => _footerRepository.Value;
         public IGenericRepository<FooterLinks> FooterLinks => _footerLinksRepository.Value;
         public IGenericRepository<FooterLinksPaths> FooterLinksPaths => _footerLinksPathsRepository.Value;
-
+        public IGenericRepository<WorkOrder> WorkOrder => _workOrderRepository.Value;
+        public IGenericRepository<WorkOrderStatus> WorkOrderStatus => _workOrderStatusRepository.Value;
+        public IGenericRepository<WorkOrderPriority> WorkOrderPriority => _workOrderPriorityRepository.Value;
+        public IGenericRepository<WorkOrderWorker> WorkOrderWorker => _workOrderWorkerRepository.Value;
+        
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
