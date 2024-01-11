@@ -84,7 +84,7 @@ namespace CarRent.Service
                  new CarOpinionService(userManager, repositoryManager, mapper));
 
             _workOrderService = new Lazy<IWorkOrderService>(() =>
-                 new WorkOrderService(repositoryManager, mapper));
+                 new WorkOrderService(userManager, repositoryManager, mapper));
 
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));

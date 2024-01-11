@@ -14,6 +14,8 @@ namespace CarRent.Repository.Interfaces
 {
     public interface IRepositoryManager
     {
+        CarRentContext Context {  get; }
+
         ICarRepository Car { get; }
         IPriceListRepository PriceList { get; }
         IGenericRepository<AirConditioningType> AirConditioningType { get; }

@@ -50,11 +50,14 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   const rentals = [
     { name: "Zamówienia", path: "/rentals" },
     { name: "Opinie", path: "/opinion" },
+    { name: "Zlecenia", path: "/workOrder" },
   ];
 
   const managment = [
     { name: "Statusy Wypozyczeń", path: "/rental/status" },
     { name: "Statusy Faktur", path: "/invoice/status" },
+    { name: "Zlecenia Statusy", path: "/workOrder/statuses" },
+    { name: "Zlecenia Priorytety", path: "/workOrder/priority" },
   ];
 
   const location = useLocation();
@@ -101,7 +104,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
 
           <li>
             <DropdownList
-              title="Zamówienia"
+              title="Firma"
               icon="nc-icon nc-alien-33"
               pages={rentals}
             />

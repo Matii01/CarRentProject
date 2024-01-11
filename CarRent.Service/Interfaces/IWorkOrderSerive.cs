@@ -1,15 +1,16 @@
 ﻿using CarRent.data.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CarRent.Repository.Parameters;
 
 namespace CarRent.Service.Interfaces
 {
     public interface IWorkOrderService
     {
-        Task<WorkOrderDto> CreateWorkOrderAsync(WorkOrderDto workOrder);
+        Task<WorkOrderDetailsDto> GetWorkOrderAsync(int id);
+        Task<NewWorkOrderDto> CreateWorkOrderAsync(NewWorkOrderDto workOrder);
         Task<WorkOrderToAssign> AssignWorkOrderAsync(WorkOrderToAssign workOrder);
+        Task ChangeWorkOrderStatusAsync(StatusToChange status);
+        Task ChangeWorkOrderPriorityAsync(PriorityToChange priority);
+        Task<PagedList<WorkOrderDto>> GetWorkOrderByParamsAsync(WorkOrderParameters orderParams);
+        Task<DataForWorkOrderFilters> GetDataForWorkOrderFilters();
     }
 }

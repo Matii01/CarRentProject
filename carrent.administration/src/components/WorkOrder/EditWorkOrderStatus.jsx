@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
-function AddInvoiceStatus({ onAdd }) {
-  //public string Name { get; set; } = null!;
-  //public string Description { get; set; } = null!;
+function EditWorkOrderStatus({ editStatus, onCancel, updateView }) {
+  const [editedStatus, setEditedStatus] = useState(editStatus);
 
-  const [newStatus, setNewStatus] = useState({
-    name: "",
-    description: "",
-  });
+  useEffect(() => {
+    setEditedStatus(editStatus);
+  }, [editStatus]);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    AddNewStatus();
+    console.log(editedStatus);
+    updateStatus();
   };
 
-  const AddNewStatus = () => {
-    console.log(newStatus);
+  const updateStatus = () => {
     jwtInterceptor
-      .post(
-        `https://localhost:7091/InvoiceStatus/create`,
-        JSON.stringify(newStatus),
+      .put(
+        `https://localhost:7091/WorkOrderStatus/update/${editedStatus.id}`,
+        JSON.stringify(editedStatus),
         {
           headers: {
             "Content-Type": "application/json",
@@ -29,26 +27,21 @@ function AddInvoiceStatus({ onAdd }) {
         }
       )
       .then((data) => {
-        console.log(data.data);
-        setNewStatus({ name: "", description: "" });
-        onAdd();
+        console.log(data);
+        updateView();
       })
       .catch((error) => console.log(error));
   };
 
-  const handleCancel = () => {
-    setNewStatus({ name: "", description: "" });
-  };
-
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setNewStatus((prev) => ({ ...prev, [name]: value }));
+    setEditedStatus((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <Card className="p-2">
       <Card.Header>
-        <Card.Title as="h5">Statusy faktur - dodawanie</Card.Title>
+        <Card.Title as="h5">Status zlecenia - edycja</Card.Title>
       </Card.Header>
       <Card.Body className="table-full-width table-responsive px-0">
         <Form onSubmit={onSubmit}>
@@ -61,7 +54,7 @@ function AddInvoiceStatus({ onAdd }) {
                 className="m-2"
                 variant="secondary"
                 size="sm"
-                onClick={handleCancel}
+                onClick={onCancel}
               >
                 Anuluj
               </Button>
@@ -74,16 +67,17 @@ function AddInvoiceStatus({ onAdd }) {
             <Form.Control
               type="text"
               name="name"
-              value={newStatus.name}
+              value={editedStatus.name}
               onChange={handleChange}
             />
           </Form.Group>
+
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-            <Form.Label>Opis</Form.Label>
+            <Form.Label>Uwagi</Form.Label>
             <Form.Control
               type="text"
               name="description"
-              value={newStatus.description}
+              value={editedStatus.description ? editedStatus.description : ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -93,4 +87,4 @@ function AddInvoiceStatus({ onAdd }) {
   );
 }
 
-export default AddInvoiceStatus;
+export default EditWorkOrderStatus;

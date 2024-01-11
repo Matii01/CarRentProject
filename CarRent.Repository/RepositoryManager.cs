@@ -106,7 +106,7 @@ namespace CarRent.Repository
             _pricelistDateRepository = new Lazy<IGenericRepository<PricelistDate>>(() =>
                 new GenericRepository<PricelistDate>(_context));
 
-            _carOpinionRepository = new Lazy<IGenericRepository<CarOpinion>>(()=>
+            _carOpinionRepository = new Lazy<IGenericRepository<CarOpinion>>(() =>
                 new GenericRepository<CarOpinion>(_context));
 
             _rentalRepository = new Lazy<IRentalRepository>(() =>
@@ -150,7 +150,7 @@ namespace CarRent.Repository
             _userInvoiceRepository = new Lazy<IGenericRepository<UserInvoice>>(() =>
                 new GenericRepository<UserInvoice>(_context));
 
-            _addressRepository = new Lazy<IGenericRepository<Address>>(() => 
+            _addressRepository = new Lazy<IGenericRepository<Address>>(() =>
                 new GenericRepository<Address>(_context));
 
             _userAddressRepository = new Lazy<IGenericRepository<UserAddress>>(() =>
@@ -162,7 +162,7 @@ namespace CarRent.Repository
             _dataForRentalRepository = new Lazy<IGenericRepository<DataForRental>>(() =>
                 new GenericRepository<DataForRental>(_context));
 
-            _workerPathRepository = new  Lazy<IGenericRepository<WorkerPaths>> (()=>
+            _workerPathRepository = new Lazy<IGenericRepository<WorkerPaths>>(() =>
                 new GenericRepository<WorkerPaths>(_context));
 
             _pathItemRepository = new Lazy<IGenericRepository<PathItem>>(() =>
@@ -171,7 +171,7 @@ namespace CarRent.Repository
             _userWorkerPathRepository = new Lazy<IGenericRepository<UserWorkerPaths>>(() =>
                 new GenericRepository<UserWorkerPaths>(_context));
 
-            _contactPageRepository =  new Lazy <IGenericRepository<ContactPage>> (()=>
+            _contactPageRepository = new Lazy<IGenericRepository<ContactPage>>(() =>
                 new GenericRepository<ContactPage>(_context));
 
             _footerRepository = new Lazy<IGenericRepository<Footer>>(() =>
@@ -183,20 +183,22 @@ namespace CarRent.Repository
             _footerLinksPathsRepository = new Lazy<IGenericRepository<FooterLinksPaths>>(() =>
                 new GenericRepository<FooterLinksPaths>(_context));
 
-            _workOrderRepository =  new Lazy<IGenericRepository<WorkOrder>>(() =>
+            _workOrderRepository = new Lazy<IGenericRepository<WorkOrder>>(() =>
                 new GenericRepository<WorkOrder>(_context)); ;
-            
+
             _workOrderStatusRepository = new Lazy<IGenericRepository<WorkOrderStatus>>(() =>
                 new GenericRepository<WorkOrderStatus>(_context));
-            
+
             _workOrderPriorityRepository = new Lazy<IGenericRepository<WorkOrderPriority>>(() =>
                 new GenericRepository<WorkOrderPriority>(_context));
 
-            
+
             _workOrderWorkerRepository = new Lazy<IGenericRepository<WorkOrderWorker>>(() =>
                 new GenericRepository<WorkOrderWorker>(_context));
         }
 
+
+        public CarRentContext Context { get => _context; }
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;

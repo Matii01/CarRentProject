@@ -59,6 +59,9 @@ import RentalDetails from "./pages/managment/RentalDetails";
 import EditFooter from "./pages/cms/EditFooter";
 import InvoiceStatus from "./pages/managment/InvoicStatus";
 import Opinion from "./pages/managment/Opinion";
+import WorkOrderStatus from "./pages/managment/WorkOrderStatus";
+import WorkOrderPriority from "./pages/managment/WorkOrderPriority";
+import WorkOrders from "./pages/managment/WorkOrders";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -123,6 +126,9 @@ const router = createBrowserRouter([
       { path: "cms/contact", element: <EditContactPage /> },
       { path: "cms/footer", element: <EditFooter /> },
       { path: "opinion", element: <Opinion /> },
+      { path: "workOrder", element: <WorkOrders /> },
+      { path: "workOrder/statuses", element: <WorkOrderStatus /> },
+      { path: "workOrder/priority", element: <WorkOrderPriority /> },
     ],
   },
   {
