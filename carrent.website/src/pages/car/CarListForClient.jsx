@@ -155,7 +155,7 @@ function CarListForClient() {
                 </Form.Select>
               </Form.Group>
             </Col>
-            <Col md={2}>
+            {/* <Col md={2}>
               <Form.Group>
                 <Form.Label>Other info</Form.Label>
                 <Form.Select>
@@ -165,7 +165,7 @@ function CarListForClient() {
                   <option value={20}>20</option>
                 </Form.Select>
               </Form.Group>
-            </Col>
+            </Col> */}
             <Col md={2}>
               <Form.Group>
                 <Form.Label>View</Form.Label>

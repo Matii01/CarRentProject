@@ -97,4 +97,12 @@ namespace CarRent.data.DTO
         public string? PostCode { get; set; }
         public string? City { get; set; }
     }
+
+    public record UserPersonalDataDto(
+        string? FirstName,
+        string? LastName,
+        string? UserName,
+        string? Email,
+        string? PhoneNumber
+    );
 }

@@ -247,5 +247,49 @@ namespace CarRent.api.Controllers
             return Ok(role);
         }
 
+        [Authorize(Roles = "User")]
+        [HttpGet("UserPersonalDetails")]
+        public async Task<IActionResult> GetUserPersonalDetails()
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            UserPersonalDataDto useData = new (
+                user.FirstName,
+                user.LastName,
+                username,
+                user.Email,
+                user.PhoneNumber
+            );
+                
+            return Ok(useData);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("UpdatePersonalDetails")]
+        public async Task<IActionResult> GetUserPersonalDetails(UserPersonalDataDto updated)
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            user.FirstName = updated.FirstName ?? user.FirstName;
+            user.LastName = updated.LastName ?? user.LastName;
+            user.Email = updated.Email ?? user.Email;
+            user.PhoneNumber = updated.PhoneNumber ?? user.PhoneNumber;
+           
+            await _userManager.UpdateAsync(user);
+
+            return Ok(updated);
+        }
     }
 }

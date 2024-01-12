@@ -1,11 +1,16 @@
 import { Col, Container, Row } from "react-bootstrap";
 import CarCardForListView from "../Cards/Cars/CarCardForListView";
 
-function CarsListView({ cars }) {
+function CarsListView({ cars, isLogin, wishlist }) {
   return (
     <>
       {cars.map((car) => (
-        <CarCardForListView car={car} key={car.id} />
+        <CarCardForListView
+          key={car.id}
+          car={car}
+          isLogin={isLogin}
+          wishlist={wishlist}
+        />
       ))}
     </>
   );
