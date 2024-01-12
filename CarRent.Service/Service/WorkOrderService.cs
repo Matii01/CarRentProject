@@ -8,6 +8,7 @@ using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,8 @@ namespace CarRent.Service.Service
     public class WorkOrderService : ServiceBase, IWorkOrderService
     {
         private readonly UserManager<User> _userManager;
-        
-        public WorkOrderService(UserManager<User> userManager, IRepositoryManager repository, IMapper mapper) 
+
+        public WorkOrderService(UserManager<User> userManager, IRepositoryManager repository, IMapper mapper)
             : base(repository, mapper)
         {
             _userManager = userManager;
@@ -31,7 +32,7 @@ namespace CarRent.Service.Service
         {
             var workers = await GetWorkerListForWorkOrder(id);
 
-            var item =  await _repository.WorkOrder
+            var item = await _repository.WorkOrder
                 .GetAsync(id, false)
                 .Select(x => new WorkOrderDetailsDto(
                          x.Id,
@@ -53,7 +54,7 @@ namespace CarRent.Service.Service
 
         public async Task<NewWorkOrderDto> CreateWorkOrderAsync(NewWorkOrderDto workOrder)
         {
-            if(workOrder.WorkerId == null)
+            if (workOrder.WorkerId.IsNullOrEmpty())
             {
                 return await CreateWorkOrderWithoutWorkerAsync(workOrder);
             }
@@ -65,6 +66,11 @@ namespace CarRent.Service.Service
 
         public async Task<WorkOrderToAssign> AssignWorkOrderAsync(WorkOrderToAssign workOrder)
         {
+            if (await WorkerIsAssigned(workOrder))
+            {
+                throw new Exception("this workOrder is already assign to this worker");
+            }
+
             var newWorkOrder = new WorkOrderWorker()
             {
                 WorkOrderId = workOrder.WorkOrderId,
@@ -78,12 +84,13 @@ namespace CarRent.Service.Service
             return workOrder;
         }
 
+
         public async Task ChangeWorkOrderStatusAsync(StatusToChange status)
         {
             var toChange = await _repository.WorkOrder
                 .GetAsync(status.WorkOrderId, true)
                 .SingleOrDefaultAsync() ?? throw new Exception("not found");
-            
+
             toChange.WorkOrderStatusId = status.StatusId;
             await _repository.SaveAsync();
         }
@@ -100,7 +107,7 @@ namespace CarRent.Service.Service
 
         public async Task<PagedList<WorkOrderDto>> GetWorkOrderByParamsAsync(WorkOrderParameters orderParams)
         {
-            var items =  _repository.WorkOrder
+            var items = _repository.WorkOrder
                 .FindByCondition(x => x.IsActive == true, false)
                 .Search(_repository.Context, orderParams)
                 .Select(x => new WorkOrderDto(
@@ -123,7 +130,7 @@ namespace CarRent.Service.Service
 
         public async Task<DataForWorkOrderFilters> GetDataForWorkOrderFilters()
         {
-            var statuses = await _repository.WorkOrderStatus.FindByCondition(x=> x.IsActive, false)
+            var statuses = await _repository.WorkOrderStatus.FindByCondition(x => x.IsActive, false)
                 .Select(x => _mapper.Map<WorkOrderStatusDto>(x))
                 .ToArrayAsync();
 
@@ -136,6 +143,46 @@ namespace CarRent.Service.Service
 
             return new DataForWorkOrderFilters(statuses, priorities,
                 usersInRole.Select(x => new WorkersForWorkOrder(x.Id, $"{x.FirstName} {x.LastName}")));
+        }
+        
+        public async Task UpdateWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder)
+        {
+            var toUpdate = await _repository.WorkOrder
+                .GetAsync(workOrderId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+
+
+            toUpdate.Title = workOrder.Title;
+            toUpdate.Description = workOrder.Description;
+            toUpdate.CompletedDate = workOrder.CompletedDate;
+            toUpdate.WorkOrderPriorityId = workOrder.WorkOrderPriorityId;
+            toUpdate.WorkOrderStatusId = workOrder.WorkOrderStatusId;
+            toUpdate.ActualHours = workOrder.ActualHours ?? 0;
+            toUpdate.EstimatedHours = workOrder.EstimatedHours ?? 0;
+            toUpdate.Notes = workOrder.Notes;
+ 
+            await _repository.SaveAsync();
+        }
+
+        public async Task DeleteWorkOrderAsync(int workOrderId)
+        {
+            var toUpdate = await _repository.WorkOrder
+               .GetAsync(workOrderId, true)
+               .SingleOrDefaultAsync() ?? throw new Exception("not found");
+
+            toUpdate.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        private async Task<bool> WorkerIsAssigned(WorkOrderToAssign workOrder)
+        {
+            var count = await _repository.WorkOrderWorker
+                .FindByCondition(x => x.IsActive &&
+                    x.WorkerId == workOrder.WorkerId &&
+                    x.WorkOrderId == workOrder.WorkOrderId, false)
+                .CountAsync();
+
+            return count > 0;
         }
 
         private async Task<NewWorkOrderDto> CreateWorkOrderWithoutWorkerAsync(NewWorkOrderDto workOrder)

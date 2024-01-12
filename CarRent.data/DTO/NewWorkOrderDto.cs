@@ -34,6 +34,20 @@ namespace CarRent.data.DTO
         string? Notes
     );
 
+    public record WorkOrderForUpdateDto(
+        int Id,
+        string Title,
+        string? Description,
+        DateTime CreatedData,
+        DateTime? ScheduledDate,
+        DateTime? CompletedDate,
+        int WorkOrderStatusId,
+        int WorkOrderPriorityId,
+        decimal? EstimatedHours,
+        decimal? ActualHours,
+        string? Notes
+    );
+
     public record WorkOrderDetailsDto(
         int Id,
         string Title,
@@ -41,8 +55,8 @@ namespace CarRent.data.DTO
         DateTime CreatedData,
         DateTime? ScheduledDate,
         DateTime? CompletedDate,
-        int? WorkOrderStatusId,
-        int? WorkOrderPriorityId,
+        int WorkOrderStatusId,
+        int WorkOrderPriorityId,
         decimal? EstimatedHours,
         decimal? ActualHours,
         string? Notes,

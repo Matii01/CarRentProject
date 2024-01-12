@@ -5,7 +5,11 @@ import { formatDate } from "../../utils/formDate";
 import MyTable from "../Table/MyTable";
 
 function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
-  const [workOrder, setWorkOrder] = useState();
+  const [workOrder, setWorkOrder] = useState(initialWorkOrderState);
+  const [newWorker, setNewWorker] = useState({
+    WorkOrderId: workOrderId,
+    WorkerId: "",
+  });
 
   useEffect(() => {
     getWorkOrder();
@@ -17,10 +21,11 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
       .then((data) => {
         console.log(data);
         setWorkOrder((prev) => ({
+          ...prev,
           ...data.data,
-          scheduledDate: formatDate(data.data.scheduledDate),
-          completedDate: formatDate(data.data.completedDate),
-          createdData: formatDate(data.data.createdData),
+          scheduledDate: formatDate(data.data.scheduledDate) ?? "",
+          completedDate: formatDate(data.data.completedDate) ?? "",
+          createdData: formatDate(data.data.createdData) ?? "",
         }));
       })
       .catch((error) => {
@@ -34,11 +39,24 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
     update();
   };
 
+  const updatedObject = () => {
+    const { workers, ...copiedObject } = workOrder;
+
+    copiedObject.completedDate =
+      copiedObject.completedDate === "" ? null : copiedObject.completedDate;
+    copiedObject.createdData =
+      copiedObject.createdData === "" ? null : copiedObject.createdData;
+    copiedObject.scheduledDate =
+      copiedObject.scheduledDate === "" ? null : copiedObject.scheduledDate;
+
+    return copiedObject;
+  };
+
   const update = () => {
     jwtInterceptor
       .put(
         `https://localhost:7091/WorkOrder/update/${workOrderId}`,
-        JSON.stringify(workOrder),
+        JSON.stringify(updatedObject()),
         {
           headers: {
             "Content-Type": "application/json",
@@ -61,6 +79,28 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
 
   const onRemoveWorker = (Id) => {
     console.log(Id);
+  };
+
+  const handleNewWorkerChange = (event) => {
+    const { value, name } = event.target;
+    setNewWorker((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const assignNewWorker = (event) => {
+    event.preventDefault();
+    console.log(newWorker);
+    jwtInterceptor
+      .post(`WorkOrder/assignWorkOrder`, JSON.stringify(newWorker), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -97,7 +137,7 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
                   <Form.Label>Tytuł</Form.Label>
                   <Form.Control
                     onChange={handleChange}
-                    name="Title"
+                    name="title"
                     value={workOrder.title}
                   />
                 </Form.Group>
@@ -159,7 +199,6 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
                       disabled
                       name="createdData"
                       type="date"
-                      onChange={handleChange}
                       value={workOrder.createdData}
                     />
                   </Form.Group>
@@ -229,14 +268,47 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
                 </Col>
               </Row>
             </Form>
+            <Form onSubmit={assignNewWorker}>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Pracownicy</Form.Label>
+                    <Form.Select
+                      onChange={handleNewWorkerChange}
+                      name="WorkerId"
+                      value={newWorker.WorkerId}
+                    >
+                      <option value={null}>Select... </option>
+                      {forFilters &&
+                        forFilters.worker.map((type) => (
+                          <option key={type.workerId} value={type.workerId}>
+                            {type.name}
+                          </option>
+                        ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                <Col className="mt-4">
+                  <Button className="" variant="dark" type="submit">
+                    Przypisz kolejnego
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+
             <Row>
               <Col>
-                <MyTable
-                  thead={["ID", "Name", " "]}
-                  items={workOrder.workers}
-                  item={["workerId", "name"]}
-                  handleDelete={onRemoveWorker}
-                />
+                {workOrder.workers && workOrder.workers.length > 0 && (
+                  <MyTable
+                    thead={["ID", "Name", " "]}
+                    items={workOrder.workers}
+                    item={["workerId", "name"]}
+                    handleDelete={onRemoveWorker}
+                  />
+                )}
+                {!(workOrder.workers && workOrder.workers.length > 0) && (
+                  <p>Nie przypisano pracowników do zadania</p>
+                )}
               </Col>
             </Row>
           </>
@@ -247,3 +319,18 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
 }
 
 export default EditWorkOrder;
+
+const initialWorkOrderState = {
+  actualHours: 0,
+  completedDate: "",
+  createdData: "",
+  description: "",
+  estimatedHours: 0,
+  id: 0,
+  notes: "",
+  scheduledDate: "",
+  title: "",
+  workOrderPriorityId: 0,
+  workOrderStatusId: 0,
+  workers: [],
+};

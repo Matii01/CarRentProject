@@ -13,9 +13,8 @@ import EditWorkOrder from "../../components/WorkOrder/EditOrder";
 function WorkOrders() {
   const [metaData, setMetaData] = useState([]);
   const [items, setItems] = useState([]);
-  const [selectedItemId, setSelectedItemId] = useState();
-  const [forFilters, setForFilters] = useState();
-  const [selectedWorkOrder, setSelectedWorkOrder] = useState();
+  const [selectedItemId, setSelectedItemId] = useState("");
+  const [forFilters, setForFilters] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [filtrs, setFiltrs] = useState({
     PageNumber: 1,

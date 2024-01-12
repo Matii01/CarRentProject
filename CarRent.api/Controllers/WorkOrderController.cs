@@ -47,7 +47,7 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,Worker")]
-        [HttpPost("create")]
+        [HttpPost("assignWorkOrder")]
         public async Task<IActionResult> AssignWorkOrder([FromBody] WorkOrderToAssign workOrder)
         {
             var created = await _services.WorkOrderService.AssignWorkOrderAsync(workOrder);
@@ -56,7 +56,7 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,Worker")]
-        [HttpPost("create")]
+        [HttpPost("changeWorkOrderStatus")]
         public async Task<IActionResult> ChangeWorkOrderStatus([FromBody] StatusToChange status)
         {
             await _services.WorkOrderService.ChangeWorkOrderStatusAsync(status);
@@ -64,11 +64,36 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,Worker")]
-        [HttpPost("create")]
+        [HttpPost("changeWorkOrderPriority")]
         public async Task<IActionResult> ChangeWorkOrderPriority([FromBody] PriorityToChange priority)
         {
             await _services.WorkOrderService.ChangeWorkOrderPriorityAsync(priority);
             return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPut("update/{workOrderId:int}")]
+        public async Task<IActionResult> UpdateWorkOrder(int workOrderId, [FromBody] WorkOrderForUpdateDto workOrder)
+        {
+            await _services.WorkOrderService.UpdateWorkOrderAsync(workOrderId, workOrder);
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPut("TestUpdate/{workOrderId:int}")]
+        public async Task<IActionResult> TestUpdate(int workOrderId, [FromBody] WorkOrderForUpdateDto data)
+        {
+            await Console.Out.WriteLineAsync("asdsadasdas: "+workOrderId);
+            await Console.Out.WriteLineAsync(data.ToString());
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpDelete("delete/${workOrderId}")]
+        public async Task<IActionResult> DeleteWorkOrder(int workOrderId)
+        {
+            await _services.WorkOrderService.DeleteWorkOrderAsync(workOrderId);
+            return NoContent();
         }
     }
 }

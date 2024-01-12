@@ -15,8 +15,8 @@ function MyTable({ thead, items, item, handleDelete }) {
               </tr>
             </thead>
             <tbody>
-              {items.map((type) => (
-                <tr key={type.id}>
+              {items.map((type, key) => (
+                <tr key={key}>
                   {item.map((it, index) => (
                     <td key={index}>{type[it]}</td>
                   ))}
