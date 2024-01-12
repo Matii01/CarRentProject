@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
@@ -171,6 +172,39 @@ namespace CarRent.api.Controllers
             //await Console.Out.WriteLineAsync("asdasdasd");
             //return Ok(1);
         }
+
+        [HttpGet("generateInvoice/{rentalId:int}")]
+        public async Task<IActionResult> GenerateInvoiceForRental(int rentalId)
+        {
+            await Console.Out.WriteLineAsync("invoice will be generated");
+            var data = await _services.RentalService.GetDataForGenerateInvoice(rentalId);
+            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data);
+
+            return Ok("");
+        }
+        
+        [HttpGet("getInvoiceDocument/{rentalId:int}")]
+        public async Task<IActionResult> GenerateInvoice(int rentalId)
+        {
+            //await Console.Out.WriteLineAsync("invoice will be generated");
+            var data = await _services.RentalService.GetDataForGenerateInvoice(rentalId);
+            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data);
+
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using(var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Path.GetFileName(path));
+        }
+
 
         /*
        [Authorize(Roles = "User")]

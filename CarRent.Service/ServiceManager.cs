@@ -18,6 +18,7 @@ namespace CarRent.Service
 {
     public class ServiceManager : IServiceManager
     {
+        public readonly Lazy<IGenerateDocumentService> _generateDocumentService;
         public readonly Lazy<ICarService> _carService;
         public readonly Lazy<ICarMakeService> _carMakeService;
         public readonly Lazy<IPriceListService> _priceListService;
@@ -47,6 +48,9 @@ namespace CarRent.Service
 
         public ServiceManager(UserManager<User> userManager, IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
         {
+            _generateDocumentService = new Lazy<IGenerateDocumentService>(() =>
+                new GenerateDocumentService());
+
             _carService = new Lazy<ICarService>(() =>
                 new CarService(repositoryManager, mapper, RentalService, CarMaintenanceService));    
 
@@ -116,7 +120,7 @@ namespace CarRent.Service
             _workOrderStatusService = new Lazy<IGenericService<WorkOrderStatusDto>>(()
                 => new WorkOrderStatusService(repositoryManager, mapper));
         }
-
+        public IGenerateDocumentService GenerateDocumentService => _generateDocumentService.Value;
         public ICarService CarService => _carService.Value;
         public ICarMakeService CarMakeService => _carMakeService.Value;
         public IPriceListService PriceListService => _priceListService.Value;

@@ -61,6 +61,12 @@ namespace CarRent.Service.Service
 
             return invoice;
         }
+        
+        public async Task<NewInvoiceDto> GetDataForGenerateInvoice(int id)
+        {
+            var data = await GetInvoiceRentalDetailsAsync(id);
+            return data;
+        }
 
         public async Task<IEnumerable<RentalDatesDto>> GetFutureRentalDatesForCarAsync(int CarId)
         {

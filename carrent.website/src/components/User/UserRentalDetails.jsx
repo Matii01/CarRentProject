@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Button, Card, Col, ListGroup, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import AddCarOpinion from "./AddCarOpinion";
+import axiosInstance from "../../utils/axiosConfig";
+import { saveAs } from "file-saver";
 
 function UserRentalDetails({ onGoBackClick, rentalDetail }) {
   const [showAddOpinion, setShowAddOpinion] = useState(false);
@@ -8,8 +10,23 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
     return date.slice(0, 10);
   };
 
-  const onInvoiceClick = () => {
-    console.log("click generate invoice");
+  const handleDownload = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `https://localhost:7091/Rental/getInvoiceDocument/${rentalDetail.id}`,
+        {
+          responseType: "blob", // Important to handle binary data properly
+        }
+      );
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+
+      saveAs(blob, "document.docx");
+    } catch (error) {
+      console.error("Download failed", error);
+    }
   };
 
   return (
@@ -26,7 +43,7 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
               <Button
                 variant="link"
                 style={{ color: "white" }}
-                onClick={onInvoiceClick}
+                onClick={handleDownload}
               >
                 <i className="fa-solid fa-file-invoice"></i>
               </Button>

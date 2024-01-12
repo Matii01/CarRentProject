@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Spire.Doc" Version="11.12.4" />
     <PackageReference Include="Stripe.net" Version="43.9.0-beta.1" />
   </ItemGroup>
 

@@ -21,6 +21,7 @@ namespace CarRent.Service.Interfaces
         Task<PagedList<InvoiceDto>> GetRentalsListAsync(OrderParameters param, bool tractChanges);
         Task<InvoiceDto> GetRentalInfoByPaymentIdAsync(string paymentId);
         Task<NewInvoiceDto> GetInvoiceRentalDetailsAsync(int id);
+        Task<NewInvoiceDto> GetDataForGenerateInvoice(int id);
         Task ChangeRentedCarAsync(ChangeRentedCar newCar);
         Task<IEnumerable<int>> GetCarsThatHaveRentalInDates(NewRentalForClient dates);
         /// <summary>

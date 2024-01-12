@@ -11,6 +11,7 @@ namespace CarRent.Service.Interfaces
 {
     public interface IServiceManager
     {
+        IGenerateDocumentService GenerateDocumentService { get; }
         ICarService CarService { get; }
         ICarMakeService CarMakeService { get; }
         IPriceListService PriceListService { get; }
