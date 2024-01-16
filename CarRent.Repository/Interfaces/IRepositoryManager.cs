@@ -52,6 +52,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<Address> Address { get; }
         IGenericRepository<UserAddress> UserAddress { get; }
         IGenericRepository<Wishlist> Wishlist { get; }
+        IGenericRepository<Notification> Notification { get; }
 
         // Sidebar 
         IGenericRepository<UserWorkerPaths> UserWorkerPaths { get; }

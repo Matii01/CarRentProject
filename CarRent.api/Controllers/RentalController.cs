@@ -122,6 +122,15 @@ namespace CarRent.api.Controllers
             return Ok(total);
         }
 
+        [HttpGet("statuses")]
+        public async Task<IActionResult> GetStatusesForRentalEdit()
+        {
+            var RentalStatuses = await _services.RentalStatusService.GetAllActiveAsync(false);
+            var InvoiceStatuses = await _services.InvoiceStatusService.GetAllActiveAsync(false);
+
+            return Ok(new { rentalStatus = RentalStatuses, invoiceStatus = InvoiceStatuses });
+        }
+
         [HttpPost("IsDateAvailable")]
         public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
         {
@@ -136,6 +145,27 @@ namespace CarRent.api.Controllers
             var isAvailable = await _services.RentalService.IsAvailable(dates);
             return Ok(isAvailable);
         }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("UpdateRentalStatus/{rentalId:int}")]
+        public async Task<IActionResult> UpdateRentalStatus(int rentalId, [FromBody] UpdateRentalStatusDto statusDto )
+        {
+            // To do send notification
+
+            await _services.RentalService.UpdateRentalStatusAsync(rentalId, statusDto);
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("UpdateInvoiceStatus/{invoiceId:int}")]
+        public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceStatusDto statusDto)
+        {
+            // To do send notification
+
+            await _services.RentalService.UpdateInvoiceStatusAsync(invoiceId, statusDto);
+            return Ok("");
+        }
+
 
         [Authorize(Roles = "Administrator,Worker")]
         [HttpPost("replaceCar")]
@@ -204,9 +234,13 @@ namespace CarRent.api.Controllers
 
             return File(memory, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Path.GetFileName(path));
         }
+        
+    }
+}
 
 
-        /*
+
+/*
        [Authorize(Roles = "User")]
        [HttpPost("AddNewUserRental")]
        public async Task<IActionResult> AddRental([FromBody] object allRentalData)
@@ -235,5 +269,3 @@ namespace CarRent.api.Controllers
 
            return Ok(result);
        }*/
-    }
-}

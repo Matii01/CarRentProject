@@ -20,17 +20,34 @@ import FirmClientData from "../../components/RentalsManagment/FirmClientData";
 import CarReplacementModal from "../../components/RentalsManagment/CarReplacementModal";
 import ConfirmOverlay from "../../components/Overlay/ConfirmOverlay";
 import CancelRental from "../../components/RentalsManagment/CancelRentalModal";
+import UpdateRentalStatus from "../../components/RentalsManagment/UpdateRentalStatus";
+import ChangeRentalStatusModal from "../../components/RentalsManagment/ChangeRentalStatusModel";
 
 function RentalDetails() {
   const param = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showCancelModal, setCancelModal] = useState(false);
+  const [showChangeRentalStatus, setShowChangeRentalStatus] = useState(false);
   const [carReplacement, setCarReplacement] = useState(false);
+  const [statuses, setStatuses] = useState([]);
   const [data, setData] = useState({});
 
   useEffect(() => {
     getRentalData();
+    getStatuses();
   }, []);
+
+  const getStatuses = () => {
+    jwtInterceptor
+      .get(`Rental/statuses`)
+      .then((data) => {
+        console.log(data.data);
+        setStatuses(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const getRentalData = () => {
     jwtInterceptor
@@ -42,10 +59,6 @@ function RentalDetails() {
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
   };
 
   const Link = ({ id, children, title }) => (
@@ -70,9 +83,6 @@ function RentalDetails() {
 
   const onChangeCar = (rentalId, carId) => {
     setShowConfirmModal(true);
-
-    //const Newasd = { RentalId: rentalId, NewCarId: carId }("Rental/replaceCar");
-
     jwtInterceptor
       .post(
         "Rental/replaceCar",
@@ -91,6 +101,11 @@ function RentalDetails() {
       });
   };
 
+  const onUpdateRentalClick = () => {
+    console.log("click");
+    setShowChangeRentalStatus(true);
+  };
+
   return (
     <>
       <Container style={{ position: "relative" }}>
@@ -102,12 +117,12 @@ function RentalDetails() {
               <Col xs="auto">
                 <Link title="Drukuj" id="t-1">
                   <i className="fa-solid fa-print"></i>
-                </Link>{" "}
+                </Link>
               </Col>
               <Col xs="auto">
                 <Link title="Zwrot" id="t-1">
                   <i className="fa-solid fa-arrows-turn-right"></i>
-                </Link>{" "}
+                </Link>
               </Col>
               <Col xs="auto">
                 <Form.Select
@@ -182,30 +197,24 @@ function RentalDetails() {
               )}
             </Row>
             <Row>
-              <Card>
-                <Card.Header>Status</Card.Header>
-                <Card.Body>
-                  <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formGroupEmail">
-                      <Form.Label>Płatność</Form.Label>
-                      <Form.Select defaultValue="Choose...">
-                        <option>Zapłacono</option>
-                        <option>Anulowana</option>
-                      </Form.Select>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formGroupPassword">
-                      <Form.Label>Realizacja</Form.Label>
-                      <Form.Select defaultValue="Choose...">
-                        <option>Wydany klientowi</option>
-                        <option>Zakończona</option>
-                      </Form.Select>
-                    </Form.Group>
-                    <Button variant="dark" type="submit">
-                      Aktualizuj statusy
-                    </Button>
-                  </Form>
-                </Card.Body>
-              </Card>
+              {data.invoiceIndividual && (
+                <UpdateRentalStatus
+                  statuses={statuses}
+                  invoiceId={data.invoiceIndividual.id}
+                  invoiceStatusId={data.invoiceIndividual.invoiceStatusId}
+                  rentalId={param.rentalId}
+                  onUpdateRentalClick={onUpdateRentalClick}
+                />
+              )}
+              {data.invoiceFirm && (
+                <UpdateRentalStatus
+                  statuses={statuses}
+                  invoiceId={data.invoiceFirm.id}
+                  invoiceStatusId={data.invoiceFirm.invoiceStatusId}
+                  rentalId={param.rentalId}
+                  onUpdateRentalClick={onUpdateRentalClick}
+                />
+              )}
             </Row>
           </Col>
         </Row>
@@ -230,6 +239,23 @@ function RentalDetails() {
           show={carReplacement}
           onHide={() => setCarReplacement(false)}
           showConfirmModal={onChangeCar}
+        />
+      )}
+
+      {data.invoiceFirm && (
+        <ChangeRentalStatusModal
+          items={data.invoiceFirm.invoiceItems}
+          show={showChangeRentalStatus}
+          onHide={() => setShowChangeRentalStatus(false)}
+          rentalStauses={statuses.rentalStatus}
+        />
+      )}
+      {data.invoiceIndividual && (
+        <ChangeRentalStatusModal
+          items={data.invoiceIndividual.invoiceItems}
+          show={showChangeRentalStatus}
+          onHide={() => setShowChangeRentalStatus(false)}
+          rentalStauses={statuses.rentalStatus}
         />
       )}
     </>
@@ -302,3 +328,13 @@ function PaymentData() {
     </>
   );
 }
+
+/**
+ <Form.Group className="mb-3" controlId="formGroupPassword">
+  <Form.Label>Realizacja</Form.Label>
+  <Form.Select defaultValue="Choose...">
+    <option>Wydany klientowi</option>
+    <option>Zakończona</option>
+  </Form.Select>
+</Form.Group> 
+*/

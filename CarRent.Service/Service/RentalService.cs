@@ -92,6 +92,26 @@ namespace CarRent.Service.Service
             return list;
         }
 
+        public async Task UpdateRentalStatusAsync(int rentalId, UpdateRentalStatusDto newStatus)
+        {
+            var toUpdate = await _repository.Rentals
+                .GetAsync(rentalId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            toUpdate.RentalStatusId = newStatus.NewStatus;
+            await _repository.SaveAsync();
+        }
+
+        public async Task UpdateInvoiceStatusAsync(int rentalId, UpdateInvoiceStatusDto newStatus)
+        {
+            var toUpdate = await _repository.Invoice
+                .GetAsync(rentalId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            toUpdate.InvoiceStatus = newStatus.NewStatus;
+            await _repository.SaveAsync();
+        }
+
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
             string? paymentIntent,
                 InvoiceDto invoiceDto,

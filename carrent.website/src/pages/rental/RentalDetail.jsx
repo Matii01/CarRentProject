@@ -1,6 +1,5 @@
-import axios from "axios";
 import axiosInstance from "./../../utils/axiosConfig";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import {
   useLocation,
@@ -11,12 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import RentalData from "../../components/Rental/RentalData";
 
-import {
-  useStripe,
-  useElements,
-  PaymentElement,
-  CardElement,
-} from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { updateLoading } from "../../features/loading/loadingSlice";
 
 function RentalDetail() {

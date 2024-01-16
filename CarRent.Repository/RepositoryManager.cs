@@ -51,6 +51,7 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<Address>> _addressRepository;
         private readonly Lazy<IGenericRepository<UserAddress>> _userAddressRepository;
         private readonly Lazy<IGenericRepository<Wishlist>> _wishListRepository;
+        private readonly Lazy<IGenericRepository<Notification>> _notificationRepository;
 
         // Sidebar 
         private readonly Lazy<IGenericRepository<WorkerPaths>> _workerPathRepository;
@@ -156,6 +157,9 @@ namespace CarRent.Repository
             _userAddressRepository = new Lazy<IGenericRepository<UserAddress>>(() =>
                 new GenericRepository<UserAddress>(_context));
 
+            _notificationRepository = new Lazy<IGenericRepository<Notification>>(() =>
+                new GenericRepository<Notification>(_context));
+
             _wishListRepository = new Lazy<IGenericRepository<Wishlist>>(() =>
                 new GenericRepository<Wishlist>(_context));
 
@@ -239,7 +243,8 @@ namespace CarRent.Repository
         public IGenericRepository<WorkOrderStatus> WorkOrderStatus => _workOrderStatusRepository.Value;
         public IGenericRepository<WorkOrderPriority> WorkOrderPriority => _workOrderPriorityRepository.Value;
         public IGenericRepository<WorkOrderWorker> WorkOrderWorker => _workOrderWorkerRepository.Value;
-        
+        public IGenericRepository<Notification> Notification => _notificationRepository.Value;
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

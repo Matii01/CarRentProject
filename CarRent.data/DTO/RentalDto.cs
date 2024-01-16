@@ -50,6 +50,16 @@ namespace CarRent.data.DTO
         bool? IsDefault
     );
     
+    public record UpdateRentalStatusDto(
+        int OldStatus,
+        int NewStatus
+    );
+
+    public record UpdateInvoiceStatusDto(
+        int OldStatus,
+        int NewStatus
+    );
+
     public record RentalListDto(
         int Id, 
         Client Client,
@@ -140,6 +150,7 @@ namespace CarRent.data.DTO
 
     public record InvoiceWithClient(
         int Id,
+        int? InvoiceStatusId,
         string Number,
         string? Comment,
         Client? Client,
@@ -147,6 +158,7 @@ namespace CarRent.data.DTO
 
     public record InvoiceWithFirmClient(
         int Id,
+        int? InvoiceStatusId,
         string Number,
         string? Comment,
         bool? IsIndividual,
@@ -156,6 +168,7 @@ namespace CarRent.data.DTO
 
     public record InvoiceWithIndividualClient(
         int Id,
+        int? InvoiceStatusId,
         string Number,
         string? Comment,
         bool? IsIndividual,

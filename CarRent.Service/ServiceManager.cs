@@ -32,6 +32,7 @@ namespace CarRent.Service
         public readonly Lazy<IWishlistService> _wishListService;
         public readonly Lazy<ICarOpinionService> _carOpinionService;
         public readonly Lazy<IWorkOrderService> _workOrderService;
+        public readonly Lazy<INotificationService> _notificationService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -90,6 +91,9 @@ namespace CarRent.Service
             _workOrderService = new Lazy<IWorkOrderService>(() =>
                  new WorkOrderService(userManager, repositoryManager, mapper));
 
+            _notificationService = new Lazy<INotificationService>(() =>
+                new NotificationService(repositoryManager, mapper));
+
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
 
@@ -134,6 +138,7 @@ namespace CarRent.Service
         public IWishlistService WishlistService => _wishListService.Value;
         public ICarOpinionService CarOpinionService => _carOpinionService.Value;
         public IWorkOrderService WorkOrderService => _workOrderService.Value;
+        public INotificationService NotificationService => _notificationService.Value;
         
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;

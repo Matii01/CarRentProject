@@ -42,6 +42,7 @@ namespace CarRent.Repository.Repositories
             var transformedData = await invoice
                 .Select(x => new InvoiceWithClient(
                         x.Id,
+                        x.InvoiceStatus,
                         x.Number,
                         x.Comment,
                         x.Client,
@@ -261,6 +262,7 @@ namespace CarRent.Repository.Repositories
                 var c = invoice.Client as IndividualClient;
                 var newInvoice = new NewInvoiceDto(true, null, new InvoiceWithIndividualClient(
                         invoice.Id,
+                        invoice.InvoiceStatusId,
                         invoice.Number,
                         invoice.Comment,
                         true,
@@ -274,6 +276,7 @@ namespace CarRent.Repository.Repositories
                 var c = invoice.Client as FirmClient;
                 var newInvoice = new NewInvoiceDto(true, new InvoiceWithFirmClient(
                         invoice.Id,
+                        invoice.InvoiceStatusId,
                         invoice.Number,
                         invoice.Comment,
                         true,
