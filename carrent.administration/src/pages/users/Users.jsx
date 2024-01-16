@@ -1,28 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Container,
-  Card,
-  Row,
-  Col,
-  Button,
-  Form,
-  Modal,
-} from "react-bootstrap";
-import styles from "./../../components/Table/Table.module.css";
+import { Container, Card, Row, Col, Button, Form } from "react-bootstrap";
 import CarInfoTable from "../../components/Table/CarInfoTable";
-import EditGearboxType from "../../components/Gearbox/EditGearbox";
-import { useNavigate } from "react-router";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import ManageUser from "../../components/Users/ManageUser";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState();
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     jwtInterceptor
@@ -37,6 +22,7 @@ function UsersPage() {
   }, []);
 
   const onCancel = () => {};
+
   const handleChange = () => {};
 
   const handleSearch = (event) => {
@@ -45,7 +31,7 @@ function UsersPage() {
 
   const onDoubleClick = (item) => {
     console.log(item);
-    navigate(`/users/users/${item.userName}`);
+    setSelectedUser(item);
   };
 
   if (!usersList) {
@@ -96,7 +82,7 @@ function UsersPage() {
               </Card.Body>
             </Card>
           </Col>
-          <Col md="6"></Col>
+          <Col md="6">{selectedUser && <ManageUser user={selectedUser} />}</Col>
         </Row>
       </Container>
     </>

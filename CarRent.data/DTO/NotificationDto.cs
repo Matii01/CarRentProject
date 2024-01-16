@@ -16,4 +16,11 @@ namespace CarRent.data.DTO
         DateTime? ReadDate,
         bool? IsRead  
     );
+
+    public record NewNotificationDto(
+        string? UserId,
+        string? Title,
+        string? Message
+    );
 }
+
