@@ -51,6 +51,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Zamówienia", path: "/rentals" },
     { name: "Opinie", path: "/opinion" },
     { name: "Zlecenia", path: "/workOrder" },
+    { name: "O firmie", path: "/company" },
   ];
 
   const managment = [
@@ -58,6 +59,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Statusy Faktur", path: "/invoice/status" },
     { name: "Zlecenia Statusy", path: "/workOrder/statuses" },
     { name: "Zlecenia Priorytety", path: "/workOrder/priority" },
+    { name: "Ustawienia", path: "/settings" },
   ];
 
   const location = useLocation();

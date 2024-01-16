@@ -12,5 +12,6 @@ namespace CarRent.data.Models.Company
 
         public bool? SendNotificationOnRentalStatusUpdate { get; set; }
         public bool? SendNotificationOnInvoiceStatusUpdate { get; set; }
+        public bool? SendNotificationOnRentalCreate { get; set; }
     }
 }

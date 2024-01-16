@@ -1,6 +1,7 @@
 ﻿using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
+using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Configuration;
@@ -92,13 +93,14 @@ namespace CarRent.Repository
         public DbSet<Footer> Footer { get; set; }
         public DbSet<FooterLinks> FooterLinks { get; set; }
         public DbSet<FooterLinksPaths> FooterLinksPaths { get; set; }
+        public DbSet<AboutCompany> AboutCompany { get; set; }
+        public DbSet<ApplicationSettings> ApplicationSettings { get; set; }
 
         //WorkOrder
         public DbSet<WorkOrder> WorkOrder { get; set; }
         public DbSet<WorkOrderStatus> WorkOrderStatus { get; set; }
         public DbSet<WorkOrderPriority> WorkOrderPriority { get; set; }
         public DbSet<WorkOrderWorker> WorkOrderWorker { get; set; }
-
-
+       
     }
 }

@@ -20,8 +20,15 @@ function UserNotification({ userId }) {
   });
 
   useEffect(() => {
+    setFiltrs((prev) => ({
+      ...prev,
+      UserId: userId,
+    }));
+  }, [userId]);
+
+  useEffect(() => {
     getFilteredItems();
-  }, [filtrs.PageNumber, filtrs.PageSize]);
+  }, [filtrs.PageNumber, filtrs.PageSize, filtrs.UserId]);
 
   const getFilteredItems = () => {
     const queryString = transformObjectToQueryString(filtrs);

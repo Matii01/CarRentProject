@@ -1,5 +1,6 @@
 ﻿using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
+using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Interfaces;
@@ -63,6 +64,8 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<Footer>> _footerRepository;
         private readonly Lazy<IGenericRepository<FooterLinks>> _footerLinksRepository;
         private readonly Lazy<IGenericRepository<FooterLinksPaths>> _footerLinksPathsRepository;
+        private readonly Lazy<IGenericRepository<AboutCompany>> _aboutCompanyRepository;
+        private readonly Lazy<IGenericRepository<ApplicationSettings>> _applicationSettingsRepository;
 
         // WorkOrder
         private readonly Lazy<IGenericRepository<WorkOrder>> _workOrderRepository;
@@ -124,6 +127,7 @@ namespace CarRent.Repository
 
             _invoiceRepository = new Lazy<IGenericRepository<Invoice>>(() =>
                 new GenericRepository<Invoice>(_context));
+
             _invoiceStatusRepository = new Lazy<IGenericRepository<InvoiceStatus>>(() =>
                 new GenericRepository<InvoiceStatus>(_context));
 
@@ -196,9 +200,14 @@ namespace CarRent.Repository
             _workOrderPriorityRepository = new Lazy<IGenericRepository<WorkOrderPriority>>(() =>
                 new GenericRepository<WorkOrderPriority>(_context));
 
-
             _workOrderWorkerRepository = new Lazy<IGenericRepository<WorkOrderWorker>>(() =>
                 new GenericRepository<WorkOrderWorker>(_context));
+
+            _applicationSettingsRepository = new Lazy<IGenericRepository<ApplicationSettings>>(() => 
+                new GenericRepository<ApplicationSettings>(_context));
+
+            _aboutCompanyRepository = new Lazy<IGenericRepository<AboutCompany>>(() =>
+                new GenericRepository<AboutCompany>(_context));
         }
 
 
@@ -244,6 +253,8 @@ namespace CarRent.Repository
         public IGenericRepository<WorkOrderPriority> WorkOrderPriority => _workOrderPriorityRepository.Value;
         public IGenericRepository<WorkOrderWorker> WorkOrderWorker => _workOrderWorkerRepository.Value;
         public IGenericRepository<Notification> Notification => _notificationRepository.Value;
+        public IGenericRepository<AboutCompany> AboutCompany => _aboutCompanyRepository.Value;
+        public IGenericRepository<ApplicationSettings> ApplicationSettings => _applicationSettingsRepository.Value;
 
         public async Task SaveAsync()
         {

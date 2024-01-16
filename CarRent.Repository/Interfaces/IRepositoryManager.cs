@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
+using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using Microsoft.EntityFrameworkCore;
@@ -70,7 +71,9 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<WorkOrderStatus> WorkOrderStatus { get; }
         IGenericRepository<WorkOrderPriority> WorkOrderPriority { get; }
         IGenericRepository<WorkOrderWorker> WorkOrderWorker { get; }
-       
+        IGenericRepository<AboutCompany> AboutCompany { get; }
+        IGenericRepository<ApplicationSettings> ApplicationSettings { get; }
+
         Task SaveAsync();
     }
 }

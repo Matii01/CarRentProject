@@ -62,6 +62,8 @@ import Opinion from "./pages/managment/Opinion";
 import WorkOrderStatus from "./pages/managment/WorkOrderStatus";
 import WorkOrderPriority from "./pages/managment/WorkOrderPriority";
 import WorkOrders from "./pages/managment/WorkOrders";
+import AboutCompany from "./pages/managment/AboutCompany";
+import Settings from "./pages/managment/Settings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -129,6 +131,8 @@ const router = createBrowserRouter([
       { path: "workOrder", element: <WorkOrders /> },
       { path: "workOrder/statuses", element: <WorkOrderStatus /> },
       { path: "workOrder/priority", element: <WorkOrderPriority /> },
+      { path: "company", element: <AboutCompany /> },
+      { path: "settings", element: <Settings /> },
     ],
   },
   {
