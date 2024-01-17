@@ -35,6 +35,8 @@ namespace CarRent.Service
         public readonly Lazy<INotificationService> _notificationService;
         public readonly Lazy<IAboutCompanyService> _aboutCompanyService;
         public readonly Lazy<IApplicationSettingsService> _applicationSettingsService;
+        public readonly Lazy<IUsersService> _usersService;
+
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -49,7 +51,7 @@ namespace CarRent.Service
         
 
 
-        public ServiceManager(UserManager<User> userManager, IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
+        public ServiceManager(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, IEmailSender emailSender)
         {
             _generateDocumentService = new Lazy<IGenerateDocumentService>(() =>
                 new GenerateDocumentService());
@@ -101,8 +103,9 @@ namespace CarRent.Service
 
             _applicationSettingsService = new Lazy<IApplicationSettingsService>(() =>
                new ApplicationSettingsService(repositoryManager, mapper));
-
-
+           
+            _usersService = new Lazy<IUsersService>(() =>
+                new UsersService(userManager, roleManager));
 
             _carTypeService = new Lazy<IGenericService<CarTypeDto>>(()
                 => new CarTypeService(repositoryManager));
@@ -151,7 +154,7 @@ namespace CarRent.Service
         public INotificationService NotificationService => _notificationService.Value;
         public IAboutCompanyService AboutCompanyService => _aboutCompanyService.Value;
         public IApplicationSettingsService ApplicationSettingsService => _applicationSettingsService.Value;
-
+        public IUsersService UsersService  => _usersService.Value;
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
         public IGenericService<EngineTypeDto> EngineTypeService => _engineTypeService.Value;

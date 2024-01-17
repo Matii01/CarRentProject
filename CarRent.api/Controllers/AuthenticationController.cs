@@ -40,8 +40,17 @@ namespace CarRent.api.Controllers
         [HttpPost("registerNewWorker")]
         public async Task<IActionResult> RegisterNewWorker([FromBody] UserForRegistrationDto newWorker)
         {
+            newWorker.Roles = new string[] { "Worker" };
+            var result = await _authenticationService.RegisterUser(newWorker);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
             return StatusCode(201);
-            //throw new NotImplementedException();
         }
 
         [HttpPost("login")]

@@ -14,11 +14,15 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import Permissions from "../../components/Workers/Permissions";
 import EditWorkerSidebar from "../../components/Workers/EditWorkerSidebar";
+import AddNewWorker from "../../components/Workers/AddNewWorker";
+import MyTable from "../../components/Table/MyTable";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function WorkersPage() {
   const [workerList, setWorkerList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,8 +43,13 @@ function WorkersPage() {
 
   const onDoubleClick = (id) => {
     setSelectedWorker(id.id);
+    setIsEditMode(true);
   };
   const handleChange = () => {};
+
+  const onAddWorker = () => {
+    setIsEditMode(false);
+  };
 
   return (
     <>
@@ -51,11 +60,19 @@ function WorkersPage() {
               <Card.Header>
                 <Row>
                   <Col className="text-center">
-                    <p>Klienci</p>
+                    <p>Pracownicy</p>
                   </Col>
                 </Row>
                 <Row>
-                  <Col></Col>
+                  <Col>
+                    <Button
+                      variant="outline-success"
+                      size="sm"
+                      onClick={onAddWorker}
+                    >
+                      Dodaj
+                    </Button>
+                  </Col>
                   <Col>
                     <Form className="d-flex" onSubmit={handleSearch}>
                       <Form.Control
@@ -69,25 +86,33 @@ function WorkersPage() {
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
+                  thead={["Imie", "Nazwisko", "email"]}
+                  items={workerList}
+                  item={["firstName", "lastName", "email"]}
+                  onDoubleClick={onDoubleClick}
+                  searchTerm={searchTerm}
+                />
+
+                {/* <CarInfoTable
                   thead={["Imie", "Nazwisko", "email", "Actions"]}
                   items={workerList}
                   item={["firstName", "lastName", "email"]}
                   searchTerm={searchTerm}
                   onDoubleClick={onDoubleClick}
-                />
+                /> */}
               </Card.Body>
             </Card>
           </Col>
           <Col md="6">
-            {selectedWorker && (
+            {isEditMode && selectedWorker && (
               <Tabs>
                 <Tab eventKey="pe" title="Uprawnienia">
                   <Permissions workerId={selectedWorker} />
@@ -97,6 +122,7 @@ function WorkersPage() {
                 </Tab>
               </Tabs>
             )}
+            {!isEditMode && <AddNewWorker />}
           </Col>
         </Row>
       </Container>

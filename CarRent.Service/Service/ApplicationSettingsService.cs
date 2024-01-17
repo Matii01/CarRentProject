@@ -40,10 +40,14 @@ namespace CarRent.Service.Service
 
         public async Task UpdateApplicationSettings(ApplicationSettingsDto settings)
         {
-            var toUpdate = await _repository.AboutCompany
-                .FindByCondition(x => x.IsActive == true, false)
+            var toUpdate = await _repository.ApplicationSettings
+                .FindByCondition(x => x.IsActive == true, true)
                 .SingleOrDefaultAsync();
-            
+
+            toUpdate.SendNotificationOnRentalStatusUpdate = settings.SendNotificationOnRentalStatusUpdate;
+            toUpdate.SendNotificationOnInvoiceStatusUpdate = settings.SendNotificationOnInvoiceStatusUpdate;
+            toUpdate.SendNotificationOnRentalCreate = settings.SendNotificationOnRentalCreate;
+
             await _repository.SaveAsync();
         }
 

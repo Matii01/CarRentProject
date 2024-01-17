@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -19,6 +20,7 @@ namespace CarRent.api.Controllers
             return Ok(item);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> UpdateAboutCompany([FromBody] AboutCompanyDto item)
         {

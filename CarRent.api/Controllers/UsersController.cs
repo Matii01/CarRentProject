@@ -27,62 +27,31 @@ namespace CarRent.api.Controllers
         [HttpGet("allUsers")]
         public async Task<IActionResult> GetUsersList()
         {
-            const string roleName = "User";
-            if (!await _roleManager.RoleExistsAsync(roleName))
-            {
-                await Console.Out.WriteLineAsync("no role");
-                return BadRequest("this role do not exist");
-            }
+            var users = await _services.UsersService.GetUsersListAsync();
 
-            var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
-
-            foreach (var user in usersInRole)
+            if (users == null || !users.Any())
             {
-                await Console.Out.WriteLineAsync(user.UserName);
-            }
-
-            if (usersInRole == null || !usersInRole.Any())
-            {
-                await Console.Out.WriteLineAsync("not found");
                 return NotFound();
             }
-            return Ok(usersInRole);
-            //throw new NotImplementedException();
+            return Ok(users);
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpGet("allWorkers")]
         public async Task<IActionResult> GetWorkersList()
         {
-            const string roleName = "Worker";
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            var workers = await _services.UsersService.GetWorkersListAsync();
+            if (workers == null || !workers.Any())
             {
-                await Console.Out.WriteLineAsync("no role");
-                return BadRequest("this role do not exist");
-            }
-
-            var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
-
-            foreach (var user in usersInRole)
-            {
-                await Console.Out.WriteLineAsync(user.UserName);
-            }
-
-            if (usersInRole == null || !usersInRole.Any())
-            {
-                await Console.Out.WriteLineAsync("not found");
                 return NotFound();
             }
-            return Ok(usersInRole);
-            //throw new NotImplementedException();
+            return Ok(workers);
         }
 
         [HttpGet("userDetails")]
         public async Task<IActionResult> GetUserDetailByUserName([FromQuery] string userName)
         {
-            //var user = await _userManager.FindByLoginAsync(userName);
             var user = await _userManager.FindByNameAsync(userName);
-
             if (user == null)
             {
                 return NotFound();

@@ -48,7 +48,7 @@ namespace CarRent.Service.Service
         public async Task UpdateAboutCompany(AboutCompanyDto companyDto)
         {
             var toUpdate = await _repository.AboutCompany
-                .FindByCondition(x => x.IsActive == true, false)
+                .FindByCondition(x => x.IsActive == true, true)
                 .SingleOrDefaultAsync();
 
             toUpdate.NIP = companyDto.NIP;
