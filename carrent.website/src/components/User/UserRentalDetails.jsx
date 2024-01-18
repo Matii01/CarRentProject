@@ -83,21 +83,16 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
             </tr>
           </tbody>
         </Table>
-        <Card.Body>
-          <Row>
-            <Col className="text-center">
-              <Button className="customButton w-50">Invoice</Button>
-            </Col>
-            <Col className="text-center">
-              <Button
-                className="customButton w-50"
-                onClick={() => setShowAddOpinion(true)}
-              >
-                Your opinion{" "}
-              </Button>
-            </Col>
-          </Row>
-        </Card.Body>
+        <Card.Footer>
+          <Col className="m-2 d-flex justify-content-start">
+            <Button
+              className="customButton w-25"
+              onClick={() => setShowAddOpinion(true)}
+            >
+              Add opinion{" "}
+            </Button>
+          </Col>
+        </Card.Footer>
       </Card>
       {showAddOpinion && (
         <AddCarOpinion

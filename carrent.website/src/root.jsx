@@ -7,6 +7,7 @@ import useRefreshToken from "./hooks/UseRefreshToken";
 import Footer from "./components/Footer/Footer";
 import { useSelector } from "react-redux";
 import LoadingOverlay from "./components/Overlay/LoadingOverlay";
+import useGetNotification from "./hooks/UseGetNotification";
 
 export default function Root() {
   const loading = useSelector((state) => state.loading);

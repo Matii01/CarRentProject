@@ -7,6 +7,7 @@ import UserOrders from "../../components/User/UserOrders";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserWishList from "../../components/User/UserWishlist";
+import UserNotification from "../../components/User/UserNotification";
 
 function UserPage() {
   const navigate = useNavigate();
@@ -15,7 +16,12 @@ function UserPage() {
   const profile = "PROFILE";
   const address = "ADDRESS";
   const wishlist = "WISHLIST";
+  const notification = "NOTIFICATION";
   const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    console.log(window.location.hash);
+  }, []);
 
   useEffect(() => {
     console.log(user);
@@ -56,6 +62,16 @@ function UserPage() {
     selectedView = <UserWishList />;
   }
 
+  if (view === notification) {
+    selectedView = <UserNotification />;
+  }
+
+  // https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc
+  // https://sell-react-b5.vercel.app/img/photo/kyle-loftus-589739-unsplash-avatar.jpg
+
+  const url =
+    "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
+
   return (
     <>
       <Container className="mt-5 mb-5" fluid="md">
@@ -71,14 +87,12 @@ function UserPage() {
               <Card style={{ width: "18rem", backgroundColor: "#F8F9FA" }}>
                 <Card.Img
                   variant="top"
-                  src="https://sell-react-b5.vercel.app/img/photo/kyle-loftus-589739-unsplash-avatar.jpg"
+                  src={url}
                   style={{ borderRadius: "50%", padding: "50px" }}
                 />
                 <Card.Body>
-                  <Card.Title className="text-center">Card Title</Card.Title>
-                  <Card.Text className="text-center">
-                    Some quick example text
-                  </Card.Text>
+                  <Card.Title className="text-center"></Card.Title>
+                  <Card.Text className="text-center"></Card.Text>
                 </Card.Body>
                 <ListGroup className="list-group-flush">
                   <ListGroup.Item action onClick={() => changeView(order)}>
@@ -93,7 +107,12 @@ function UserPage() {
                   <ListGroup.Item action onClick={() => changeView(address)}>
                     Address
                   </ListGroup.Item>
-                  <ListGroup.Item action>Logout</ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    onClick={() => changeView(notification)}
+                  >
+                    Notification
+                  </ListGroup.Item>
                 </ListGroup>
               </Card>
             </Container>

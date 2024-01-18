@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import SetLocalStorage from "../../hooks/SetLocalStorage";
 import styles from "./NavBar.module.css";
 import { useEffect } from "react";
+import NotificationElement from "./NotificationElement";
 
 function NavBar() {
   const user = useSelector((state) => state.user);
@@ -70,6 +71,11 @@ function NavBar() {
             {!user.isLogin && (
               <Nav.Link to={"/register"} as={NavLink}>
                 Register
+              </Nav.Link>
+            )}
+            {user.isLogin && (
+              <Nav.Link to="/user#notification" as={NavLink}>
+                <NotificationElement />
               </Nav.Link>
             )}
             <Nav.Link to="/user" as={NavLink}>

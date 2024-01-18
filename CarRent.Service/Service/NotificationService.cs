@@ -39,6 +39,17 @@ namespace CarRent.Service.Service
             return item;
         }
 
+
+        public async Task<int> GetNotificationsCountAsync(NotificationParameters notificationParams)
+        {
+            var items = await _repository.Notification
+                .FindByCondition(x => x.IsActive == true && x.IsRead == false, false)
+                .Search(notificationParams)
+                .CountAsync();
+
+            return items;
+        }
+
         public async Task<PagedList<NotificationDto>> GetNotificationsByParamsAsync(NotificationParameters notificationParams)
         {
             var items = _repository.Notification
@@ -78,11 +89,13 @@ namespace CarRent.Service.Service
 
         public async Task ReadNotificationAsync(int notificationId)
         {
-            var toDelete = await _repository.Notification
+            var toUpdate = await _repository.Notification
                 .GetAsync(notificationId, true)
                 .SingleOrDefaultAsync() ?? throw new Exception("Not found");
 
-            toDelete.IsRead = true;
+            toUpdate.IsRead = true;
+            toUpdate.ReadDate = DateTime.Now;
+
             await _repository.SaveAsync();
         }
 

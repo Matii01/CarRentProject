@@ -1,5 +1,6 @@
 ﻿using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
+using CarRent.Service.Extensions;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -45,8 +46,9 @@ namespace CarRent.Service.Service
             }
 
             var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
-
-            //var pagedList = new PagedList<User>
+            
+            //var users = usersInRole.ToUserPageList();
+            //var pagedList = await PagedList<User>.ToPagedList(usersInRole, 1, 1);
 
             return usersInRole;
         }
