@@ -64,6 +64,8 @@ import WorkOrderPriority from "./pages/managment/WorkOrderPriority";
 import WorkOrders from "./pages/managment/WorkOrders";
 import AboutCompany from "./pages/managment/AboutCompany";
 import Settings from "./pages/managment/Settings";
+import EditHomePage from "./pages/cms/EditHomePage";
+import AccountPage from "./pages/managment/AccountPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -127,12 +129,13 @@ const router = createBrowserRouter([
       { path: "rentals/details/:rentalId", element: <RentalDetails /> },
       { path: "cms/contact", element: <EditContactPage /> },
       { path: "cms/footer", element: <EditFooter /> },
+      { path: "cms/home", element: <EditHomePage /> },
       { path: "opinion", element: <Opinion /> },
       { path: "workOrder", element: <WorkOrders /> },
       { path: "workOrder/statuses", element: <WorkOrderStatus /> },
       { path: "workOrder/priority", element: <WorkOrderPriority /> },
       { path: "company", element: <AboutCompany /> },
-      { path: "settings", element: <Settings /> },
+      { path: "account", element: <AccountPage /> },
     ],
   },
   {

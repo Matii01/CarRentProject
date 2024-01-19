@@ -40,11 +40,13 @@ function CarDetails() {
   };
   const [car, setCar] = useState(initialState);
   const [carInfo, setCarInfo] = useState();
+  const [isRecommended, setIsRecommended] = useState(false);
   const param = useParams();
 
   useEffect(() => {
     fetchCarInfo();
     fetchCar();
+    isInRecommended();
   }, []);
 
   const fetchCarInfo = () => {
@@ -67,6 +69,17 @@ function CarDetails() {
       .then((data) => {
         console.log(data);
         setCar(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const isInRecommended = () => {
+    jwtInterceptor
+      .get(`car/isRecommended/${param.carId}`)
+      .then((data) => {
+        setIsRecommended(data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -101,6 +114,28 @@ function CarDetails() {
     updateCar();
   };
 
+  const addToRecommended = () => {
+    jwtInterceptor
+      .post(`car/addRecommended/${param.carId}`)
+      .then((data) => {
+        setIsRecommended(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const removeFromRecommended = () => {
+    jwtInterceptor
+      .post(`car/removeRecommended/${param.carId}`)
+      .then((data) => {
+        setIsRecommended(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   if (!carInfo) {
     return <p>Loading ...</p>;
   }
@@ -127,7 +162,23 @@ function CarDetails() {
           <Col md="8">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Edit Car</Card.Title>
+                <Row>
+                  <Col>
+                    <Card.Title as="h4">Edit Car</Card.Title>
+                  </Col>
+                  <Col className="d-flex justify-content-end">
+                    {!isRecommended && (
+                      <Button variant="dark" onClick={addToRecommended}>
+                        Dodaj do polecanych
+                      </Button>
+                    )}
+                    {isRecommended && (
+                      <Button variant="dark" onClick={removeFromRecommended}>
+                        Usuń z polecanych
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
               </Card.Header>
               <Card.Body>
                 <Form onSubmit={handleSubmit}>

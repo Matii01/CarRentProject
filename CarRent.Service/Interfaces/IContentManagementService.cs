@@ -9,6 +9,8 @@ namespace CarRent.Service.Interfaces
 {
     public interface IContentManagementService
     {
+        Task<HomePageDto> GetHomePage();
+        Task EditHomePage(HomePageDto homePage);
         Task<ContactPageDto> GetContactPage();
         Task EditContactPage(ContactPageDto pageDto);
         Task<FooterDto> GetFooter();

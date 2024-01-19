@@ -99,6 +99,21 @@ namespace CarRent.api.Controllers
             return Ok(allCarInfo);
         }
 
+        
+        [HttpGet("isRecommended/{id:int}")]
+        public async Task<IActionResult> GetIsCarRecommended(int id)
+        {
+            var value = await _services.CarService.IsCarRecommendedAsync(id);
+            return Ok(value);
+        }
+
+        [HttpGet("recommended")]
+        public async Task<IActionResult> GetRecommendedCars()
+        {
+            var list = await _services.CarService.GetRecommended();
+            return Ok(list);
+        }
+
         [HttpGet("carsForDates")]
         public async Task<IActionResult> GetAvailableCarsForDates([FromQuery] NewRentalForClient dates)
         {
@@ -117,11 +132,27 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,CarEditor")]
+        [HttpPost("addRecommended/{id:int}")]
+        public async Task<IActionResult> AddRecommended(int id)
+        {
+            await _services.CarService.AddToRecommendedAsync(id);
+            return Ok();
+        }
+
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPut("edit/{id:int}")]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
             await _services.CarService.UpdateCarAsync(id, car, true);
 
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Administrator,CarEditor")]
+        [HttpPost("removeRecommended/{id:int}")]
+        public async Task<IActionResult> RemoveFromRecommended(int id)
+        {
+            await _services.CarService.RemoveRecommendedAsync(id);
             return NoContent();
         }
 

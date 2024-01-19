@@ -8,7 +8,6 @@ function CarOpinionList({ carid }) {
     axiosInstance
       .get(`https://localhost:7091/CarOpinion/${carid}`)
       .then((data) => {
-        console.log(data);
         setList(data.data);
       })
       .catch((error) => {
@@ -19,8 +18,8 @@ function CarOpinionList({ carid }) {
   return (
     <>
       {list.map((it) => (
-        <>
-          <Row key={it.id} className="mb-2">
+        <div key={it.id}>
+          <Row className="mb-2">
             <Col xl={3}>
               <Row className="h-50">
                 <Col className="d-flex justify-content-center">
@@ -48,7 +47,7 @@ function CarOpinionList({ carid }) {
             </Col>
           </Row>
           <hr />
-        </>
+        </div>
       ))}
     </>
   );

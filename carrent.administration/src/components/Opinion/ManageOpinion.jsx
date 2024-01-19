@@ -44,7 +44,7 @@ function ManageOpinion({ opinion, onChange, onDelete }) {
     jwtInterceptor
       .delete(`CarOpinion/${opinion.id}`)
       .then((data) => {
-        onDelete();
+        onDelete(opinion.id);
       })
       .catch((error) => {
         console.log(error);

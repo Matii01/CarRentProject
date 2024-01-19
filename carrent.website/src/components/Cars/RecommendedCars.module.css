@@ -1,0 +1,8 @@
+.scrollableRow {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.scrollableRow .row {
+  flex-wrap: nowrap;
+}

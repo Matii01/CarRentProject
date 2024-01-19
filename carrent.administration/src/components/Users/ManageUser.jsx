@@ -1,5 +1,6 @@
 import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 import UserNotification from "./UserNotification";
+import UserDetails from "./UserDetails";
 
 function ManageUser({ user }) {
   return (
@@ -7,14 +8,11 @@ function ManageUser({ user }) {
       <Card.Header>Użytkownik</Card.Header>
       <Card.Body>
         <Tabs>
-          <Tab eventKey="home" title="Home">
-            Tab content for Home NotificationParameters
-          </Tab>
-          <Tab eventKey="notification" title="Notification">
+          <Tab eventKey="notification" title="Powiadomienia">
             <UserNotification userId={user.id} />
           </Tab>
-          <Tab eventKey="contact" title="Contact">
-            Tab content for Contact
+          <Tab eventKey="info" title="Informacje">
+            <UserDetails user={user} />
           </Tab>
         </Tabs>
       </Card.Body>

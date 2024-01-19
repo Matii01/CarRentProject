@@ -48,29 +48,11 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto" navbar>
             <Nav.Item>
-              <Nav.Link
-                className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="no-icon ms-5">Account</span>
-              </Nav.Link>
+              <NavLink to="account" className="nav-link m-0 ms-5">
+                <span className="no-icon">Account</span>
+              </NavLink>
             </Nav.Item>
 
-            <Nav.Item>
-              <Nav.Link
-                className="m-0"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="no-icon">Log out</span>
-              </Nav.Link>
-            </Nav.Item>
-            {/* 
-            <NavLink to={"#"} className="nav-link">
-              <i className={"nc-icon nc-alien-33"} />
-              <p>Analizy</p>
-            </NavLink>*/}
             <Nav.Item>
               <NavLink
                 to="#"

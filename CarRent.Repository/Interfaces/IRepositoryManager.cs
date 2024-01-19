@@ -29,6 +29,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<PricelistItem> PricelistItem { get; }
         IGenericRepository<PricelistDate> PricelistDate { get; }
         IGenericRepository<CarOpinion> CarOpinion { get; }
+        IGenericRepository<RecommendedCars> RecommendedCars { get; }
 
         // CarMaintenances
         IGenericRepository<CarMaintenance> CarMaintenances { get; }
@@ -61,6 +62,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<PathItem> PathItem { get; }
 
         // CMS 
+        IGenericRepository<HomePage> HomePage {get; }
         IGenericRepository<ContactPage> ContactPage {get; }
         IGenericRepository<Footer> Footer { get; }
         IGenericRepository<FooterLinks> FooterLinks { get; }

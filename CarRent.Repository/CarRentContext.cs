@@ -56,6 +56,7 @@ namespace CarRent.Repository
         public DbSet<CarOpinion> CarOpinions { get; set; }
         //CarMaintenance
         public DbSet<CarMaintenance> CarMaintenances { get; set; }
+        public DbSet<RecommendedCars> RecommendedCars { get; set; }
 
         //Rentals
         public DbSet<Rental> Rentals { get; set; }
@@ -89,6 +90,7 @@ namespace CarRent.Repository
         public DbSet<WorkerPaths> WorkerPaths { get; set; }
 
         // CMS 
+        public DbSet<HomePage> HomePage { get; set; }
         public DbSet<ContactPage> ContactPage { get; set; }
         public DbSet<Footer> Footer { get; set; }
         public DbSet<FooterLinks> FooterLinks { get; set; }

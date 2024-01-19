@@ -122,6 +122,13 @@ namespace CarRent.api.Controllers
             return Ok(total);
         }
 
+        [HttpGet("takenDates/{id:int}")]
+        public async Task<IActionResult> GetFutureRentalDatesForCar(int id)
+        {
+            var excludedDates = await _services.RentalService.GetFutureRentalDatesForCarAsync(id);
+            return Ok(excludedDates);
+        }
+
         [HttpGet("statuses")]
         public async Task<IActionResult> GetStatusesForRentalEdit()
         {

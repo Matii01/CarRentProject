@@ -17,6 +17,14 @@ namespace CarRent.api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("homePage")]
+        public async Task<IActionResult> GetHomePage()
+        {
+            var home = await _services.ContentManagementService.GetHomePage();
+            return Ok(home);
+        }
+
+        [AllowAnonymous]
         [HttpGet("contact")]
         public async Task<IActionResult> GetContactPage()
         {
@@ -36,6 +44,14 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> EditContactPage([FromBody] ContactPageDto contact)
         {
             await _services.ContentManagementService.EditContactPage(contact);
+            return NoContent();
+        }
+
+        [HttpPost("editHomePage")]
+        public async Task<IActionResult> EditHomePage([FromBody] HomePageDto homePage)
+        {
+            await Console.Out.WriteLineAsync("edit home page");
+            await _services.ContentManagementService.EditHomePage(homePage);
             return NoContent();
         }
     }

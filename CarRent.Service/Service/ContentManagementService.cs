@@ -19,6 +19,20 @@ namespace CarRent.Service.Service
         {
         }
 
+        public async Task<HomePageDto> GetHomePage()
+        {
+            var item = await _repository.HomePage.FindByCondition(x => x.IsActive == true, false)
+                .Select(x => _mapper.Map<HomePageDto>(x))
+                .SingleOrDefaultAsync();
+
+            if(item == null)
+            {
+                return await GenerateHomePage();
+            }
+
+            return item;
+        }
+
         public async Task<ContactPageDto> GetContactPage()
         {
             var item = await _repository.ContactPage
@@ -28,6 +42,20 @@ namespace CarRent.Service.Service
 
             return item;
         }
+
+        public async Task EditHomePage(HomePageDto homePage)
+        {
+            var item = await _repository.HomePage.FindByCondition(x => x.IsActive == true, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+
+            item.HomePageImage = homePage.HomePageImage;
+            item.HomePageTitle = homePage.HomePageTitle;
+            item.HomePageTextOne = homePage.HomePageTextOne;
+            item.HomePageTextTwo = homePage.HomePageTextTwo;
+
+            await _repository.SaveAsync();
+        }
+
         public async Task EditContactPage(ContactPageDto pageDto)
         {
             var item = await _repository.ContactPage
@@ -83,6 +111,13 @@ namespace CarRent.Service.Service
                 .SingleOrDefaultAsync();
 
             return item;
+        }
+        private async Task<HomePageDto> GenerateHomePage()
+        {
+            HomePage home = new() { IsActive = true };
+            _repository.HomePage.Create(home);
+            await _repository.SaveAsync();
+            return _mapper.Map<HomePageDto>(home);
         }
     }
 }

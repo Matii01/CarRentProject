@@ -17,7 +17,11 @@ namespace CarRent.Service.Interfaces
         Task<NewCarDto?> GetCarById(int id, bool trackChanges);
         Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental);
         Task<Car> CreateCarAsync(NewCarDto car);
+        Task AddToRecommendedAsync(int carId);
+        Task<bool> IsCarRecommendedAsync(int carId);
+        Task<IEnumerable<CarListForRecommended>> GetRecommended();
         Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges);
+        Task RemoveRecommendedAsync(int id);
         Task DeleteCar(int id);
     }
 }

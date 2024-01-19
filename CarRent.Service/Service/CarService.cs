@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Models;
+using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Helper;
@@ -75,10 +76,60 @@ namespace CarRent.Service.Service
             return newCar;   
         }
 
+        public async Task AddToRecommendedAsync(int carId)
+        {
+            RecommendedCars recommended = new () 
+            {
+                CarId = carId,
+                AddedData = DateTime.Now,
+                IsActive = true,
+            };
+            _repository.RecommendedCars.Create(recommended);
+            await _repository.SaveAsync();
+        }
+
+        public async Task<bool> IsCarRecommendedAsync(int carId)
+        {
+            var list = await _repository.RecommendedCars
+                .FindByCondition(x => x.IsActive == true && x.CarId == carId, false)
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            if(list.Count == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<IEnumerable<CarListForRecommended>> GetRecommended()
+        {
+            var list = await _repository.RecommendedCars
+                .FindByCondition(x => x.IsActive == true, false)
+                .Select(x => new CarListForRecommended(x.CarId, x.Car.Name, x.Car.CarImage))
+                .ToListAsync();
+
+            foreach (var item in list)
+            {
+                item.Price = await _repository.PriceList.GetCarPriceForOneDay(item.CarId);
+            }
+            return list;
+        }
+
         public async Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges)
         {
             var car = await _repository.Car.GetCarAsync(id, trackChanges) ?? throw new ArgumentException("not found");
             MapHelper.UpdateCar(ref car, newCar);
+            await _repository.SaveAsync();
+        }
+
+        public async Task RemoveRecommendedAsync(int id)
+        {
+            var item = await _repository.RecommendedCars
+                .FindByCondition(x => x.CarId == id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+              
+            item.IsActive = false;
             await _repository.SaveAsync();
         }
 

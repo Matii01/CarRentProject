@@ -80,6 +80,9 @@ namespace CarRent.api
             CreateMap<KilometrLimitDto, KilometrLimit>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
+            CreateMap<HomePage, HomePageDto>();
+            CreateMap<HomePageDto, HomePage>()
+                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
             CreateMap<ContactPage, ContactPageDto>();
             CreateMap<ContactPageDto, ContactPage>()

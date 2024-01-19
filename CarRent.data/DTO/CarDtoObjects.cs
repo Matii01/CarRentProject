@@ -10,6 +10,12 @@ namespace CarRent.data.DTO
     {
         public decimal Price { get; set; }
     }
+
+    public record CarListForRecommended(int CarId, string Name,  string PictureUrl)
+    {
+        public decimal Price { get; set; }
+    }
+
     public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
 
     public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
@@ -73,5 +79,4 @@ namespace CarRent.data.DTO
         string PictureUrl
     );
 
-    //public record UpdateCar(int id);
 }

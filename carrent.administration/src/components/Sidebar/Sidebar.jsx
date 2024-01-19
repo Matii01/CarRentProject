@@ -24,7 +24,7 @@ import DropdownList from "./DropDownList";
 
 function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   const pages = [
-    { name: "Strona Główna", path: "" },
+    { name: "Strona Główna", path: "/cms/home" },
     { name: "Menu", path: "" },
     { name: "Footer", path: "/cms/footer" },
     { name: "Kontakt", path: "/cms/contact" },
@@ -39,7 +39,6 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Skrzynia biegów", path: "/cars/gearbox" },
     { name: "Klimatyzacje", path: "/cars/AirConditioning" },
     { name: "Limity kilometrów", path: "/cars/limits" },
-    { name: "Kalendarz", path: "/cars/calendar" },
   ];
 
   const usersPages = [
@@ -59,7 +58,6 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Statusy Faktur", path: "/invoice/status" },
     { name: "Zlecenia Statusy", path: "/workOrder/statuses" },
     { name: "Zlecenia Priorytety", path: "/workOrder/priority" },
-    { name: "Ustawienia", path: "/settings" },
   ];
 
   const location = useLocation();

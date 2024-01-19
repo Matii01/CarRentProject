@@ -71,7 +71,7 @@ function Opinion() {
   };
 
   const onOpinionDelete = (id) => {
-    const newList = items.filter((it) => it.id == id);
+    const newList = items.filter((it) => it.id != id);
     setSelectedItem(null);
     setItems(newList);
   };

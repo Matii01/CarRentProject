@@ -28,6 +28,8 @@ namespace CarRent.Repository
 
         //CarMaintenances
         private readonly Lazy<IGenericRepository<CarMaintenance>> _carMaintenancesRepository;
+        private readonly Lazy<IGenericRepository<RecommendedCars>> _recommendedCarsRepository;
+        
 
         // Rental 
         private readonly Lazy<IRentalRepository> _rentalRepository;
@@ -60,6 +62,7 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<UserWorkerPaths>> _userWorkerPathRepository;
 
         // CMS
+        private readonly Lazy<IGenericRepository<HomePage>> _homePageRepository;
         private readonly Lazy<IGenericRepository<ContactPage>> _contactPageRepository;
         private readonly Lazy<IGenericRepository<Footer>> _footerRepository;
         private readonly Lazy<IGenericRepository<FooterLinks>> _footerLinksRepository;
@@ -88,6 +91,9 @@ namespace CarRent.Repository
 
             _carTypeRepository = new Lazy<IGenericRepository<CarType>>(() =>
                 new GenericRepository<CarType>(_context));
+
+            _recommendedCarsRepository = new Lazy<IGenericRepository<RecommendedCars>>(()=> 
+                new GenericRepository<RecommendedCars>(_context));
 
             _airConditioningTypeRepository = new Lazy<IGenericRepository<AirConditioningType>>(() =>
                 new GenericRepository<AirConditioningType>(_context));
@@ -178,6 +184,9 @@ namespace CarRent.Repository
 
             _userWorkerPathRepository = new Lazy<IGenericRepository<UserWorkerPaths>>(() =>
                 new GenericRepository<UserWorkerPaths>(_context));
+            
+            _homePageRepository = new Lazy<IGenericRepository<HomePage>>(() =>
+                new GenericRepository<HomePage>(_context));
 
             _contactPageRepository = new Lazy<IGenericRepository<ContactPage>>(() =>
                 new GenericRepository<ContactPage>(_context));
@@ -224,7 +233,8 @@ namespace CarRent.Repository
         public IGenericRepository<PricelistItem> PricelistItem => _priceListItemRepository.Value;
         public IGenericRepository<PricelistDate> PricelistDate => _pricelistDateRepository.Value;
         public IGenericRepository<CarOpinion> CarOpinion => _carOpinionRepository.Value;
-
+        public IGenericRepository<RecommendedCars> RecommendedCars  => _recommendedCarsRepository.Value;
+        
         public IRentalRepository Rentals => _rentalRepository.Value;
         public IGenericRepository<RentalStatus> RentalStatus => _rentalStatusRepository.Value;
         public IGenericRepository<ClientDetails> ClientDetails => _clientDetailsRepository.Value;
@@ -244,6 +254,7 @@ namespace CarRent.Repository
         public IGenericRepository<Wishlist> Wishlist => _wishListRepository.Value;
         public IGenericRepository<WorkerPaths> WorkerPaths => _workerPathRepository.Value;
         public IGenericRepository<PathItem> PathItem => _pathItemRepository.Value;
+        public IGenericRepository<HomePage> HomePage => _homePageRepository.Value;
         public IGenericRepository<ContactPage> ContactPage => _contactPageRepository.Value;
         public IGenericRepository<Footer> Footer => _footerRepository.Value;
         public IGenericRepository<FooterLinks> FooterLinks => _footerLinksRepository.Value;
