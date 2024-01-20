@@ -66,7 +66,7 @@ namespace CarRent.Service
                 => new PriceListService(repositoryManager, RabatService, mapper));
 
             _rabatService =new Lazy<IRabatService>(() =>
-               new RabatService(repositoryManager, mapper));
+               new RabatService(repositoryManager, NotificationService, mapper));
 
             _rentalService = new Lazy<IRentalService>(()
                 => new RentalService(repositoryManager, PriceListService,  mapper));

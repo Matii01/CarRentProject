@@ -15,6 +15,7 @@ namespace CarRent.Service.Interfaces
         Task<PagedList<NotificationDto>> GetNotificationsByParamsAsync(NotificationParameters notificationParams);
         Task<int> GetNotificationsCountAsync(NotificationParameters notificationParams);
         Task<NewNotificationDto> CreateNotificationAsync(NewNotificationDto notification);
+        Task SendAddedRabatNotificationAsync(string UserId, NewRabatForUserDto rabat);
         Task ReadNotificationAsync(int notificationId);
         Task DeleteNotificationAsync(int notificationId);
     }

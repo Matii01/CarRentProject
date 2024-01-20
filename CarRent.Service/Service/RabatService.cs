@@ -17,9 +17,12 @@ namespace CarRent.Service.Service
     public class RabatService : ServiceBase, IRabatService
     {
         public const decimal MAX_RABAT_VAlUE = 50;
-        public RabatService(IRepositoryManager repository, IMapper mapper) 
+        private readonly INotificationService _notification;
+
+        public RabatService(IRepositoryManager repository, INotificationService notification, IMapper mapper) 
             : base(repository, mapper)
         {
+            _notification = notification;
         }
 
         public async Task<IEnumerable<RabatDto>> GetCurrentRabat()
@@ -121,6 +124,7 @@ namespace CarRent.Service.Service
 
             _repository.RabatForUser.Create(rabat);
             await _repository.SaveAsync();
+            await _notification.SendAddedRabatNotificationAsync(newRabat.UserId, newRabat);
         }
 
         private async Task<bool> CanAddRabat(NewRabatForUserDto newRabat)

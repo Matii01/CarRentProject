@@ -183,8 +183,11 @@ namespace CarRent.Service.Service
             await Console.Out.WriteLineAsync(item.Price.ToString());
             decimal total = item.Price * CalculateRentalDays(rental);
             decimal net = total * 0.77m; // 23% vat 
-            
-            PriceForCar priceForCar = new (rabat.RabatPercentValue, net, total, 23, total - net);
+
+            var rabatValue = total * (rabat.RabatPercentValue / 100);
+
+            //PriceForCar priceForCar = new (rabat.RabatPercentValue, net, total, 23, total - net);
+            PriceForCar priceForCar = new (rabatValue, net, total, 23, total - net);
 
             return priceForCar;
         }

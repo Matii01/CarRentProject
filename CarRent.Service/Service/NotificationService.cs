@@ -69,6 +69,13 @@ namespace CarRent.Service.Service
                 .ToPagedList(items, notificationParams.PageNumber, notificationParams.PageSize);
         }
 
+        public async Task SendAddedRabatNotificationAsync(string UserId, NewRabatForUserDto rabat)
+        {
+            string Message = $"przyznano raba {rabat.RabatPercentValue} procent, rabat jest ważny do {rabat.DateOfExpiration}";
+            NewNotificationDto notification = new (UserId, "New Rabat", Message);
+            await CreateNotificationAsync(notification);
+        }
+
         public async Task<NewNotificationDto> CreateNotificationAsync(NewNotificationDto notification)
         {
             var newNotification = new Notification()
