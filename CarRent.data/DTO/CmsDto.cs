@@ -40,12 +40,14 @@ namespace CarRent.data.DTO
     );
 
     public record FooterLinksDto(
+        int Id,
         int FooterId,
         string Title,
         IEnumerable<FooterLinksPathsDto> Paths
     );
 
     public record FooterLinksPathsDto(
+        int Id,
         int FooterLinksId,
         string Name,
         string Path,

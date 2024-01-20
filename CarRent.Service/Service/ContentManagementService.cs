@@ -99,9 +99,11 @@ namespace CarRent.Service.Service
                     x.TikTokLink,
                     x.Info,
                     x.Links.Select(l => new FooterLinksDto(
+                        l.Id,
                         x.Id, 
                         l.Title, 
                         l.Paths.Select(p => new FooterLinksPathsDto(
+                            p.Id,
                             l.Id,
                             p.Name,
                             p.Path,
@@ -110,8 +112,19 @@ namespace CarRent.Service.Service
                     ))
                 .SingleOrDefaultAsync();
 
+            if(item == null)
+            {
+                return await GenerateFooter();
+            }
+
             return item;
         }
+
+        private async Task<FooterDto> GenerateFooter()
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<HomePageDto> GenerateHomePage()
         {
             HomePage home = new() { IsActive = true };
