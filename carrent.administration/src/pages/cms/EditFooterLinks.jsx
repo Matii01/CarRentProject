@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function EditFooterLinks({ links, onEdit }) {
   const [validated, setValidated] = useState(false);
   const [edited, setEdited] = useState(links);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  const [deleteMode, setDeleteMode] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -32,6 +31,75 @@ function EditFooterLinks({ links, onEdit }) {
       paths: items,
     }));
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(edited);
+
+    jwtInterceptor
+      .post(
+        `ContentManagement/editFooterLinks/${edited.id}`,
+        JSON.stringify(edited),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const addNewLink = (linksId) => {
+    const items = [
+      ...edited.paths,
+      {
+        displayPosition: 0,
+        footerLinksId: linksId,
+        id: 0,
+        name: "",
+        path: "#",
+      },
+    ];
+    setEdited((prev) => ({
+      ...prev,
+      paths: items,
+    }));
+  };
+
+  const removeFromList = (id) => {
+    const items = edited.paths.filter((it) => it.id != id);
+
+    setEdited((prev) => ({
+      ...prev,
+      paths: items,
+    }));
+  };
+
+  const removeLink = (id) => {
+    if (id == 0) {
+      removeFromList(id);
+      return;
+    }
+    jwtInterceptor
+      .delete(`ContentManagement/deleteFooterPathLink/${id}`)
+      .then((data) => {
+        console.log("deleted");
+        removeFromList(id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const toggleDeleteMode = () => {
+    setDeleteMode(!deleteMode);
+  };
+
   return (
     <>
       <Card>
@@ -60,7 +128,7 @@ function EditFooterLinks({ links, onEdit }) {
             {edited.paths &&
               edited.paths.map((it, index) => (
                 <Row className="mb-3" key={index}>
-                  <Form.Group as={Col} md="6" controlId="validationCustom01">
+                  <Form.Group as={Col} md="5" controlId="validationCustom01">
                     <Form.Label>Tytuł</Form.Label>
                     <Form.Control
                       required
@@ -76,7 +144,7 @@ function EditFooterLinks({ links, onEdit }) {
                       Wymagane
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md="6" controlId="validationCustom01">
+                  <Form.Group as={Col} md="5" controlId="validationCustom01">
                     <Form.Label>Link</Form.Label>
                     <Form.Control
                       required
@@ -92,12 +160,47 @@ function EditFooterLinks({ links, onEdit }) {
                       Wymagane
                     </Form.Control.Feedback>
                   </Form.Group>
+                  {deleteMode && (
+                    <Form.Group as={Col} md="2" controlId="validationCustom01">
+                      <Form.Label>Usuń</Form.Label>
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={() => removeLink(it.id)}
+                      >
+                        -
+                      </Button>
+                    </Form.Group>
+                  )}
                 </Row>
               ))}
 
-            <Button variant="dark" type="submit">
-              Aktualizuj
-            </Button>
+            <Row>
+              <Col md="3">
+                <Button
+                  size="sm"
+                  variant="dark"
+                  type="submit"
+                  disabled={deleteMode}
+                >
+                  Aktualizuj
+                </Button>
+              </Col>
+              <Col md="3">
+                <Button
+                  size="sm"
+                  onClick={() => addNewLink(links.id)}
+                  disabled={deleteMode}
+                >
+                  +
+                </Button>
+              </Col>
+              <Col md="6">
+                <Button size="sm" onClick={toggleDeleteMode}>
+                  {deleteMode && "Wyłącz"} {!deleteMode && "Tryb usuwania"}
+                </Button>
+              </Col>
+            </Row>
           </Form>
         </Card.Body>
       </Card>

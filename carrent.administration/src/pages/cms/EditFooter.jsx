@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import EditFooterLinks from "./EditFooterLinks";
+
 function EditFooter() {
   const [validated, setValidated] = useState(false);
   const [page, setPage] = useState({
@@ -43,21 +44,21 @@ function EditFooter() {
 
     console.log(page);
 
-    // event.preventDefault();
-    // const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    // } else {
-    //   //editPage();
-    // }
-    // setValidated(true);
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      editPage();
+    }
+    setValidated(true);
   };
 
   const editPage = () => {
     console.log("send data");
     jwtInterceptor
-      .post(`ContentManagement/editContact`, JSON.stringify(page), {
+      .post(`ContentManagement/editFooter`, JSON.stringify(page), {
         headers: {
           "Content-Type": "application/json",
         },
@@ -223,7 +224,9 @@ function EditFooter() {
                     </Form.Group>
                   </Row>
 
-                  <Button type="submit">Aktualizuj</Button>
+                  <Button variant="dark" type="submit">
+                    Aktualizuj
+                  </Button>
                 </Form>
               </Card.Body>
             </Card>

@@ -8,4 +8,4 @@ namespace CarRent.data.DTO
 {
     public record class RabatDto(int Id, decimal RabatPercentValue);
     public record class RabatValueDto(decimal RabatPercentValue);
-}
+    public record NewRabatForUser(string UserId, string? Title, decimal RabatPercentValue, DateTime DateOfExpiration);

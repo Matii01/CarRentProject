@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +72,48 @@ namespace CarRent.Service.Service
 
             return userRabat ?? new RabatValueDto(0);
         }
+
+        public async Task AddRabatForUser(NewRabatForUser newRabat)
+        {
+            if(newRabat.RabatPercentValue > MAX_RABAT_VAlUE || newRabat.RabatPercentValue <= 0)
+            {
+                throw new Exception("rabat must be in the range of 1 - 50");
+            }
+
+            if(!await CanAddRabat(newRabat))
+            {
+                throw new Exception("user have active rabat");
+            }
+
+            RabatForUser rabat = new RabatForUser()
+            {
+                Title = newRabat.Title,
+                IsActive = true,
+                UserAccountId = newRabat.UserId,
+                DateOfExpiration = newRabat.DateOfExpiration,
+                RabatPercentValue = newRabat.RabatPercentValue
+            };
+        }
+
+        private async Task<bool> CanAddRabat(NewRabatForUser newRabat)
+        {
+            var data = DateTime.Now;
+            var userRabat = await _repository.RabatForUser
+                .FindByCondition(
+                    x => x.IsActive == true &&
+                    x.IsUsed == false &&
+                    x.UserAccountId == newRabat.UserId &&
+                    x.DateOfExpiration <= data
+                    , false)
+                .ToListAsync();
+            
+            if (userRabat == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Combine rabat for user and for car and return rabat for rental 

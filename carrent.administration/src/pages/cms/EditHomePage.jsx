@@ -114,7 +114,7 @@ function EditHomePage() {
                     <Form.Group as={Col} md="6" controlId="validationCustom01">
                       <Form.Label>Tekst 1</Form.Label>
                       <Form.Control
-                        style={{ height: "100px" }}
+                        style={{ height: "250px" }}
                         as="textarea"
                         rows={4}
                         type="text"
@@ -126,7 +126,7 @@ function EditHomePage() {
                     <Form.Group as={Col} md="6" controlId="validationCustom02">
                       <Form.Label>Tekst 2</Form.Label>
                       <Form.Control
-                        style={{ height: "100px" }}
+                        style={{ height: "250px" }}
                         as="textarea"
                         rows={4}
                         type="text"

@@ -441,11 +441,10 @@ function CarDetails() {
                         <label>Description</label>
                         <Form.Control
                           as="textarea"
-                          cols="80"
-                          rows="5"
                           name="description"
                           value={car.description}
                           onChange={handleChange}
+                          style={{ height: 150 }}
                         ></Form.Control>
                       </Form.Group>
                     </Col>

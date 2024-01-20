@@ -123,7 +123,8 @@ namespace CarRent.api.Controllers
             return CreatedAtAction("AddUserAddresses", address);
         }
 
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
+        [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword passwords)
         {

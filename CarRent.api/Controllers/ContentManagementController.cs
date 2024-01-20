@@ -40,6 +40,27 @@ namespace CarRent.api.Controllers
             return Ok(footer);
         }
 
+        [HttpPost("editFooter")]
+        public async Task<IActionResult> EditFooter([FromBody] FooterDto footer)
+        {
+            await _services.ContentManagementService.EditFooter(footer);
+            return Ok();
+        }
+
+        [HttpPost("editFooterLinks/{id:int}")]
+        public async Task<IActionResult> EditFooterLinks(int id, [FromBody] FooterLinksDto footer)
+        {
+            await _services.ContentManagementService.EditFooterLinks(id, footer);
+            await Console.Out.WriteLineAsync(footer.ToString());
+
+            foreach (var item in footer.Paths)
+            {
+                await Console.Out.WriteLineAsync(item.ToString());
+            }
+            return Ok();
+        }
+       
+
         [HttpPost("editContact")]
         public async Task<IActionResult> EditContactPage([FromBody] ContactPageDto contact)
         {
@@ -52,6 +73,13 @@ namespace CarRent.api.Controllers
         {
             await Console.Out.WriteLineAsync("edit home page");
             await _services.ContentManagementService.EditHomePage(homePage);
+            return NoContent();
+        }
+
+        [HttpDelete("deleteFooterPathLink/{id:int}")]
+        public async Task<IActionResult> EditHomePage(int id)
+        {
+            await _services.ContentManagementService.DeleteFooterLinkPath(id);
             return NoContent();
         }
     }

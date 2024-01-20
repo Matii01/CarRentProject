@@ -102,7 +102,8 @@ namespace CarRent.Service.Service
                         l.Id,
                         x.Id, 
                         l.Title, 
-                        l.Paths.Select(p => new FooterLinksPathsDto(
+                        l.Paths.Where(x => x.IsActive == true)
+                            .Select(p => new FooterLinksPathsDto(
                             p.Id,
                             l.Id,
                             p.Name,
@@ -118,6 +119,93 @@ namespace CarRent.Service.Service
             }
 
             return item;
+        }
+
+        public async Task EditFooter(FooterDto footer)
+        {
+            var item = await _repository.Footer
+                 .FindByCondition(x => x.IsActive, true)
+                 .SingleOrDefaultAsync();
+            
+            if(item == null)
+            {
+                throw new Exception("not found");
+            }
+            
+            item.Title = footer.Title;
+            item.Description = footer.Description;
+            item.InstagramLink = footer.InstagramLink;
+            item.FacebookLink = footer.FacebookLink;
+            item.YouTubeLink = footer.YouTubeLink;
+            item.TikTokLink = footer.TikTokLink;
+            item.NewsLetterTitle = footer.NewsLetterTitle;
+            item.NewsLetterDescription = footer.NewsLetterDescription;
+            item.NewsLetterInfo = footer.NewsLetterInfo;
+            item.Info = footer.Info;
+
+            await _repository.SaveAsync();
+        }
+
+        public async Task EditFooterLinks(int id, FooterLinksDto links)
+        {
+            var toUpdate = await _repository.FooterLinks
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            toUpdate.Title = links.Title;
+            await _repository.SaveAsync();
+            await EditFooterPathLinks(id, links.Paths);
+        }
+
+        private async Task EditFooterPathLinks(int FooterLinksId, IEnumerable<FooterLinksPathsDto> paths)
+        {
+            foreach (var path in paths)
+            {
+                if(path.Id == 0)
+                {
+                   await AddNewFooterPathLinks(FooterLinksId, path);
+                }
+            }
+
+            var toUpdate = await _repository.FooterLinksPaths
+                .FindByCondition(x => x.IsActive == true, true)
+                .ToListAsync();
+
+            foreach (var it in toUpdate)
+            {
+                var newData = paths.Where(x=> x.Id == it.Id).SingleOrDefault();
+                if(newData != null)
+                {
+                    it.Path = newData.Path;
+                    it.Name = newData.Name;
+                }
+                
+            }
+            await _repository.SaveAsync();
+        }
+
+        private async Task AddNewFooterPathLinks(int FooterLinksId, FooterLinksPathsDto paths)
+        {
+            FooterLinksPaths footerLinksPaths = new ()
+            {
+                FooterLinksId = FooterLinksId,
+                IsActive = true,
+                Path = paths.Path,
+                Name = paths.Name,
+            };
+
+            _repository.FooterLinksPaths.Create(footerLinksPaths);
+            await _repository.SaveAsync();
+        }
+
+        public async Task DeleteFooterLinkPath(int id)
+        {
+            var item = await _repository.FooterLinksPaths
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+            
+            item.IsActive = false;
+            await _repository.SaveAsync();
         }
 
         private async Task<FooterDto> GenerateFooter()

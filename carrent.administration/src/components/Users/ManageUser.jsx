@@ -1,6 +1,7 @@
 import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 import UserNotification from "./UserNotification";
 import UserDetails from "./UserDetails";
+import UserRabats from "./Userrabats";
 
 function ManageUser({ user }) {
   return (
@@ -13,6 +14,9 @@ function ManageUser({ user }) {
           </Tab>
           <Tab eventKey="info" title="Informacje">
             <UserDetails user={user} />
+          </Tab>
+          <Tab eventKey="rabats" title="Rabaty">
+            <UserRabats userId={user.id} />
           </Tab>
         </Tabs>
       </Card.Body>
