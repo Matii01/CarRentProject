@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
@@ -11,6 +11,14 @@ function UpdateRentalStatus({
   const [oldStatus, setOldStatus] = useState(invoiceStatusId);
   const [selectedInvoiceStatusId, setSelectedInvoiceStatusId] =
     useState(invoiceStatusId);
+
+  useEffect(() => {
+    if (invoiceStatusId === null) {
+      setOldStatus(-1);
+    } else {
+      setOldStatus(invoiceStatusId);
+    }
+  }, [invoiceStatusId]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,13 +34,16 @@ function UpdateRentalStatus({
       newStatus: selectedInvoiceStatusId,
     };
 
+    console.log(data);
     jwtInterceptor
       .post(`Rental/UpdateInvoiceStatus/${invoiceId}`, JSON.stringify(data), {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((data) => {})
+      .then((data) => {
+        console.log(data.data);
+      })
       .catch((error) => {
         console.log(error);
       });

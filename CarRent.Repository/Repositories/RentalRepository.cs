@@ -135,6 +135,7 @@ namespace CarRent.Repository.Repositories
         public async Task<PagedList<RentalListDataDto>> GetPagedListRentalActiveAsync(RentalParameters param, bool trackChanges)
         {
             var list = context.Rentals
+                .OrderByDescending(x => x.RentalStart)
                 .Include(x => x.RentalStatus)
                 .Include(c => c.Car)
                 .Include(x => x.InvoiceItem)

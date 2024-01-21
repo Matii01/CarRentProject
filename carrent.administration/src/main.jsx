@@ -66,6 +66,7 @@ import AboutCompany from "./pages/managment/AboutCompany";
 import Settings from "./pages/managment/Settings";
 import EditHomePage from "./pages/cms/EditHomePage";
 import AccountPage from "./pages/managment/AccountPage";
+import CarRabats from "./pages/cars/CarRabats";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -118,6 +119,7 @@ const router = createBrowserRouter([
         path: "car/:carId/calendar",
         element: <CarEventCalendar />,
       },
+      { path: "car/:carId/carRabat", element: <CarRabats /> },
       { path: "car/details/:carId", element: <CarDetails /> },
       { path: "car/details/:carId/pricelist", element: <CarPriceList /> },
       { path: "users/users", element: <UsersPage /> },

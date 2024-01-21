@@ -13,8 +13,11 @@ namespace CarRent.Service.Interfaces
         Task<RabatValueDto> CalculateRabat(int carId, string? userId);
         Task<RabatValueDto> GetUserRabat(string userId);
         Task<IEnumerable<RabatForUserDto>> GetUserRabats(string userId);
+        Task<IEnumerable<CarRabatDto>> GetCarRabats(int carId);
         Task<RabatValueDto> GetRabatForCar(int carId);
         Task AddRabatForUser(NewRabatForUserDto newRabat);
+        Task AddCarRabat(int carId, CarRabatDto newRabat);
         Task DeleteUserRabat(int rabatId);
+        Task DeleteCarRabat(int rabatId);
     }
 }

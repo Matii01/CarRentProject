@@ -77,6 +77,16 @@ namespace CarRent.Service.Service
             return userRabat ?? new RabatValueDto(0);
         }
 
+        public async Task<IEnumerable<CarRabatDto>> GetCarRabats(int carId)
+        {
+            var carRabats = await _repository.Rabat
+                .FindByCondition(x => x.IsActive == true, false)
+                .Select(x => new CarRabatDto(x.Id, x.RabatPercentValue, x.DateFrom, x.DateTo))
+                .ToListAsync();
+
+            return carRabats;
+        }
+
         public async Task<IEnumerable<RabatForUserDto>> GetUserRabats(string userId)
         {
             var data = DateTime.Now;
@@ -98,6 +108,30 @@ namespace CarRent.Service.Service
                 .ToListAsync();
 
             return userRabat;
+        }
+
+        public async Task AddCarRabat(int carId, CarRabatDto newRabat)
+        {
+            if (newRabat.RabatPercentValue > MAX_RABAT_VAlUE || newRabat.RabatPercentValue <= 0)
+            {
+                throw new Exception("rabat must be in the range of 1 - 50");
+            }
+
+            if (!await CanAddRabat(carId, newRabat))
+            {
+                throw new Exception("car have active rabat");
+            }
+
+            Rabat rabat = new()
+            {
+                CarId = carId,
+                RabatPercentValue = newRabat.RabatPercentValue,
+                DateFrom = newRabat.DateFrom,
+                DateTo = newRabat.DateTo,
+                IsActive = true,
+            };
+            _repository.Rabat.Create(rabat);
+            await _repository.SaveAsync();
         }
 
         public async Task AddRabatForUser(NewRabatForUserDto newRabat)
@@ -125,6 +159,28 @@ namespace CarRent.Service.Service
             _repository.RabatForUser.Create(rabat);
             await _repository.SaveAsync();
             await _notification.SendAddedRabatNotificationAsync(newRabat.UserId, newRabat);
+        }
+
+        private async Task<bool> CanAddRabat(int carId, CarRabatDto newRabat)
+        {
+            var data = DateTime.Now;
+            if(newRabat.DateTo < data)
+            {
+                return false;
+            }
+
+            var rabats = await _repository.Rabat.FindByCondition(x =>
+                x.IsActive == true &&
+                   !((newRabat.DateFrom > x.DateTo && newRabat.DateTo > x.DateTo) ||
+                       (newRabat.DateFrom < x.DateFrom && newRabat.DateTo < x.DateFrom))
+                    , false).
+                    ToListAsync();
+
+            if (rabats.IsNullOrEmpty())
+            {
+                return true;
+            }
+            return false;
         }
 
         private async Task<bool> CanAddRabat(NewRabatForUserDto newRabat)
@@ -173,6 +229,16 @@ namespace CarRent.Service.Service
             }
         }
 
+        public async Task DeleteCarRabat(int rabatId)
+        {
+            var rabat = await _repository.Rabat
+                .GetAsync(rabatId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            rabat.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
         public async Task DeleteUserRabat(int rabatId)
         {
             var userRabat = await _repository.RabatForUser
@@ -181,6 +247,6 @@ namespace CarRent.Service.Service
 
             userRabat.IsActive = false; 
             await _repository.SaveAsync();
-        }
+        } 
     }
 }

@@ -157,6 +157,11 @@ function CarDetails() {
               Kalendarz
             </Nav.Link>
           </Col>
+          <Col>
+            <Nav.Link as={NavLink} to={`/car/${param.carId}/carRabat`}>
+              Rabaty
+            </Nav.Link>
+          </Col>
         </Row>
         <Row>
           <Col md="8">

@@ -22,6 +22,22 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpGet("carRabats/{carId}")]
+        public async Task<IActionResult> GetCarRabats(int carId)
+        {
+            var list = await _services.RabatService.GetCarRabats(carId);
+            return Ok(list);
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("addCarRabat/{carId:int}")]
+        public async Task<IActionResult> AddCarRabat(int carId, [FromBody] CarRabatDto rabatDto)
+        {
+            await _services.RabatService.AddCarRabat(carId, rabatDto);
+            return Ok();
+        }
+
         [Authorize(Roles ="Administrator,Worker")]
         [HttpPost("addUserRabat")]
         public async Task<IActionResult> AddRabat([FromBody] NewRabatForUserDto rabat)
@@ -29,10 +45,18 @@ namespace CarRent.api.Controllers
             await _services.RabatService.AddRabatForUser(rabat);
             return Ok();
         }
-        //deleteUserRabat
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpDelete("deleteCarRabat/{id:int}")]
+        public async Task<IActionResult> DeleteCarRabat(int id)
+        {
+            await _services.RabatService.DeleteCarRabat(id);
+            return Ok();
+        }
+
         [Authorize(Roles = "Administrator,Worker")]
         [HttpDelete("deleteUserRabat/{id:int}")]
-        public async Task<IActionResult> AddRabat(int id)
+        public async Task<IActionResult> DeleteUserRabat(int id)
         {
             await _services.RabatService.DeleteUserRabat(id);
             return Ok();

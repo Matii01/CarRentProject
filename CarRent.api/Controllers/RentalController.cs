@@ -168,7 +168,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceStatusDto statusDto)
         {
             // To do send notification
-
+            await Console.Out.WriteLineAsync("Update invoice");
             await _services.RentalService.UpdateInvoiceStatusAsync(invoiceId, statusDto);
             return Ok("");
         }
