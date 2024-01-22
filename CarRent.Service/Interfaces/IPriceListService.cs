@@ -17,12 +17,15 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<PricelistDateDto>> GetPricelistDate(int priceListId);
         Task<PriceList> CreatePriceListForCarAsync(PriceListDto priceList);
         Task<PriceList> UpdatePriceListAsync(PriceListDto priceList);
-        Task RemovePosition(int itemId);
-        Task RemovePriceListDate(int itemId);
         Task<PricelistItem> AddPosition(NewtPricelistItemDto item);
         Task AddCarlistDate(PricelistDateDto dateDto);
         Task<bool> CarPriceListExistForThisDateTime(PricelistDateDto priceListDate);
         Task<PriceForCar> GetPriceForCarForDate(string? userId, NewRentalForClient rental);
+        Task ChangeDefaultPriceList(int newDefaultPriceListId);
+        Task UpdatePriceListItem(int id, PricelistItemDto pricelistItem);
+        Task UpdatePriceListDates(int id, PricelistDateDto pricelistDate);
+        Task RemovePosition(int itemId);
+        Task RemovePriceListDate(int itemId);
 
         /*
         Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);

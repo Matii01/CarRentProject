@@ -7,6 +7,7 @@ import transformObjectToQuery from "../../utils/transformObjectToQuery";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { formatDate } from "../../utils/formDate";
 import EditService from "../../components/CalendarEvent/EditService";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function CarEventCalendar() {
   const param = useParams();
@@ -39,10 +40,20 @@ function CarEventCalendar() {
       .then((data) => {
         console.log(data);
         setRentals(data.data.items);
+        transformAndSetRental(data.data.items);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const transformAndSetRental = (items) => {
+    const transformed = items.map((it) => ({
+      ...it,
+      rentalStart: formatDate(it.rentalStart),
+      rentalEnd: formatDate(it.rentalEnd),
+    }));
+    setRentals(transformed);
   };
 
   const getService = () => {
@@ -50,12 +61,20 @@ function CarEventCalendar() {
     jwtInterceptor
       .get(`https://localhost:7091/CarMaintenance/All?${queryString}`)
       .then((data) => {
-        console.log(data);
-        setService(data.data);
+        transformAndSetService(data.data);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const transformAndSetService = (items) => {
+    const transformed = items.map((it) => ({
+      ...it,
+      dateStart: formatDate(it.dateStart),
+      dateEnd: formatDate(it.dateEnd),
+    }));
+    setService(transformed);
   };
 
   const handleClick = (id) => {
@@ -79,95 +98,37 @@ function CarEventCalendar() {
   return (
     <>
       <Container>
-        <Row className="mt-2 mb-2">
-          <Col>
-            <Button onClick={onAddClick}>Dodaj</Button>
-          </Col>
-        </Row>
+        <Row className="mt-2 mb-2"></Row>
         <Row>
           <Col>
             <Card>
-              <Card.Header>Wypożyczenia</Card.Header>
+              <Card.Header>Wypożyczenia </Card.Header>
               <Card.Body>
-                <table
-                  className={`${styles.table}`}
-                  style={{
-                    fontSize: "12px",
-                  }}
-                >
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nazwa</th>
-                      <th>Data od</th>
-                      <th>Data do</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rentals &&
-                      rentals.map((it) => (
-                        <tr key={it.id}>
-                          <td>{it.id}</td>
-                          <td>{it.carName}</td>
-                          <td>{formatDate(it.rentalStart)}</td>
-                          <td>{formatDate(it.rentalEnd)}</td>
-                          <td>{it.status}</td>
-                          <td>
-                            <Button
-                              size="sm"
-                              onClick={() => handleClick(it.id)}
-                            >
-                              View
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["ID", "Nazwa", "Data od", "Data do", "Status"]}
+                  items={rentals}
+                  item={["id", "name", "rentalStart", "rentalEnd", "status"]}
+                />
               </Card.Body>
             </Card>
             <Card>
-              <Card.Header>Serwisy</Card.Header>
+              <Card.Header>
+                <Row>
+                  <Col>Serwisy</Col>
+                  <Col>
+                    <Button variant="dark" size="sm" onClick={onAddClick}>
+                      Dodaj
+                    </Button>
+                  </Col>
+                </Row>
+              </Card.Header>
               <Card.Body>
-                <table
-                  className={`${styles.table}`}
-                  style={{
-                    fontSize: "12px",
-                  }}
-                >
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nazwa</th>
-                      <th>Data od</th>
-                      <th>Data do</th>
-                      <th>Koszt</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {service &&
-                      service.map((it) => (
-                        <tr key={it.id}>
-                          <td>{it.id}</td>
-                          <td>{it.carName}</td>
-                          <td>{formatDate(it.dateStart)}</td>
-                          <td>{formatDate(it.dateEnd)}</td>
-                          <td>{it.totalCost}</td>
-                          <td>
-                            <Button
-                              size="sm"
-                              onClick={() => ServiseEdit(it.id)}
-                            >
-                              Edit
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["ID", "Nazwa", "Data od", "Data do", "Status"]}
+                  items={service}
+                  item={["id", "carName", "dateStart", "dateEnd", "totalCost"]}
+                  onDoubleClick={ServiseEdit}
+                />
               </Card.Body>
             </Card>
           </Col>
@@ -188,3 +149,43 @@ function CarEventCalendar() {
 }
 
 export default CarEventCalendar;
+
+/**
+<table
+        className={`${styles.table}`}
+        style={{
+          fontSize: "12px",
+        }}
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Data od</th>
+            <th>Data do</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rentals &&
+            rentals.map((it) => (
+              <tr key={it.id}>
+                <td>{it.id}</td>
+                <td>{it.carName}</td>
+                <td>{formatDate(it.rentalStart)}</td>
+                <td>{formatDate(it.rentalEnd)}</td>
+                <td>{it.status}</td>
+                <td>
+                  <Button
+                    size="sm"
+                    onClick={() => handleClick(it.id)}
+                  >
+                    View
+                  </Button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table> 
+ */

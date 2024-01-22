@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function AddNotificationForUser({ userId, onAdd }) {
   const [notification, setNotification] = useState({
@@ -26,9 +27,11 @@ function AddNotificationForUser({ userId, onAdd }) {
         console.log(data);
         clearMessage();
         onAdd();
+        toast.success("Dodano nowe powiadomienie");
       })
       .catch((error) => {
         console.log(error);
+        toast.success("Dodawanie - bład");
       });
   };
 

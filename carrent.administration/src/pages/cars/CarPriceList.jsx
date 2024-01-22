@@ -1,30 +1,41 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import fetchData from "../../functions/fetchData";
-import styles from "./../../components/Table/Table.module.css";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import AddPricelist from "../../components/Pricelist/AddPricelist";
 import EditPriceList from "../../components/Pricelist/EditPriceList";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function CarPriceList() {
   const [priceList, setPriceList] = useState();
   const [selectedPricelist, setSelectedPricelist] = useState(null);
   const param = useParams();
 
-  //https://localhost:7091/CarPriceList/1/PriceList
   useEffect(() => {
-    fetchData(`https://localhost:7091/CarPriceList/${param.carId}/PriceList`)
+    getPriceLists();
+  }, []);
+
+  const getPriceLists = () => {
+    jwtInterceptor
+      .get(`https://localhost:7091/CarPriceList/${param.carId}/PriceList`)
       .then((data) => {
-        setPriceList(data);
-        console.log(data);
+        setPriceList(data.data);
+        console.log(data.data);
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Płąd pobierania");
       });
-  }, []);
+  };
+
+  const refreshView = () => {
+    getPriceLists();
+  };
 
   const onPricelistAdded = () => {
     console.log("nowy cennik dodany ");
+    getPriceLists();
   };
 
   const onChoose = (pricelist) => {
@@ -35,12 +46,17 @@ function CarPriceList() {
     setSelectedPricelist(null);
   };
 
+  const handleDelete = (id) => {
+    console.log(id);
+  };
+
   if (!priceList) {
     return <p>Loading ... </p>;
   }
 
   return (
     <>
+      <ToastContainer />
       <Container style={{ fontSize: "12px" }}>
         <Row>
           <Col md={6}>
@@ -53,29 +69,13 @@ function CarPriceList() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <table
-                  className={`${styles.table}`}
-                  style={{ fontSize: "12px" }}
-                >
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nazwa</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {priceList.map((item) => (
-                      <tr key={item.id} onDoubleClick={() => onChoose(item)}>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          <Button size="sm">Delete</Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["ID", "Nazwa", ""]}
+                  items={priceList}
+                  item={["id", "name"]}
+                  onDoubleClick={onChoose}
+                  handleDelete={handleDelete}
+                />
               </Card.Body>
             </Card>
           </Col>
@@ -87,6 +87,7 @@ function CarPriceList() {
               <EditPriceList
                 priceList={selectedPricelist}
                 onCancel={onCancelClick}
+                onEdit={refreshView}
               />
             )}
           </Col>
@@ -97,3 +98,29 @@ function CarPriceList() {
 }
 
 export default CarPriceList;
+
+/*
+<table
+    className={`${styles.table}`}
+    style={{ fontSize: "12px" }}
+  >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nazwa</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {priceList.map((item) => (
+        <tr key={item.id} onDoubleClick={() => onChoose(item)}>
+          <td>{item.id}</td>
+          <td>{item.name}</td>
+          <td>
+            <Button size="sm">Delete</Button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+*/

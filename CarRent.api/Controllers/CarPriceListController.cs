@@ -47,10 +47,10 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .GetPricelistItems(priceListId);
 
-            if (result.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
+            //if (result.IsNullOrEmpty())
+            //{
+            //    return NotFound();
+            //}
 
             return Ok(result);
         }
@@ -62,6 +62,13 @@ namespace CarRent.api.Controllers
                 .GetPriceForCarForDate(null, newRental);
 
             return Ok(result);
+        }
+
+        [HttpPost("defaultPriceList/{id:int}")]
+        public async Task<IActionResult> ChangeDefaultPriceList(int id)
+        {
+            await _services.PriceListService.ChangeDefaultPriceList(id);
+            return Ok("");
         }
 
         [HttpPost("addItem")]
@@ -96,11 +103,6 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("deletePricelistDate/{id:int}")]
-        public async Task<IActionResult> DeletePricelistDate(int id)
-        {
-            return NoContent();
-        }
 
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdatePricelist(PriceListDto priceList)
@@ -111,12 +113,43 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
+        [HttpPut("updatePricelistItem/{id:int}")]
+        public async Task<IActionResult> UpdatePricelistItem(int id, [FromBody] PricelistItemDto priceList)
+        {
+             await _services.PriceListService
+                .UpdatePriceListItem(id, priceList);
+
+            return Ok();
+        }
+
+        //[HttpPut("updatePricelistDate/{id:int}")]
+        //public async Task<IActionResult> UpdatePricelistDate(int id, [FromBody] PricelistItemDto priceList)
+        //{
+
+        //    return Ok();
+        //}
+
         [HttpPost("priceForDates/{carId:int}")]
         public async Task<IActionResult> CalculatePrice ([FromBody] NewRentalForClient rental)
         {
             //var result = await _services.PriceListService.GetPriceForCarForDate(rental);
             //return Ok(result);
             throw new NotImplementedException();
-        } 
+        }
+
+
+        [HttpDelete("deletePricelistDate/{id:int}")]
+        public async Task<IActionResult> DeletePricelistDate(int id)
+        {
+            await _services.PriceListService.RemovePriceListDate(id);
+            return NoContent();
+        }
+
+        [HttpDelete("deletePricelistItem/{id:int}")]
+        public async Task<IActionResult> DeletePricelistItem(int id)
+        {
+            await _services.PriceListService.RemovePosition(id);
+            return NoContent();
+        }
     }
 }

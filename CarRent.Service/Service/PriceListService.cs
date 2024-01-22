@@ -43,7 +43,7 @@ namespace CarRent.Service.Service
         {
             var priceLists = await _repository.PriceList
                 .GetPriceListsForCar(carId, trackChanges)
-                .Select(x => new PriceListDto(x.Id,x.CarId,x.Name))
+                .Select(x => new PriceListDto(x.Id,x.CarId,x.Name, x.IsDefault))
                 .ToListAsync();
 
             return priceLists;
@@ -76,6 +76,7 @@ namespace CarRent.Service.Service
                 CarId = priceList.CarId,
                 Name = priceList.Name,
                 IsActive = true,
+                IsDefault = false,
             };
 
             _repository.PriceList.Create(newPriceList);
@@ -92,6 +93,22 @@ namespace CarRent.Service.Service
             toUpdate.Name = priceList.Name;
             await _repository.SaveAsync();
             return toUpdate;
+        }
+
+        public async Task UpdatePriceListItem(int id, PricelistItemDto pricelistItem)
+        {
+            var toUpdate = await _repository.PricelistItem.GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            toUpdate.Price = pricelistItem.Price;
+            toUpdate.OverlimitFee = pricelistItem.OverlimitFee;
+            toUpdate.Days = pricelistItem.Days;
+            await _repository.SaveAsync();
+        }
+
+        public async Task UpdatePriceListDates(int id, PricelistDateDto pricelistDate)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<PricelistItem> AddPosition(NewtPricelistItemDto item)
@@ -132,6 +149,14 @@ namespace CarRent.Service.Service
 
         public async Task<bool> CarPriceListExistForThisDateTime(PricelistDateDto dateDto)
         {
+            //var result = await _repository.PricelistDate
+            //    .FindByCondition(
+            //        x => x.PriceListId == dateDto.PriceId &&
+            //        x.IsActive == true &&
+            //        !((dateDto.DateFrom > x.DateTo && dateDto.DateTo > x.DateTo) ||
+            //            (dateDto.DateFrom < x.DateFrom && dateDto.DateTo < x.DateFrom))
+            //        , false)
+            //    .ToListAsync();
             var result = await _repository.PricelistDate
                 .FindByCondition(
                     x => x.PriceListId == dateDto.PriceId &&
@@ -150,10 +175,10 @@ namespace CarRent.Service.Service
 
         public async Task RemovePosition(int itemId)
         {
-            var item = await 
+            var item = await
                 _repository.PricelistItem
                 .FindByCondition(x => x.Id == itemId, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
             
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -167,6 +192,25 @@ namespace CarRent.Service.Service
                .SingleOrDefaultAsync();
 
             item.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        public async Task ChangeDefaultPriceList(int newDefaultPriceListId)
+        {
+            var newDefault = await _repository.PriceList
+                .GetPriceListsById(newDefaultPriceListId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("");
+
+            var list = await _repository.PriceList
+                .GetPriceListsForCar(newDefault.CarId, true)
+                .Where(x=> x.Id != newDefault.Id)
+                .ToListAsync();
+
+            foreach (var item in list)
+            {
+                item.IsDefault = false;
+            }
+            newDefault.IsDefault = true;
             await _repository.SaveAsync();
         }
 

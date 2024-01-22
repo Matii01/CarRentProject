@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
-import { Card, Row, Col, Accordion, Button } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import TableWithPagination from "../Table/TableWithPagination";
 import AddNotificationForUser from "./AddNotificationForUser";
 import { formatDate } from "../../utils/formDate";
@@ -103,17 +103,6 @@ function UserNotification({ userId }) {
                   onAdd={onNotificationAdd}
                 />
               )}
-              {/* <Accordion defaultActiveKey="0" style={{ border: 0 }}>
-                <Accordion.Item eventKey="0" style={{ border: 0 }}>
-                  <Accordion.Header>Nowe powiadomienie</Accordion.Header>
-                  <Accordion.Body style={{ border: 0 }}>
-                    <AddNotificationForUser
-                      userId={userId}
-                      onAdd={onNotificationAdd}
-                    />
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion> */}
             </Col>
           </Row>
           <Row className="mt-3">

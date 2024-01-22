@@ -76,6 +76,8 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<WorkOrderPriority>> _workOrderPriorityRepository;
         private readonly Lazy<IGenericRepository<WorkOrderWorker>> _workOrderWorkerRepository;
 
+        private readonly Lazy<IGenericRepository<NewsletterSubscriber>> _newsletterSubscriberRepository;
+        private readonly Lazy<IGenericRepository<SendHistory>> _sendHistoryRepository;
 
         public RepositoryManager(CarRentContext context)
         {
@@ -217,6 +219,12 @@ namespace CarRent.Repository
 
             _aboutCompanyRepository = new Lazy<IGenericRepository<AboutCompany>>(() =>
                 new GenericRepository<AboutCompany>(_context));
+
+            _newsletterSubscriberRepository = new Lazy<IGenericRepository<NewsletterSubscriber>>(()=>
+                new GenericRepository<NewsletterSubscriber>(_context));
+
+            _sendHistoryRepository = new Lazy<IGenericRepository<SendHistory>>(() =>
+                new GenericRepository<SendHistory>(_context));
         }
 
 
@@ -266,6 +274,8 @@ namespace CarRent.Repository
         public IGenericRepository<Notification> Notification => _notificationRepository.Value;
         public IGenericRepository<AboutCompany> AboutCompany => _aboutCompanyRepository.Value;
         public IGenericRepository<ApplicationSettings> ApplicationSettings => _applicationSettingsRepository.Value;
+        public IGenericRepository<NewsletterSubscriber> NewsletterSubscriber => _newsletterSubscriberRepository.Value;
+        public IGenericRepository<SendHistory> SendHistory => _sendHistoryRepository.Value;
 
         public async Task SaveAsync()
         {

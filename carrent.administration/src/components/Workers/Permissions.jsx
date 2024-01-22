@@ -91,22 +91,7 @@ function Permissions({ workerId }) {
       <Card.Header>Edytuj uprawnienia</Card.Header>
       <Card.Body>
         <Form onSubmit={onSubmit}>
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>Zip</Form.Label>
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-
-            <Form.Group as={Col}>
-              <Form.Label>Zip</Form.Label>
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-          </Row>
-
-          <Form.Group className="mb-3" id="formGridCheckbox">
-            <Form.Label>Zip</Form.Label>
-            <input className="m-2" type="checkbox" />
-          </Form.Group>
+          <Row className="mb-3"></Row>
 
           {!isLoading && (
             <Table bordered>

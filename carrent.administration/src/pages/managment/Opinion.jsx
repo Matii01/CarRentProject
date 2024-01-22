@@ -4,6 +4,8 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import TableWithPagination from "../../components/Table/TableWithPagination";
 import ManageOpinion from "../../components/Opinion/ManageOpinion";
+import { formatDate } from "../../utils/formDate";
+import { ToastContainer } from "react-toastify";
 
 function Opinion() {
   const [metaData, setMetaData] = useState([]);
@@ -78,6 +80,7 @@ function Opinion() {
 
   return (
     <>
+      <ToastContainer />
       <Row>
         <Col>
           <Card>

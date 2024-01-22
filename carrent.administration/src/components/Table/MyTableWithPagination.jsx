@@ -10,6 +10,7 @@ function MyTableWithPagination({
   handleDelete,
   searchTerm,
   serachBy,
+  size,
 }) {
   const [filtered, setFiltered] = useState([]);
   const [pagedList, setPagedList] = useState([]);
@@ -103,12 +104,17 @@ function MyTableWithPagination({
     setOnPage(event.target.value);
   };
 
+  let fontSize = "12px";
+  if (size === "sm") {
+    fontSize = "10px";
+  }
+
   return (
     <>
       <Card>
         <Card.Body>
           <Row>
-            <table className={`${styles.table}`} style={{ fontSize: "12px" }}>
+            <table className={`${styles.table}`} style={{ fontSize: fontSize }}>
               <thead>
                 <tr>
                   {thead.map((header, index) => (

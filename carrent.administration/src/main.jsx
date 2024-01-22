@@ -68,6 +68,8 @@ import Settings from "./pages/managment/Settings";
 import EditHomePage from "./pages/cms/EditHomePage";
 import AccountPage from "./pages/managment/AccountPage";
 import CarRabats from "./pages/cars/CarRabats";
+import CarAnalyses from "./pages/analyses/CarAnalyses";
+import UsersAnalyses from "./pages/analyses/UsersAnalyses";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -139,6 +141,8 @@ const router = createBrowserRouter([
       { path: "workOrder/priority", element: <WorkOrderPriority /> },
       { path: "company", element: <AboutCompany /> },
       { path: "account", element: <AccountPage /> },
+      { path: "analyses/car", element: <CarAnalyses /> },
+      { path: "analyses/users", element: <UsersAnalyses /> },
     ],
   },
   {

@@ -76,6 +76,10 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<AboutCompany> AboutCompany { get; }
         IGenericRepository<ApplicationSettings> ApplicationSettings { get; }
 
+        // newsletter
+        IGenericRepository<NewsletterSubscriber> NewsletterSubscriber { get; }
+        IGenericRepository<SendHistory> SendHistory { get; }
+        
         Task SaveAsync();
     }
 }

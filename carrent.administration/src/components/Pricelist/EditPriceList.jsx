@@ -2,40 +2,61 @@ import { Button, Card, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
 import EditPricelistDate from "./EditPricelistDate";
 import { useEffect, useState } from "react";
 import EditPricelistItems from "./EditPriceListItems";
-import fetchData from "../../functions/fetchData";
+import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
-function EditPriceList({ priceList, onCancel }) {
+function EditPriceList({ priceList, onCancel, onEdit }) {
   const [newName, setNewName] = useState("");
+  const [isDefault, setIsDefault] = useState(priceList.isDefault);
 
   useEffect(() => {
     if (priceList) {
       setNewName(priceList.name);
+      setIsDefault(priceList.isDefault);
     }
   }, [priceList]);
 
   const onSubmit = (event) => {
     event.preventDefault();
     console.log(newName);
-    fetchData(`https://localhost:7091/CarPriceList/update/${priceList.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { id: priceList.id, name: newName },
-    })
+
+    jwtInterceptor
+      .put(
+        `https://localhost:7091/CarPriceList/update/${priceList.id}`,
+        JSON.stringify({ id: priceList.id, name: newName }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((data) => {
-        setNewName(data.name);
-        console.log("data");
-        console.log(data);
+        toast.success("Zaktualizowano");
+        setNewName(data.data.name);
+        onEdit();
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Błąd edycja cenników");
       });
   };
 
   const handleChange = (event) => {
     const value = event.target.value;
     setNewName(value);
+  };
+
+  const setAsADefault = () => {
+    jwtInterceptor
+      .post(`CarPriceList/defaultPriceList/${priceList.id}`)
+      .then((data) => {
+        toast.success("zapisano zamiany");
+        setIsDefault(true);
+        onEdit();
+      })
+      .catch((error) => {
+        toast.error("Błąd");
+      });
   };
 
   if (!priceList) {
@@ -73,6 +94,18 @@ function EditPriceList({ priceList, onCancel }) {
                   >
                     Anuluj
                   </Button>
+                </Col>
+                <Col>
+                  {isDefault && (
+                    <p size="sm" className="m-2">
+                      Domyślny
+                    </p>
+                  )}
+                  {!isDefault && (
+                    <Button size="sm" className="m-2" onClick={setAsADefault}>
+                      Ustawa jako domyślny
+                    </Button>
+                  )}
                 </Col>
               </Row>
             </Form>

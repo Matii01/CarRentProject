@@ -1,5 +1,6 @@
 import { Card, Row, Col, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function ManageOpinion({ opinion, onChange, onDelete }) {
   const toggleAccepted = (event) => {
@@ -19,8 +20,10 @@ function ManageOpinion({ opinion, onChange, onDelete }) {
       })
       .then((data) => {
         onChange(opinion.id, true);
+        toast.success("Zakceptowano");
       })
       .catch((error) => {
+        toast.error("Wystąpił błąd");
         console.log(error);
       });
   };
@@ -34,9 +37,11 @@ function ManageOpinion({ opinion, onChange, onDelete }) {
       })
       .then((data) => {
         onChange(opinion.id, false);
+        toast.success("Ukryto opinię");
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Wystąpił błąd");
       });
   };
 
@@ -45,8 +50,10 @@ function ManageOpinion({ opinion, onChange, onDelete }) {
       .delete(`CarOpinion/${opinion.id}`)
       .then((data) => {
         onDelete(opinion.id);
+        toast.success("Usunięto");
       })
       .catch((error) => {
+        toast.error("Wystąpił błąd");
         console.log(error);
       });
   };

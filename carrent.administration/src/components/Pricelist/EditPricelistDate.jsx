@@ -2,6 +2,8 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import fetchData from "../../functions/fetchData";
 import styles from "./../../components/Table/Table.module.css";
+import jwtInterceptor from "../../utils/jwtInterceptor";
+import { formatDate } from "./../../utils/formDate";
 
 function EditPricelistDate({ pricelistId }) {
   const initialState = {
@@ -17,33 +19,36 @@ function EditPricelistDate({ pricelistId }) {
   }, [pricelistId]);
 
   const getData = () => {
-    fetchData(
-      `https://localhost:7091/CarPriceList/${pricelistId}/PricelistDate`
-    )
+    jwtInterceptor
+      .get(`CarPriceList/${pricelistId}/PricelistDate`)
       .then((data) => {
-        setPricelistDates(data);
-        console.log("data");
-        console.log(data);
+        transformAndSetData(data.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  const transformAndSetData = (data) => {
+    const transformed = data.map((it) => ({
+      ...it,
+      dateFrom: formatDate(it.dateFrom),
+      dateTo: formatDate(it.dateTo),
+    }));
+    setPricelistDates(transformed);
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
 
-    console.log(newData);
-    fetchData("https://localhost:7091/CarPriceList/addDate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: newData,
-    })
+    jwtInterceptor
+      .post(`CarPriceList/addDate`, JSON.stringify(newData), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         getData();
-        console.log(data);
         setNewData(initialState);
       })
       .catch((error) => {
@@ -60,20 +65,10 @@ function EditPricelistDate({ pricelistId }) {
   };
 
   const onDeleteClick = (itemId) => {
-    fetch(`https://localhost:7091/CarPriceList/deletePricelistDate/${itemId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    jwtInterceptor
+      .delete(`CarPriceList/deletePricelistDate/${itemId}`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        if (response.status == 200 || response.status == 204) {
-          console.log("ok 200");
-          getData();
-        }
+        getData();
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -27,8 +27,10 @@ namespace CarRent.Repository.Repositories
         public IQueryable<PriceList> GetCarPriceListForClient(int carId, DateTime currentData)
         {
             var pricelist =  context.PricesList
+                .Where(x => x.IsActive == true)
+                .Where(x => x.IsDefault == true)
                 .Include(x => x.PricelistDates)
-                .Include(x=>x.PricelistItems)
+                .Include(x => x.PricelistItems)
                 .Where(x =>x.CarId == carId )
                 .Where(x => x.PricelistDates
                     .Any(x => x.DateFrom<=currentData && x.DateTo >= currentData));
@@ -41,6 +43,8 @@ namespace CarRent.Repository.Repositories
             var currentData = DateTime.Now;
 
             var pricelist = context.PricesList
+                .Where (x => x.IsActive == true)
+                .Where(x => x.IsDefault == true)
                 .Include(x => x.PricelistDates)
                 .Include(x => x.PricelistItems)
                 .Where(x => x.CarId == carId)

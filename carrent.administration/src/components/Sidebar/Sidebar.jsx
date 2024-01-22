@@ -23,6 +23,11 @@ import styles from "./Sidebar.module.css";
 import DropdownList from "./DropDownList";
 
 function Sidebar({ hide, toggleSidebar, color, image, routes }) {
+  const analyses = [
+    { name: "Samochodów", path: "analyses/car" },
+    { name: "Klientów", path: "analyses/users" },
+  ];
+
   const pages = [
     { name: "Strona Główna", path: "/cms/home" },
     { name: "Menu", path: "" },
@@ -95,13 +100,14 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
             className={
               false ? "active active-pro" : activeRoute("admin/upgrade")
             }
-          >
-            <NavLink to={"#"} className="nav-link">
-              <i className={"nc-icon nc-alien-33"} />
-              <p>Analizy</p>
-            </NavLink>
+          ></li>
+          <li>
+            <DropdownList
+              title="analizy"
+              icon="nc-icon nc-alien-33"
+              pages={analyses}
+            />
           </li>
-
           <li>
             <DropdownList
               title="Firma"
