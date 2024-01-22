@@ -121,6 +121,10 @@ function WorkOrders() {
     setIsEditMode(true);
   };
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Container fluid>
@@ -148,7 +152,7 @@ function WorkOrders() {
                         </Button>
                       </Col>
                       <Col>
-                        <Form className="d-flex" onSubmit={handleSearch}>
+                        <Form className="d-flex" onSubmit={handleSearchSubmit}>
                           <Form.Control
                             size="sm"
                             name="serachTerm"
@@ -159,13 +163,6 @@ function WorkOrders() {
                             value={""}
                             onChange={handleChange}
                           />
-                          <Button
-                            variant="outline-success"
-                            type="submit"
-                            size="sm"
-                          >
-                            Search
-                          </Button>
                         </Form>
                       </Col>
                     </Row>

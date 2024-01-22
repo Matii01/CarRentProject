@@ -69,7 +69,9 @@ function RentalStatus() {
         toast.error("Błąd");
       });
   };
-
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
       <ToastContainer />
@@ -88,7 +90,7 @@ function RentalStatus() {
                     </Button>
                   </Col>
                   <Col>
-                    <Form className="d-flex" onSubmit={handleSearch}>
+                    <Form className="d-flex" onSubmit={handleSearchSubmit}>
                       <Form.Control
                         size="sm"
                         name="serachTerm"
@@ -99,9 +101,6 @@ function RentalStatus() {
                         value={searchTerm}
                         onChange={handleChange}
                       />
-                      <Button variant="outline-success" type="submit" size="sm">
-                        Search
-                      </Button>
                     </Form>
                   </Col>
                 </Row>
