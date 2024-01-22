@@ -19,10 +19,12 @@ function MyTableWithPagination({
   const [hasPrevious, setHasPrevious] = useState(true);
 
   useEffect(() => {
-    const newList = filtered.filter((e) =>
-      e[serachBy].toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setPagedList(newList);
+    try {
+      const newList = filtered.filter((e) =>
+        e[serachBy].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setPagedList(newList);
+    } catch {}
   }, [searchTerm]);
 
   useEffect(() => {

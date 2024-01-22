@@ -35,7 +35,7 @@ function EditKilometreLimit({ editItem, onCancel, updateView }) {
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setEditedMake((prev) => ({ ...prev, [name]: value }));
+    setEditedItem((prev) => ({ ...prev, [name]: value }));
   };
 
   if (editedItem == null) {
@@ -46,7 +46,7 @@ function EditKilometreLimit({ editItem, onCancel, updateView }) {
     <>
       <Card className="p-2">
         <Card.Header>
-          <Card.Title as="h5">Klimatyzacje - edycja</Card.Title>
+          <Card.Title as="h5">Limity kilometrów - edycja</Card.Title>
         </Card.Header>
         <Card.Body className="table-full-width table-responsive px-0">
           <Form onSubmit={onSubmit}>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row, Button, Form } from "react-bootstrap";
-import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditConditioning from "../../components/AirConditioning/EditConditioning";
 import AddConditioning from "../../components/AirConditioning/AddConditioning";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { ToastContainer, toast } from "react-toastify";
 
 function AirConditioning() {
   const [items, setItems] = useState();
@@ -35,6 +36,7 @@ function AirConditioning() {
       .delete(`https://localhost:7091/AirConditioning/${id}`)
       .then((results) => {
         getData();
+        toast.success("usunięto");
       });
   };
 
@@ -53,6 +55,7 @@ function AirConditioning() {
 
   const updateView = () => {
     getData();
+    toast.success("Zapisano zmiany");
   };
 
   if (items == null) {
@@ -60,6 +63,7 @@ function AirConditioning() {
   }
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -96,11 +100,12 @@ function AirConditioning() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   items={items}
                   thead={["Id", "Model", "Actions"]}
                   item={["id", "name"]}
                   searchTerm={searchTerm}
+                  serachBy={"name"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={handleDelete}
                 />
@@ -124,3 +129,14 @@ function AirConditioning() {
 }
 
 export default AirConditioning;
+
+/**
+<CarInfoTable
+    items={items}
+    thead={["Id", "Model", "Actions"]}
+    item={["id", "name"]}
+    searchTerm={searchTerm}
+    onDoubleClick={onDoubleClick}
+    handleDelete={handleDelete}
+  />
+ */

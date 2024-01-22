@@ -5,6 +5,8 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditKilometreLimit from "../../components/KilometreLimit/EditKilometreLimit";
 import AddKilometreLimit from "../../components/KilometreLimit/AddKilometreLimit";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { ToastContainer, toast } from "react-toastify";
 
 function KilometreLimit() {
   const [items, setItems] = useState();
@@ -54,6 +56,7 @@ function KilometreLimit() {
 
   const updateView = () => {
     getData();
+    toast.success("Zapisano zmiany");
   };
 
   if (items == null) {
@@ -61,6 +64,7 @@ function KilometreLimit() {
   }
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -97,12 +101,12 @@ function KilometreLimit() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   items={items}
                   thead={["Id", "Wartość", "Actions"]}
                   item={["id", "limitValue"]}
                   searchTerm={searchTerm}
-                  filterBy="name"
+                  serachBy={"limitValue"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={handleDelete}
                 />
@@ -126,3 +130,15 @@ function KilometreLimit() {
 }
 
 export default KilometreLimit;
+
+/* 
+<CarInfoTable
+      items={items}
+      thead={["Id", "Wartość", "Actions"]}
+      item={["id", "limitValue"]}
+      searchTerm={searchTerm}
+      filterBy="name"
+      onDoubleClick={onDoubleClick}
+      handleDelete={handleDelete}
+    />
+*/
