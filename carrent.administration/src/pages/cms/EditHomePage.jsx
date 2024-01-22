@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Card,
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
+import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function EditHomePage() {
   const [validated, setValidated] = useState(false);
@@ -62,6 +55,7 @@ function EditHomePage() {
       .then((data) => {
         if (data.status === 204) {
           setValidated(false);
+          toast.success("Zapisano zmiany");
         }
       })
       .catch((error) => {
@@ -70,6 +64,7 @@ function EditHomePage() {
   };
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row></Row>
         <Row>
