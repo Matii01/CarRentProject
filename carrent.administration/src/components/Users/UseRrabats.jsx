@@ -3,6 +3,7 @@ import { Row, Card, Form, Col, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../Table/MyTableWithPagination";
 import { formatDate } from "../../utils/formDate";
+import { toast } from "react-toastify";
 
 function UserRabats({ userId }) {
   const [rabats, setRabats] = useState();
@@ -62,6 +63,7 @@ function UserRabats({ userId }) {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.response.data.Message);
       });
   };
 
@@ -91,6 +93,7 @@ function UserRabats({ userId }) {
               <Form.Group as={Col}>
                 <Form.Label>Tytuł</Form.Label>
                 <Form.Control
+                  required
                   type="text"
                   name="Title"
                   value={newUserRabat.Title}
@@ -101,6 +104,7 @@ function UserRabats({ userId }) {
               <Form.Group as={Col}>
                 <Form.Label>Wartość w %</Form.Label>
                 <Form.Control
+                  required
                   type="number"
                   name="RabatPercentValue"
                   value={newUserRabat.RabatPercentValue}
@@ -112,6 +116,7 @@ function UserRabats({ userId }) {
             <Form.Group className="mb-3" controlId="formGridAddress1">
               <Form.Label>Data wygaśnięcia</Form.Label>
               <Form.Control
+                required
                 type="date"
                 name="DateOfExpiration"
                 value={newUserRabat.DateOfExpiration}

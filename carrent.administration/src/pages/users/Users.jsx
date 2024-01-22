@@ -3,6 +3,7 @@ import { Container, Card, Row, Col, Button, Form } from "react-bootstrap";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import ManageUser from "../../components/Users/ManageUser";
+import { ToastContainer } from "react-toastify";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
@@ -40,6 +41,7 @@ function UsersPage() {
 
   return (
     <>
+      <ToastContainer />
       <Container style={{ fontSize: "12px" }}>
         <Row>
           <Col md={6}>

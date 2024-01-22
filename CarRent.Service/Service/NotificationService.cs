@@ -54,6 +54,7 @@ namespace CarRent.Service.Service
         {
             var items = _repository.Notification
                 .FindByCondition(x => x.IsActive == true, false)
+                .OrderByDescending(x => x.CreatedDate)
                 .Search(notificationParams)
                 .Select(x => new NotificationDto(
                          x.Id,

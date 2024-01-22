@@ -144,10 +144,10 @@ namespace CarRent.Service.Service
 
             if(!await CanAddRabat(newRabat))
             {
-                throw new DatesTakenException();
+                throw new UserHaveRabatException();
             }
 
-            RabatForUser rabat = new RabatForUser()
+            RabatForUser rabat = new ()
             {
                 Title = newRabat.Title,
                 IsActive = true,

@@ -78,13 +78,32 @@ function UserNotification({ userId }) {
     getFilteredItems();
   };
 
+  const toogleAddNotification = () => {
+    setShowAddNotification(!showAddNotification);
+  };
+
   return (
     <>
       <Card>
         <Card.Body>
           <Row>
             <Col>
-              <Accordion defaultActiveKey="0" style={{ border: 0 }}>
+              <Button
+                className="w-75"
+                variant="dark"
+                size="sm"
+                onClick={toogleAddNotification}
+              >
+                {!showAddNotification && "Dodaj nowe powiadomienie +"}
+                {showAddNotification && "Ukryj"}
+              </Button>
+              {showAddNotification && (
+                <AddNotificationForUser
+                  userId={userId}
+                  onAdd={onNotificationAdd}
+                />
+              )}
+              {/* <Accordion defaultActiveKey="0" style={{ border: 0 }}>
                 <Accordion.Item eventKey="0" style={{ border: 0 }}>
                   <Accordion.Header>Nowe powiadomienie</Accordion.Header>
                   <Accordion.Body style={{ border: 0 }}>
@@ -94,10 +113,10 @@ function UserNotification({ userId }) {
                     />
                   </Accordion.Body>
                 </Accordion.Item>
-              </Accordion>
+              </Accordion> */}
             </Col>
           </Row>
-          <Row className="mt-5">
+          <Row className="mt-3">
             <Col>
               <TableWithPagination
                 thead={["ID", "Tytuł", "Data dodania", "Odczytano"]}
