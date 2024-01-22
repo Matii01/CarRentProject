@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Card,
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
+import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function EditContactPage() {
   const [validated, setValidated] = useState(false);
@@ -72,16 +65,18 @@ function EditContactPage() {
       })
       .then((data) => {
         if (data.status === 204) {
+          toast.success("Zapisono zmiany");
           setValidated(false);
         }
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Błąd");
       });
   };
   return (
     <>
-      {" "}
+      <ToastContainer />
       <Container fluid>
         <Row></Row>
         <Row>

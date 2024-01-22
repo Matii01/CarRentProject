@@ -14,7 +14,6 @@ import WorkerSidebar from "./components/Sidebar/WorkerSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setUserName, setUserRoles } from "./shared/userSlice";
-import { ToastContainer } from "react-toastify";
 
 function App() {
   const [hasImage, setHasImage] = React.useState(true);
@@ -138,7 +137,6 @@ function App() {
               <Outlet />
             </div>
             <Footer />
-            <ToastContainer />
           </div>
         </div>
       )}
