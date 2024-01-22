@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function AddRentalStatus({ onAdd }) {
   const [newStatus, setNewStatus] = useState({
@@ -27,8 +28,8 @@ function AddRentalStatus({ onAdd }) {
         }
       )
       .then((data) => {
-        console.log(data.data);
-        setNewStatus({ status: "", remarks: "" });
+        toast.success("Zapisano zmiany");
+        setNewStatus({ status: "", remarks: "", isDefault: false });
         onAdd();
       })
       .catch((error) => console.log(error));
@@ -41,7 +42,6 @@ function AddRentalStatus({ onAdd }) {
   const handleChange = (event) => {
     const { value, name } = event.target;
     setNewStatus((prev) => ({ ...prev, [name]: value }));
-    console.log(value);
   };
 
   const handleCheckboxChange = (event) => {

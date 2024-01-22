@@ -6,6 +6,8 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddRentalStatus from "../../components/RentalStatus/AddRentalStatus";
 import EditRentalStatus from "../../components/RentalStatus/EditRentalStatus";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function RentalStatus() {
   const [statuses, setStatuses] = useState([]);
@@ -57,11 +59,20 @@ function RentalStatus() {
   };
 
   const onDeleteClick = (itemId) => {
-    console.log(itemId);
+    jwtInterceptor
+      .delete(`https://localhost:7091/RentalStatus/${itemId}`)
+      .then((data) => {
+        toast.success("Usunięto");
+        refreshView();
+      })
+      .catch((error) => {
+        toast.error("Błąd");
+      });
   };
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -96,11 +107,12 @@ function RentalStatus() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   thead={["Id", "Status", "Uwagi", "Actions"]}
                   items={statuses}
                   item={["id", "status", "remarks"]}
                   searchTerm={searchTerm}
+                  serachBy={"status"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={onDeleteClick}
                 />
@@ -133,3 +145,14 @@ function RentalStatus() {
 }
 
 export default RentalStatus;
+
+/*
+<CarInfoTable
+  thead={["Id", "Status", "Uwagi", "Actions"]}
+  items={statuses}
+  item={["id", "status", "remarks"]}
+  searchTerm={searchTerm}
+  onDoubleClick={onDoubleClick}
+  handleDelete={onDeleteClick}
+                />
+*/

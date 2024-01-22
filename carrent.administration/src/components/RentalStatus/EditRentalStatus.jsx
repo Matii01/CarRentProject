@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 function EditRentalStatus({ editStatus, onCancel, updateView }) {
   const [editedStatus, setEditedStatus] = useState(editStatus);
 
@@ -27,6 +28,7 @@ function EditRentalStatus({ editStatus, onCancel, updateView }) {
       )
       .then((data) => {
         console.log(data);
+        toast.success("Zapisano zmiany");
         updateView();
       })
       .catch((error) => console.log(error));
