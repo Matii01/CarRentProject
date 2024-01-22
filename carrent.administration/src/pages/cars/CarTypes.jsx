@@ -3,6 +3,8 @@ import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import axios from "axios";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 const initialState = {
   newCarType: { id: 0, name: "" },
@@ -156,6 +158,7 @@ function CarTypes() {
       .then(() => {
         getData();
         onCancel();
+        toast.success("Zapisano zmiany");
       })
       .catch((error) => {
         console.log(error);
@@ -183,6 +186,7 @@ function CarTypes() {
       .then(() => {
         getData();
         onCancel();
+        toast.success("Pomyślnie dodano");
       })
       .catch((error) => {
         console.log(error);
@@ -197,16 +201,18 @@ function CarTypes() {
   };
 
   const handleDelete = (id) => {
+    console.log(id);
     console.log("delete");
     jwtInterceptor
-      .delete(`https://localhost:7091/cartype/${id}`)
+      .delete(`https://localhost:7091/cartype/delete/${id}`)
       .then(() => {
         getData();
         onCancel();
+        toast.success("Pomyślnie usunięto");
       })
       .catch((error) => {
         console.log(error);
-        setError(error);
+        toast.error("Błąd");
       });
   };
 
@@ -216,6 +222,7 @@ function CarTypes() {
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -249,33 +256,13 @@ function CarTypes() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <table className={`${styles.table}`}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Type</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {state.filteredCarTypes.map((type) => (
-                      <tr
-                        key={type.id}
-                        onDoubleClick={() => onDoubleClick(type)}
-                      >
-                        <td>{type.id}</td>
-                        <td>{type.name}</td>
-                        <td>
-                          <i
-                            className="fa-solid fa-trash"
-                            onClick={() => handleDelete(type.id)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["Id", "Nazwa", ""]}
+                  items={state.filteredCarTypes}
+                  item={["id", "name"]}
+                  onDoubleClick={onDoubleClick}
+                  handleDelete={handleDelete}
+                />
               </Card.Body>
             </Card>
           </Col>
@@ -332,3 +319,33 @@ function CarTypes() {
 }
 
 export default CarTypes;
+
+/*
+ <table className={`${styles.table}`}>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {state.filteredCarTypes.map((type) => (
+        <tr
+          key={type.id}
+          onDoubleClick={() => onDoubleClick(type)}
+        >
+          <td>{type.id}</td>
+          <td>{type.name}</td>
+          <td>
+            <i
+              className="fa-solid fa-trash"
+              onClick={() => handleDelete(type.id)}
+              style={{ cursor: "pointer" }}
+            ></i>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+*/
