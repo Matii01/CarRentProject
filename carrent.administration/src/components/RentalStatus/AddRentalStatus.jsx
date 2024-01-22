@@ -36,7 +36,7 @@ function AddRentalStatus({ onAdd }) {
   };
 
   const handleCancel = () => {
-    setNewStatus({ status: "", remarks: "" });
+    setNewStatus({ status: "", remarks: "", isDefault: false });
   };
 
   const handleChange = (event) => {

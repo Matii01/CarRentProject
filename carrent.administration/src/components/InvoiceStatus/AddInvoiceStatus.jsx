@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function AddInvoiceStatus({ onAdd }) {
   //public string Name { get; set; } = null!;
@@ -29,11 +30,14 @@ function AddInvoiceStatus({ onAdd }) {
         }
       )
       .then((data) => {
-        console.log(data.data);
+        toast.success("Dodano");
         setNewStatus({ name: "", description: "" });
         onAdd();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.error("Dodawanie: Błąd");
+        console.log(error);
+      });
   };
 
   const handleCancel = () => {

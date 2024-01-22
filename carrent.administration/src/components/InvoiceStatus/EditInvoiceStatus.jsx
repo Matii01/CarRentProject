@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function EditInvoiceStatus({ editStatus, onCancel, updateView }) {
   const [editedStatus, setEditedStatus] = useState(editStatus);
@@ -27,10 +28,14 @@ function EditInvoiceStatus({ editStatus, onCancel, updateView }) {
         }
       )
       .then((data) => {
+        toast.success("Zapisano zmiany");
         console.log(data);
         updateView();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.error("Edycja: Błąd");
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {

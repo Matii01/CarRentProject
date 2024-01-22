@@ -4,6 +4,8 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddInvoiceStatus from "../../components/InvoiceStatus/AddInvoiceStatus";
 import EditInvoiceStatus from "../../components/InvoiceStatus/EditInvoiceStatus";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function InvoiceStatus() {
   const [statuses, setStatuses] = useState([]);
@@ -55,11 +57,23 @@ function InvoiceStatus() {
   };
 
   const onDeleteClick = (itemId) => {
-    console.log(itemId);
+    jwtInterceptor
+      .delete(`https://localhost:7091/InvoiceStatus/${itemId}`)
+      .then((data) => {
+        toast.success("Usunięto");
+        refreshView();
+      })
+      .catch((error) => {
+        toast.error("Błąd");
+      });
   };
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -75,7 +89,7 @@ function InvoiceStatus() {
                     </Button>
                   </Col>
                   <Col>
-                    <Form className="d-flex" onSubmit={handleSearch}>
+                    <Form className="d-flex" onSubmit={handleSearchSubmit}>
                       <Form.Control
                         size="sm"
                         name="serachTerm"
@@ -86,19 +100,17 @@ function InvoiceStatus() {
                         value={searchTerm}
                         onChange={handleChange}
                       />
-                      <Button variant="outline-success" type="submit" size="sm">
-                        Search
-                      </Button>
                     </Form>
                   </Col>
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   thead={["Id", "Status", "Opis", "Actions"]}
                   items={statuses}
                   item={["id", "name", "description"]}
                   searchTerm={searchTerm}
+                  serachBy={"name"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={onDeleteClick}
                 />
@@ -123,3 +135,14 @@ function InvoiceStatus() {
 }
 
 export default InvoiceStatus;
+
+/*
+<CarInfoTable
+    thead={["Id", "Status", "Opis", "Actions"]}
+    items={statuses}
+    item={["id", "name", "description"]}
+    searchTerm={searchTerm}
+    onDoubleClick={onDoubleClick}
+    handleDelete={onDeleteClick}
+  />
+*/
