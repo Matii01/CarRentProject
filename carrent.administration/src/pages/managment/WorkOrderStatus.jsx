@@ -4,6 +4,8 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddWorkOrderStatus from "../../components/WorkOrder/AddWorkOrderStatus";
 import EditWorkOrderStatus from "../../components/WorkOrder/EditWorkOrderStatus";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function WorkOrderStatus() {
   const [statuses, setStatuses] = useState([]);
@@ -61,14 +63,17 @@ function WorkOrderStatus() {
       .then((data) => {
         const filtered = statuses.filter((e) => e.id != itemId);
         setStatuses(filtered);
+        toast.success("Usunięto");
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Usuwanie  błąd");
       });
   };
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -103,11 +108,12 @@ function WorkOrderStatus() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   thead={["Id", "Status", "Opis", "Actions"]}
                   items={statuses}
                   item={["id", "name", "description"]}
                   searchTerm={searchTerm}
+                  serachBy={"name"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={onDeleteClick}
                 />
@@ -132,3 +138,14 @@ function WorkOrderStatus() {
 }
 
 export default WorkOrderStatus;
+
+/*
+<CarInfoTable
+                  thead={["Id", "Status", "Opis", "Actions"]}
+                  items={statuses}
+                  item={["id", "name", "description"]}
+                  searchTerm={searchTerm}
+                  onDoubleClick={onDoubleClick}
+                  handleDelete={onDeleteClick}
+                />
+*/

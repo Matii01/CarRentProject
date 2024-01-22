@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function AddWorkOrderStatus({ onAdd }) {
   const [newStatus, setNewStatus] = useState({
@@ -26,11 +27,15 @@ function AddWorkOrderStatus({ onAdd }) {
         }
       )
       .then((data) => {
+        toast.success("Dodano");
         console.log(data.data);
         setNewStatus({ name: "", description: "" });
         onAdd();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.error("Dodawanie - bład");
+        console.log(error);
+      });
   };
 
   const handleCancel = () => {
