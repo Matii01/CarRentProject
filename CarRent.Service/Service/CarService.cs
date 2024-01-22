@@ -133,9 +133,22 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        public Task DeleteCar(int id)
+        public async Task DeleteCar(int id)
         {
-            throw new NotImplementedException();
+            var car = await _repository.Car.GetCarAsync(id, true) 
+                ?? throw new Exception("not found");
+
+            car.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        public async Task SetCarVisibility(int id, bool IsVisible)
+        {
+            var car = await _repository.Car.GetCarAsync(id, true)
+                ?? throw new Exception("not found");
+
+            car.IsVisible = IsVisible;
+            await _repository.SaveAsync();
         }
     }
 }

@@ -61,7 +61,8 @@ namespace CarRent.Service.Helper
                 car.KilometrLimit.Id,
                 car.AirConditioningType.Id,
                 car.GearBoxType.Id,
-                car.CarDrive.Id
+                car.CarDrive.Id,
+                car.IsVisible
                 );
         }
         public static void UpdateCar(ref Car toUpdate, NewCarDto carDto)

@@ -14,6 +14,7 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function CarDetails() {
   const initialState = {
@@ -136,12 +137,44 @@ function CarDetails() {
       });
   };
 
+  const SetCarAsVisible = () => {
+    ToggleVisibility(true);
+  };
+  const SetCarAsHide = () => {
+    ToggleVisibility(false);
+  };
+
+  const ToggleVisibility = (value) => {
+    jwtInterceptor
+      .post(`car/setVisibility/${param.carId}`, JSON.stringify(value), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        SetCarVisibility(value);
+        toast.success("Zapisano zmiany");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error);
+      });
+  };
+
+  const SetCarVisibility = (value) => {
+    setCar((prev) => ({
+      ...prev,
+      IsVisible: value,
+    }));
+  };
+
   if (!carInfo) {
     return <p>Loading ...</p>;
   }
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col>
@@ -170,6 +203,19 @@ function CarDetails() {
                 <Row>
                   <Col>
                     <Card.Title as="h4">Edit Car</Card.Title>
+                  </Col>
+
+                  <Col className="d-flex justify-content-end">
+                    {!car.IsVisible && (
+                      <Button variant="dark" onClick={SetCarAsVisible}>
+                        Ustaw jako widoczny
+                      </Button>
+                    )}
+                    {car.IsVisible && (
+                      <Button variant="dark" onClick={SetCarAsHide}>
+                        Ustaw jako ukryty
+                      </Button>
+                    )}
                   </Col>
                   <Col className="d-flex justify-content-end">
                     {!isRecommended && (

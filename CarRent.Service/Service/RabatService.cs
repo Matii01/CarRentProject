@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
@@ -114,12 +115,12 @@ namespace CarRent.Service.Service
         {
             if (newRabat.RabatPercentValue > MAX_RABAT_VAlUE || newRabat.RabatPercentValue <= 0)
             {
-                throw new Exception("rabat must be in the range of 1 - 50");
+                throw new RabatRangeBadRequest();
             }
 
             if (!await CanAddRabat(carId, newRabat))
             {
-                throw new Exception("car have active rabat");
+                throw new DatesTakenException();
             }
 
             Rabat rabat = new()
@@ -138,12 +139,12 @@ namespace CarRent.Service.Service
         {
             if(newRabat.RabatPercentValue > MAX_RABAT_VAlUE || newRabat.RabatPercentValue <= 0)
             {
-                throw new Exception("rabat must be in the range of 1 - 50");
+                throw new RabatRangeBadRequest();
             }
 
             if(!await CanAddRabat(newRabat))
             {
-                throw new Exception("user have active rabat");
+                throw new DatesTakenException();
             }
 
             RabatForUser rabat = new RabatForUser()

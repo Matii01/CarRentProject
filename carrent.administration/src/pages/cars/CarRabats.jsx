@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { formatDate } from "../../utils/formDate";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function CarRabats() {
   const param = useParams();
@@ -55,10 +56,11 @@ function CarRabats() {
       })
       .then((data) => {
         console.log(data);
+        toast.error("Pomyślnie zapisano");
         getRabats();
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.response.data.Message);
       });
   };
 
@@ -68,6 +70,7 @@ function CarRabats() {
 
   return (
     <>
+      <ToastContainer />
       <Container style={{ fontSize: "12px" }}>
         <Row>
           <Col xs={5}>
@@ -78,6 +81,7 @@ function CarRabats() {
                     <Form.Group as={Col}>
                       <Form.Label>Wartość w %</Form.Label>
                       <Form.Control
+                        required
                         type="number"
                         name="RabatPercentValue"
                         value={newRabat.RabatPercentValue}
@@ -94,6 +98,7 @@ function CarRabats() {
                     >
                       <Form.Label>Data od</Form.Label>
                       <Form.Control
+                        required
                         type="date"
                         name="DateFrom"
                         value={newRabat.DateFrom}
@@ -108,6 +113,7 @@ function CarRabats() {
                     >
                       <Form.Label>Data do</Form.Label>
                       <Form.Control
+                        required
                         type="date"
                         name="DateTo"
                         value={newRabat.DateTo}

@@ -112,6 +112,11 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
+        public async Task<RentalDataForClientDto> CreateRentalAndOutstandingInvoiceAndAssignUser()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
             string? paymentIntent,
                 InvoiceDto invoiceDto,
@@ -122,6 +127,7 @@ namespace CarRent.Service.Service
             {
                 throw new Exception("Car have rental on this time");
             }
+
             var price = await _priceList.GetPriceForCarForDate(userId, newRental);
 
             string invoiceNumber = await GenerateInvoiceNumber();
@@ -131,6 +137,7 @@ namespace CarRent.Service.Service
                 Comment = invoiceDto.Comment, 
                 PaymentIntentId = paymentIntent,
                 IsActive = true, 
+                InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
                 Client = new IndividualClient
                 {
                     FirstName = clientDetails.FirstName, 
@@ -371,6 +378,16 @@ namespace CarRent.Service.Service
             {
                 return "NR/1";
             }
+        }
+
+        private int GetInvoiceStatusForPaidInvoice()
+        {
+            return 2;
+        }
+
+        private async Task<int> GetInvoiceStatusForOutstandingInvoice()
+        {
+            return 0;
         }
     }
 }

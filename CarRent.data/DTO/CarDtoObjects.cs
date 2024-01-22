@@ -40,7 +40,8 @@ namespace CarRent.data.DTO
         int KilometrLimitId,
         int AirConditioningTypeId,
         int GearBoxTypeId,
-        int CarDriveId
+        int CarDriveId,
+        bool? IsVisible
         );
 
     public record CarDto(

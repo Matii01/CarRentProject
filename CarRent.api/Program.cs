@@ -1,3 +1,4 @@
+using CarRent.api;
 using CarRent.api.Extensions;
 using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
@@ -19,7 +20,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 var app = builder.Build();
-
+app.ConfigureExceptionHandler();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();

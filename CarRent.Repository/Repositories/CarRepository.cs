@@ -24,27 +24,11 @@ namespace CarRent.Repository.Repositories
 
         public async Task<PagedList<CarListDtoForClient>> GetCarsForClientAsync(CarParameters parameters, bool trackChanges)
         {
-            //TODO można lepiej 
-
-            //PagedList<CarListDtoForClient> pagedList = null;
-
-            //var pagedList = await context.Cars
-            //    .GetPagedListAsync(parameters);
-
-            //var newList = context.Cars.Search(parameters).Select(x => new CarListDtoForClient(
-            //     x.Id,
-            //     x.Name,
-            //     x.CarMake.Name,
-            //     x.CarImage ?? " ",
-            //     x.EngineType.Name,
-            //     x.GearBoxType.Name,
-            //     x.AirConditioningType.Name,
-            //     0
-            //     ));
-
             var currentData = DateTime.Now;
 
             var list = context.Cars
+             .Where(x => x.IsActive == true)
+             .Where(x => x.IsVisible == true)
              .Search(parameters)
              .Select(x => new CarListDtoForClient(
                  x.Id,

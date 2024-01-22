@@ -21,6 +21,7 @@ namespace CarRent.Service.Interfaces
         Task<bool> IsCarRecommendedAsync(int carId);
         Task<IEnumerable<CarListForRecommended>> GetRecommended();
         Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges);
+        Task SetCarVisibility(int id, bool IsVisible);
         Task RemoveRecommendedAsync(int id);
         Task DeleteCar(int id);
     }

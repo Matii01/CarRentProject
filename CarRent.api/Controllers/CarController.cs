@@ -156,6 +156,16 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles = "Administrator,CarEditor")]
+        [HttpPost("setVisibility/{id:int}")]
+        public async Task<IActionResult> SetCarVisibility(int id, [FromBody] bool IsVisible)
+        {
+            await Console.Out.WriteLineAsync("set visibility");
+            await _services.CarService.SetCarVisibility(id, IsVisible);
+            return NoContent();
+        }
+
         [Authorize(Roles = "Administrator,CarEditor")]
         [HttpDelete("delete")]
         public Task<IActionResult> DeleteCar(int id)
