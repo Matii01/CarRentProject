@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import EditFooterLinks from "./EditFooterLinks";
+import { ToastContainer, toast } from "react-toastify";
 
 function EditFooter() {
   const [validated, setValidated] = useState(false);
@@ -65,8 +66,9 @@ function EditFooter() {
       })
       .then((data) => {
         if (data.status === 204) {
-          setValidated(false);
         }
+        toast.success("Zapisano zmiany");
+        setValidated(false);
       })
       .catch((error) => {
         console.log(error);
@@ -77,6 +79,7 @@ function EditFooter() {
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col>

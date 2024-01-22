@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
 
 function EditFooterLinks({ links, onEdit }) {
   const [validated, setValidated] = useState(false);
@@ -48,6 +49,7 @@ function EditFooterLinks({ links, onEdit }) {
       )
       .then((data) => {
         console.log(data.data);
+        toast.success("Zapiasano zmiany");
       })
       .catch((error) => {
         console.log(error);
@@ -82,13 +84,14 @@ function EditFooterLinks({ links, onEdit }) {
 
   const removeLink = (id) => {
     if (id == 0) {
+      toast.success("usunięto");
       removeFromList(id);
       return;
     }
     jwtInterceptor
       .delete(`ContentManagement/deleteFooterPathLink/${id}`)
       .then((data) => {
-        console.log("deleted");
+        toast.success("usunięto");
         removeFromList(id);
       })
       .catch((error) => {
