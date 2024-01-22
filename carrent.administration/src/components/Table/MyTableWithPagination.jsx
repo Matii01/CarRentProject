@@ -97,7 +97,7 @@ function MyTableWithPagination({
       <Card>
         <Card.Body>
           <Row>
-            <table className={`${styles.table}`}>
+            <table className={`${styles.table}`} style={{ fontSize: "12px" }}>
               <thead>
                 <tr>
                   {thead.map((header, index) => (

@@ -5,6 +5,7 @@ import EditCarMake from "../../components/CarMakes/EditCarMakes";
 import AddCarMake from "../../components/CarMakes/AddCarMakes";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
@@ -128,35 +129,13 @@ function CarMakes() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <table className={`${styles.table}`}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Model</th>
-                      <th>Opis</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredList.map((type) => (
-                      <tr
-                        key={type.id}
-                        onDoubleClick={() => onDoubleClick(type)}
-                      >
-                        <td>{type.id}</td>
-                        <td>{type.name}</td>
-                        <td>{type.description}</td>
-                        <td>
-                          <i
-                            className="fa-solid fa-trash"
-                            onClick={() => handleDelete(type.id)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["ID", "Model", "Opis", ""]}
+                  items={filteredList}
+                  item={["id", "name", "description"]}
+                  handleDelete={handleDelete}
+                  onDoubleClick={onDoubleClick}
+                />
               </Card.Body>
             </Card>
           </Col>
@@ -186,3 +165,35 @@ function CarMakes() {
 }
 
 export default CarMakes;
+
+/*
+<table className={`${styles.table}`}>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Model</th>
+                      <th>Opis</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredList.map((type) => (
+                      <tr
+                        key={type.id}
+                        onDoubleClick={() => onDoubleClick(type)}
+                      >
+                        <td>{type.id}</td>
+                        <td>{type.name}</td>
+                        <td>{type.description}</td>
+                        <td>
+                          <i
+                            className="fa-solid fa-trash"
+                            onClick={() => handleDelete(type.id)}
+                            style={{ cursor: "pointer" }}
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+*/
