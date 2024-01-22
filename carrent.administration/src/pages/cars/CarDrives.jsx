@@ -2,6 +2,8 @@ import React, { useEffect, useReducer, useState } from "react";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 const initialState = {
   newCarDrive: { id: 0, name: "", description: "" },
@@ -75,6 +77,7 @@ function CarDrives() {
         });
       })
       .catch((error) => {
+        toast.error("błąd wczytywania");
         dispatch({
           type: "SET_ERROR",
           payload: error,
@@ -90,7 +93,7 @@ function CarDrives() {
 
   const handleSearch = (event) => {
     event.preventDefault();
-    const filtered = state.carDrive.filter((e) => e.name.includes(searchTerm));
+    const filtered = state.carDrives.filter((e) => e.name.includes(searchTerm));
     dispatch({ type: "FILTER_DRIVES", payload: filtered });
   };
 
@@ -155,10 +158,12 @@ function CarDrives() {
       .then(() => {
         getData();
         onCancel();
+        toast.success("Zapisano zmiany");
       })
       .catch((error) => {
         console.log(error);
         setError(error);
+        toast.error("Błąd");
       })
       .finally(() => {
         dispatch({
@@ -182,10 +187,12 @@ function CarDrives() {
       .then(() => {
         getData();
         onCancel();
+        toast.success("Dodano");
       })
       .catch((error) => {
         console.log(error);
         setError(error);
+        toast.error("Błąd");
       })
       .finally(() => {
         dispatch({
@@ -202,10 +209,12 @@ function CarDrives() {
       .then(() => {
         getData();
         onCancel();
+        toast.success("Usunięto");
       })
       .catch((error) => {
         console.log(error);
         setError(error);
+        toast.error("Błąd");
       });
   };
 
@@ -215,6 +224,7 @@ function CarDrives() {
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -248,35 +258,13 @@ function CarDrives() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <table className={`${styles.table}`}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Type</th>
-                      <th>Opis</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {state.filteredCarDrive.map((type) => (
-                      <tr
-                        key={type.id}
-                        onDoubleClick={() => onDoubleClick(type)}
-                      >
-                        <td>{type.id}</td>
-                        <td>{type.name}</td>
-                        <td>{type.description}</td>
-                        <td>
-                          <i
-                            className="fa-solid fa-trash"
-                            onClick={() => handleDelete(type.id)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <MyTableWithPagination
+                  thead={["Id", "Typ", "Opis", ""]}
+                  items={state.filteredCarDrive}
+                  item={["id", "name", "description"]}
+                  onDoubleClick={onDoubleClick}
+                  handleDelete={handleDelete}
+                />
               </Card.Body>
             </Card>
           </Col>
@@ -346,3 +334,35 @@ function CarDrives() {
 }
 
 export default CarDrives;
+
+/* 
+ <table className={`${styles.table}`}>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Type</th>
+                      <th>Opis</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {state.filteredCarDrive.map((type) => (
+                      <tr
+                        key={type.id}
+                        onDoubleClick={() => onDoubleClick(type)}
+                      >
+                        <td>{type.id}</td>
+                        <td>{type.name}</td>
+                        <td>{type.description}</td>
+                        <td>
+                          <i
+                            className="fa-solid fa-trash"
+                            onClick={() => handleDelete(type.id)}
+                            style={{ cursor: "pointer" }}
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+*/
