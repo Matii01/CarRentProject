@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function EditWorkOrderPriority({ editPriority, onCancel, updateView }) {
   const [editedPriority, setEditedStatus] = useState(editPriority);
@@ -27,10 +28,14 @@ function EditWorkOrderPriority({ editPriority, onCancel, updateView }) {
         }
       )
       .then((data) => {
+        toast.success("Zapisano zmiany");
         console.log(data);
         updateView();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.error("Edycja błąd");
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {

@@ -118,15 +118,13 @@ function MyTableWithPagination({
                         <Col>
                           <Row>
                             <i
-                              onDoubleClick={() => onHeaderClick(header, "ASC")}
+                              onClick={() => onHeaderClick(header, "ASC")}
                               className="fa-solid fa-caret-up"
                             ></i>
                           </Row>
                           <Row>
                             <i
-                              onDoubleClick={() =>
-                                onHeaderClick(header, "DESC")
-                              }
+                              onClick={() => onHeaderClick(header, "DESC")}
                               className="fa-solid fa-caret-down"
                             ></i>
                           </Row>

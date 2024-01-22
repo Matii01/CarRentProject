@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function AddWorkOrderPriority({ onAdd }) {
   const [newPriority, setNewStatus] = useState({
@@ -26,11 +27,14 @@ function AddWorkOrderPriority({ onAdd }) {
         }
       )
       .then((data) => {
-        console.log(data.data);
+        toast.success("Dodano");
         setNewStatus({ name: "", description: "" });
         onAdd();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        toast.success("Dodawanie - błąd");
+        console.log(error);
+      });
   };
 
   const handleCancel = () => {

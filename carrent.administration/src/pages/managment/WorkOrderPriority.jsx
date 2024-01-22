@@ -4,6 +4,8 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddWorkOrderPriority from "../../components/WorkOrder/AddWorkOrderPriority";
 import EditWorkOrderPriority from "../../components/WorkOrder/EditWorkOrderPriority";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function WorkOrderPriority() {
   const [priorities, setPriorities] = useState([]);
@@ -62,14 +64,21 @@ function WorkOrderPriority() {
       .then((data) => {
         const filtered = priorities.filter((e) => e.id != itemId);
         setPriorities(filtered);
+        toast.success("usunięto");
       })
       .catch((error) => {
         console.log(error);
+        toast.success("usuwanie - błąd");
       });
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
   };
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">
@@ -85,7 +94,7 @@ function WorkOrderPriority() {
                     </Button>
                   </Col>
                   <Col>
-                    <Form className="d-flex" onSubmit={handleSearch}>
+                    <Form className="d-flex" onSubmit={handleSearchSubmit}>
                       <Form.Control
                         size="sm"
                         name="serachTerm"
@@ -96,19 +105,17 @@ function WorkOrderPriority() {
                         value={searchTerm}
                         onChange={handleChange}
                       />
-                      <Button variant="outline-success" type="submit" size="sm">
-                        Search
-                      </Button>
                     </Form>
                   </Col>
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
+                <MyTableWithPagination
                   thead={["Id", "Nazwa", "Opis", "Actions"]}
                   items={priorities}
                   item={["id", "name", "description"]}
                   searchTerm={searchTerm}
+                  serachBy={"name"}
                   onDoubleClick={onDoubleClick}
                   handleDelete={onDeleteClick}
                 />
@@ -133,3 +140,14 @@ function WorkOrderPriority() {
 }
 
 export default WorkOrderPriority;
+
+/**
+ <CarInfoTable
+    thead={["Id", "Nazwa", "Opis", "Actions"]}
+    items={priorities}
+    item={["id", "name", "description"]}
+    searchTerm={searchTerm}
+    onDoubleClick={onDoubleClick}
+    handleDelete={onDeleteClick}
+  />
+ */
