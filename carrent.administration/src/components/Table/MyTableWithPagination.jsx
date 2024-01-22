@@ -8,6 +8,8 @@ function MyTableWithPagination({
   item,
   onDoubleClick,
   handleDelete,
+  searchTerm,
+  serachBy,
 }) {
   const [filtered, setFiltered] = useState([]);
   const [pagedList, setPagedList] = useState([]);
@@ -15,6 +17,13 @@ function MyTableWithPagination({
   const [PageNum, setPageNum] = useState(1);
   const [hasNext, setHasNext] = useState(true);
   const [hasPrevious, setHasPrevious] = useState(true);
+
+  useEffect(() => {
+    const newList = filtered.filter((e) =>
+      e[serachBy].toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setPagedList(newList);
+  }, [searchTerm]);
 
   useEffect(() => {
     setFiltered(items);

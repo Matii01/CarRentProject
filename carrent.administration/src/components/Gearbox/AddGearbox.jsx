@@ -23,7 +23,7 @@ function AddGearbox({ onAdd }) {
       )
       .then((data) => {
         onAdd(data.data.createdGearbox);
-        console.log(data.data);
+        setNewGerabox({ name: "" });
       })
       .catch((error) => console.log(error));
   };
@@ -64,6 +64,7 @@ function AddGearbox({ onAdd }) {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Nazwa</Form.Label>
             <Form.Control
+              required
               type="text"
               name="name"
               value={newGearbox.name}

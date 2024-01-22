@@ -6,6 +6,8 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import EditGearboxType from "../../components/Gearbox/EditGearbox";
 import AddGearbox from "../../components/Gearbox/AddGearbox";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { ToastContainer, toast } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function GearboxType() {
   const [gearboxList, setGearboxList] = useState();
@@ -46,6 +48,7 @@ function GearboxType() {
   const addElement = (gearbox) => {
     const newMakes = [...gearboxList, { ...gearbox }];
     setGearboxList(newMakes);
+    toast.success("Dodano");
   };
 
   const onDeleteClick = (id) => {
@@ -54,6 +57,7 @@ function GearboxType() {
       .then((data) => {
         if (data.status === 204) {
           filterView(id);
+          toast.success("Usunięto");
         }
       })
       .catch((error) => {
@@ -67,6 +71,7 @@ function GearboxType() {
   };
 
   const updateView = (gearbox) => {
+    toast.success("Zapisano zmiany");
     const edited = gearboxList.map((x) => {
       if (x.id === gearbox.id) {
         x.name = gearbox.name;
@@ -84,6 +89,7 @@ function GearboxType() {
 
   return (
     <>
+      <ToastContainer />
       <Container style={{ fontSize: "12px" }}>
         <Row>
           <Col md={6}>
@@ -120,13 +126,14 @@ function GearboxType() {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
-                  thead={["Id", "Nazwa", "Actions"]}
+                <MyTableWithPagination
+                  thead={["Id", "Nazwa", ""]}
                   items={gearboxList}
                   item={["id", "name"]}
-                  searchTerm={searchTerm}
                   onDoubleClick={onDoubleClick}
                   handleDelete={onDeleteClick}
+                  searchTerm={searchTerm}
+                  serachBy={"name"}
                 />
               </Card.Body>
             </Card>
@@ -148,3 +155,14 @@ function GearboxType() {
 }
 
 export default GearboxType;
+
+/*
+<CarInfoTable
+    thead={["Id", "Nazwa", "Actions"]}
+    items={gearboxList}
+    item={["id", "name"]}
+    searchTerm={searchTerm}
+    onDoubleClick={onDoubleClick}
+    handleDelete={onDeleteClick}
+  />
+*/
