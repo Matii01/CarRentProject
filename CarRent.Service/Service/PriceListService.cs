@@ -221,7 +221,9 @@ namespace CarRent.Service.Service
 
             if (item == null)
             {
-                throw new Exception("No pricelist for car for this date");
+                // ToDo:  zmień to 
+                return new PriceForCar(0, 0, 0, 0, 0); 
+                //throw new Exception("No pricelist for car for this date");
             }
 
             await Console.Out.WriteLineAsync(item.Price.ToString());

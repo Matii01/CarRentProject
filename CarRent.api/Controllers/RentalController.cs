@@ -138,6 +138,18 @@ namespace CarRent.api.Controllers
             return Ok(new { rentalStatus = RentalStatuses, invoiceStatus = InvoiceStatuses });
         }
 
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("createNewRental")]
+        public async Task<IActionResult> CreateNewRental([FromBody] NewRentalFromWorker data)
+        {
+            await _services.RentalService.CreateRentalsAndInvoice(data);
+            await Console.Out.WriteLineAsync(data.ToString());
+            foreach(var item in data.Rentals) {
+                await Console.Out.WriteLineAsync(item.ToString());
+            }
+            return Ok("");
+        }
+
         [HttpPost("IsDateAvailable")]
         public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
         {

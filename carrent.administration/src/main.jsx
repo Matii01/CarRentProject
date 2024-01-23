@@ -70,6 +70,7 @@ import AccountPage from "./pages/managment/AccountPage";
 import CarRabats from "./pages/cars/CarRabats";
 import CarAnalyses from "./pages/analyses/CarAnalyses";
 import UsersAnalyses from "./pages/analyses/UsersAnalyses";
+import NewRental from "./pages/managment/NewRental";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -129,6 +130,8 @@ const router = createBrowserRouter([
       { path: "users/users/:userName", element: <UserDetail /> },
       { path: "users/workers", element: <WorkersPage /> },
       { path: "invoice/status", element: <InvoiceStatus /> },
+
+      { path: "rental/new", element: <NewRental /> },
       { path: "rental/status", element: <RentalStatus /> },
       { path: "rentals", element: <RentalsList /> },
       { path: "rentals/details/:rentalId", element: <RentalDetails /> },

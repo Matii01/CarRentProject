@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import TablePagination from "../../components/Pagination/TablePagination";
@@ -59,6 +58,10 @@ function RentalsList() {
     }));
   };
 
+  const addNewRental = () => {
+    navigate(`/rental/new`);
+  };
+
   if (!items.items) {
     return <p>"Loading"</p>;
   }
@@ -67,6 +70,13 @@ function RentalsList() {
     <>
       <Container>
         <Row>
+          <Col>
+            <Button variant="dark" size="sm" onClick={addNewRental}>
+              Nowe zamówienie
+            </Button>
+          </Col>
+        </Row>
+        <Row className="mt-2">
           <Col>
             <Card>
               <Card.Body>

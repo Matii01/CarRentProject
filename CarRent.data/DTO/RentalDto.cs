@@ -38,6 +38,18 @@ namespace CarRent.data.DTO
         Rental? Rental
     );
 
+    public record InvoiceAndRentalDto(
+        int InvoiceId,
+        decimal Rabat,
+        decimal Net,
+        decimal Gross,
+        decimal PaidAmount,
+        decimal VAT,
+        decimal VATValue,
+        int CarId,
+        DateTime DateFrom, DateTime DateTo
+    );
+
     public record AllRentalDataDto(
         NewRentalForClient NewRentalForClient, 
         ClientDetailsDto ClientDetails, 
@@ -184,6 +196,19 @@ namespace CarRent.data.DTO
 
     public record RentalDetailsForWorkerViewDto(
         RentalDatesDto? RentalInfo, 
-        NewInvoiceDto? Invoice)
-    ;
+        NewInvoiceDto? Invoice
+    );
+
+    public record DataForInvoice(
+        DateTime PaymentTerm,
+        decimal ToPaid,
+        decimal Paid
+    );
+
+    public record NewRentalFromWorker(
+        ClientDetailsDto? ClientDetails,
+        FirmClientDto? FirmClientDto,
+        DataForInvoice? Invoice,
+        NewRentalForClient[] Rentals
+    );
 }

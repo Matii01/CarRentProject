@@ -14,12 +14,14 @@ namespace CarRent.Service.Service
     {
         private readonly IRentalService _rentals;
         private readonly ICarMaintenanceService _maintenance;
+        private readonly IPriceListService _priceList;
 
-        public CarService(IRepositoryManager repository, IMapper mapper, IRentalService rentals, ICarMaintenanceService maintenance) 
+        public CarService(IRepositoryManager repository, IMapper mapper, IRentalService rentals, ICarMaintenanceService maintenance, IPriceListService priceList) 
             : base(repository, mapper)
         {
             _rentals = rentals;
             _maintenance = maintenance;
+            _priceList = priceList;
         }
         
         public async Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
@@ -55,6 +57,8 @@ namespace CarRent.Service.Service
             return MapHelper.MapCarToNewCarDto(car);
         }
 
+        //RentalDatesDto
+
         public async Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental)
         {
             var carsThatHaveRental = await _rentals.GetCarsThatHaveRentalInDates(rental);
@@ -62,9 +66,40 @@ namespace CarRent.Service.Service
 
             var excludedIds = carsThatHaveRental.Union(carThatHaveService).ToList();
 
-            var cars = await _repository.Car.GetCarsExcept(excludedIds).ToListAsync();
+            var cars = await _repository.Car.GetCarsExcept(excludedIds)
+                .Where(x => x.IsVisible == true)
+                .ToListAsync();
             return cars;
         }
+
+        public async Task<IEnumerable<CarListDto>> GetAvailableCarsWithPriceForDatesAsync(NewRentalForClient rental)
+        {
+            var carsThatHaveRental = await _rentals.GetCarsThatHaveRentalInDates(rental);
+            var carThatHaveService = await _maintenance.GetCarsThatHaveServiceInDates(rental);
+
+            var excludedIds = carsThatHaveRental.Union(carThatHaveService).ToList();
+
+            var cars = await _repository.Car.GetCarsExcept(excludedIds)
+                .Where(x => x.IsVisible == true)
+                .ToListAsync();
+            
+            var CarList = new List<CarListDto>();
+            foreach(var item in cars)
+            {
+                var price = await _priceList.GetPriceForCarForDate(null, new NewRentalForClient(item.Id, rental.DateFrom, rental.DateTo));
+                CarList.Add(new CarListDto(
+                    item.Id,
+                    item.Name,
+                    "",
+                    "",
+                    "",
+                    "",
+                    price.Gross
+              ));
+            }
+            return CarList;
+        }
+
 
         public async Task<Car> CreateCarAsync(NewCarDto car)
         {

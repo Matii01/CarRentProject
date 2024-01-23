@@ -57,7 +57,7 @@ namespace CarRent.Service
                 new GenerateDocumentService());
 
             _carService = new Lazy<ICarService>(() =>
-                new CarService(repositoryManager, mapper, RentalService, CarMaintenanceService));    
+                new CarService(repositoryManager, mapper, RentalService, CarMaintenanceService, PriceListService));    
 
             _carMakeService = new Lazy<ICarMakeService>(() 
                 => new CarMakeService(repositoryManager));

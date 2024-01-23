@@ -44,6 +44,8 @@ namespace CarRent.Service.Interfaces
                 DateTime DateStart,
                 DateTime DateEnd);
 
+        Task CreateRentalsAndInvoice(NewRentalFromWorker data);
+
         Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(
                 string userId, 
                 string? paymentIntentId,

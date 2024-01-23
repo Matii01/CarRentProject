@@ -122,6 +122,14 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
+        [HttpGet("carsAndPriceForDates")]
+        public async Task<IActionResult> GetAvailableCarsWithPriceForDates([FromQuery] NewRentalForClient dates)
+        {
+            await Console.Out.WriteLineAsync("get available cars");
+            var list = await _services.CarService.GetAvailableCarsWithPriceForDatesAsync(dates);
+            return Ok(list);
+        }
+
         [Authorize(Roles = "Administrator,CarAdd")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)

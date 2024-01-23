@@ -11,7 +11,5 @@ namespace CarRent.data.Models.CarRent
         public string NIP { get; set; } = null!;
         public string CompanyName { get; set; } = null!;
         public string StreetAndNumber { get; set; } = null!;
-        public string PostCode { get; set; } = null!;
-        public string City { get; set; } = null!;
     }
 }

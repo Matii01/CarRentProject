@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
@@ -186,6 +187,126 @@ namespace CarRent.Service.Service
 
             return rentalInfo;
         }
+
+        public async Task CreateRentalsAndInvoice(NewRentalFromWorker data)
+        {
+            await Console.Out.WriteLineAsync("New invoice will be added");
+            await CreateRentalsAndInvoiceWithIndividual(data);
+        }
+
+        private async Task CreateRentalsAndInvoiceWithIndividual(NewRentalFromWorker data)
+        {
+            //if (await CarIsBusy(newRental))
+            //{
+            //    throw new Exception("Car have rental on this time");
+            //}
+            
+            var DefaultRentalStatusId = await GetDefaultRentalStatus();
+            string invoiceNumber = await GenerateInvoiceNumber();
+
+            List<InvoiceAndRentalDto> InvoiceItems = await GenerateInvoiceItemsList(data.Rentals);
+            var totalGross = InvoiceItems.Sum(x => x.Gross);
+
+            var NewInvoice = new Invoice
+            {
+                Number = invoiceNumber,
+                Comment = "",
+                IsActive = true,
+                TotalPaid = data?.Invoice?.Paid ?? 0,
+                TotalToPay = totalGross,
+                CreatedDate = DateTime.Now,
+                PaymentDate = data?.Invoice?.PaymentTerm,
+                InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
+                Client = GetClientToInvoice(data), 
+                InvoicesItems = InvoiceItems
+                    .Select(x => new InvoiceItem()
+                    {
+                        Rabat = x.Rabat,
+                        Net = x.Net,
+                        Gross = x.Gross,
+                        PaidAmount = x.PaidAmount,
+                        VAT = x.VAT,
+                        VATValue = x.VATValue,
+                        Rental = new Rental()
+                        {
+                            CarId = x.CarId,
+                            RentalStart = x.DateFrom,
+                            RentalEnd = x.DateTo,
+                            RentalStatusId = DefaultRentalStatusId,
+                            IsActive = true,
+                        },
+                        IsActive = true,
+                    }).ToList()
+            };
+
+            _repository.Invoice.Create(NewInvoice);
+            await _repository.SaveAsync();
+        }
+
+        private static Client GetClientToInvoice(NewRentalFromWorker data)
+        {
+            if (data.ClientDetails != null)
+            {
+                var Client = new IndividualClient
+                {
+                    FirstName = data.ClientDetails.FirstName,
+                    LastName = data.ClientDetails.LastName,
+                    Email = data.ClientDetails.Email,
+                    PhoneNumber = data.ClientDetails.PhoneNumber,
+                    Address = data.ClientDetails.Address,
+                    PostCode = data.ClientDetails.PostCode,
+                    City = data.ClientDetails.City,
+                    IsActive = true,
+                };
+                return Client;
+            }
+            else if (data.FirmClientDto != null)
+            {
+                var Client = new FirmClient
+                {
+                    NIP = data.FirmClientDto.NIP,
+                    CompanyName = data.FirmClientDto.CompanyName,
+                    StreetAndNumber = data.FirmClientDto.StreetAndNumber,
+                    PostCode = data.FirmClientDto.PostCode,
+                    City = data.FirmClientDto.City,
+                    IsActive = true,
+                };
+                return Client;
+            }
+            else
+            {
+                throw new Exception("No client data");
+            }
+        }
+
+        private async Task<List<InvoiceAndRentalDto>> GenerateInvoiceItemsList(NewRentalForClient[] rentals)
+        {
+            List<InvoiceAndRentalDto> items = new(); 
+            foreach (var x in rentals)
+            {
+                var price = await _priceList.GetPriceForCarForDate(null, new NewRentalForClient(x.CarId, x.DateFrom, x.DateTo));
+                items.Add(new InvoiceAndRentalDto(
+                        0,
+                        price.Rabat,
+                        price.Net,
+                        price.Gross,
+                        0,
+                        price.VAT,
+                        price.VATValue, 
+                        x.CarId,
+                        x.DateFrom,
+                        x.DateTo
+                    ));
+            }
+
+            return items;
+        }
+
+        private async Task CreateRentalsAndInvoiceWithFirm(NewRentalFromWorker data)
+        {
+
+        }
+
 
         public async Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId)
         {
