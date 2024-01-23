@@ -56,6 +56,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Opinie", path: "/opinion" },
     { name: "Zlecenia", path: "/workOrder" },
     { name: "O firmie", path: "/company" },
+    { name: "Newsletter", path: "/newsletter" },
   ];
 
   const managment = [
