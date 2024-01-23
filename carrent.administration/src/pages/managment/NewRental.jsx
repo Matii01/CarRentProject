@@ -96,7 +96,10 @@ function NewRental() {
               <ChooseCarForNewRental onNext={onGoToPaymentInfo} />
             )}
             {step == PaymentInfo && (
-              <NewRentalInvoiceData onSubmit={onGoToSummary} />
+              <NewRentalInvoiceData
+                onSubmit={onGoToSummary}
+                rentalData={allRentalData}
+              />
             )}
             {step == Summary && (
               <NewRentalSummary

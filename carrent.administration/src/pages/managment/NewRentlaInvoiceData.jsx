@@ -1,12 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Row, Form } from "react-bootstrap";
+import { toast } from "react-toastify";
 
-function NewRentalInvoiceData({ onSubmit }) {
+function NewRentalInvoiceData({ onSubmit, rentalData }) {
   const [DataForInvoice, setDataForInvoice] = useState({
     PaymentTerm: "",
     ToPaid: 0,
     Paid: 0,
   });
+
+  useEffect(() => {
+    const totalCost = rentalData.Rentals.reduce((accumulator, item) => {
+      return accumulator + item.Price;
+    }, 0);
+
+    setDataForInvoice((prev) => ({
+      ...prev,
+      ToPaid: totalCost,
+    }));
+  }, [rentalData]);
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -21,6 +33,10 @@ function NewRentalInvoiceData({ onSubmit }) {
   };
 
   const onSaveClick = () => {
+    if (DataForInvoice.PaymentTerm == "") {
+      toast.error("Wybierz termin płatności");
+      return;
+    }
     onSubmit(DataForInvoice);
   };
 

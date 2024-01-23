@@ -10,14 +10,9 @@ function NewRentalSummary({ onSubmit, rentalData }) {
     onSubmit();
   };
 
-  const onTest = () => {
-    console.log(rentalData);
-  };
   return (
     <Card>
-      <Card.Header>
-        <Button onClick={onTest}>test</Button>
-      </Card.Header>
+      <Card.Header></Card.Header>
       <Card.Body>
         <Row>
           <Form onSubmit={onSubmitClick}>
