@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    public record NewsletterDto();
+    public record NewSubscriptionDto(string Email);
+
     public record SendHistoryDto( 
         string? Title,
         string? Message 

@@ -3,6 +3,7 @@ import style from "./Footer.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import axiosInstance from "../../utils/axiosConfig";
 
 function FooterList({ item }) {
   return (
@@ -29,20 +30,7 @@ function FooterList({ item }) {
 
 function Footer() {
   const [footer, setFooter] = useState({});
-  const company = [
-    { title: "Login", link: "Login" },
-    { title: "Register", link: "Register" },
-    { title: "Account", link: "Account" },
-    { title: "Wishlist", link: "Wishlist" },
-  ];
-
-  const rental = [
-    { title: "Car List", link: "Car List" },
-    { title: "Home", link: "Home" },
-    { title: "Contact", link: "" },
-    { title: "Recommend", link: "Latest" },
-    { title: "Help", link: "Latest" },
-  ];
+  const [newSubscription, setNewSubscription] = useState("");
 
   useEffect(() => {
     axios
@@ -55,6 +43,34 @@ function Footer() {
         console.log(error);
       });
   }, []);
+
+  const handleChange = (event) => {
+    const { value } = event.target;
+    console.log(value);
+    setNewSubscription(value);
+  };
+
+  const subscribeNewsletter = (event) => {
+    event.preventDefault();
+    console.log(newSubscription);
+    axiosInstance
+      .post(
+        `https://localhost:7091/Newsletter/subscribe`,
+        JSON.stringify(newSubscription),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        setNewSubscription("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -119,16 +135,25 @@ function Footer() {
                   {footer.newsLetterDescription}
                 </Col>
                 <Col xs={12} className="m-1 ms-4">
-                  <Form>
+                  <Form onSubmit={subscribeNewsletter}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Control type="email" placeholder="Enter email" />
+                      <Form.Control
+                        type="email"
+                        placeholder="Enter email"
+                        value={newSubscription}
+                        onChange={handleChange}
+                      />
                       <Form.Text className="text-muted">
                         {footer.newsLetterInfo}
                       </Form.Text>
                     </Form.Group>
-                    {/* <Button variant="primary" type="submit">
-                    Submit
-                      </Button> */}
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className="customButton"
+                    >
+                      Submit
+                    </Button>
                   </Form>
                 </Col>
               </Row>
@@ -162,6 +187,23 @@ function Footer() {
   <Col xs={12} md={6} lg={2} className="d-flex justify-content-left">
     <FooterList title={"Company"} items={rental} />
   </Col> 
+*/
+
+/*
+const company = [
+    { title: "Login", link: "Login" },
+    { title: "Register", link: "Register" },
+    { title: "Account", link: "Account" },
+    { title: "Wishlist", link: "Wishlist" },
+  ];
+
+  const rental = [
+    { title: "Car List", link: "Car List" },
+    { title: "Home", link: "Home" },
+    { title: "Contact", link: "" },
+    { title: "Recommend", link: "Latest" },
+    { title: "Help", link: "Latest" },
+  ];
 */
 
 export default Footer;

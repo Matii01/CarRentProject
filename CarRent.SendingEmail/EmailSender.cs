@@ -35,6 +35,18 @@ namespace CarRent.SendingEmail
             SendEmail(message);
         }
 
+        public void SendEmailToNewsletterSubscribers(SendHistoryDto message, string[] emails)
+        {
+            foreach(var email in emails)
+            {
+                if(message.Title != null && message.Message != null)
+                {
+                    var mail = new Message(new string[] { $"{email}" }, message.Title, message.Message);
+                    SendEmail(mail);
+                }
+            }
+        }
+
         private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();

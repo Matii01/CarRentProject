@@ -12,5 +12,6 @@ namespace CarRent.SendingEmail
         void SendEmail(Message message);
         void SendEmailPaymentSucceeded(ClientDetailsDto client, NewRentalForClient rental, List<InvoiceItemDto> InvoiceItems);
         void SendEmailPaymentFailed(ClientDetailsDto client);
+        void SendEmailToNewsletterSubscribers(SendHistoryDto message, string[] emails);
     }
 }

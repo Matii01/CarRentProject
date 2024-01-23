@@ -104,5 +104,8 @@ namespace CarRent.Repository
         public DbSet<WorkOrderPriority> WorkOrderPriority { get; set; }
         public DbSet<WorkOrderWorker> WorkOrderWorker { get; set; }
        
+        public DbSet<NewsletterSubscriber> NewsletterSubscriber { get; set; }
+        public DbSet<SendHistory> SendHistory { get; set; }
+
     }
 }

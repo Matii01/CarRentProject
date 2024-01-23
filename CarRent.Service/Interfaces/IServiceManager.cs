@@ -29,7 +29,7 @@ namespace CarRent.Service.Interfaces
         IAboutCompanyService AboutCompanyService { get; }
         IApplicationSettingsService ApplicationSettingsService { get; }
         IUsersService UsersService {  get; }
-
+        INewsletterService NewsletterService { get; }
 
 
         IGenericService<CarTypeDto> CarTypeService { get; }
