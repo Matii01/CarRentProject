@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function UpdateRentalStatus({
   statuses,
@@ -43,6 +44,7 @@ function UpdateRentalStatus({
       })
       .then((data) => {
         console.log(data.data);
+        toast.success("Zaktualizowano");
       })
       .catch((error) => {
         console.log(error);

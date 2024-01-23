@@ -6,7 +6,7 @@ import ChooseCarForNewRental from "./ChooseCarForNewRental";
 import NewRentalSummary from "./NewRentalSummary";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import NewRentalInvoiceData from "./NewRentlaInvoiceData";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 function NewRental() {
   const ChooseCLient = "CHOOSECLIENT";
@@ -70,6 +70,8 @@ function NewRental() {
       })
       .then((data) => {
         console.log(data);
+        toast.success("Dodno nowe zamówienie");
+        navigate("/rentals");
       })
       .catch((error) => {
         console.log(error);

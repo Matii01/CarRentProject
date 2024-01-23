@@ -3,6 +3,7 @@ import { Button, Row, Col, Form } from "react-bootstrap";
 import { useState } from "react";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function ChangeRentalStatusModal({ onHide, items, rentalStauses, ...props }) {
   return (
@@ -85,7 +86,9 @@ function ChangeIndividualRentalStatus({ it, rentalStauses }) {
           },
         }
       )
-      .then((data) => {})
+      .then((data) => {
+        toast.success("Zaktualizowano status");
+      })
       .catch((error) => {
         console.log(error);
       });

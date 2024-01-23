@@ -22,6 +22,7 @@ import ConfirmOverlay from "../../components/Overlay/ConfirmOverlay";
 import CancelRental from "../../components/RentalsManagment/CancelRentalModal";
 import UpdateRentalStatus from "../../components/RentalsManagment/UpdateRentalStatus";
 import ChangeRentalStatusModal from "../../components/RentalsManagment/ChangeRentalStatusModel";
+import { ToastContainer } from "react-toastify";
 
 function RentalDetails() {
   const param = useParams();
@@ -108,6 +109,7 @@ function RentalDetails() {
 
   return (
     <>
+      <ToastContainer />
       <Container style={{ position: "relative" }}>
         <Row>
           <Col>Szczegóły {param.rentalId}</Col>
