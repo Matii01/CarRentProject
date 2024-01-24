@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function AddCarMake({ onAdd }) {
   const [newCarMake, setNewCarMake] = useState({ name: "", description: "" });
@@ -12,16 +13,14 @@ function AddCarMake({ onAdd }) {
   const AddNewCarMake = () => {
     console.log(newCarMake);
     jwtInterceptor
-      .post(
-        `https://localhost:7091/carmake/create`,
-        JSON.stringify(newCarMake),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`carmake/create`, JSON.stringify(newCarMake), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
+        setNewCarMake({ name: "", description: "" });
+        toast.success("dodano");
         onAdd(data.data);
       })
       .catch((error) => console.log(error));

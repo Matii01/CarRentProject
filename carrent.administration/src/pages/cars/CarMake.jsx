@@ -6,6 +6,7 @@ import AddCarMake from "../../components/CarMakes/AddCarMakes";
 import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { ToastContainer, toast } from "react-toastify";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
@@ -16,7 +17,7 @@ function CarMakes() {
 
   useEffect(() => {
     jwtInterceptor
-      .get("https://localhost:7091/CarMake")
+      .get("CarMake")
       .then((data) => {
         console.log(data);
         setMake(data.data);
@@ -81,11 +82,13 @@ function CarMakes() {
 
   const deleteCarMake = (id) => {
     jwtInterceptor
-      .delete(`https://localhost:7091/carmake/${id}`)
+      .delete(`carmake/${id}`)
       .then((response) => {
         console.log(response);
+
         if (response.status === 204) {
           filterList(id);
+          toast.success("usunięto");
         }
       })
       .catch((error) => {
@@ -95,6 +98,7 @@ function CarMakes() {
 
   return (
     <>
+      <ToastContainer />
       <Container fluid>
         <Row>
           <Col md="6">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function EditCarMake({ editMake, onCancel, updateView }) {
   const [editedMake, setEditedMake] = useState(editMake);
@@ -17,17 +18,14 @@ function EditCarMake({ editMake, onCancel, updateView }) {
 
   const updateCarMake = () => {
     jwtInterceptor
-      .put(
-        `https://localhost:7091/carmake/update/${editedMake.id}`,
-        JSON.stringify(editedMake),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .put(`carmake/update/${editedMake.id}`, JSON.stringify(editedMake), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
+        toast.success("Zapisano zmiany");
         updateView(editedMake);
       })
       .catch((error) => console.log(error));
