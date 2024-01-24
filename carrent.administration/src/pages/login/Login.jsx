@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
-import { Row, Col, Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Form, Button, Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { setUserName, setUserRoles } from "../../shared/userSlice";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function Login() {
   const dispatch = useDispatch();
@@ -23,9 +24,9 @@ function Login() {
   };
 
   const onLoginAsWorkerClick = () => {
-    axios
+    jwtInterceptor
       .post(
-        `https://localhost:7091/authentication/login`,
+        `authentication/login`,
         JSON.stringify({
           username: "Test",
           password: "Pa$$word1000",
@@ -47,16 +48,12 @@ function Login() {
   };
 
   const onLoginClick = () => {
-    axios
-      .post(
-        `https://localhost:7091/authentication/login`,
-        JSON.stringify(loginForm),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+    jwtInterceptor
+      .post(`authentication/login`, JSON.stringify(loginForm), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         setData(data.data);
@@ -74,36 +71,56 @@ function Login() {
     dispatch(setUserRoles({ role: data.role }));
   }
 
+  const url =
+    "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
+
+  //#f7f7f8
   return (
-    <Container>
-      <Row>
-        <Col className="col-md-8 offset-md-2">
-          <legend>Login Form</legend>
-          <Form.Group className="mb-3">
-            <Form.Label>User Name</Form.Label>
-            <Form.Control type="text" name="username" onChange={handleChange} />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Button variant="primary" type="button" onClick={onLoginClick}>
-            Login
-          </Button>
-          <Button
-            variant="primary"
-            type="button"
-            onClick={onLoginAsWorkerClick}
-          >
-            Login as Worker
-          </Button>
-        </Col>
-      </Row>
-    </Container>
+    <div style={{ width: "100%", height: "100vh", backgroundColor: "#f7f7f8" }}>
+      <Container
+        className="pt-4 pb-4"
+        style={{ width: "58rem", backgroundColor: "" }}
+      >
+        <Card className="p-4">
+          <Row>
+            <Col xs={12} md={6}>
+              <legend>Wypożyczalnia - administrator</legend>
+              <Form.Group className="mb-3">
+                <Form.Label>User Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="username"
+                  onChange={handleChange}
+                  value={loginForm.username}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  value={loginForm.password}
+                />
+              </Form.Group>
+              <Button variant="dark" type="button" onClick={onLoginClick}>
+                Login
+              </Button>
+              <Button
+                variant="dark"
+                type="button"
+                onClick={onLoginAsWorkerClick}
+              >
+                Login as Worker
+              </Button>
+            </Col>
+            <Col className="mt-4 mb-4">
+              <Card.Img src={url} />
+            </Col>
+          </Row>
+        </Card>
+      </Container>
+    </div>
   );
 }
 

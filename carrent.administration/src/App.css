@@ -56,3 +56,8 @@
   border-color: #212529;
 }
 /* pagination end */
+.login {
+  width: "100%";
+  height: "100vh";
+  background-color: "#f7f7f8";
+}
