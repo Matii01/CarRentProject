@@ -38,6 +38,11 @@ function RentalDetails() {
     getStatuses();
   }, []);
 
+  const onRefresh = () => {
+    getRentalData();
+    getStatuses();
+  };
+
   const getStatuses = () => {
     jwtInterceptor
       .get(`Rental/statuses`)
@@ -107,6 +112,10 @@ function RentalDetails() {
     setShowChangeRentalStatus(true);
   };
 
+  const onPrint = () => {
+    console.log("Drukuj");
+  };
+
   return (
     <>
       <ToastContainer />
@@ -118,12 +127,7 @@ function RentalDetails() {
             <Row className="d-flex justify-content-end">
               <Col xs="auto">
                 <Link title="Drukuj" id="t-1">
-                  <i className="fa-solid fa-print"></i>
-                </Link>
-              </Col>
-              <Col xs="auto">
-                <Link title="Zwrot" id="t-1">
-                  <i className="fa-solid fa-arrows-turn-right"></i>
+                  <i className="fa-solid fa-print" onClick={onPrint}></i>
                 </Link>
               </Col>
               <Col xs="auto">
@@ -163,27 +167,7 @@ function RentalDetails() {
                 )}
               </Col>
               <Col>
-                <Card>
-                  <Card.Header>Dane Płatności</Card.Header>
-                  <Card.Body>
-                    <Row>
-                      <Col>Payment Type: </Col>
-                      <Col>Credit Card</Col>
-                    </Row>
-                    <Row>
-                      <Col>Provider: </Col>
-                      <Col>Visa ending in 2851</Col>
-                    </Row>
-                    <Row>
-                      <Col>Valid Date: </Col>
-                      <Col>02/2020</Col>
-                    </Row>
-                    <Row>
-                      <Col>CVV: </Col>
-                      <Col>xxx</Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
+                <PaymentData />
               </Col>
             </Row>
           </Col>
@@ -206,6 +190,7 @@ function RentalDetails() {
                   invoiceStatusId={data.invoiceIndividual.invoiceStatusId}
                   rentalId={param.rentalId}
                   onUpdateRentalClick={onUpdateRentalClick}
+                  onRefresh={onRefresh}
                 />
               )}
               {data.invoiceFirm && (
@@ -215,6 +200,7 @@ function RentalDetails() {
                   invoiceStatusId={data.invoiceFirm.invoiceStatusId}
                   rentalId={param.rentalId}
                   onUpdateRentalClick={onUpdateRentalClick}
+                  onRefresh={onRefresh}
                 />
               )}
             </Row>

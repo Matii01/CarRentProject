@@ -8,6 +8,7 @@ function UpdateRentalStatus({
   invoiceId,
   invoiceStatusId,
   onUpdateRentalClick,
+  onRefresh,
 }) {
   const [oldStatus, setOldStatus] = useState(invoiceStatusId);
   const [selectedInvoiceStatusId, setSelectedInvoiceStatusId] =
@@ -44,6 +45,7 @@ function UpdateRentalStatus({
       })
       .then((data) => {
         console.log(data.data);
+        onRefresh();
         toast.success("Zaktualizowano");
       })
       .catch((error) => {

@@ -1,24 +1,30 @@
 import { Card, Row, Col } from "react-bootstrap";
 
 function FirmClientData({ client }) {
+  console.log(client);
   return (
     <Card>
       <Card.Header>Dane klienta</Card.Header>
       <Card.Body>
         <Row>
-          <Col>Adam Nijaki</Col>
+          <Col xl={4}>Firma:</Col>
+          <Col>{client.companyName}</Col>
         </Row>
         <Row>
-          <Col>795 Folsom Ave, Suite 600</Col>
+          <Col xl={4}>NIP</Col>
+          <Col>{client.nip}</Col>
         </Row>
         <Row>
-          <Col>San Francisco, CA 94107</Col>
+          <Col xl={4}>Miasto</Col>
+          <Col>{client.city}</Col>
         </Row>
         <Row>
-          <Col>P: (123) 456-7890</Col>
+          <Col xl={4}>Ulica</Col>
+          <Col>{client.streetAndNumber}</Col>
         </Row>
         <Row>
-          <Col>M: (+01) 12345 67890</Col>
+          <Col xl={4}>Kod P</Col>
+          <Col>{client.postCode}</Col>
         </Row>
       </Card.Body>
     </Card>

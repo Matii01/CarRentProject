@@ -18,14 +18,18 @@ namespace CarRent.Service.Service
     public class RentalService : ServiceBase, IRentalService
     {
         private readonly IPriceListService _priceList;
+        private readonly INotificationService _notification;
 
         public RentalService(
             IRepositoryManager repository,
             IPriceListService priceList,
-            IMapper mapper) 
+            IMapper mapper,
+            INotificationService notification
+            ) 
             : base(repository, mapper)
         {
            _priceList = priceList;
+           _notification = notification;
         }
 
         public async Task<PagedList<RentalListDataDto>> GetRentalsListAsync(RentalParameters param, bool tractChanges)
@@ -101,16 +105,19 @@ namespace CarRent.Service.Service
 
             toUpdate.RentalStatusId = newStatus.NewStatus;
             await _repository.SaveAsync();
+            await SendUpdateRentalStatusNotification(rentalId, newStatus);
         }
 
-        public async Task UpdateInvoiceStatusAsync(int rentalId, UpdateInvoiceStatusDto newStatus)
+        public async Task UpdateInvoiceStatusAsync(int invoiceId, UpdateInvoiceStatusDto newStatus)
         {
             var toUpdate = await _repository.Invoice
-                .GetAsync(rentalId, true)
+                .GetAsync(invoiceId, true)
                 .SingleOrDefaultAsync() ?? throw new Exception("Not found");
 
             toUpdate.InvoiceStatus = newStatus.NewStatus;
             await _repository.SaveAsync();
+
+            await SendUpdateInvoiceStatusNotification(invoiceId, newStatus);
         }
 
         public async Task<RentalDataForClientDto> CreateRentalAndOutstandingInvoiceAndAssignUser()
@@ -509,6 +516,72 @@ namespace CarRent.Service.Service
         private async Task<int> GetInvoiceStatusForOutstandingInvoice()
         {
             return 0;
+        }
+
+        private async Task<string> GetInvoiceStatusNameById(int id)
+        {
+            var name = await _repository.InvoiceStatus
+                .GetAsync(id, false)
+                .Select(x => x.Name)
+                .SingleOrDefaultAsync();
+
+            return name ?? "";
+        }
+
+        private async Task<string> GetRentalStatusNameById(int id)
+        {
+            var name = await _repository.RentalStatus
+                .GetAsync(id, false)
+                .Select(x => x.Status)
+                .SingleOrDefaultAsync();
+
+            return name ?? "";
+        }
+
+        private async Task SendUpdateRentalStatusNotification(int rentalId, UpdateRentalStatusDto newStatus)
+        {
+            string? UserId = await _repository.UserRental
+                    .GetAsync(rentalId, false)
+                    .Select(x => x.UserAccountId)
+                    .SingleOrDefaultAsync();
+
+            if (UserId != null)
+            {
+                var old = await GetRentalStatusNameById(newStatus.OldStatus);
+                var newSt = await GetRentalStatusNameById(newStatus.NewStatus);
+                await _notification.SendUpdateRentalStatusNotificationAsync(UserId, old, newSt);
+            }
+        }
+
+        private async Task SendUpdateInvoiceStatusNotification(int invoiceId, UpdateInvoiceStatusDto item)
+        {
+            string? UserId = await GetUserIdFromInvoiceNr(invoiceId);
+
+            if (UserId != null) 
+            {
+                var old = await GetInvoiceStatusNameById(item.OldStatus);
+                var newSt = await GetInvoiceStatusNameById(item.NewStatus);
+                await _notification.SendUpdateInvoiceStatusNotificationAsync(UserId, old, newSt);
+            }
+        }
+        private async Task<string?> GetUserIdFromInvoiceNr(int invoiceId)
+        {
+            try
+            {
+                var rentalId = await _repository.Invoice
+                    .GetAsync(invoiceId, false)
+                    .Select(x => x.InvoicesItems.First().Rental.Id)
+                    .FirstOrDefaultAsync();
+
+                return await _repository.UserRental
+                    .GetAsync(rentalId, false)
+                    .Select(x=> x.UserAccountId)
+                    .SingleOrDefaultAsync();
+            }
+            catch(Exception )
+            {
+                return null;
+            }
         }
     }
 }

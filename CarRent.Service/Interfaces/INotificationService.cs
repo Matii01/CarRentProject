@@ -18,5 +18,7 @@ namespace CarRent.Service.Interfaces
         Task SendAddedRabatNotificationAsync(string UserId, NewRabatForUserDto rabat);
         Task ReadNotificationAsync(int notificationId);
         Task DeleteNotificationAsync(int notificationId);
+        Task SendUpdateInvoiceStatusNotificationAsync(string UserId, string OldStatus, string NewStatus);
+        Task SendUpdateRentalStatusNotificationAsync(string UserId, string OldStatus, string NewStatus);
     }
 }

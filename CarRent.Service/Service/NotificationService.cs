@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
@@ -74,6 +75,19 @@ namespace CarRent.Service.Service
         {
             string Message = $"przyznano raba {rabat.RabatPercentValue} procent, rabat jest ważny do {rabat.DateOfExpiration}";
             NewNotificationDto notification = new (UserId, "New Rabat", Message);
+            await CreateNotificationAsync(notification);
+        }
+
+        public async Task SendUpdateInvoiceStatusNotificationAsync(string UserId, string OldStatus, string NewStatus)
+        {
+            string Message = $"Zmiana statusu faktury z {OldStatus} na {NewStatus}";
+            NewNotificationDto notification = new(UserId, "New Rabat", Message);
+            await CreateNotificationAsync(notification);
+        }
+        public async Task SendUpdateRentalStatusNotificationAsync(string UserId, string OldStatus, string NewStatus)
+        {
+            string Message = $"Zmiana statusu z {OldStatus} na {NewStatus}";
+            NewNotificationDto notification = new(UserId, "New Rabat", Message);
             await CreateNotificationAsync(notification);
         }
 
