@@ -123,5 +123,47 @@ namespace CarRent.Service.Service
 
             return items;
         }
+
+        public async Task DeleteFromHistory(int id)
+        {
+            var item = await _repository
+                .SendHistory.GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+            
+            item.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        public async Task UnsubscribeNewsletter(int id)
+        {
+            var item = await _repository
+                .NewsletterSubscriber.GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+
+            item.IsSubscribe = false;
+            item.UnsubscribeDate = DateTime.Now;
+            await _repository.SaveAsync();
+        }
+
+        public async Task DeleteFromNewsletterSub(int id)
+        {
+            var item = await _repository
+                .NewsletterSubscriber.GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+
+            item.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+        public async Task RenewSubscribe(int id)
+        {
+            var item = await _repository
+                .NewsletterSubscriber.GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+
+            item.IsSubscribe = true;
+            item.UnsubscribeDate = null;
+            await _repository.SaveAsync();
+        }
     }
 }

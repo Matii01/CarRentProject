@@ -7,6 +7,7 @@ import { formatDate } from "./../../utils/formDate";
 import ManageNewsletterSub from "../../components/Newsletter/ManageNewsletterSub";
 import ManageNewsletterHistory from "../../components/Newsletter/ManageNewsletterHistory";
 import SendNewNewsletterMessage from "../../components/Newsletter/SendNewNewsletterMessage";
+import { ToastContainer } from "react-toastify";
 
 function NewsletterPage() {
   const [sendNew, setSendNew] = useState(false);
@@ -93,123 +94,135 @@ function NewsletterPage() {
   };
 
   return (
-    <Container fluid>
-      <Row>
-        <Col md="6">
-          <Row>
-            <Row></Row>
+    <>
+      <ToastContainer />
+      <Container fluid>
+        <Row>
+          <Col md="6">
             <Row>
-              <Card className="" style={{ marginTop: "0px" }}>
-                <Card.Header>
-                  <Row>
-                    <Col className="text-center mb-2">Newsletter - subs</Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button variant="dark" size="sm">
-                        Dodaj
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Form className="d-flex">
-                        <Form.Control
-                          size="sm"
-                          name="serachTerm"
-                          type="search"
-                          placeholder="Search"
-                          className="me-2"
-                          aria-label="Search"
-                          value={""}
-                        />
-                      </Form>
-                    </Col>
-                  </Row>
-                </Card.Header>
-                <Card.Body>
-                  {newsletterSub && (
-                    <TableWithPagination
-                      thead={["ID", "Tytuł", "Data dołączenia", "Is"]}
-                      items={newsletterSub}
-                      searchTerm={""}
-                      item={["id", "email", "subscribeDate", "isSubscribe"]}
-                      metaData={subMetaData}
-                      onDoubleClick={onSubDoubleClick}
-                    />
-                  )}
-                </Card.Body>
-              </Card>
+              <Row></Row>
+              <Row>
+                <Card className="" style={{ marginTop: "0px" }}>
+                  <Card.Header>
+                    <Row>
+                      <Col className="text-center mb-2">Newsletter - subs</Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Button variant="dark" size="sm">
+                          Dodaj
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Form className="d-flex">
+                          <Form.Control
+                            size="sm"
+                            name="serachTerm"
+                            type="search"
+                            placeholder="Search"
+                            className="me-2"
+                            aria-label="Search"
+                            value={""}
+                          />
+                        </Form>
+                      </Col>
+                    </Row>
+                  </Card.Header>
+                  <Card.Body>
+                    {newsletterSub && (
+                      <TableWithPagination
+                        thead={["ID", "Tytuł", "Data dołączenia", "Is"]}
+                        items={newsletterSub}
+                        searchTerm={""}
+                        item={["id", "email", "subscribeDate", "isSubscribe"]}
+                        metaData={subMetaData}
+                        onDoubleClick={onSubDoubleClick}
+                      />
+                    )}
+                  </Card.Body>
+                </Card>
+              </Row>
             </Row>
-          </Row>
-        </Col>
-        <Col md="6">
-          {showSelectedSub && selectedSub && (
-            <ManageNewsletterSub
-              item={selectedSub}
-              hide={() => setShowSelectedSub(false)}
-            />
-          )}
-        </Col>
-      </Row>
-      <Row>
-        <Col md="6">
-          <Row>
-            <Row></Row>
+          </Col>
+          <Col md="6">
+            {showSelectedSub && selectedSub && (
+              <ManageNewsletterSub
+                item={selectedSub}
+                hide={() => setShowSelectedSub(false)}
+                refreshView={getNewsletterSub}
+              />
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col md="6">
             <Row>
-              <Card className="" style={{ marginTop: "0px" }}>
-                <Card.Header>
-                  <Row>
-                    <Col className="text-center mb-2">
-                      Newsletter - historia
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button variant="dark" size="sm" onClick={sendNewMessage}>
-                        Wyślij nową
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Form className="d-flex">
-                        <Form.Control
+              <Row></Row>
+              <Row>
+                <Card className="" style={{ marginTop: "0px" }}>
+                  <Card.Header>
+                    <Row>
+                      <Col className="text-center mb-2">
+                        Newsletter - historia
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Button
+                          variant="dark"
                           size="sm"
-                          name="serachTerm"
-                          type="search"
-                          placeholder="Search"
-                          className="me-2"
-                          aria-label="Search"
-                          value={""}
-                        />
-                      </Form>
-                    </Col>
-                  </Row>
-                </Card.Header>
-                <Card.Body>
-                  {newsletterSub && (
-                    <TableWithPagination
-                      thead={["ID", "Tytuł", "Wysłana"]}
-                      items={sendHistory}
-                      searchTerm={""}
-                      item={["id", "title", "createdDate"]}
-                      metaData={historyMetaData}
-                      onDoubleClick={onHistotyDoubleClick}
-                    />
-                  )}
-                </Card.Body>
-              </Card>
+                          onClick={sendNewMessage}
+                        >
+                          Wyślij nową
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Form className="d-flex">
+                          <Form.Control
+                            size="sm"
+                            name="serachTerm"
+                            type="search"
+                            placeholder="Search"
+                            className="me-2"
+                            aria-label="Search"
+                            value={""}
+                          />
+                        </Form>
+                      </Col>
+                    </Row>
+                  </Card.Header>
+                  <Card.Body>
+                    {newsletterSub && (
+                      <TableWithPagination
+                        thead={["ID", "Tytuł", "Wysłana"]}
+                        items={sendHistory}
+                        searchTerm={""}
+                        item={["id", "title", "createdDate"]}
+                        metaData={historyMetaData}
+                        onDoubleClick={onHistotyDoubleClick}
+                      />
+                    )}
+                  </Card.Body>
+                </Card>
+              </Row>
             </Row>
-          </Row>
-        </Col>
-        <Col md="6">
-          {showSelectedHistory && selectedHistory && (
-            <ManageNewsletterHistory
-              item={selectedHistory}
-              hide={() => setShowSelectedHistory(false)}
-            />
-          )}
-          {sendNew && !showSelectedHistory && <SendNewNewsletterMessage />}
-        </Col>
-      </Row>
-    </Container>
+          </Col>
+          <Col md="6">
+            {showSelectedHistory && selectedHistory && (
+              <ManageNewsletterHistory
+                item={selectedHistory}
+                hide={() => setShowSelectedHistory(false)}
+                onDelete={getSendHistory}
+              />
+            )}
+
+            {sendNew && !showSelectedHistory && (
+              <SendNewNewsletterMessage onAdd={getSendHistory} />
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 

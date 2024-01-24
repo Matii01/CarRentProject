@@ -12,7 +12,7 @@ function SendNewNewsletterMessage({ onAdd }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setNotification((prev) => ({ ...prev, [name]: value }));
+    setNewMessage((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -25,8 +25,8 @@ function SendNewNewsletterMessage({ onAdd }) {
       })
       .then((data) => {
         clearMessage();
-        onAdd();
         toast.success("Wysłano wiadomość");
+        onAdd();
       })
       .catch((error) => {
         console.log(error);
@@ -35,7 +35,7 @@ function SendNewNewsletterMessage({ onAdd }) {
   };
 
   const clearMessage = () => {
-    setNotification((prev) => ({
+    setNewMessage((prev) => ({
       ...prev,
       Title: "",
       Message: "",

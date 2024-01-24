@@ -14,5 +14,9 @@ namespace CarRent.Service.Interfaces
         Task<PagedList<NewsletterSubscriberDto>> GetNewsletterSubscribersByParamsAsync(SubscriberParam param);
         Task NewSubscription(string newSubscription);
         Task SendNewMessage(SendHistoryDto newSubscription);
+        Task DeleteFromHistory(int id);
+        Task UnsubscribeNewsletter(int id);
+        Task RenewSubscribe(int id);
+        Task DeleteFromNewsletterSub(int id);
     }
 }

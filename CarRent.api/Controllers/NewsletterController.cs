@@ -45,8 +45,42 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> SendNewMessageToNewsletterSubscribers([FromBody] SendHistoryDto newMessage)
         {
             await Console.Out.WriteLineAsync(newMessage.ToString());
-            //await _services.NewsletterService.NewSubscription(newSubscription);
+            await _services.NewsletterService.SendNewMessage(newMessage);
             return Ok();
+        }
+
+        
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("Unsubscribe/{id:int}")]
+        public async Task<IActionResult> UnsubscribeNewsletter(int id)
+        {
+            await _services.NewsletterService.UnsubscribeNewsletter(id);
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("RenewSubscribe/{id:int}")]
+        public async Task<IActionResult> RenewSubscribe(int id)
+        {
+            await _services.NewsletterService.RenewSubscribe(id);
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpDelete("deleteHistory/{id:int}")]
+        public async Task<IActionResult> DeleteFromHistory(int id)
+        {
+            await _services.NewsletterService.DeleteFromHistory(id);
+            return Ok("");
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
+        [HttpDelete("deleteSub/{id:int}")]
+        public async Task<IActionResult> DeleteFromNewsletterSub(int id)
+        {
+            await _services.NewsletterService.DeleteFromNewsletterSub(id);
+            return Ok("");
         }
     }
 }
