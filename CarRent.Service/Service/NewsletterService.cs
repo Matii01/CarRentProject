@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Models.Company;
+using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
+using CarRent.Repository.Parameters;
 using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +25,43 @@ namespace CarRent.Service.Service
             : base(repository, mapper)
         {
             _emailSender = emailSender;
+        }
+
+        public async Task<PagedList<SendHistoryForWorkerViewDto>> GetSendHistoryByParamsAsync(SendHistoryParameters parameters)
+        {
+            var list =  _repository.SendHistory
+                .FindByCondition(x => x.IsActive == true, false)
+                .OrderByDescending(x => x.CreatedDate)
+                .Search(parameters)
+                .Select(x => new SendHistoryForWorkerViewDto
+                    (
+                        x.Id,
+                        x.CreatedDate,
+                        x.Title,
+                        x.Message
+                    ));
+
+            return await PagedList<SendHistoryForWorkerViewDto>
+                .ToPagedList(list, parameters.PageNumber, parameters.PageSize);
+        }
+
+        public async Task<PagedList<NewsletterSubscriberDto>> GetNewsletterSubscribersByParamsAsync(SubscriberParam param)
+        {
+            var list = _repository.NewsletterSubscriber
+                .FindByCondition(x => x.IsActive == true, false)
+                .OrderByDescending(x => x.SubscribeDate)
+                .Search(param)
+                .Select(x => new NewsletterSubscriberDto
+                    (
+                       x.Id,
+                        x.Email,
+                        x.SubscribeDate,
+                        x.UnsubscribeDate,
+                        x.IsSubscribe
+                    ));
+
+            return await PagedList<NewsletterSubscriberDto>
+                .ToPagedList(list, param.PageNumber, param.PageSize);
         }
 
         public async Task NewSubscription(string newSubscription)

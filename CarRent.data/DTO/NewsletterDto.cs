@@ -13,11 +13,19 @@ namespace CarRent.data.DTO
         string? Message 
     );
 
+    public record SendHistoryForWorkerViewDto(
+        int ? Id,
+        DateTime? CreatedDate,
+        string? Title,
+        string? Message
+    );
+
     public record NewsletterSubscriberDto(
+         int? Id,
          string? Email,
          DateTime? SubscribeDate ,
          DateTime? UnsubscribeDate ,
-         int? IsSubscribe 
+         bool? IsSubscribe 
     );
 
 }
