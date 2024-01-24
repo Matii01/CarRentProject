@@ -8,7 +8,7 @@ function EditWorkerSidebar({ workerId }) {
 
   useEffect(() => {
     getWorkerSidebar();
-  }, []);
+  }, [workerId]);
 
   const getWorkerSidebar = () => {
     jwtInterceptor
@@ -75,9 +75,40 @@ function EditWorkerSidebar({ workerId }) {
       });
   };
 
+  const generateWorkerMenu = () => {
+    //GenerateWorkerSidebar/{workerId}
+    jwtInterceptor
+      .post(
+        `WorkerSidebar/GenerateWorkerSidebar/${workerId}`,
+        JSON.stringify(genereateNew),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Card>
       <Card.Header>Edytuj menu boczne</Card.Header>
+      {!allPages.length > 0 && (
+        <Card.Body>
+          <Row>
+            <Col>
+              <Button variant="dark" size="sm" onClick={generateWorkerMenu}>
+                Wygeenruj menu
+              </Button>
+            </Col>
+          </Row>
+        </Card.Body>
+      )}
       {allPages.length > 0 && (
         <Card.Body>
           <Row>
@@ -85,9 +116,10 @@ function EditWorkerSidebar({ workerId }) {
               <Button onClick={onSaveClick}>Zapisz</Button>
             </Col>
           </Row>
+          <Row></Row>
           <Row>
             <Accordion>
-              <Accordion.Header>Analizy</Accordion.Header>
+              <Accordion.Header>Ustawienia</Accordion.Header>
               <Accordion.Body>
                 <Row>
                   <Col sm={3}>Katrgoria: </Col>
@@ -95,39 +127,54 @@ function EditWorkerSidebar({ workerId }) {
                     <input
                       type="checkbox"
                       title="clickmey"
-                      name="Katrgoria"
+                      name="Firma"
                       checked={
-                        allPages.find((i) => i.title === "Analizy").isActive
+                        allPages.find((i) => i.title === "Firma").isActive
                       }
-                      onChange={(event) =>
-                        handleCheckboxChange(event, "Analizy")
-                      }
+                      onChange={(event) => handleCheckboxChange(event, "Firma")}
                     />
                   </Col>
                 </Row>
-              </Accordion.Body>
-            </Accordion>
-          </Row>
-          <Row>
-            <Accordion>
-              <Accordion.Header>Zamówienia</Accordion.Header>
-              <Accordion.Body>
-                <Row>
-                  <Col sm={3}>Katrgoria: </Col>
-                  <Col>
-                    <input
-                      type="checkbox"
-                      title="clickmey"
-                      name="Katrgoria"
-                      checked={
-                        allPages.find((i) => i.title === "Zamówienia").isActive
-                      }
-                      onChange={(event) =>
-                        handleCheckboxChange(event, "Zamówienia")
-                      }
-                    />
-                  </Col>
-                </Row>
+                <EditSidebarCheckbox
+                  name="Zamówienia"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "Zamówienia")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="Opinie"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "Opinie")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="Zlecenia"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "Zlecenia")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="O firmie"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "O firmie")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="Newsletter"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "Newsletter")}
+                  onChange={handleCheckboxChange}
+                />
               </Accordion.Body>
             </Accordion>
           </Row>
@@ -153,7 +200,7 @@ function EditWorkerSidebar({ workerId }) {
                 </Row>
                 <Row className="mt-2">
                   <Col sm={3} className="text-end">
-                    Użytkownicy:{" "}
+                    Użytkownicy:
                   </Col>
                   <Col>
                     <input
@@ -175,7 +222,7 @@ function EditWorkerSidebar({ workerId }) {
                 </Row>
                 <Row className="mt-2">
                   <Col sm={3} className="text-end">
-                    Pracownicy:{" "}
+                    Pracownicy:
                   </Col>
                   <Col>
                     <input
@@ -321,14 +368,7 @@ function EditWorkerSidebar({ workerId }) {
                     .children.find((i) => i.name == "Strona Główna")}
                   onChange={handleCheckboxChange}
                 />
-                <EditSidebarCheckbox
-                  name="Menu"
-                  mainCategory="Strona"
-                  item={allPages
-                    .find((i) => i.title === "Strona")
-                    .children.find((i) => i.name == "Menu")}
-                  onChange={handleCheckboxChange}
-                />
+
                 <EditSidebarCheckbox
                   name="Footer"
                   mainCategory="Strona"
@@ -376,6 +416,30 @@ function EditWorkerSidebar({ workerId }) {
                     .children.find((i) => i.name == "Statusy Wypozyczeń")}
                   onChange={handleCheckboxChange}
                 />
+                <EditSidebarCheckbox
+                  name="Statusy Faktur"
+                  mainCategory="Ustawienia"
+                  item={allPages
+                    .find((i) => i.title === "Ustawienia")
+                    .children.find((i) => i.name == "Statusy Faktur")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="Zlecenia Statusy"
+                  mainCategory="Ustawienia"
+                  item={allPages
+                    .find((i) => i.title === "Ustawienia")
+                    .children.find((i) => i.name == "Zlecenia Statusy")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
+                  name="Zlecenia Priorytety"
+                  mainCategory="Ustawienia"
+                  item={allPages
+                    .find((i) => i.title === "Ustawienia")
+                    .children.find((i) => i.name == "Zlecenia Priorytety")}
+                  onChange={handleCheckboxChange}
+                />
               </Accordion.Body>
             </Accordion>
           </Row>
@@ -389,16 +453,16 @@ export default EditWorkerSidebar;
 
 const genereateNew = [
   {
-    title: "Analizy",
+    title: "Firma",
     icon: "nc-icon nc-alien-33",
     isActive: false,
-    children: [],
-  },
-  {
-    title: "Zamówienia",
-    icon: "nc-icon nc-alien-33",
-    isActive: false,
-    children: [{ name: "Wypozyczenia", path: "/rentals", isActive: false }],
+    children: [
+      { name: "Zamówienia", path: "/rentals", isActive: false },
+      { name: "Opinie", path: "/opinion", isActive: false },
+      { name: "Zlecenia", path: "/workOrder", isActive: false },
+      { name: "O firmie", path: "/company", isActive: false },
+      { name: "Newsletter", path: "/newsletter", isActive: false },
+    ],
   },
   {
     title: "Użytkownicy",
@@ -427,7 +491,6 @@ const genereateNew = [
         isActive: false,
       },
       { name: "Limity kilometrów", path: "/cars/limits", isActive: false },
-      { name: "Kalendarz", path: "/cars/calendar", isActive: false },
     ],
   },
   {
@@ -435,10 +498,9 @@ const genereateNew = [
     icon: "nc-icon nc-alien-33",
     isActive: false,
     children: [
-      { name: "Strona Główna", path: "", isActive: false },
-      { name: "Menu", path: "", isActive: false },
-      { name: "Footer", path: "", isActive: false },
-      { name: "Kontakt", path: "", isActive: false },
+      { name: "Strona Główna", path: "/cms/home", isActive: false },
+      { name: "Footer", path: "/cms/footer", isActive: false },
+      { name: "Kontakt", path: "/cms/contact", isActive: false },
     ],
   },
   {
@@ -447,12 +509,29 @@ const genereateNew = [
     isActive: false,
     children: [
       { name: "Statusy Wypozyczeń", path: "/rental/status", isActive: false },
+      { name: "Statusy Faktur", path: "/invoice/status", isActive: false },
+      {
+        name: "Zlecenia Statusy",
+        path: "/workOrder/statuses",
+        isActive: false,
+      },
+      {
+        name: "Zlecenia Priorytety",
+        path: "/workOrder/priority",
+        isActive: false,
+      },
     ],
   },
-  {
-    title: "Temp",
+];
+
+/* 
+{
+    title: "Analizy",
     icon: "nc-icon nc-alien-33",
     isActive: false,
-    children: [],
+    children: [
+      { name: "Samochodów", path: "/analyses/car", isActive: false },
+      { name: "Klientów", path: "/analyses/users", isActive: false },
+    ],
   },
-];
+*/
