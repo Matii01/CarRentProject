@@ -14,6 +14,9 @@ import WorkerSidebar from "./components/Sidebar/WorkerSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setUserName, setUserRoles } from "./shared/userSlice";
+import jwtInterceptor from "./utils/jwtInterceptor";
+import AccessDenied from "./pages/login/AccessDenied";
+import useRefreshToken from "./hooks/UseRefreshToken";
 
 function App() {
   const [hasImage, setHasImage] = React.useState(true);
@@ -24,41 +27,13 @@ function App() {
   const image = sidebarImage;
   const mainPanel = React.useRef(null);
 
+  useRefreshToken();
+
   const toggleSidebar = () => {
     setHideSidebar(!hideSidebar);
   };
 
   const user = useSelector((state) => state.user);
-
-  function setData(data) {
-    localStorage.setItem("accessToken", data.token.accessToken);
-    localStorage.setItem("refreshToken", data.token.refreshToken);
-    dispatch(setUserName({ userName: data.userName }));
-    dispatch(setUserRoles({ role: data.role }));
-  }
-
-  if (user.userName === "") {
-    console.log("not login");
-    const refreshToken = localStorage.getItem("refreshToken");
-    const accessToken = localStorage.getItem("accessToken");
-    axios
-      .post(
-        `https://localhost:7091/token/retrieve`,
-        JSON.stringify({ accessToken, refreshToken }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((data) => {
-        console.log(data);
-        setData(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   const isAdmin = user.role.includes("Administrator");
   const isWorker = user.role.includes("Worker");
@@ -142,8 +117,7 @@ function App() {
       )}
       {!isAdmin && !isWorker && (
         <div className="wrapper">
-          <p>you don't have permission</p>
-          <Button onClick={goToLogin}>Go To login</Button>
+          <AccessDenied />
         </div>
       )}
     </>
@@ -151,6 +125,33 @@ function App() {
 }
 
 export default App;
+
+// function setData(data) {
+//   localStorage.setItem("accessToken", data.token.accessToken);
+//   localStorage.setItem("refreshToken", data.token.refreshToken);
+//   dispatch(setUserName({ userName: data.userName }));
+//   dispatch(setUserRoles({ role: data.role }));
+// }
+
+// if (user.userName === "") {
+//   console.log("not login");
+//   const refreshToken = localStorage.getItem("refreshToken");
+//   const accessToken = localStorage.getItem("accessToken");
+
+//   jwtInterceptor
+//     .post(`token/retrieve`, JSON.stringify({ accessToken, refreshToken }), {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     })
+//     .then((data) => {
+//       console.log(data);
+//       setData(data.data);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
 /*<>
   <div className="wrapper">
