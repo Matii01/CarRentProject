@@ -18,7 +18,7 @@ function EditConditioning({ editItem, onCancel, updateView }) {
   const updateItem = () => {
     jwtInterceptor
       .put(
-        `https://localhost:7091/AirConditioning/update/${editedItem.id}`,
+        `AirConditioning/update/${editedItem.id}`,
         JSON.stringify(editedItem),
         {
           headers: {

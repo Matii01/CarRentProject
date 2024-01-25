@@ -12,7 +12,7 @@ function AddKilometreLimit({ onAdd }) {
   const AddNewItem = () => {
     console.log(newItem);
     jwtInterceptor
-      .post(`https://localhost:7091/KilometrLimit`, JSON.stringify(newItem), {
+      .post(`KilometrLimit`, JSON.stringify(newItem), {
         headers: {
           "Content-Type": "application/json",
         },

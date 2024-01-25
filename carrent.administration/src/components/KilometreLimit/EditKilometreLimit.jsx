@@ -18,7 +18,7 @@ function EditKilometreLimit({ editItem, onCancel, updateView }) {
   const updateItem = () => {
     jwtInterceptor
       .put(
-        `https://localhost:7091/KilometrLimit/update/${editedItem.id}`,
+        `KilometrLimit/update/${editedItem.id}`,
         JSON.stringify(editedItem),
         {
           headers: {

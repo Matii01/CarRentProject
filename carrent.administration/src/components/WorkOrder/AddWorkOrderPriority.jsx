@@ -17,15 +17,11 @@ function AddWorkOrderPriority({ onAdd }) {
   const AddNewStatus = () => {
     console.log(newPriority);
     jwtInterceptor
-      .post(
-        `https://localhost:7091/WorkOrderPriority/create`,
-        JSON.stringify(newPriority),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`WorkOrderPriority/create`, JSON.stringify(newPriority), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         toast.success("Dodano");
         setNewStatus({ name: "", description: "" });

@@ -20,15 +20,11 @@ function AddInvoiceStatus({ onAdd }) {
   const AddNewStatus = () => {
     console.log(newStatus);
     jwtInterceptor
-      .post(
-        `https://localhost:7091/InvoiceStatus/create`,
-        JSON.stringify(newStatus),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`InvoiceStatus/create`, JSON.stringify(newStatus), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         toast.success("Dodano");
         setNewStatus({ name: "", description: "" });

@@ -17,7 +17,7 @@ function GearboxType() {
 
   useEffect(() => {
     jwtInterceptor
-      .get(`https://localhost:7091/GearboxType`)
+      .get(`GearboxType`)
       .then((data) => {
         console.log(data);
         setGearboxList(data.data);
@@ -53,7 +53,7 @@ function GearboxType() {
 
   const onDeleteClick = (id) => {
     jwtInterceptor
-      .delete(`https://localhost:7091/GearboxType/delete/${id}`)
+      .delete(`GearboxType/delete/${id}`)
       .then((data) => {
         if (data.status === 204) {
           filterView(id);

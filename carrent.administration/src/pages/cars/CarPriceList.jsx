@@ -18,7 +18,7 @@ function CarPriceList() {
 
   const getPriceLists = () => {
     jwtInterceptor
-      .get(`https://localhost:7091/CarPriceList/${param.carId}/PriceList`)
+      .get(`CarPriceList/${param.carId}/PriceList`)
       .then((data) => {
         setPriceList(data.data);
         console.log(data.data);

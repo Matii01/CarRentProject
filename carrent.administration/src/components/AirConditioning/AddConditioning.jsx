@@ -12,7 +12,7 @@ function AddConditioning({ onAdd }) {
   const AddNewItem = () => {
     console.log(newItem);
     jwtInterceptor
-      .post(`https://localhost:7091/AirConditioning`, JSON.stringify(newItem), {
+      .post(`AirConditioning`, JSON.stringify(newItem), {
         headers: {
           "Content-Type": "application/json",
         },

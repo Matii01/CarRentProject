@@ -53,7 +53,7 @@ function WorkOrderAdminView() {
   const getData = () => {
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
-      .get(`https://localhost:7091/WorkOrder/all?${queryString}`)
+      .get(`WorkOrder/all?${queryString}`)
       .then((data) => {
         console.log(data.data);
         setItems(data.data.items);

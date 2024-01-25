@@ -19,12 +19,10 @@ function KilometreLimit() {
   }, []);
 
   const getData = () => {
-    jwtInterceptor
-      .get("https://localhost:7091/KilometrLimit")
-      .then((results) => {
-        console.log(results);
-        setItems(results.data);
-      });
+    jwtInterceptor.get("KilometrLimit").then((results) => {
+      console.log(results);
+      setItems(results.data);
+    });
   };
 
   const onDoubleClick = (item) => {
@@ -34,11 +32,9 @@ function KilometreLimit() {
 
   const handleDelete = (id) => {
     console.log("delete: " + id);
-    jwtInterceptor
-      .delete(`https://localhost:7091/KilometrLimit/${id}`)
-      .then((results) => {
-        getData();
-      });
+    jwtInterceptor.delete(`KilometrLimit/${id}`).then((results) => {
+      getData();
+    });
   };
 
   const handleSearch = (event) => {

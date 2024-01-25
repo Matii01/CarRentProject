@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import fetchData from "../../functions/fetchData";
+import jwtInterceptor from "../../utils/jwtInterceptor";
+import { toast } from "react-toastify";
 
 function AddPricelist({ carId, onAdded }) {
   const [pricelistName, setPricelistName] = useState("");
@@ -18,19 +20,24 @@ function AddPricelist({ carId, onAdded }) {
   // PriceListDto(int Id, int CarId, string? Name);
   // [HttpPost("create/{carId:int}")]
   const sendNewpriceList = () => {
-    fetchData(`https://localhost:7091/CarPriceList/create/${carId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { CarId: carId, name: pricelistName },
-    })
+    jwtInterceptor
+      .post(
+        `CarPriceList/create/${carId}`,
+        JSON.stringify({ CarId: carId, name: pricelistName }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((data) => {
         console.log(data);
         onAdded();
+        toast.success("dodano");
       })
       .catch((error) => {
         console.log(error);
+        toast.error("błąd");
       });
   };
 

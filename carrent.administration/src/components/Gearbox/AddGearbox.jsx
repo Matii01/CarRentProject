@@ -12,15 +12,11 @@ function AddGearbox({ onAdd }) {
   const AddNewCarMake = () => {
     console.log(newGearbox);
     jwtInterceptor
-      .post(
-        `https://localhost:7091/GearboxType/create`,
-        JSON.stringify(newGearbox),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`/GearboxType/create`, JSON.stringify(newGearbox), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         onAdd(data.data.createdGearbox);
         setNewGerabox({ name: "" });

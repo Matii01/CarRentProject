@@ -54,15 +54,11 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
 
   const update = () => {
     jwtInterceptor
-      .put(
-        `https://localhost:7091/WorkOrder/update/${workOrderId}`,
-        JSON.stringify(updatedObject()),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .put(`WorkOrder/update/${workOrderId}`, JSON.stringify(updatedObject()), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         updateView();

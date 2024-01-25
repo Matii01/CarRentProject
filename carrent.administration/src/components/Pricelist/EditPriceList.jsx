@@ -22,7 +22,7 @@ function EditPriceList({ priceList, onCancel, onEdit }) {
 
     jwtInterceptor
       .put(
-        `https://localhost:7091/CarPriceList/update/${priceList.id}`,
+        `CarPriceList/update/${priceList.id}`,
         JSON.stringify({ id: priceList.id, name: newName }),
         {
           headers: {

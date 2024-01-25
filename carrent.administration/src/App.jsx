@@ -111,7 +111,6 @@ function App() {
             <div className="content">
               <Outlet />
             </div>
-            <Footer />
           </div>
         </div>
       )}

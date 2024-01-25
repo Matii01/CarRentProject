@@ -18,7 +18,7 @@ function EditRentalStatus({ editStatus, onCancel, updateView }) {
   const updateStatus = () => {
     axios
       .put(
-        `https://localhost:7091/RentalStatus/update/${editedStatus.id}`,
+        `RentalStatus/update/${editedStatus.id}`,
         JSON.stringify(editedStatus),
         {
           headers: {

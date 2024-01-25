@@ -199,7 +199,7 @@ function Engines() {
 
   const handleDelete = (id) => {
     jwtInterceptor
-      .delete(`https://localhost:7091/EngineType/${id}`)
+      .delete(`EngineType/${id}`)
       .then(() => {
         getData();
         onCancel();

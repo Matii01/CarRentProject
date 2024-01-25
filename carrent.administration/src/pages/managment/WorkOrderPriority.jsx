@@ -19,7 +19,7 @@ function WorkOrderPriority() {
 
   const getPriorities = () => {
     jwtInterceptor
-      .get("https://localhost:7091/WorkOrderPriority")
+      .get("WorkOrderPriority")
       .then((data) => {
         console.log(data);
         setPriorities(data.data);

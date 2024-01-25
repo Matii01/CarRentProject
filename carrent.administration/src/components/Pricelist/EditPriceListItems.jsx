@@ -21,7 +21,7 @@ function EditPricelistItems({ pricelistId }) {
 
   const getData = () => {
     jwtInterceptor
-      .get(`https://localhost:7091/CarPriceList/${pricelistId}/pricelistItems`)
+      .get(`CarPriceList/${pricelistId}/pricelistItems`)
       .then((data) => {
         setItems(data.data);
         console.log(data);
@@ -44,15 +44,11 @@ function EditPricelistItems({ pricelistId }) {
 
   const AddNewItem = () => {
     jwtInterceptor
-      .post(
-        `https://localhost:7091/CarPriceList/addItem`,
-        JSON.stringify(newItem),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`CarPriceList/addItem`, JSON.stringify(newItem), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         toast.success("Dodano");
         getData();

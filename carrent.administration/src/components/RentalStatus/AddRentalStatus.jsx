@@ -18,15 +18,11 @@ function AddRentalStatus({ onAdd }) {
   const AddNewStatus = () => {
     console.log(newStatus);
     axios
-      .post(
-        `https://localhost:7091/RentalStatus/create`,
-        JSON.stringify(newStatus),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`RentalStatus/create`, JSON.stringify(newStatus), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         toast.success("Zapisano zmiany");
         setNewStatus({ status: "", remarks: "", isDefault: false });

@@ -19,7 +19,7 @@ function WorkOrderStatus() {
 
   const getStatuses = () => {
     jwtInterceptor
-      .get("https://localhost:7091/WorkOrderStatus")
+      .get("WorkOrderStatus")
       .then((data) => {
         console.log(data);
         setStatuses(data.data);

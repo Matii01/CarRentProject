@@ -18,7 +18,7 @@ function EditGearboxType({ gearbox, onCancel, updateView }) {
     console.log("todo: update");
     jwtInterceptor
       .put(
-        `https://localhost:7091/GearboxType/update/${editedGearbox.id}`,
+        `GearboxType/update/${editedGearbox.id}`,
         JSON.stringify(editedGearbox),
         {
           headers: {

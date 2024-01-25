@@ -17,15 +17,11 @@ function AddWorkOrderStatus({ onAdd }) {
   const AddNewStatus = () => {
     console.log(newStatus);
     jwtInterceptor
-      .post(
-        `https://localhost:7091/WorkOrderStatus/create`,
-        JSON.stringify(newStatus),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`WorkOrderStatus/create`, JSON.stringify(newStatus), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         toast.success("Dodano");
         console.log(data.data);

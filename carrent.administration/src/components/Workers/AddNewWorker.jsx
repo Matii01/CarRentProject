@@ -73,15 +73,11 @@ function AddNewWorker() {
 
   const registerNewUser = () => {
     jwtInterceptor
-      .post(
-        `https://localhost:7091/authentication/registerNewWorker`,
-        JSON.stringify(newUser),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`authentication/registerNewWorker`, JSON.stringify(newUser), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         if (data === 201) {
           console.log("register ok");

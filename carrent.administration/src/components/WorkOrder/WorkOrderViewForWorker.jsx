@@ -59,15 +59,11 @@ function WorkOrderViewForWorker({
 
   const update = () => {
     jwtInterceptor
-      .put(
-        `https://localhost:7091/WorkOrder/update/${workOrderId}`,
-        JSON.stringify(updatedObject()),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .put(`WorkOrder/update/${workOrderId}`, JSON.stringify(updatedObject()), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         toast.success("Zapisano zmiany");
@@ -99,7 +95,7 @@ function WorkOrderViewForWorker({
   const asCompleated = () => {
     jwtInterceptor
       .post(
-        `https://localhost:7091/WorkOrder/compleat/${workOrderId}`,
+        `WorkOrder/compleat/${workOrderId}`,
         JSON.stringify(updatedObject()),
         {
           headers: {

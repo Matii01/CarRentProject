@@ -17,12 +17,10 @@ function AirConditioning() {
   }, []);
 
   const getData = () => {
-    jwtInterceptor
-      .get("https://localhost:7091/AirConditioning")
-      .then((results) => {
-        console.log(results);
-        setItems(results.data);
-      });
+    jwtInterceptor.get("AirConditioning").then((results) => {
+      console.log(results);
+      setItems(results.data);
+    });
   };
 
   const onDoubleClick = (item) => {
@@ -32,12 +30,10 @@ function AirConditioning() {
 
   const handleDelete = (id) => {
     console.log("delete: " + id);
-    jwtInterceptor
-      .delete(`https://localhost:7091/AirConditioning/${id}`)
-      .then((results) => {
-        getData();
-        toast.success("usunięto");
-      });
+    jwtInterceptor.delete(`AirConditioning/${id}`).then((results) => {
+      getData();
+      toast.success("usunięto");
+    });
   };
 
   const handleSearch = (event) => {

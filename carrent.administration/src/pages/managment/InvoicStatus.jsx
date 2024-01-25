@@ -19,7 +19,7 @@ function InvoiceStatus() {
 
   const getStatuses = () => {
     jwtInterceptor
-      .get("https://localhost:7091/InvoiceStatus")
+      .get("InvoiceStatus")
       .then((data) => {
         console.log(data);
         setStatuses(data.data);
@@ -58,7 +58,7 @@ function InvoiceStatus() {
 
   const onDeleteClick = (itemId) => {
     jwtInterceptor
-      .delete(`https://localhost:7091/InvoiceStatus/${itemId}`)
+      .delete(`InvoiceStatus/${itemId}`)
       .then((data) => {
         toast.success("Usunięto");
         refreshView();

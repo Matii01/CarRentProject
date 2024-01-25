@@ -19,7 +19,7 @@ function EditWorkOrderPriority({ editPriority, onCancel, updateView }) {
   const updateStatus = () => {
     jwtInterceptor
       .put(
-        `https://localhost:7091/WorkOrderPriority/update/${editedPriority.id}`,
+        `WorkOrderPriority/update/${editedPriority.id}`,
         JSON.stringify(editedPriority),
         {
           headers: {

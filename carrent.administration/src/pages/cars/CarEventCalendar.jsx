@@ -36,7 +36,7 @@ function CarEventCalendar() {
   const getRentals = () => {
     const queryString = transformObjectToQuery(filterRental);
     jwtInterceptor
-      .get(`https://localhost:7091/Rental/AllRentals?${queryString}`)
+      .get(`Rental/AllRentals?${queryString}`)
       .then((data) => {
         console.log(data);
         setRentals(data.data.items);
@@ -59,7 +59,7 @@ function CarEventCalendar() {
   const getService = () => {
     const queryString = transformObjectToQuery(filterService);
     jwtInterceptor
-      .get(`https://localhost:7091/CarMaintenance/All?${queryString}`)
+      .get(`CarMaintenance/All?${queryString}`)
       .then((data) => {
         transformAndSetService(data.data);
       })

@@ -21,7 +21,7 @@ function RentalStatus() {
 
   const getStatuses = () => {
     jwtInterceptor
-      .get("https://localhost:7091/RentalStatus")
+      .get("RentalStatus")
       .then((data) => {
         console.log(data);
         setStatuses(data.data);
@@ -60,7 +60,7 @@ function RentalStatus() {
 
   const onDeleteClick = (itemId) => {
     jwtInterceptor
-      .delete(`https://localhost:7091/RentalStatus/${itemId}`)
+      .delete(`RentalStatus/${itemId}`)
       .then((data) => {
         toast.success("Usunięto");
         refreshView();

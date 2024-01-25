@@ -19,7 +19,7 @@ function EditWorkOrderStatus({ editStatus, onCancel, updateView }) {
   const updateStatus = () => {
     jwtInterceptor
       .put(
-        `https://localhost:7091/WorkOrderStatus/update/${editedStatus.id}`,
+        `WorkOrderStatus/update/${editedStatus.id}`,
         JSON.stringify(editedStatus),
         {
           headers: {

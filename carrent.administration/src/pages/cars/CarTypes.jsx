@@ -69,7 +69,7 @@ function CarTypes() {
 
   const getData = () => {
     jwtInterceptor
-      .get("https://localhost:7091/CarType")
+      .get("CarType")
       .then((data) => {
         console.log(data);
         dispatch({
@@ -146,15 +146,11 @@ function CarTypes() {
 
   const editCarType = (id) => {
     jwtInterceptor
-      .put(
-        `https://localhost:7091/cartype/update/${id}`,
-        JSON.stringify(state.newCarType),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .put(`cartype/update/${id}`, JSON.stringify(state.newCarType), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then(() => {
         getData();
         onCancel();
@@ -174,15 +170,11 @@ function CarTypes() {
 
   const addNewCarType = () => {
     jwtInterceptor
-      .post(
-        "https://localhost:7091/cartype",
-        JSON.stringify(state.newCarType),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post("cartype", JSON.stringify(state.newCarType), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then(() => {
         getData();
         onCancel();
@@ -204,7 +196,7 @@ function CarTypes() {
     console.log(id);
     console.log("delete");
     jwtInterceptor
-      .delete(`https://localhost:7091/cartype/delete/${id}`)
+      .delete(`cartype/delete/${id}`)
       .then(() => {
         getData();
         onCancel();

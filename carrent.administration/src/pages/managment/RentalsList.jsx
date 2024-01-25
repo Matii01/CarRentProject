@@ -24,7 +24,7 @@ function RentalsList() {
     const queryString = new URLSearchParams(filteredParams).toString();
 
     jwtInterceptor
-      .get(`https://localhost:7091/Rental/AllRentals?${queryString}`)
+      .get(`Rental/AllRentals?${queryString}`)
       .then((data) => {
         setItems(data.data);
         console.log(data);

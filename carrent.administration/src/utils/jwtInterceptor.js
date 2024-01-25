@@ -57,19 +57,19 @@ jwtInterceptor.interceptors.request.use(
     return response;
   },
   async (error) => {
-    console.log("Intercepted error:", error);
-    console.log("error");
-    const request = error.config;
-    if (error.response.status === 401) {
-      console.log("401, i will try to refresh token");
-      const newToken = await refreshToken();
-      axios.defaults.headers.common["Authorization"] = "Bearer " + newToken;
-      return jwtInterceptor(request);
-    }
-    if (error.response.status === 403) {
-      toast.error("Brak uprawnień");
-      return jwtInterceptor(request);
-    }
+    // console.log("Intercepted error:", error);
+    // console.log("error");
+    // const request = error.config;
+    // if (error.response.status === 401) {
+    //   console.log("401, i will try to refresh token");
+    //   const newToken = await refreshToken();
+    //   axios.defaults.headers.common["Authorization"] = "Bearer " + newToken;
+    //   return jwtInterceptor(request);
+    // }
+    // if (error.response.status === 403) {
+    //   toast.error("Brak uprawnień");
+    //   return jwtInterceptor(request);
+    // }
     return Promise.reject(error);
   }
 );

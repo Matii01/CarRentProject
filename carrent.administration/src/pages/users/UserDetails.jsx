@@ -16,9 +16,7 @@ function UserDetail() {
 
   useEffect(() => {
     jwtInterceptor
-      .get(
-        `https://localhost:7091/Users/userDetails?userName=${param.userName}`
-      )
+      .get(`Users/userDetails?userName=${param.userName}`)
       .then((data) => {
         console.log(data);
         //setUsersList(data.data);
