@@ -32,6 +32,11 @@ namespace CarRent.Service.Service
         {
             var workers = await GetWorkerListForWorkOrder(id);
 
+            int compleatedStatusId = await _repository.WorkOrderStatus
+                .FindByCondition(x => x.IsActive == true && x.IsDefaultForCompleated == true, false)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
             var item = await _repository.WorkOrder
                 .GetAsync(id, false)
                 .Select(x => new WorkOrderDetailsDto(
@@ -46,6 +51,7 @@ namespace CarRent.Service.Service
                         x.EstimatedHours,
                         x.ActualHours,
                         x.Notes,
+                        x.WorkOrderStatusId != compleatedStatusId,
                         workers
                     ))
                 .SingleOrDefaultAsync();
@@ -161,6 +167,27 @@ namespace CarRent.Service.Service
             toUpdate.EstimatedHours = workOrder.EstimatedHours ?? 0;
             toUpdate.Notes = workOrder.Notes;
  
+            await _repository.SaveAsync();
+        }
+
+        public async Task CompleatWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder)
+        {
+            var toUpdate = await _repository.WorkOrder
+                .GetAsync(workOrderId, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+
+            //TODO get status from service 
+
+            int compleatedStatusId = await _repository.WorkOrderStatus
+                .FindByCondition(x => x.IsActive == true && x.IsDefaultForCompleated == true, false)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            await Console.Out.WriteLineAsync("Statusid : " + compleatedStatusId.ToString());
+
+            toUpdate.CompletedDate = DateTime.Now;
+            toUpdate.WorkOrderStatusId = compleatedStatusId;
+
             await _repository.SaveAsync();
         }
 

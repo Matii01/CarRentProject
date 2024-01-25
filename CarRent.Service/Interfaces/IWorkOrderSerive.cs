@@ -13,6 +13,7 @@ namespace CarRent.Service.Interfaces
         Task<PagedList<WorkOrderDto>> GetWorkOrderByParamsAsync(WorkOrderParameters orderParams);
         Task<DataForWorkOrderFilters> GetDataForWorkOrderFilters();
         Task UpdateWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder);
+        Task CompleatWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder);
         Task DeleteWorkOrderAsync(int workOrderId);
     }
 }

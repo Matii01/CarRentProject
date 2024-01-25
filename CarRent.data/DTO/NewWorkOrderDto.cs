@@ -60,6 +60,7 @@ namespace CarRent.data.DTO
         decimal? EstimatedHours,
         decimal? ActualHours,
         string? Notes,
+        bool? IsEditable,
         IEnumerable<WorkersForWorkOrder> Workers
     );
 

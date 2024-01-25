@@ -1,4 +1,6 @@
 import axios from "axios";
+import config from "../../config";
+import { toast } from "react-toastify";
 
 async function refreshToken() {
   console.log("try to refresh");
@@ -27,7 +29,7 @@ async function refreshToken() {
 }
 
 const jwtInterceptor = axios.create({
-  baseURL: "https://localhost:7091/",
+  baseURL: config.API_URL,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
   },
@@ -62,6 +64,10 @@ jwtInterceptor.interceptors.request.use(
       console.log("401, i will try to refresh token");
       const newToken = await refreshToken();
       axios.defaults.headers.common["Authorization"] = "Bearer " + newToken;
+      return jwtInterceptor(request);
+    }
+    if (error.response.status === 403) {
+      toast.error("Brak uprawnień");
       return jwtInterceptor(request);
     }
     return Promise.reject(error);

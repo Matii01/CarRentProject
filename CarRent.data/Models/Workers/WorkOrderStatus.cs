@@ -11,6 +11,9 @@ namespace CarRent.data.Models.Workers
         public override int Id { get ; set ; }
         public string Name { get; set; } = null!;
         public string? Description  { get; set; } = null!;
-        
+        public bool? IsDefaultForNew { get; set; }
+        public bool? IsDefaultForCompleated { get; set; }
+        public bool? IsDefaultForCanceled { get; set; }
+
     }
 }

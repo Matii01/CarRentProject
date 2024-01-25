@@ -29,5 +29,6 @@ namespace CarRent.data.Models.Workers
         [Range(0, double.MaxValue)]
         public decimal ActualHours  { get; set; }
         public string? Notes { get; set; }
+       
     }
 }

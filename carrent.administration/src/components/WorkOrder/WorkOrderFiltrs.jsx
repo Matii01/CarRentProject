@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
-function WorkOrderFiltrs({ filtrs, setFiltrs, forFilters, onApplayFiltrs }) {
+function WorkOrderFiltrs({
+  filtrs,
+  setFiltrs,
+  forFilters,
+  onApplayFiltrs,
+  isAdmin,
+}) {
   const [showFilters, setShowFilters] = useState(false);
 
   const handleChange = (event) => {
@@ -66,18 +72,20 @@ function WorkOrderFiltrs({ filtrs, setFiltrs, forFilters, onApplayFiltrs }) {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Pracownik</Form.Label>
-                  <Form.Select onChange={handleChange} name="WorkerId">
-                    <option value={null}>Select... </option>
-                    {forFilters &&
-                      forFilters.worker.map((type) => (
-                        <option key={type.workerId} value={type.workerId}>
-                          {type.name}
-                        </option>
-                      ))}
-                  </Form.Select>
-                </Form.Group>
+                {isAdmin && (
+                  <Form.Group className="mb-3">
+                    <Form.Label>Pracownik</Form.Label>
+                    <Form.Select onChange={handleChange} name="WorkerId">
+                      <option value={null}>Select... </option>
+                      {forFilters &&
+                        forFilters.worker.map((type) => (
+                          <option key={type.workerId} value={type.workerId}>
+                            {type.name}
+                          </option>
+                        ))}
+                    </Form.Select>
+                  </Form.Group>
+                )}
               </Col>
             </Row>
 
