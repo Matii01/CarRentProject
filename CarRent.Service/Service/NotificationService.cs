@@ -80,15 +80,42 @@ namespace CarRent.Service.Service
 
         public async Task SendUpdateInvoiceStatusNotificationAsync(string UserId, string OldStatus, string NewStatus)
         {
-            string Message = $"Zmiana statusu faktury z {OldStatus} na {NewStatus}";
-            NewNotificationDto notification = new(UserId, "New Rabat", Message);
-            await CreateNotificationAsync(notification);
+            var item = await _repository.ApplicationSettings
+                .FindByCondition(x => x.IsActive == true, false)
+                .SingleOrDefaultAsync();
+
+            if (item != null && item.SendNotificationOnInvoiceStatusUpdate == true)
+            {
+                string Message = $"Zmiana statusu faktury z {OldStatus} na {NewStatus}";
+                NewNotificationDto notification = new(UserId, "Invoice Status Update", Message);
+                await CreateNotificationAsync(notification);
+            }
         }
         public async Task SendUpdateRentalStatusNotificationAsync(string UserId, string OldStatus, string NewStatus)
         {
-            string Message = $"Zmiana statusu z {OldStatus} na {NewStatus}";
-            NewNotificationDto notification = new(UserId, "New Rabat", Message);
-            await CreateNotificationAsync(notification);
+            var item = await _repository.ApplicationSettings
+                .FindByCondition(x => x.IsActive == true, false)
+                .SingleOrDefaultAsync();
+
+            if (item != null && item.SendNotificationOnRentalStatusUpdate == true)
+            {
+                string Message = $"Zmiana statusu z {OldStatus} na {NewStatus}";
+                NewNotificationDto notification = new(UserId, "Rental Status Update", Message);
+                await CreateNotificationAsync(notification);
+            }
+        }
+        public async Task SendAddedRentalNotificationAsync(string UserId, NewRentalForClient rental)
+        {
+            var item = await _repository.ApplicationSettings
+                .FindByCondition(x => x.IsActive == true, false)
+                .SingleOrDefaultAsync();
+
+            if (item != null && item.SendNotificationOnRentalCreate == true)
+            {
+                string Message = $"Dodano nowe wypożyczenie. \nOd: {rental.DateFrom} \nDo {rental.DateTo}";
+                NewNotificationDto notification = new(UserId, "Create Rental", Message);
+                await CreateNotificationAsync(notification);
+            }
         }
 
         public async Task<NewNotificationDto> CreateNotificationAsync(NewNotificationDto notification)

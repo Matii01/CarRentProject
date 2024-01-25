@@ -20,5 +20,6 @@ namespace CarRent.Service.Interfaces
         Task DeleteNotificationAsync(int notificationId);
         Task SendUpdateInvoiceStatusNotificationAsync(string UserId, string OldStatus, string NewStatus);
         Task SendUpdateRentalStatusNotificationAsync(string UserId, string OldStatus, string NewStatus);
+        Task SendAddedRentalNotificationAsync(string UserId, NewRentalForClient rental);
     }
 }

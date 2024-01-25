@@ -190,8 +190,9 @@ namespace CarRent.Service.Service
                     carName.Name,
                     carName.CarImage,
                     Rental.InvoiceItem.Gross
-                    ); 
+                    );
 
+            await _notification.SendAddedRentalNotificationAsync(userId, newRental);
             return rentalInfo;
         }
 
