@@ -41,7 +41,7 @@ function useGetNotification() {
 
   const getNotification = () => {
     axiosInstance
-      .get(`https://localhost:7091/Notification/myNotification`)
+      .get(`/Notification/myNotification`)
       .then((data) => {
         console.log(data.data);
         console.log("new data");

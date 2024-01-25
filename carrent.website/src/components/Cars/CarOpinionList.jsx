@@ -6,7 +6,7 @@ function CarOpinionList({ carid }) {
   const [list, setList] = useState([]);
   useEffect(() => {
     axiosInstance
-      .get(`https://localhost:7091/CarOpinion/${carid}`)
+      .get(`CarOpinion/${carid}`)
       .then((data) => {
         setList(data.data);
       })

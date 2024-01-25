@@ -6,6 +6,7 @@ import {
   CardElement,
 } from "@stripe/react-stripe-js";
 import { Button } from "react-bootstrap";
+import config from "../../../config";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -25,7 +26,7 @@ const CheckoutForm = () => {
 
     const cardElemet = elements.getElement(CardElement);
     const { clientSecret } = await fetch(
-      "https://localhost:7091/Payment/NewPayment",
+      `${config.API_URL}/Payment/NewPayment`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

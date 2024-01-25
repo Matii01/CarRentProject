@@ -6,6 +6,7 @@ import TechDetailCard from "../../components/Cars/TechDetailCard";
 import BookCar from "../../components/Cars/BookCar";
 import Pricelist from "../../components/Cars/Pricelist";
 import CarOpinionList from "../../components/Cars/CarOpinionList";
+import axiosInstance from "../../utils/axiosConfig";
 
 function CarDetailsForClient() {
   const [car, setCar] = useState({});
@@ -14,8 +15,8 @@ function CarDetailsForClient() {
 
   useEffect(() => {
     //details/{id:int}
-    axios
-      .get(`https://localhost:7091/Car/details/${param.carId}`)
+    axiosInstance
+      .get(`Car/details/${param.carId}`)
       .then((data) => {
         console.log(data);
         setCar(data.data);

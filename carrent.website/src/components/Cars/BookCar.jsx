@@ -45,16 +45,12 @@ function BookCar({ carId, excludedDates }) {
 
   const bookCar = () => {
     console.log(reservationData);
-    axios
-      .post(
-        `https://localhost:7091/Rental/IsDateAvailable`,
-        JSON.stringify(reservationData),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+    axiosInstance
+      .post(`Rental/IsDateAvailable`, JSON.stringify(reservationData), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         if (data.data === true) {
@@ -79,7 +75,7 @@ function BookCar({ carId, excludedDates }) {
   const checkPriceForUser = () => {
     const queryString = transformObjectToQueryString(reservationData);
     axiosInstance
-      .get(`https://localhost:7091/Rental/CheckPriceForClient?${queryString}`)
+      .get(`Rental/CheckPriceForClient?${queryString}`)
       .then((data) => {
         setCost(data.data);
       })
@@ -91,7 +87,7 @@ function BookCar({ carId, excludedDates }) {
   const checkPriceForLoggedOff = () => {
     const queryString = transformObjectToQueryString(reservationData);
     axios
-      .get(`https://localhost:7091/Rental/CheckPrice?${queryString}`)
+      .get(`Rental/CheckPrice?${queryString}`)
       .then((data) => {
         setCost(data.data);
       })

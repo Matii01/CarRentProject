@@ -9,7 +9,7 @@ function NotificationDetails({ item, onGoBack, onMessageRead }) {
 
   const readMessage = () => {
     axiosInstance
-      .post(`https://localhost:7091/Notification/read/${item.id}`)
+      .post(`Notification/read/${item.id}`)
       .then((data) => {
         console.log(data);
         onMessageRead(item.id);

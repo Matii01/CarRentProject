@@ -9,7 +9,7 @@ function RecommendedCars() {
   const navigate = useNavigate();
   useEffect(() => {
     axiosInstance
-      .get(`https://localhost:7091/car/recommended`)
+      .get(`car/recommended`)
       .then((data) => {
         console.log(data.data);
         setItems(data.data);

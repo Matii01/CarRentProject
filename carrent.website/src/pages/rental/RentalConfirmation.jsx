@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import axiosInstance from "../../utils/axiosConfig";
 
 function RentalConfirmation() {
   const location = useLocation();
@@ -9,8 +10,8 @@ function RentalConfirmation() {
   const [rentalData, setRentalData] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`https://localhost:7091/Rental/rentalDetail/${rentalId}`)
+    axiosInstance
+      .get(`Rental/rentalDetail/${rentalId}`)
       .then((response) => {
         console.log(response);
         setRentalData(response.data);

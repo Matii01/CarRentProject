@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
+import axiosInstance from "../../utils/axiosConfig";
 
 function Pricelist({ id }) {
   const [pricelist, setPricelist] = useState([]);
@@ -9,8 +10,8 @@ function Pricelist({ id }) {
   // CarPriceList
   useEffect(() => {
     //https://localhost:7091/CarPriceList/1/carPricelist
-    axios
-      .get(`https://localhost:7091/CarPriceList/${id}/carPricelist`)
+    axiosInstance
+      .get(`CarPriceList/${id}/carPricelist`)
       .then((data) => {
         console.log(data);
         setPricelist(data.data);

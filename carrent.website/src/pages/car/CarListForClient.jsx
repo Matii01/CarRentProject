@@ -48,19 +48,11 @@ function CarListForClient() {
 
   const getFilteredCars = () => {
     const queryString = transformObjectToQueryString(filterInfo);
-    fetch(`https://localhost:7091/car/cars?${queryString}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("An Error");
-        }
-        return response.json();
-      })
+    axiosInstance
+      .get(`/car/cars?${queryString}`)
       .then((data) => {
-        setCars(data.items);
-        setMetaData(data.metaData);
-        console.log("data");
-        console.log(data.metaData);
-        console.log(data);
+        setCars(data.data.items);
+        setMetaData(data.data.metaData);
       })
       .catch((error) => {
         console.log(error);
@@ -71,7 +63,7 @@ function CarListForClient() {
   const getClientWishList = () => {
     if (user.isLogin) {
       axiosInstance
-        .get("https://localhost:7091/Wishlist")
+        .get("/Wishlist")
         .then((data) => {
           setUserWishList(data.data);
         })

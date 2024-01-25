@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, Col, Container, Form, Button, Row } from "react-bootstrap";
 import fetchData from "../../components/functions/fetchData";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosConfig";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -76,23 +77,22 @@ function RegisterPage() {
   };
 
   const registerNewUser = () => {
-    fetchData(`https://localhost:7091/authentication`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: newUser,
-    })
+    axiosInstance
+      .post(`/authentication`, JSON.stringify(newUser), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
-        if (data === 201) {
-          console.log("register ok");
-          navigate("/login");
-        }
+        navigate("/login");
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const url =
+    "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
 
   return (
     <Container className="mt-4 mb-4 loginContainer">
@@ -205,7 +205,7 @@ function RegisterPage() {
             </Form>
           </Col>
           <Col>
-            <Card.Img className="mt-4" src="imgs/car-login.jpg" />
+            <Card.Img className="mt-4" src={url} />
             <p className="mt-3 customFont">
               Unlock the road to freedom and adventure! Create your account with
               our car rental service today and explore destinations at your own

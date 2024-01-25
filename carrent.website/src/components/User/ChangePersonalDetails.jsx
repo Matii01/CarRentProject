@@ -13,7 +13,7 @@ function ChangePersonalDetails() {
 
   useEffect(() => {
     axiosInstance
-      .get("https://localhost:7091/Users/UserPersonalDetails")
+      .get("Users/UserPersonalDetails")
       .then((data) => {
         console.log(data);
         setUser(data.data);
@@ -35,15 +35,11 @@ function ChangePersonalDetails() {
     event.preventDefault();
     console.log(user);
     axiosInstance
-      .post(
-        "https://localhost:7091/Users/UpdatePersonalDetails",
-        JSON.stringify(user),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post("Users/UpdatePersonalDetails", JSON.stringify(user), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         setUser(data.data);

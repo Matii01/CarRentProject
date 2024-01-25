@@ -13,7 +13,7 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
   const handleDownload = async () => {
     try {
       const response = await axiosInstance.get(
-        `https://localhost:7091/Rental/getInvoiceDocument/${rentalDetail.id}`,
+        `Rental/getInvoiceDocument/${rentalDetail.id}`,
         {
           responseType: "blob", // Important to handle binary data properly
         }

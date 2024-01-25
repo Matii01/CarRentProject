@@ -16,7 +16,7 @@ function RentalData({ allRentalData, setAllRentalData }) {
   const getUserDate = () => {
     setIsLoading(true);
     axiosInstance
-      .get(`https://localhost:7091/Users/GetDefaultDataForRental`)
+      .get(`Users/GetDefaultDataForRental`)
       .then((response) => {
         setAllRentalData((prev) => ({
           ...prev,
@@ -180,53 +180,57 @@ function RentalData({ allRentalData, setAllRentalData }) {
                 </Form.Group>
               </Row>
               <Row className="mt-3">
-                <Form.Group className="mb-3">
-                  <Form.Label>Numer prawa jazdy</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Numer prawa jazdy"
-                  />
-                </Form.Group>
+                {false && (
+                  <Form.Group className="mb-3">
+                    <Form.Label>Numer prawa jazdy</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      placeholder="Numer prawa jazdy"
+                    />
+                  </Form.Group>
+                )}
               </Row>
             </Card.Body>
           </Card>
         </Row>
         <Row className="m-2 mt-5">
-          <Card className="p-4">
-            <Card.Title>Dane do faktury</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              (wypełnij jeżeli potrzebujesz otrzymać fakturę VAT)
-            </Card.Subtitle>
-            <Card.Body>
-              <Row className="mt-2">
-                <Form.Group as={Col} xs={12} xl={6}>
-                  <Form.Label>Nazwa firmy</Form.Label>
-                  <Form.Control type="text" name="Nazwa firmy" />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>NIP</Form.Label>
-                  <Form.Control type="text" name="NIP" />
-                </Form.Group>
-              </Row>
-              <Row className="mt-3">
-                <Form.Group as={Col}>
-                  <Form.Label>Adres</Form.Label>
-                  <Form.Control type="text" name="Adres" />
-                </Form.Group>
-              </Row>
-              <Row className="mt-3">
-                <Form.Group as={Col} xs={12} xl={6}>
-                  <Form.Label>Kod pocztowy</Form.Label>
-                  <Form.Control type="text" name="Kod pocztowy" />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Miasto</Form.Label>
-                  <Form.Control type="text" name="Miasto" />
-                </Form.Group>
-              </Row>
-            </Card.Body>
-          </Card>
+          {false && (
+            <Card className="p-4">
+              <Card.Title>Dane do faktury</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">
+                (wypełnij jeżeli potrzebujesz otrzymać fakturę VAT)
+              </Card.Subtitle>
+              <Card.Body>
+                <Row className="mt-2">
+                  <Form.Group as={Col} xs={12} xl={6}>
+                    <Form.Label>Nazwa firmy</Form.Label>
+                    <Form.Control type="text" name="Nazwa firmy" />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>NIP</Form.Label>
+                    <Form.Control type="text" name="NIP" />
+                  </Form.Group>
+                </Row>
+                <Row className="mt-3">
+                  <Form.Group as={Col}>
+                    <Form.Label>Adres</Form.Label>
+                    <Form.Control type="text" name="Adres" />
+                  </Form.Group>
+                </Row>
+                <Row className="mt-3">
+                  <Form.Group as={Col} xs={12} xl={6}>
+                    <Form.Label>Kod pocztowy</Form.Label>
+                    <Form.Control type="text" name="Kod pocztowy" />
+                  </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Miasto</Form.Label>
+                    <Form.Control type="text" name="Miasto" />
+                  </Form.Group>
+                </Row>
+              </Card.Body>
+            </Card>
+          )}
         </Row>
       </Col>
     </>

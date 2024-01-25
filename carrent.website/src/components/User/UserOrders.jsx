@@ -12,7 +12,7 @@ function UserOrders() {
   useEffect(() => {
     setIsLoading(true);
     axiosInstance
-      .get(`https://localhost:7091/rental/UserRental`)
+      .get(`rental/UserRental`)
       .then((data) => {
         console.log(data.data);
         setRentalList(data.data);
@@ -26,7 +26,7 @@ function UserOrders() {
     setIsLoading(true);
 
     axiosInstance
-      .get(`https://localhost:7091/rental/UserRental/${id}`)
+      .get(`rental/UserRental/${id}`)
       .then((response) => {
         console.log(response);
         setRentalDetailData(response.data);

@@ -8,7 +8,7 @@ function UserWishList() {
   const [list, setList] = useState([]);
   useEffect(() => {
     axiosInstance
-      .get("https://localhost:7091/Wishlist/Wishlist")
+      .get("Wishlist/Wishlist")
       .then((data) => {
         console.log(data);
         setList(data.data);
@@ -25,7 +25,7 @@ function UserWishList() {
 
   const removeFromList = (id) => {
     axiosInstance
-      .delete(`https://localhost:7091/Wishlist/${id}`)
+      .delete(`Wishlist/${id}`)
       .then((data) => {
         const newList = list.filter((it) => it.carId != id);
         setList(newList);

@@ -1,6 +1,7 @@
 import { Form, Button, Container, Accordion, FormCheck } from "react-bootstrap";
 import styles from "./CarFilter.module.css";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../utils/axiosConfig";
 
 function CarFilter({
   isOpen,
@@ -25,15 +26,10 @@ function CarFilter({
   }, [filterInfo.PriceMax, filterInfo.PriceMin]);
 
   useEffect(() => {
-    fetch("https://localhost:7091/car/CarSortingInfo")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+    axiosInstance
+      .get("car/CarSortingInfo")
       .then((data) => {
-        setData(data);
+        setData(data.data);
       })
       .catch();
   }, []);

@@ -14,7 +14,7 @@ function HomePage() {
 
   useEffect(() => {
     axiosInstance
-      .get(`https://localhost:7091/ContentManagement/homePage`)
+      .get(`ContentManagement/homePage`)
       .then((data) => {
         setPage(data.data);
       })

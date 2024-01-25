@@ -32,15 +32,11 @@ function ChangePasword() {
 
   const updatePassword = () => {
     axiosInstance
-      .post(
-        "https://localhost:7091/Users/ChangePassword",
-        JSON.stringify(data),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post("Users/ChangePassword", JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {

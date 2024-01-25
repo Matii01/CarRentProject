@@ -40,7 +40,7 @@ function AddressComponent({ address, onAdd }) {
   const onUpdateAddress = () => {
     axiosInstance
       .put(
-        `https://localhost:7091/Users/UpdateUserAddresses/${updateAddress.id}`,
+        `Users/UpdateUserAddresses/${updateAddress.id}`,
         JSON.stringify(updateAddress),
         {
           headers: {
@@ -59,15 +59,11 @@ function AddressComponent({ address, onAdd }) {
 
   const addNewAddres = () => {
     axiosInstance
-      .post(
-        `https://localhost:7091/Users/AddUserAddresses`,
-        JSON.stringify(updateAddress),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`Users/AddUserAddresses`, JSON.stringify(updateAddress), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         console.log(response);
         onAdd();

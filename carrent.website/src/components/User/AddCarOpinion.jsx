@@ -22,15 +22,11 @@ function AddCarOpinion({ onCancel, carId, ...props }) {
     event.preventDefault();
     console.log(opinion);
     axiosInstance
-      .post(
-        `https://localhost:7091/CarOpinion/create`,
-        JSON.stringify(opinion),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`CarOpinion/create`, JSON.stringify(opinion), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         onCancel();

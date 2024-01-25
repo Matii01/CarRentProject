@@ -33,8 +33,8 @@ function Footer() {
   const [newSubscription, setNewSubscription] = useState("");
 
   useEffect(() => {
-    axios
-      .get("https://localhost:7091/ContentManagement/footer")
+    axiosInstance
+      .get("ContentManagement/footer")
       .then((data) => {
         console.log(data);
         setFooter(data.data);
@@ -54,15 +54,11 @@ function Footer() {
     event.preventDefault();
     console.log(newSubscription);
     axiosInstance
-      .post(
-        `https://localhost:7091/Newsletter/subscribe`,
-        JSON.stringify(newSubscription),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`Newsletter/subscribe`, JSON.stringify(newSubscription), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
         setNewSubscription("");

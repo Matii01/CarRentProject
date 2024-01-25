@@ -3,6 +3,7 @@ import { Container, Form, Button, Card, Col, Row } from "react-bootstrap";
 import SetLocalStorage from "../../hooks/SetLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axiosInstance from "../../utils/axiosConfig";
 
 function LoginPage() {
   const [loginForm, setLoginForm] = useState({
@@ -21,21 +22,14 @@ function LoginPage() {
 
   const login = () => {
     console.log(loginForm);
-    fetch(`https://localhost:7091/authentication/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginForm),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("An Error");
-        }
-        return response.json();
+    axiosInstance
+      .post(`/authentication/login`, JSON.stringify(loginForm), {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((data) => {
-        setTokens(data);
+        setTokens(data.data);
         navigate("/car/cars");
       })
       .catch((error) => {
@@ -63,6 +57,9 @@ function LoginPage() {
   const goToRegister = () => {
     navigate("/register");
   };
+
+  const url =
+    "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
 
   return (
     // <Container className="mt-4 mb-4" fluid="xs">
@@ -114,7 +111,7 @@ function LoginPage() {
             </Form>
           </Col>
           <Col className="mt-4 mb-4">
-            <Card.Img src="imgs/car-login.jpg" />
+            <Card.Img src={url} />
           </Col>
         </Row>
       </Card>

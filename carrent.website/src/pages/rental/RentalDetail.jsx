@@ -68,7 +68,7 @@ function RentalDetail() {
 
     try {
       const response = await axiosInstance.post(
-        `https://localhost:7091/Payment/NewPayment`,
+        `Payment/NewPayment`,
         JSON.stringify(allRentalData),
         {
           headers: {

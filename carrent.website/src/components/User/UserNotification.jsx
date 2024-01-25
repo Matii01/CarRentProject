@@ -18,7 +18,7 @@ function UserNotification() {
   useEffect(() => {
     const queryString = transformObjectToQueryString(params);
     axiosInstance
-      .get(`https://localhost:7091/Notification/myNotification?${queryString}`)
+      .get(`Notification/myNotification?${queryString}`)
       .then((data) => {
         transformAndSetItems(data.data.items);
         setMetaData(data.data.metaData);

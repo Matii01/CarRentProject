@@ -11,12 +11,10 @@ function ChangeAddress() {
   }, []);
 
   const getData = () => {
-    axiosInstance
-      .get(`https://localhost:7091/Users/GetUserAddresses`)
-      .then((response) => {
-        console.log(response);
-        setAddresses(response.data);
-      });
+    axiosInstance.get(`Users/GetUserAddresses`).then((response) => {
+      console.log(response);
+      setAddresses(response.data);
+    });
   };
 
   const onAdd = () => {

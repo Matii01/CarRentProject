@@ -41,7 +41,7 @@ function NotificationElement() {
 
   const getNotificationCount = () => {
     axiosInstance
-      .get(` https://localhost:7091/Notification/myNewNotification`)
+      .get(`/Notification/myNewNotification`)
       .then((data) => {
         console.log(data.data);
         setNotification(data.data);

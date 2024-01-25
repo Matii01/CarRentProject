@@ -24,15 +24,11 @@ function AddToWishList({ carId, wishlist }) {
 
   const addToWishList = () => {
     axiosInstance
-      .post(
-        `https://localhost:7091/Wishlist/add`,
-        JSON.stringify({ CarId: carId }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .post(`Wishlist/add`, JSON.stringify({ CarId: carId }), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((data) => {
         console.log(data);
       })
@@ -43,7 +39,7 @@ function AddToWishList({ carId, wishlist }) {
 
   const removeFromWishList = () => {
     axiosInstance
-      .delete(`https://localhost:7091/Wishlist/${carId}`)
+      .delete(`Wishlist/${carId}`)
       .then((data) => {
         console.log(data);
       })
