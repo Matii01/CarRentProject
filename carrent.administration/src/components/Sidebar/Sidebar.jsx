@@ -28,9 +28,9 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Klientów", path: "analyses/users" },
   ];
 
+  // { name: "Menu", path: "" },
   const pages = [
     { name: "Strona Główna", path: "/cms/home" },
-    { name: "Menu", path: "" },
     { name: "Footer", path: "/cms/footer" },
     { name: "Kontakt", path: "/cms/contact" },
   ];
@@ -92,8 +92,12 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               {/* <img src={require("assets/img/reactlogo.png")} alt="..." /> */}
             </div>
           </a>
-          <a className="simple-text" href="#">
-            Car Rent
+          <a
+            className="simple-text"
+            href="#"
+            style={{ textDecoration: "none" }}
+          >
+            Car Rent Admin
           </a>
         </div>
         <Nav>
@@ -102,13 +106,13 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               false ? "active active-pro" : activeRoute("admin/upgrade")
             }
           ></li>
-          <li>
+          {/* <li>
             <DropdownList
               title="analizy"
               icon="nc-icon nc-alien-33"
               pages={analyses}
             />
-          </li>
+          </li> */}
           <li>
             <DropdownList
               title="Firma"

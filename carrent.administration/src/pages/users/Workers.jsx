@@ -17,8 +17,10 @@ import EditWorkerSidebar from "../../components/Workers/EditWorkerSidebar";
 import AddNewWorker from "../../components/Workers/AddNewWorker";
 import MyTable from "../../components/Table/MyTable";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { ToastContainer, toast } from "react-toastify";
 
 function WorkersPage() {
+  const [error, setError] = useState();
   const [workerList, setWorkerList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
@@ -33,7 +35,10 @@ function WorkersPage() {
         setWorkerList(data.data);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status) {
+          toast.error("Brak uprawnień");
+          setError("Brak uprawnień");
+        }
       });
   }, []);
 
@@ -51,8 +56,13 @@ function WorkersPage() {
     setIsEditMode(false);
   };
 
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <>
+      <ToastContainer />
       <Container style={{ fontSize: "12px" }}>
         <Row>
           <Col md={6}>
