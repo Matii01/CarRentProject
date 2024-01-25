@@ -124,10 +124,13 @@ function EditPriceList({ priceList, onCancel, onEdit }) {
             </Form>
           </Tab>
           <Tab eventKey="profile" title="Daty obowiązywania">
-            <EditPricelistDate pricelistId={priceList.id} />
+            <EditPricelistDate pricelistId={priceList.id} onCancel={onCancel} />
           </Tab>
           <Tab eventKey="contact" title="Pozycje">
-            <EditPricelistItems pricelistId={priceList.id} />
+            <EditPricelistItems
+              pricelistId={priceList.id}
+              onCancel={onCancel}
+            />
           </Tab>
         </Tabs>
       </Card.Body>

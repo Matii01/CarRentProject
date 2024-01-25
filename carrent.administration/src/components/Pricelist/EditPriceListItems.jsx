@@ -4,7 +4,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { toast } from "react-toastify";
 import MyTableWithPagination from "../Table/MyTableWithPagination";
 
-function EditPricelistItems({ pricelistId }) {
+function EditPricelistItems({ pricelistId, onCancel }) {
   const initialState = {
     priceListId: pricelistId,
     days: "",
@@ -108,6 +108,7 @@ function EditPricelistItems({ pricelistId }) {
   const onCancelClick = () => {
     setIsEditMode(false);
     setNewItem(initialState);
+    onCancel();
   };
 
   if (!items) {

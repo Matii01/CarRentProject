@@ -5,7 +5,7 @@ import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { formatDate } from "./../../utils/formDate";
 
-function EditPricelistDate({ pricelistId }) {
+function EditPricelistDate({ pricelistId, onCancel }) {
   const initialState = {
     PriceId: pricelistId,
     DateFrom: "",
@@ -88,7 +88,12 @@ function EditPricelistDate({ pricelistId }) {
               <Button type="submit" className="m-2" variant="primary" size="sm">
                 Zapisz
               </Button>
-              <Button className="m-2" variant="secondary" size="sm">
+              <Button
+                className="m-2"
+                variant="secondary"
+                size="sm"
+                onClick={onCancel}
+              >
                 Anuluj
               </Button>
             </Col>

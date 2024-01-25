@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
+import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function AddRentalStatus({ onAdd }) {
   const [newStatus, setNewStatus] = useState({
@@ -17,7 +17,7 @@ function AddRentalStatus({ onAdd }) {
 
   const AddNewStatus = () => {
     console.log(newStatus);
-    axios
+    jwtInterceptor
       .post(`RentalStatus/create`, JSON.stringify(newStatus), {
         headers: {
           "Content-Type": "application/json",
