@@ -89,6 +89,7 @@ function EditWorkerSidebar({ workerId }) {
       )
       .then((data) => {
         console.log(data);
+        getWorkerSidebar();
       })
       .catch((error) => {
         console.log(error);
@@ -119,7 +120,7 @@ function EditWorkerSidebar({ workerId }) {
           <Row></Row>
           <Row>
             <Accordion>
-              <Accordion.Header>Ustawienia</Accordion.Header>
+              <Accordion.Header>Firma</Accordion.Header>
               <Accordion.Body>
                 <Row>
                   <Col sm={3}>Katrgoria: </Col>
@@ -127,7 +128,7 @@ function EditWorkerSidebar({ workerId }) {
                     <input
                       type="checkbox"
                       title="clickmey"
-                      name="Firma"
+                      name="Katrgoria"
                       checked={
                         allPages.find((i) => i.title === "Firma").isActive
                       }

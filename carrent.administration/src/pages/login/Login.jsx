@@ -28,7 +28,7 @@ function Login() {
       .post(
         `authentication/login`,
         JSON.stringify({
-          username: "Test",
+          username: "ANijaka",
           password: "Pa$$word1000",
         }),
         {
