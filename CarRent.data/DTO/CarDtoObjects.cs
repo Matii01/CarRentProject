@@ -41,8 +41,9 @@ namespace CarRent.data.DTO
         int AirConditioningTypeId,
         int GearBoxTypeId,
         int CarDriveId,
-        bool? IsVisible
-        );
+        bool? IsVisible,
+        IEnumerable<string>? CarImages
+    );
 
     public record CarDto(
         string Name,

@@ -30,7 +30,7 @@ function HomePage() {
           <Col className="p-0 m-0" style={{ width: "100vw" }}>
             <Image src="imgs/car-login.jpg" style={{ width: "100vw" }} />
             <div className={`${style.textOverlay}`}>
-              <h2>Welcome to - Your Ultimate Car Rental Solution!</h2>
+              {/* <h2>Welcome to - Your Ultimate Car Rental Solution!</h2> */}
             </div>
           </Col>
         </Row>

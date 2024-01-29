@@ -30,6 +30,7 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<PricelistDate> PricelistDate { get; }
         IGenericRepository<CarOpinion> CarOpinion { get; }
         IGenericRepository<RecommendedCars> RecommendedCars { get; }
+        IGenericRepository<CarImages> CarImages { get; }
 
         // CarMaintenances
         IGenericRepository<CarMaintenance> CarMaintenances { get; }

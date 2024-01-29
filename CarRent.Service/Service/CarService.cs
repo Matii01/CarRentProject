@@ -105,6 +105,18 @@ namespace CarRent.Service.Service
         {
             var newCar = _mapper.Map<Car>(car);
 
+            if (car.CarImages != null)
+            {
+                List<CarImages> carImages = new ();
+
+                foreach (var item in car.CarImages)
+                {
+                    carImages.Add(new CarImages() { ImgUrl = item, IsActive = true });
+                }
+
+                newCar.CarImages = carImages;
+            }
+
             _repository.Car.Create(newCar);
             await _repository.SaveAsync();
 
@@ -183,6 +195,28 @@ namespace CarRent.Service.Service
                 ?? throw new Exception("not found");
 
             car.IsVisible = IsVisible;
+            await _repository.SaveAsync();
+        }
+
+        public async Task<IEnumerable<CarImageDto>> GetCarImagesAsync(int carId)
+        {
+            var list = await _repository.CarImages
+                .FindByCondition(
+                    x => x.IsActive == true &&
+                    x.CarId == carId, false)
+                .Select(x => new CarImageDto(x.Id, x.CarId, x.ImgUrl)) 
+                .ToListAsync();
+
+            return list;
+        }
+
+        public async Task DeleteCarImage(int id)
+        {
+            var item = await _repository.CarImages
+               .GetAsync(id, true)
+               .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            item.IsActive = false;
             await _repository.SaveAsync();
         }
     }

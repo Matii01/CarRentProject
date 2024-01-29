@@ -126,9 +126,9 @@ function RentalDetails() {
           <Col>
             <Row className="d-flex justify-content-end">
               <Col xs="auto">
-                <Link title="Drukuj" id="t-1">
+                {/* <Link title="Drukuj" id="t-1">
                   <i className="fa-solid fa-print" onClick={onPrint}></i>
-                </Link>
+                </Link> */}
               </Col>
               <Col xs="auto">
                 <Form.Select
@@ -137,7 +137,7 @@ function RentalDetails() {
                 >
                   <option>Więcej</option>
                   <option value="replacement">Wymiana</option>
-                  <option value="cancel">Anuluj</option>
+                  {/* <option value="cancel">Anuluj</option> */}
                 </Form.Select>
               </Col>
             </Row>
@@ -166,9 +166,7 @@ function RentalDetails() {
                   <FirmClientData client={data.invoiceFirm.client} />
                 )}
               </Col>
-              <Col>
-                <PaymentData />
-              </Col>
+              <Col>{/* <PaymentData /> */}</Col>
             </Row>
           </Col>
           <Col>

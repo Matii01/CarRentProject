@@ -67,6 +67,7 @@ namespace CarRent.data.Models
 
         public int CarDriveId { get; set; }
         public CarDrive CarDrive { get; set; } = null!;
+        public IEnumerable<CarImages>? CarImages { get; set; }
 
         public bool? IsVisible { get; set; }
 

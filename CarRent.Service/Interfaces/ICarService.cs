@@ -25,5 +25,6 @@ namespace CarRent.Service.Interfaces
         Task SetCarVisibility(int id, bool IsVisible);
         Task RemoveRecommendedAsync(int id);
         Task DeleteCar(int id);
+        Task<IEnumerable<CarImageDto>> GetCarImagesAsync(int carId);
     }
 }

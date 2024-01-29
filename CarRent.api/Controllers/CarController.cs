@@ -136,7 +136,7 @@ namespace CarRent.api.Controllers
         {
             var car = await _services.CarService.CreateCarAsync(newCar);
             
-            return Ok(car); 
+            return Ok(""); 
         }
 
         [Authorize(Roles = "Administrator,CarEditor")]

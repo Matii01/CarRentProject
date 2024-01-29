@@ -1,5 +1,14 @@
 import { useNavigate } from "react-router";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { storage } from "./../../hooks/useFirebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -27,6 +36,7 @@ const initialState = {
   AirConditioningTypeId: 0,
   GearBoxTypeId: 0,
   CarDriveId: 0,
+  CarImages: [],
 };
 
 function AddCar() {
@@ -36,6 +46,7 @@ function AddCar() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [imageUpload, setImageUpload] = useState(null);
+  const [additionalImg, setAdditionalImg] = useState([]);
 
   useEffect(() => {
     jwtInterceptor
@@ -91,8 +102,36 @@ function AddCar() {
     });
   };
 
+  const uploadAdditionalImag = (img) => {
+    if (img == null) return;
+    const imageRef = ref(storage, `${v4() + img.name}`);
+
+    uploadBytes(imageRef, img).then((response) => {
+      getDownloadURL(response.ref).then((url) => {
+        const newArr = [...additionalImg, { name: img.name, url: url }];
+        const newArrForCar = [...car.CarImages, url];
+
+        setCar((prev) => ({
+          ...prev,
+          CarImages: newArrForCar,
+        }));
+        setAdditionalImg(newArr);
+      });
+    });
+  };
+
+  const removeFromAdditionalImgsList = (name) => {
+    const newArr = additionalImg.filter((it) => it.name != name);
+    setAdditionalImg(newArr);
+  };
+
   const handleFirebaseImage = (event) => {
     setImageUpload(event.target.files[0]);
+  };
+
+  const handleAdditionalImages = (event) => {
+    const name = event.target.files[0].name;
+    uploadAdditionalImag(event.target.files[0]);
   };
 
   useEffect(() => {
@@ -120,7 +159,7 @@ function AddCar() {
         <Col>
           <Card className="ps-5 pe-5">
             <Card.Header>
-              <Card.Title as="h4">Add Car</Card.Title>
+              <Card.Title as="h4">Dodaj Samochód</Card.Title>
             </Card.Header>
             <Card.Body className="p-4">
               <Form onSubmit={handleSubmit}>
@@ -131,7 +170,7 @@ function AddCar() {
                       <Form.Control
                         className="border border-dark"
                         type="text"
-                        placeholder="Enter car name"
+                        placeholder="Nazwa"
                         name="Name"
                         required
                         value={car.Name}
@@ -145,7 +184,7 @@ function AddCar() {
                       <Form.Control
                         className="border border-dark"
                         type="text"
-                        placeholder="Enter car model"
+                        placeholder="Model"
                         name="CarModel"
                         value={car.CarModel}
                         onChange={handleChange}
@@ -156,11 +195,11 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="carMake">
-                      <Form.Label>Make</Form.Label>
+                      <Form.Label>Marka</Form.Label>
                       <Form.Control
+                        required
                         as="select"
                         name="CarMakeId"
-                        required
                         value={car.CarMakeId}
                         onChange={handleChange}
                         placeholder="select ... "
@@ -176,10 +215,9 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="yearOfProduction">
-                      <Form.Label>Year Of Production</Form.Label>
+                      <Form.Label>Rok produkcji</Form.Label>
                       <Form.Control
                         type="number"
-                        placeholder="Enter year of production"
                         name="YearOfProduction"
                         value={car.YearOfProduction}
                         onChange={handleChange}
@@ -190,7 +228,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="carDrive">
-                      <Form.Label>Car Drive</Form.Label>
+                      <Form.Label>Napęd na</Form.Label>
                       <Form.Control
                         as="select"
                         name="CarDriveId"
@@ -209,7 +247,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="carType">
-                      <Form.Label>Car Type</Form.Label>
+                      <Form.Label>Typ nadwozia</Form.Label>
                       <Form.Control
                         as="select"
                         name="CarTypeId"
@@ -229,7 +267,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="engineType">
-                      <Form.Label>Engine Type</Form.Label>
+                      <Form.Label>Silnik</Form.Label>
                       <Form.Control
                         as="select"
                         name="EngineTypeId"
@@ -247,7 +285,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="gearboxType">
-                      <Form.Label>Gearbox Type</Form.Label>
+                      <Form.Label>Skrzynia biegów</Form.Label>
                       <Form.Control
                         as="select"
                         name="GearBoxTypeId"
@@ -267,7 +305,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="airCondition">
-                      <Form.Label>Air Condition</Form.Label>
+                      <Form.Label>Klimatyzacja</Form.Label>
                       <Form.Control
                         as="select"
                         name="AirConditioningTypeId"
@@ -285,7 +323,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="kilometrLimit">
-                      <Form.Label>Kilometr Limit</Form.Label>
+                      <Form.Label>Limit kilometrów</Form.Label>
                       <Form.Control
                         as="select"
                         name="KilometrLimitId"
@@ -306,7 +344,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="numberOfDoors">
-                      <Form.Label>Number Of Doors</Form.Label>
+                      <Form.Label>Liczba drzwi</Form.Label>
                       <Form.Control
                         type="number"
                         placeholder="Enter doors number"
@@ -318,7 +356,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="numberOfSeats">
-                      <Form.Label>Number Of Seats</Form.Label>
+                      <Form.Label>Liczba miejsc</Form.Label>
                       <Form.Control
                         type="number"
                         placeholder="Enter seats number"
@@ -332,10 +370,9 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="carMileage">
-                      <Form.Label>Number Of Mileage</Form.Label>
+                      <Form.Label>Przebieg</Form.Label>
                       <Form.Control
                         type="number"
-                        placeholder="Enter car millage"
                         name="CarMileage"
                         value={car.CarMileage}
                         onChange={handleChange}
@@ -344,10 +381,9 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="horsepower">
-                      <Form.Label>Number of Horsepower</Form.Label>
+                      <Form.Label>Moc (KM)</Form.Label>
                       <Form.Control
                         type="number"
-                        placeholder="Enter horsepower"
                         name="Horsepower"
                         value={car.Horsepower}
                         onChange={handleChange}
@@ -358,7 +394,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="acceleration0to100">
-                      <Form.Label> 0 to 100 Acceleration</Form.Label>
+                      <Form.Label>Przyspieszenie (0 - 100)</Form.Label>
                       <Form.Control
                         type="number"
                         placeholder="Acceleration"
@@ -370,7 +406,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="averageCombustion">
-                      <Form.Label> Average Combustion</Form.Label>
+                      <Form.Label>Średnie spalanie</Form.Label>
                       <Form.Control
                         type="number"
                         placeholder="AverageCombustion"
@@ -384,10 +420,9 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="trunkCapacity">
-                      <Form.Label> TrunkCapacity</Form.Label>
+                      <Form.Label>Wielkość bagażnika</Form.Label>
                       <Form.Control
                         type="number"
-                        placeholder="TrunkCapacity"
                         name="TrunkCapacity"
                         value={car.TrunkCapacity}
                         onChange={handleChange}
@@ -396,7 +431,7 @@ function AddCar() {
                   </Col>
                   <Col xs={12} sm={6} className="custom-mt-xs">
                     <Form.Group controlId="overlimitFee">
-                      <Form.Label> OverlimitFee</Form.Label>
+                      <Form.Label>Opłata za przekroczenie limitu</Form.Label>
                       <Form.Control
                         type="number"
                         placeholder="OverlimitFee"
@@ -410,13 +445,15 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col>
                     <Form.Group controlId="Description">
-                      <Form.Label> Description</Form.Label>
+                      <Form.Label>Opis</Form.Label>
                       <Form.Control
+                        as={"textarea"}
                         type="text"
-                        placeholder="description"
+                        placeholder="Opis"
                         name="Description"
                         value={car.Description}
                         onChange={handleChange}
+                        style={{ height: 100 }}
                       />
                     </Form.Group>
                   </Col>
@@ -424,7 +461,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col>
                     <Form.Group controlId="carImage">
-                      <Form.Label>Car Image</Form.Label>
+                      <Form.Label>Zdjęcie główne</Form.Label>
                       <Form.Control
                         type="file"
                         name="CarImage"
@@ -433,10 +470,51 @@ function AddCar() {
                     </Form.Group>
                   </Col>
                 </Row>
+                <Row className="mt-2">
+                  <Form.Group>
+                    <Form.Label>Dodatkowe zdjęcia</Form.Label>
+                    <Form.Control
+                      type="file"
+                      name="CarImage"
+                      onChange={handleAdditionalImages}
+                    ></Form.Control>
+                  </Form.Group>
+                </Row>
+                <Row className="mt-2">
+                  <ListGroup>
+                    {additionalImg.map((it, index) => (
+                      <ListGroup.Item
+                        key={index}
+                        as="li"
+                        className="d-flex justify-content-between align-items-start"
+                      >
+                        <div className="ms-2 me-auto">
+                          <div className="fw-bold"></div>
+                          {it.name}
+                        </div>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => removeFromAdditionalImgsList(it.name)}
+                        >
+                          usuń
+                        </Button>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Row>
+
                 <Row className={`${rowClasses} mb-5`}>
-                  <Button variant="primary" type="submit">
-                    Create new car
-                  </Button>
+                  <Col className="w-100">
+                    <Button
+                      className="w-100 p-2 mt-2"
+                      variant="dark"
+                      size="sm"
+                      type="submit"
+                    >
+                      Dodaj nowy
+                    </Button>
+                  </Col>
                 </Row>
               </Form>
             </Card.Body>

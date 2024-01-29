@@ -14,6 +14,7 @@ namespace CarRent.api
         {
             CreateMap<Car, NewCarDto>();
             CreateMap<NewCarDto, Car>()
+                .ForMember(x => x.CarImages, opt => opt.Ignore())
                 .ForMember(x => x.IsVisible, opt => opt.MapFrom(x => false))
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 

@@ -1,5 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models;
+using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using System;
@@ -62,7 +63,8 @@ namespace CarRent.Service.Helper
                 car.AirConditioningType.Id,
                 car.GearBoxType.Id,
                 car.CarDrive.Id,
-                car.IsVisible
+                car.IsVisible,
+                null   
                 );
         }
         public static void UpdateCar(ref Car toUpdate, NewCarDto carDto)

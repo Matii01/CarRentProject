@@ -96,8 +96,7 @@ function CarFilter({
           <i className="fa-solid fa-bars"></i>
         </Button>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3 ms-4 me-4">
-            {/* <Form.Label>Min Price</Form.Label> */}
+          {/* <Form.Group className="mb-3 ms-4 me-4">
             <Form.Control
               type="number"
               placeholder="Enter min price"
@@ -108,7 +107,6 @@ function CarFilter({
           </Form.Group>
 
           <Form.Group className="mb-3 ms-4 me-4">
-            {/* <Form.Label>Max Price</Form.Label> */}
             <Form.Control
               type="number"
               placeholder="Enter max price"
@@ -117,7 +115,7 @@ function CarFilter({
               min={0}
             />
             {priceError && <p className="text-danger">{priceError}</p>}
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group>
             <hr />
             <Accordion>
