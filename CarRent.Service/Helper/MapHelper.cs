@@ -3,6 +3,7 @@ using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,49 @@ namespace CarRent.Service.Helper
                 null   
                 );
         }
+
+        public static CarDetailForWorkerDto MapCarToCarDetailForWorkerDto(Car car)
+        {
+            List<CarImageDto> images = new List<CarImageDto>();
+
+            if (car.CarImage != null)
+            {
+                foreach (var item in car.CarImages)
+                {
+                    if(item.IsActive == true)
+                    {
+                        images.Add(new CarImageDto(item.Id, item.CarId, item.ImgUrl));
+                    }
+                }
+            }
+
+            return new CarDetailForWorkerDto(
+                car.Name,
+                car.CarMake.Id,
+                car.CarModel,
+                car.Description,
+                car.CarImage,
+                car.CarMileage,
+                car.Horsepower,
+                car.Acceleration0to100,
+                car.NumberOfSeats,
+                car.NumberOfDoors,
+                car.YearOfProduction,
+                car.OverlimitFee,
+                car.AverageCombustion,
+                car.TrunkCapacity,
+                car.CarType.Id,
+                car.EngineType.Id,
+                car.KilometrLimit.Id,
+                car.AirConditioningType.Id,
+                car.GearBoxType.Id,
+                car.CarDrive.Id,
+                car.IsVisible,
+                images
+                );
+        }
+
+
         public static void UpdateCar(ref Car toUpdate, NewCarDto carDto)
         {
             toUpdate.Name = carDto.Name;

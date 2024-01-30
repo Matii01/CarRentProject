@@ -16,7 +16,7 @@ namespace CarRent.data.DTO
         public decimal Price { get; set; }
     }
 
-    public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
+    //public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
 
     public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
 
@@ -43,6 +43,31 @@ namespace CarRent.data.DTO
         int CarDriveId,
         bool? IsVisible,
         IEnumerable<string>? CarImages
+    );
+
+    public record CarDetailForWorkerDto(
+        string Name,
+        int CarMakeId,
+        string CarModel,
+        string? Description,
+        string? CarImage,
+        double CarMileage,
+        double Horsepower,
+        double Acceleration0to100,
+        int NumberOfSeats,
+        int NumberOfDoors,
+        int YearOfProduction,
+        decimal OverlimitFee,
+        double AverageCombustion,
+        double TrunkCapacity,
+        int CarTypeId,
+        int EngineTypeId,
+        int KilometrLimitId,
+        int AirConditioningTypeId,
+        int GearBoxTypeId,
+        int CarDriveId,
+        bool? IsVisible,
+        IEnumerable<CarImageDto>? CarImages
     );
 
     public record CarDto(

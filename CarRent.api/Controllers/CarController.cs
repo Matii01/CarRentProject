@@ -56,6 +56,18 @@ namespace CarRent.api.Controllers
             return Ok(car);
         }
 
+        [HttpGet("carImages/{id:int}")]
+        public async Task<IActionResult> GetCarImages(int id)
+        {
+            var images = await _services.CarService.GetCarImages(id);
+            if (images == null)
+            {
+                return NotFound("Car not found");
+            }
+
+            return Ok(images);
+        }
+
         [HttpGet("details/{id:int}")]
         public async Task<IActionResult> GetCarDetailsForClient(int id)
         {
@@ -134,10 +146,20 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {
-            var car = await _services.CarService.CreateCarAsync(newCar);
+            //var car = await _services.CarService.CreateCarAsync(newCar);
+            await _services.CarService.CreateCarAsync(newCar);
             
             return Ok(""); 
         }
+
+        [Authorize(Roles = "Administrator,CarAdd")]
+        [HttpPost("addCarImg")]
+        public async Task<IActionResult> AddCarImg([FromBody] CarImageDto img)
+        {
+            await _services.CarService.AddCarImg(img);
+            return Ok("");
+        }
+
 
         [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPost("addRecommended/{id:int}")]
@@ -171,6 +193,14 @@ namespace CarRent.api.Controllers
         {
             await Console.Out.WriteLineAsync("set visibility");
             await _services.CarService.SetCarVisibility(id, IsVisible);
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Administrator,CarEditor")]
+        [HttpDelete("deleteImg/{id:int}")]
+        public async Task<IActionResult> DeleteCarImg(int id)
+        {
+            await _services.CarService.DeleteCarImage(id);
             return NoContent();
         }
 

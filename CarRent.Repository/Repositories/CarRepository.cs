@@ -82,6 +82,12 @@ namespace CarRent.Repository.Repositories
             return carList;
         }
 
+        public IQueryable<Car?> GetCarById(int id, bool trackChanges)
+        {
+            var car = FindByCondition(x => x.Id == id, trackChanges);
+            return car;
+        }
+
         public async Task<Car?> GetCarAsync(int id, bool trackChanges)
         {
             var car = await FindByCondition(c => c.Id == id, trackChanges)
@@ -92,6 +98,7 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.AirConditioningType)
                 .Include(x => x.GearBoxType)
                 .Include(x => x.CarDrive)
+                .Include(x => x.CarImages)
                 .SingleOrDefaultAsync();
 
             return car;

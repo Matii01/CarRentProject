@@ -46,18 +46,40 @@ namespace CarRent.Service.Service
             return MapHelper.MapCarToCarDetailsPageForClient(item);
         }
 
-        public async Task<NewCarDto?> GetCarById(int id, bool trackChanges)
+        public async Task<CarDetailForWorkerDto?> GetCarById(int id, bool trackChanges)
         {
-            var car = await _repository.Car.GetCarAsync(id, trackChanges);
+            // TODO 
+            var car = await _repository.Car
+                .GetCarAsync(id, trackChanges);
+            
             if(car is null)
             {
                 return null;
             }
-            //return _mapper.Map<CarDto>(car);
-            return MapHelper.MapCarToNewCarDto(car);
+            return MapHelper.MapCarToCarDetailForWorkerDto(car);
         }
 
-        //RentalDatesDto
+        public async Task<IEnumerable<CarImageDto>> GetCarImages(int carId)
+        {
+            var list = await _repository.CarImages
+                .FindByCondition(x => x.IsActive == true && x.CarId == carId, false)
+                .Select(x=> new CarImageDto(x.Id, x.CarId, x.ImgUrl))
+                .ToListAsync();
+
+            return list;
+        }
+
+        public async Task AddCarImg(CarImageDto img)
+        {
+            CarImages carImages = new()
+            {
+                CarId = img.CarId,
+                ImgUrl = img.ImgUrl,
+                IsActive = true,
+            };
+            _repository.CarImages.Create(carImages);
+            await _repository.SaveAsync();
+        }
 
         public async Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental)
         {

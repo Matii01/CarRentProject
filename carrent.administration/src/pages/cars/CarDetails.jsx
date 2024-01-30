@@ -11,10 +11,14 @@ import {
   Row,
   Col,
   Image,
+  ListGroup,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { storage } from "./../../hooks/useFirebase";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 function CarDetails() {
   const initialState = {
@@ -38,6 +42,7 @@ function CarDetails() {
     airConditioningTypeId: 0,
     gearBoxTypeId: 0,
     carDriveId: 0,
+    carImages: [],
   };
   const [car, setCar] = useState(initialState);
   const [carInfo, setCarInfo] = useState();
@@ -168,6 +173,65 @@ function CarDetails() {
     }));
   };
 
+  const getCarImages = () => {
+    jwtInterceptor
+      .get(`car/carImages/${param.carId}`)
+      .then((data) => {
+        console.log(data.data);
+        setCar((prev) => ({ ...prev, carImages: data.data }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteCarImg = (id) => {
+    jwtInterceptor
+      .delete(`car/deleteImg/${id}`)
+      .then((data) => {
+        const newArr = car.carImages.filter((it) => it.id != id);
+        setCar((prev) => ({ ...prev, carImages: newArr }));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleAdditionalImages = (event) => {
+    const name = event.target.files[0].name;
+    uploadAdditionalImag(event.target.files[0]);
+  };
+
+  const addNewCarImage = (url) => {
+    jwtInterceptor
+      .post(
+        `car/addCarImg`,
+        JSON.stringify({ Id: 0, CarId: param.carId, ImgUrl: url }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        getCarImages();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const uploadAdditionalImag = (img) => {
+    if (img == null) return;
+    const imageRef = ref(storage, `${v4() + img.name}`);
+
+    uploadBytes(imageRef, img).then((response) => {
+      getDownloadURL(response.ref).then((url) => {
+        addNewCarImage(url);
+      });
+    });
+  };
+
   if (!carInfo) {
     return <p>Loading ...</p>;
   }
@@ -207,24 +271,36 @@ function CarDetails() {
 
                   <Col className="d-flex justify-content-end">
                     {!car.IsVisible && (
-                      <Button variant="dark" onClick={SetCarAsVisible}>
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        onClick={SetCarAsVisible}
+                      >
                         Ustaw jako widoczny
                       </Button>
                     )}
                     {car.IsVisible && (
-                      <Button variant="dark" onClick={SetCarAsHide}>
+                      <Button variant="dark" size="sm" onClick={SetCarAsHide}>
                         Ustaw jako ukryty
                       </Button>
                     )}
                   </Col>
                   <Col className="d-flex justify-content-end">
                     {!isRecommended && (
-                      <Button variant="dark" onClick={addToRecommended}>
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        onClick={addToRecommended}
+                      >
                         Dodaj do polecanych
                       </Button>
                     )}
                     {isRecommended && (
-                      <Button variant="dark" onClick={removeFromRecommended}>
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        onClick={removeFromRecommended}
+                      >
                         Usuń z polecanych
                       </Button>
                     )}
@@ -500,10 +576,11 @@ function CarDetails() {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Button
                     className="btn-fill pull-right"
                     type="submit"
-                    variant="info"
+                    variant="dark"
                   >
                     Aktualizuj
                   </Button>
@@ -513,41 +590,81 @@ function CarDetails() {
             </Card>
           </Col>
           <Col md="4">
-            <Card className="card-user">
-              <div className="card-image h-100">
-                <Image src={car.carImage} />
-              </div>
-              <Card.Body>
-                <p className="description text-center mt-2">
-                  {car.description}
-                </p>
-              </Card.Body>
-              <hr></hr>
-              <div className="button-container mr-auto ml-auto">
-                <Button
-                  className="btn-simple btn-icon"
-                  href="#pablo"
-                  variant="link"
-                >
-                  <i className="fab fa-facebook-square"></i>
-                </Button>
-                <Button
-                  className="btn-simple btn-icon"
-                  href="#pablo"
-                  variant="link"
-                >
-                  <i className="fab fa-twitter"></i>
-                </Button>
-                <Button
-                  className="btn-simple btn-icon"
-                  href="#pablo"
-                  variant="link"
-                >
-                  <i className="fab fa-google-plus-square"></i>
-                </Button>
-              </div>
-            </Card>
+            <Row>
+              <Card className="card-user">
+                <div className="card-image h-100">
+                  <Image src={car.carImage} />
+                </div>
+                <Card.Body>
+                  <p className="description text-center mt-2">
+                    {car.description}
+                  </p>
+                </Card.Body>
+                <hr></hr>
+                <div className="button-container mr-auto ml-auto">
+                  <Button
+                    className="btn-simple btn-icon"
+                    href="#pablo"
+                    variant="link"
+                  >
+                    <i className="fab fa-facebook-square"></i>
+                  </Button>
+                  <Button
+                    className="btn-simple btn-icon"
+                    href="#pablo"
+                    variant="link"
+                  >
+                    <i className="fab fa-twitter"></i>
+                  </Button>
+                  <Button
+                    className="btn-simple btn-icon"
+                    href="#pablo"
+                    variant="link"
+                  >
+                    <i className="fab fa-google-plus-square"></i>
+                  </Button>
+                </div>
+              </Card>
+            </Row>
           </Col>
+        </Row>
+        <Row>
+          <Row>
+            <Card>
+              <Card.Header>Dodatkowe zdjęcia</Card.Header>
+              <Card.Body>
+                <Row className="mt-2">
+                  {car.carImages.map((it) => (
+                    <Col key={it.id}>
+                      <Card style={{ width: "15rem" }}>
+                        <Image src={it.imgUrl} />
+                        <Card.Footer>
+                          <Button
+                            className="w-100 mt-2"
+                            variant="danger"
+                            size="sm"
+                            onClick={() => deleteCarImg(it.id)}
+                          >
+                            Usuń
+                          </Button>
+                        </Card.Footer>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+                <Row>
+                  <Form.Group>
+                    <Form.Label>Dodaj kolejne</Form.Label>
+                    <Form.Control
+                      type="file"
+                      name="CarImage"
+                      onChange={handleAdditionalImages}
+                    ></Form.Control>
+                  </Form.Group>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Row>
         </Row>
       </Container>
     </>
