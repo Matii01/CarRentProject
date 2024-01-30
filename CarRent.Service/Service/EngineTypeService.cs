@@ -21,13 +21,14 @@ namespace CarRent.Service.Service
             _repository.EngineType.Create(engineTypeEntity);
             await _repository.SaveAsync();
 
-            return _mapper.Map<EngineTypeDto>(engineType);
+            return _mapper.Map<EngineTypeDto>(engineTypeEntity);
         }
 
         public async Task<IEnumerable<EngineTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
             var engineTypes = await _repository.EngineType
-                .GetAllActiveAsync(trackChanges)
+                .GetAllAsync(trackChanges, "Id", false)
+                .Where(x => x.IsActive == true)
                 .Select(x => _mapper.Map<EngineTypeDto>(x))
                 .ToListAsync();
 
@@ -37,7 +38,7 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<EngineTypeDto>> GetAllAsync(bool trackChanges)
         {
             var engineTypes = await _repository.EngineType
-                .GetAllAsync(trackChanges, "Name")
+                .GetAllAsync(trackChanges, "Id", false)
                 .Select(x => _mapper.Map<EngineTypeDto>(x))
                 .ToListAsync();
 

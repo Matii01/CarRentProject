@@ -49,7 +49,7 @@ function Header() {
           <Nav className="ml-auto" navbar>
             <Nav.Item>
               <NavLink to="account" className="nav-link m-0 ms-5">
-                <span className="no-icon">Account</span>
+                <span className="no-icon">Konto</span>
               </NavLink>
             </Nav.Item>
 
@@ -60,7 +60,7 @@ function Header() {
                 as={Nav.Link}
                 onClick={onLogout}
               >
-                <span className="no-icon">Logout</span>
+                <span className="no-icon">Wyloguj</span>
               </NavLink>
             </Nav.Item>
           </Nav>

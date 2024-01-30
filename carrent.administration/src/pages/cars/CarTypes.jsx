@@ -71,7 +71,6 @@ function CarTypes() {
     jwtInterceptor
       .get("CarType")
       .then((data) => {
-        console.log(data);
         dispatch({
           type: "SET_TYPES",
           payload: data.data,
@@ -144,6 +143,20 @@ function CarTypes() {
     }
   };
 
+  const updateView = (item) => {
+    const newItems = state.carTypes.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    dispatch({
+      type: "SET_TYPES",
+      payload: newItems,
+    });
+  };
+
   const editCarType = (id) => {
     jwtInterceptor
       .put(`cartype/update/${id}`, JSON.stringify(state.newCarType), {
@@ -152,7 +165,7 @@ function CarTypes() {
         },
       })
       .then(() => {
-        getData();
+        updateView(state.newCarType);
         onCancel();
         toast.success("Zapisano zmiany");
       })
@@ -175,8 +188,12 @@ function CarTypes() {
           "Content-Type": "application/json",
         },
       })
-      .then(() => {
-        getData();
+      .then((data) => {
+        const newTypes = [data.data, ...state.carTypes];
+        dispatch({
+          type: "SET_TYPES",
+          payload: newTypes,
+        });
         onCancel();
         toast.success("Pomyślnie dodano");
       })

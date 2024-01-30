@@ -112,6 +112,7 @@ function Engines() {
   };
 
   const onDoubleClick = (engine) => {
+    console.log("onDouble click");
     console.log(engine);
     dispatch({
       type: "SET_NEW_ENGINE",
@@ -144,6 +145,20 @@ function Engines() {
     }
   };
 
+  const updateView = (item) => {
+    const newItems = state.engines.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    dispatch({
+      type: "SET_ENGINES",
+      payload: newItems,
+    });
+  };
+
   const editEngine = (id) => {
     jwtInterceptor
       .put(`EngineType/update/${id}`, JSON.stringify(state.newEngine), {
@@ -153,7 +168,7 @@ function Engines() {
       })
       .then((data) => {
         if (data.status === 201) {
-          getData();
+          updateView(state.newEngine);
           onCancel();
           toast.success("Zapisano zmiany");
         }
@@ -179,8 +194,13 @@ function Engines() {
       })
       .then((data) => {
         if (data.status === 201) {
-          getData();
-          onCancel();
+          const newEngines = [data.data, ...state.filteredEngines];
+
+          dispatch({
+            type: "SET_ENGINES",
+            payload: newEngines,
+          });
+
           toast.success("Pomyślnie dodano");
         }
       })
@@ -312,32 +332,3 @@ function Engines() {
 }
 
 export default Engines;
-
-/*
- <table className={`${styles.table}`}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Type</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {state.filteredEngines.map((engine) => (
-                      <tr
-                        key={engine.id}
-                        onDoubleClick={() => onDoubleClick(engine)}
-                      >
-                        <td>{engine.id}</td>
-                        <td>{engine.name}</td>
-                        <td>
-                          <i
-                            className="fa-solid fa-trash"
-                            onClick={() => handleDelete(engine.id)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table> */

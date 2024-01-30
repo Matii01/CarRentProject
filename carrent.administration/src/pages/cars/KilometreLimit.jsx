@@ -50,8 +50,22 @@ function KilometreLimit() {
     setIEditMode(false);
   };
 
-  const updateView = () => {
-    getData();
+  const onAddNewElement = (item) => {
+    const newItems = [item, ...items];
+    setItems(newItems);
+    onDoubleClick(item);
+    toast.success("Zapisano zmiany");
+  };
+
+  const updateView = (item) => {
+    const newItems = items.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setItems(newItems);
     toast.success("Zapisano zmiany");
   };
 
@@ -117,7 +131,7 @@ function KilometreLimit() {
                 updateView={updateView}
               />
             )}
-            {!isEditMode && <AddKilometreLimit onAdd={updateView} />}
+            {!isEditMode && <AddKilometreLimit onAdd={onAddNewElement} />}
           </Col>
         </Row>
       </Container>

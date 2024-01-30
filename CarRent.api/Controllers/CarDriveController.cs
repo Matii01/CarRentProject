@@ -41,7 +41,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateCarDrive([FromBody] CarDriveDto carDrive)
         {
             var createdCarDrive = await _services.CarDriveService.CreateAsync(carDrive);
-            return CreatedAtAction(nameof(CreateCarDrive), new { createdCarDrive.Id, createdCarDrive });
+            return CreatedAtAction(nameof(CreateCarDrive), createdCarDrive);
         }
 
         [Authorize(Roles = "Administrator,CarDetailsEditor")]

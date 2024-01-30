@@ -21,11 +21,24 @@ namespace CarRent.Repository.Repositories
         {
         }
 
-        public IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty)
+        public IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty, bool ascending)
         {
             var query = All(trackChanges);
            
             
+            if (!string.IsNullOrEmpty(sortByProperty) && typeof(T).GetProperty(sortByProperty) != null)
+            {
+                query = query.OrderByField(sortByProperty, ascending);
+            }
+
+            return query;
+        }
+
+        public IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty)
+        {
+            var query = All(trackChanges);
+
+
             if (!string.IsNullOrEmpty(sortByProperty) && typeof(T).GetProperty(sortByProperty) != null)
             {
                 query = query.OrderByField(sortByProperty, true);

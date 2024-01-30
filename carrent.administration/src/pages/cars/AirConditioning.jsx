@@ -49,8 +49,22 @@ function AirConditioning() {
     setIEditMode(false);
   };
 
-  const updateView = () => {
-    getData();
+  const onAddNewElement = (item) => {
+    const newItems = [item, ...items];
+    setItems(newItems);
+    onDoubleClick(item);
+    toast.success("Zapisano zmiany");
+  };
+
+  const updateView = (item) => {
+    const newItems = items.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setItems(newItems);
     toast.success("Zapisano zmiany");
   };
 
@@ -72,7 +86,7 @@ function AirConditioning() {
                 </Row>
                 <Row>
                   <Col>
-                    <Button onClick={onCancel} size="sm">
+                    <Button onClick={onCancel} variant="dark" size="sm">
                       Dodaj
                     </Button>
                   </Col>
@@ -116,7 +130,7 @@ function AirConditioning() {
                 updateView={updateView}
               />
             )}
-            {!isEditMode && <AddConditioning onAdd={updateView} />}
+            {!isEditMode && <AddConditioning onAdd={onAddNewElement} />}
           </Col>
         </Row>
       </Container>

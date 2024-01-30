@@ -52,12 +52,7 @@ function EditConditioning({ editItem, onCancel, updateView }) {
           <Form onSubmit={onSubmit}>
             <Row>
               <Col>
-                <Button
-                  type="submit"
-                  className="m-2"
-                  variant="primary"
-                  size="sm"
-                >
+                <Button type="submit" className="m-2" variant="dark" size="sm">
                   Zapisz
                 </Button>
                 <Button

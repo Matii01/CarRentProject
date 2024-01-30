@@ -42,7 +42,8 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateEngineType([FromBody] EngineTypeDto engineType)
         {
             var createdEngineType = await _services.EngineTypeService.CreateAsync(engineType);
-            return CreatedAtAction(nameof(CreateEngineType), new { createdEngineType.Id, engineType });
+
+            return CreatedAtAction(nameof(CreateEngineType), createdEngineType);
         }
 
 

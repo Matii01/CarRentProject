@@ -11,6 +11,7 @@ namespace CarRent.Repository.Interfaces
     public interface IGenericRepository<T>
     {
         IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty);
+        IQueryable<T> GetAllAsync(bool trackChanges, string sortByProperty, bool ascending);
         IQueryable<T> GetAllActiveAsync(bool trackChanges);
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
         IQueryable<T> GetAsync(int id, bool trackChanges);

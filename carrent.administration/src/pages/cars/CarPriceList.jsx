@@ -34,7 +34,6 @@ function CarPriceList() {
   };
 
   const onPricelistAdded = () => {
-    console.log("nowy cennik dodany ");
     getPriceLists();
   };
 

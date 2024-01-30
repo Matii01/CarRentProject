@@ -144,6 +144,20 @@ function CarDrives() {
     }
   };
 
+  const updateView = (item) => {
+    const newItems = state.carDrives.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    dispatch({
+      type: "SET_DRIVE",
+      payload: newItems,
+    });
+  };
+
   const editCarDrive = (id) => {
     jwtInterceptor
       .put(`CarDrive/update/${id}`, JSON.stringify(state.newCarDrive), {
@@ -152,7 +166,7 @@ function CarDrives() {
         },
       })
       .then(() => {
-        getData();
+        updateView(state.newCarDrive);
         onCancel();
         toast.success("Zapisano zmiany");
       })
@@ -176,8 +190,12 @@ function CarDrives() {
           "Content-Type": "application/json",
         },
       })
-      .then(() => {
-        getData();
+      .then((data) => {
+        const newCarDrives = [data.data, ...state.carDrives];
+        dispatch({
+          type: "SET_DRIVE",
+          payload: newCarDrives,
+        });
         onCancel();
         toast.success("Dodano");
       })

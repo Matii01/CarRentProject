@@ -24,8 +24,8 @@ namespace CarRent.api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAirConditioning([FromBody] KilometrLimitDto limit)
         {
-            await _services.KilometrLimitService.CreateAsync(limit);
-            return Ok(limit);
+            var created = await _services.KilometrLimitService.CreateAsync(limit);
+            return Ok(created);
         }
 
         [Authorize(Roles = "Administrator,CarDetailsEditor")]

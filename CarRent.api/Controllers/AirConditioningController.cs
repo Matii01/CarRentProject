@@ -22,8 +22,8 @@ namespace CarRent.api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAirConditioning([FromBody] AirConditioningTypeDto type)
         {
-            await _services.AirConditioningTypeService.CreateAsync(type);
-            return Ok(type);
+            var created = await _services.AirConditioningTypeService.CreateAsync(type);
+            return Ok(created);
         }
 
         [HttpPut("update/{id:int}")]

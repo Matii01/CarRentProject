@@ -51,9 +51,13 @@ function CarMakes() {
   };
 
   const addElement = (carMake) => {
-    const newMakes = [...makes, { ...carMake }];
+    const newMakes = [{ ...carMake }, ...makes];
     setMake(newMakes);
     setFilteredList(newMakes);
+
+    //set last added as edited
+    setSelectedMake(carMake);
+    setIsEditMode(true);
   };
 
   const handleDelete = (id) => {

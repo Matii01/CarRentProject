@@ -36,7 +36,8 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<CarDriveDto>> GetAllActiveAsync(bool trackChanges)
         {
             var carDrives = await _repository.CarDrive
-                .GetAllActiveAsync(trackChanges)
+                .GetAllAsync(trackChanges, "Name")
+                .Where(x => x.IsActive == true)
                 .Select(x => _mapper.Map<CarDriveDto>(x))
                 .ToListAsync();
 

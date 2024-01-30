@@ -46,8 +46,9 @@ function GearboxType() {
   };
 
   const addElement = (gearbox) => {
-    const newMakes = [...gearboxList, { ...gearbox }];
-    setGearboxList(newMakes);
+    const newGearbox = [{ ...gearbox }, ...gearboxList];
+    setGearboxList(newGearbox);
+    onDoubleClick(gearbox);
     toast.success("Dodano");
   };
 
@@ -155,14 +156,3 @@ function GearboxType() {
 }
 
 export default GearboxType;
-
-/*
-<CarInfoTable
-    thead={["Id", "Nazwa", "Actions"]}
-    items={gearboxList}
-    item={["id", "name"]}
-    searchTerm={searchTerm}
-    onDoubleClick={onDoubleClick}
-    handleDelete={onDeleteClick}
-  />
-*/

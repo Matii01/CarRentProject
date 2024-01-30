@@ -37,7 +37,8 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<CarTypeDto>> GetAllActiveAsync(bool trackChanges)
         {
             var carTypes = await _repository.CarType
-                .GetAllActiveAsync(trackChanges)
+                .GetAllAsync(trackChanges, "Name", true)
+                .Where(x=>x.IsActive == true)
                 .Select(x => new CarTypeDto(x.Id, x.Name))
                 .ToListAsync();
             
