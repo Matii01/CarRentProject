@@ -26,7 +26,7 @@ function AddRentalStatus({ onAdd }) {
       .then((data) => {
         toast.success("Zapisano zmiany");
         setNewStatus({ status: "", remarks: "", isDefault: false });
-        onAdd();
+        onAdd(data.data);
       })
       .catch((error) => console.log(error));
   };

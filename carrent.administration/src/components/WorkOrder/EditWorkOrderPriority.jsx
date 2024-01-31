@@ -30,7 +30,7 @@ function EditWorkOrderPriority({ editPriority, onCancel, updateView }) {
       .then((data) => {
         toast.success("Zapisano zmiany");
         console.log(data);
-        updateView();
+        updateView(editedPriority);
       })
       .catch((error) => {
         toast.error("Edycja błąd");

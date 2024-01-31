@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
-import axios from "axios";
-import styles from "./../../components/Table/Table.module.css";
-import CarInfoTable from "../../components/Table/CarInfoTable";
 import AddRentalStatus from "../../components/RentalStatus/AddRentalStatus";
 import EditRentalStatus from "../../components/RentalStatus/EditRentalStatus";
 import jwtInterceptor from "../../utils/jwtInterceptor";
@@ -53,9 +50,30 @@ function RentalStatus() {
     setSelectedStatus(status);
   };
 
-  const refreshView = () => {
-    getStatuses();
+  const refreshView = (item) => {
+    const newItems = statuses.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setStatuses(newItems);
     setIsEditMode(false);
+  };
+
+  const onAddItem = (item) => {
+    const newItems = [item, ...statuses];
+    setStatuses(newItems);
+    onDoubleClick(item);
+  };
+
+  const onDeleteItem = (itemId) => {
+    if (selectedStatus.id === itemId) {
+      setIsEditMode(false);
+    }
+    const newItems = statuses.filter((it) => it.id != itemId);
+    setStatuses(newItems);
   };
 
   const onDeleteClick = (itemId) => {
@@ -63,15 +81,17 @@ function RentalStatus() {
       .delete(`RentalStatus/${itemId}`)
       .then((data) => {
         toast.success("Usunięto");
-        refreshView();
+        onDeleteItem(itemId);
       })
       .catch((error) => {
         toast.error("Błąd");
       });
   };
+
   const handleSearchSubmit = (event) => {
     event.preventDefault();
   };
+
   return (
     <>
       <ToastContainer />
@@ -126,7 +146,7 @@ function RentalStatus() {
                 updateView={refreshView}
               />
             )}
-            {!isEditMode && <AddRentalStatus onAdd={refreshView} />}
+            {!isEditMode && <AddRentalStatus onAdd={onAddItem} />}
           </Col>
         </Row>
         <Row>

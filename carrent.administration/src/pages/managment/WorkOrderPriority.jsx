@@ -51,19 +51,37 @@ function WorkOrderPriority() {
     setSelectedPriority(priority);
   };
 
-  const refreshView = () => {
-    getPriorities();
+  const refreshView = (item) => {
+    const newItems = priorities.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setPriorities(newItems);
     setIsEditMode(false);
   };
 
-  const onDeleteClick = (itemId) => {
-    console.log(itemId);
+  const onAddItem = (item) => {
+    const newItems = [item, ...priorities];
+    setPriorities(newItems);
+    onDoubleClick(item);
+  };
 
+  const onDeleteItem = (itemId) => {
+    if (selectedPriority.id === itemId) {
+      setIsEditMode(false);
+    }
+    const newItems = priorities.filter((it) => it.id != itemId);
+    setPriorities(newItems);
+  };
+
+  const onDeleteClick = (itemId) => {
     jwtInterceptor
       .delete(`WorkOrderPriority/${itemId}`)
       .then((data) => {
-        const filtered = priorities.filter((e) => e.id != itemId);
-        setPriorities(filtered);
+        onDeleteItem(itemId);
         toast.success("usunięto");
       })
       .catch((error) => {
@@ -130,7 +148,7 @@ function WorkOrderPriority() {
                 updateView={refreshView}
               />
             )}
-            {!isEditMode && <AddWorkOrderPriority onAdd={refreshView} />}
+            {!isEditMode && <AddWorkOrderPriority onAdd={onAddItem} />}
           </Col>
         </Row>
         <Row></Row>

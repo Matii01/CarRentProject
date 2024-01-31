@@ -19,8 +19,8 @@ function AddWorkOrder({ onAdd, forFilters }) {
         },
       })
       .then((data) => {
-        console.log(data.data);
         setNewWorkOrder({ ...initialState });
+        //onAdd(data.data);
         onAdd();
       })
       .catch((error) => console.log(error));

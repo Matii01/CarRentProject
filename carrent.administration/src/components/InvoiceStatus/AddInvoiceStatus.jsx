@@ -4,9 +4,6 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { toast } from "react-toastify";
 
 function AddInvoiceStatus({ onAdd }) {
-  //public string Name { get; set; } = null!;
-  //public string Description { get; set; } = null!;
-
   const [newStatus, setNewStatus] = useState({
     name: "",
     description: "",
@@ -28,7 +25,7 @@ function AddInvoiceStatus({ onAdd }) {
       .then((data) => {
         toast.success("Dodano");
         setNewStatus({ name: "", description: "" });
-        onAdd();
+        onAdd(data.data);
       })
       .catch((error) => {
         toast.error("Dodawanie: Błąd");

@@ -51,9 +51,30 @@ function WorkOrderStatus() {
     setSelectedStatus(status);
   };
 
-  const refreshView = () => {
-    getStatuses();
+  const refreshView = (item) => {
+    const newItems = statuses.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setStatuses(newItems);
     setIsEditMode(false);
+  };
+
+  const onAddItem = (item) => {
+    const newItems = [item, ...statuses];
+    setStatuses(newItems);
+    onDoubleClick(item);
+  };
+
+  const onDeleteItem = (itemId) => {
+    if (selectedStatus.id === itemId) {
+      setIsEditMode(false);
+    }
+    const newItems = statuses.filter((it) => it.id != itemId);
+    setStatuses(newItems);
   };
 
   const onDeleteClick = (itemId) => {
@@ -61,9 +82,8 @@ function WorkOrderStatus() {
     jwtInterceptor
       .delete(`WorkOrderStatus/${itemId}`)
       .then((data) => {
-        const filtered = statuses.filter((e) => e.id != itemId);
-        setStatuses(filtered);
         toast.success("Usunięto");
+        onDeleteItem(itemId);
       })
       .catch((error) => {
         console.log(error);
@@ -129,7 +149,7 @@ function WorkOrderStatus() {
                 updateView={refreshView}
               />
             )}
-            {!isEditMode && <AddWorkOrderStatus onAdd={refreshView} />}
+            {!isEditMode && <AddWorkOrderStatus onAdd={onAddItem} />}
           </Col>
         </Row>
         <Row></Row>

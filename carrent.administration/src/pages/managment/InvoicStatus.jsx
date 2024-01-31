@@ -51,9 +51,30 @@ function InvoiceStatus() {
     setSelectedStatus(status);
   };
 
-  const refreshView = () => {
-    getStatuses();
+  const refreshView = (item) => {
+    const newItems = statuses.map((it) => {
+      if (it.id == item.id) {
+        return item;
+      } else {
+        return it;
+      }
+    });
+    setStatuses(newItems);
     setIsEditMode(false);
+  };
+
+  const onAddItem = (item) => {
+    const newItems = [item, ...statuses];
+    setStatuses(newItems);
+    onDoubleClick(item);
+  };
+
+  const onDeleteItem = (itemId) => {
+    if (selectedStatus.id === itemId) {
+      setIsEditMode(false);
+    }
+    const newItems = statuses.filter((it) => it.id != itemId);
+    setStatuses(newItems);
   };
 
   const onDeleteClick = (itemId) => {
@@ -61,7 +82,7 @@ function InvoiceStatus() {
       .delete(`InvoiceStatus/${itemId}`)
       .then((data) => {
         toast.success("Usunięto");
-        refreshView();
+        onDeleteItem(itemId);
       })
       .catch((error) => {
         toast.error("Błąd");
@@ -80,7 +101,7 @@ function InvoiceStatus() {
             <Card className="" style={{ marginTop: "0px" }}>
               <Card.Header>
                 <Row>
-                  <Col className="text-center mb-2">Statusy wypożyczeń</Col>
+                  <Col className="text-center mb-2">Statusy Faktur</Col>
                 </Row>
                 <Row>
                   <Col>
@@ -125,7 +146,7 @@ function InvoiceStatus() {
                 updateView={refreshView}
               />
             )}
-            {!isEditMode && <AddInvoiceStatus onAdd={refreshView} />}
+            {!isEditMode && <AddInvoiceStatus onAdd={onAddItem} />}
           </Col>
         </Row>
         <Row></Row>

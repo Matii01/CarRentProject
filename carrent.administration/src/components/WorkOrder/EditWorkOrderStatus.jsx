@@ -29,8 +29,7 @@ function EditWorkOrderStatus({ editStatus, onCancel, updateView }) {
       )
       .then((data) => {
         toast.success("Zapisano zmiany");
-        console.log(data);
-        updateView();
+        updateView(editedStatus);
       })
       .catch((error) => {
         toast.error("Edycja błąd");

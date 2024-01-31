@@ -15,7 +15,6 @@ function AddWorkOrderStatus({ onAdd }) {
   };
 
   const AddNewStatus = () => {
-    console.log(newStatus);
     jwtInterceptor
       .post(`WorkOrderStatus/create`, JSON.stringify(newStatus), {
         headers: {
@@ -24,13 +23,11 @@ function AddWorkOrderStatus({ onAdd }) {
       })
       .then((data) => {
         toast.success("Dodano");
-        console.log(data.data);
         setNewStatus({ name: "", description: "" });
-        onAdd();
+        onAdd(data.data);
       })
       .catch((error) => {
         toast.error("Dodawanie - bład");
-        console.log(error);
       });
   };
 

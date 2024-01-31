@@ -29,7 +29,7 @@ function EditRentalStatus({ editStatus, onCancel, updateView }) {
       .then((data) => {
         console.log(data);
         toast.success("Zapisano zmiany");
-        updateView();
+        updateView(editedStatus);
       })
       .catch((error) => console.log(error));
   };

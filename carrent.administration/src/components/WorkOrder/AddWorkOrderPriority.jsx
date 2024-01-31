@@ -25,7 +25,7 @@ function AddWorkOrderPriority({ onAdd }) {
       .then((data) => {
         toast.success("Dodano");
         setNewStatus({ name: "", description: "" });
-        onAdd();
+        onAdd(data.data);
       })
       .catch((error) => {
         toast.success("Dodawanie - błąd");
