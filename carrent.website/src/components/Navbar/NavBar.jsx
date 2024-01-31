@@ -79,7 +79,7 @@ function NavBar() {
               </Nav.Link>
             )}
             <Nav.Link to="/user" as={NavLink}>
-              {user.isLogin ? userName : ""}
+              {user.isLogin ? "Profile" : ""}
             </Nav.Link>
             {user.isLogin && (
               <Nav.Link onClick={handleLogout}>Log out</Nav.Link>

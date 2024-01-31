@@ -49,6 +49,7 @@ namespace CarRent.Service.Service
         {
             var items = _repository.CarOpinion
                 .GetAllAsync(false, "Id")
+                .OrderByDescending(x => x.AddedDate)
                 .Where(x => x.IsActive == true)
                 .Search(param)
                 .Select(x => new OpinionForAdminViewDto(

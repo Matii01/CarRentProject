@@ -80,33 +80,20 @@ function ChangePersonalDetails() {
 
           <Row className="mb-3">
             <Form.Group as={Col}>
-              <Form.Label>User Name</Form.Label>
+              <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="User name"
-                name="userName"
-                disabled
+                placeholder="phoneNumber"
+                name="phoneNumber"
+                value={user.phoneNumber}
                 onChange={handleChange}
-                value={user.userName}
               />
             </Form.Group>
 
             <Form.Group as={Col}>
-              <Form.Label>Phone Number</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Phone number"
-                name="phoneNumber"
-                onChange={handleChange}
-                value={user.phoneNumber}
-              />
-            </Form.Group>
-          </Row>
-
-          <Row>
-            <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
+                disabled
                 type="email"
                 placeholder="Email"
                 name="email"
@@ -115,6 +102,8 @@ function ChangePersonalDetails() {
               />
             </Form.Group>
           </Row>
+
+          <Row></Row>
           <Row className="mt-2">
             <Col>
               <Button className="customButton" type="submit">

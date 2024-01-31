@@ -56,16 +56,18 @@ namespace CarRent.Repository.Repositories
         public async Task<PagedList<CarListDto>> GetCarsForWorkerAsync(CarParameters parameters, bool trackChanges)
         {
             var list = context.Cars
-            .Search(parameters)
-            .Select(x => new CarListDto(
-                x.Id,
-                x.Name,
-                x.CarMake.Name,
-                x.EngineType.Name,
-                x.GearBoxType.Name,
-                x.AirConditioningType.Name,
-                0
-                ));
+                .Where(x => x.IsActive == true)
+                .OrderByDescending(x=>x.Id)
+                .Search(parameters)
+                .Select(x => new CarListDto(
+                    x.Id,
+                    x.Name,
+                    x.CarMake.Name,
+                    x.EngineType.Name,
+                    x.GearBoxType.Name,
+                    x.AirConditioningType.Name,
+                    0
+                    ));
 
             var pagedList = await PagedList<CarListDto>
                 .ToPagedList(list, parameters.PageNumber, parameters.PageSize);

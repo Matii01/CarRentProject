@@ -8,7 +8,6 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   const initialState = {
-    userName: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -122,18 +121,6 @@ function RegisterPage() {
                         type="text"
                         placeholder="Last Name"
                         name="lastName"
-                        onChange={handleChange}
-                      />
-                    </Form.Group>
-                  </Row>
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridUserName">
-                      <Form.Label>User Name</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="User Name"
-                        name="userName"
                         onChange={handleChange}
                       />
                     </Form.Group>

@@ -8,12 +8,6 @@ using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -72,6 +66,7 @@ namespace CarRent.Service.Service
 
             var list = await _repository.NewsletterSubscriber
                 .FindByCondition(x => x.Email == newSubscription, true)
+                .OrderByDescending (x => x.SubscribeDate)
                 .ToListAsync();
 
             if (list.Count > 0)

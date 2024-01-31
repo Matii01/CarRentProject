@@ -71,7 +71,9 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
     setWorkOrder((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    onCancel();
+  };
 
   const onRemoveWorker = (Id) => {
     console.log(Id);

@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
+import { Card, Container, Row, Col, Form } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
-import CarInfoTable from "../../components/Table/CarInfoTable";
-import AddWorkOrderStatus from "../../components/WorkOrder/AddWorkOrderStatus";
-import EditWorkOrderStatus from "../../components/WorkOrder/EditWorkOrderStatus";
 import WorkOrderFiltrs from "../../components/WorkOrder/WorkOrderFiltrs";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import TableWithPagination from "../../components/Table/TableWithPagination";
-import AddWorkOrder from "../../components/WorkOrder/AddWorkOrder";
-import EditWorkOrder from "../../components/WorkOrder/EditOrder";
-import { useSelector } from "react-redux";
 import WorkOrderViewForWorker from "../../components/WorkOrder/WorkOrderViewForWorker";
+import { formatDate } from "../../utils/formDate";
 
 function WorkOrderWorkerView() {
   const [metaData, setMetaData] = useState([]);
@@ -52,13 +47,22 @@ function WorkOrderWorkerView() {
       });
   };
 
+  const transformDataAndSetItems = (items) => {
+    const transformed = items.map((it) => {
+      return {
+        ...it,
+        createdData: formatDate(it.createdData),
+      };
+    });
+    setItems(transformed);
+  };
+
   const getData = () => {
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
       .get(`WorkOrder/workerAll?${queryString}`)
       .then((data) => {
-        console.log(data.data);
-        setItems(data.data.items);
+        transformDataAndSetItems(data.data.items);
         setMetaData(data.data.metaData);
       })
       .catch((error) => {

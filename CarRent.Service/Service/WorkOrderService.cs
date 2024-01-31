@@ -33,7 +33,9 @@ namespace CarRent.Service.Service
             var workers = await GetWorkerListForWorkOrder(id);
 
             int compleatedStatusId = await _repository.WorkOrderStatus
-                .FindByCondition(x => x.IsActive == true && x.IsDefaultForCompleated == true, false)
+                .FindByCondition(x => x.IsActive == true && 
+                    x.IsDefaultForCompleated == true,
+                    false)
                 .Select(x => x.Id)
                 .FirstOrDefaultAsync();
 
@@ -115,6 +117,7 @@ namespace CarRent.Service.Service
         {
             var items = _repository.WorkOrder
                 .FindByCondition(x => x.IsActive == true, false)
+                .OrderByDescending(x=>x.CreatedData)
                 .Search(_repository.Context, orderParams)
                 .Select(x => new WorkOrderDto(
                     x.Id,

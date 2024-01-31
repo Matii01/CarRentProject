@@ -179,7 +179,7 @@ namespace CarRent.Service.Helper
             {
                 FirstName = userForRegistration.FirstName,
                 LastName = userForRegistration.LastName,
-                UserName = userForRegistration.UserName,
+                UserName = userForRegistration.Email,
                 Email = userForRegistration.Email,
                 PhoneNumber = userForRegistration.PhoneNumber,
             };

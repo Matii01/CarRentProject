@@ -25,13 +25,23 @@ function Opinion() {
     getFilteredItems();
   }, [filtrs.PageNumber, filtrs.PageSize]);
 
+  const transformDataAndSetItems = (items) => {
+    const transformed = items.map((it) => {
+      return {
+        ...it,
+        addedDate: formatDate(it.addedDate),
+      };
+    });
+    setItems(transformed);
+  };
+
   const getFilteredItems = () => {
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
       .get(`CarOpinion/all?${queryString}`)
       .then((data) => {
         setMetaData(data.data.metaData);
-        setItems(data.data.items);
+        transformDataAndSetItems(data.data.items);
       })
       .catch((error) => {
         console.log(error);

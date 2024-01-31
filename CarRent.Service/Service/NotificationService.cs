@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
-using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -21,13 +15,14 @@ namespace CarRent.Service.Service
             : base(repository, mapper)
         {
         }
-        // Remember to check if Notification should be send
 
+        // Remember to check if Notification should be send
         public async Task<List<NotificationDto>> GetNotificationsAsync()
         {
 
             var item = await _repository.Notification
                 .FindByCondition(x => x.IsActive == true, false)
+                .OrderByDescending(x => x.CreatedDate)
                 .Select(x => new NotificationDto(
                          x.Id,
                          x.UserId,

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
-import CarInfoTable from "../../components/Table/CarInfoTable";
-import AddWorkOrderStatus from "../../components/WorkOrder/AddWorkOrderStatus";
-import EditWorkOrderStatus from "../../components/WorkOrder/EditWorkOrderStatus";
 import WorkOrderFiltrs from "../../components/WorkOrder/WorkOrderFiltrs";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import TableWithPagination from "../../components/Table/TableWithPagination";
 import AddWorkOrder from "../../components/WorkOrder/AddWorkOrder";
 import EditWorkOrder from "../../components/WorkOrder/EditOrder";
+import { formatDate } from "../../utils/formDate";
 
 function WorkOrderAdminView() {
   const [metaData, setMetaData] = useState([]);
@@ -50,13 +48,22 @@ function WorkOrderAdminView() {
       });
   };
 
+  const transformDataAndSetItems = (items) => {
+    const transformed = items.map((it) => {
+      return {
+        ...it,
+        createdData: formatDate(it.createdData),
+      };
+    });
+    setItems(transformed);
+  };
+
   const getData = () => {
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
       .get(`WorkOrder/all?${queryString}`)
       .then((data) => {
-        console.log(data.data);
-        setItems(data.data.items);
+        transformDataAndSetItems(data.data.items);
         setMetaData(data.data.metaData);
       })
       .catch((error) => {
