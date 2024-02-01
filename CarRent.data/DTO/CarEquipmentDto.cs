@@ -11,4 +11,17 @@ namespace CarRent.data.DTO
         string Name,
         string? Description 
     );
+
+    public record CarEquipmentForCarDto(
+        int Id, 
+        int CarId,
+        int EquipmentId,  
+        string Name, 
+        string? Description
+    );
+
+    public record CarEquipmentCarDto(
+        int CarId,
+        int EquipmentId
+    );
 }

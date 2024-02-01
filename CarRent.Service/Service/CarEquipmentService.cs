@@ -30,6 +30,23 @@ namespace CarRent.Service.Service
             return items;
         }
 
+        public async Task<IEnumerable<CarEquipmentForCarDto>> GetEquipmentForCarAsync(int carId)
+        {
+            var items = await _repository.CarEquipmentCar
+                .FindByCondition(x => x.IsActive == true && 
+                    x.CarId == carId, 
+                    false)
+                .Select(x => new CarEquipmentForCarDto(
+                    x.Id, 
+                    x.CarId, 
+                    x.CarEquipmentId, 
+                    x.CarEquipment.Name, 
+                    x.CarEquipment.Description))
+                .ToListAsync();
+
+            return items;
+        }
+
         public async Task<CarEquipmentDto> GetByIdAsync(int id)
         {
             var item = await _repository.CarEquipment
@@ -48,6 +65,45 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
 
             return _mapper.Map<CarEquipmentDto>(newItem);
+        }
+
+        public async Task<CarEquipmentForCarDto> AssignCarEquipmentToCar(CarEquipmentCarDto carEquipment)
+        {
+            var equipment = await GetByIdAsync(carEquipment.EquipmentId);
+
+            var item = await _repository.CarEquipmentCar.FindByCondition(
+                    x => x.CarEquipmentId == carEquipment.EquipmentId 
+                    && x.CarId == carEquipment.CarId, true)
+                .SingleOrDefaultAsync();
+
+            if (item != null)
+            {
+                item.IsActive = true;
+                await _repository.SaveAsync();
+                return new CarEquipmentForCarDto(item.Id, item.CarId, item.CarEquipmentId, equipment.Name, equipment.Description);
+            }
+
+            CarEquipmentCar newItem = new()
+            {
+                CarId = carEquipment.CarId,
+                CarEquipmentId = carEquipment.EquipmentId,
+                IsActive = true
+            };
+
+            _repository.CarEquipmentCar.Create(newItem);
+            await _repository.SaveAsync();
+         
+            return new CarEquipmentForCarDto(newItem.Id, newItem.CarId, newItem.CarEquipmentId, equipment.Name, equipment.Description);
+        }
+       
+        public async Task RemoveEquipmentFromCar(int id)
+        {
+            var item = await _repository.CarEquipmentCar
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            item.IsActive = false;
+            await _repository.SaveAsync();
         }
 
         public async Task UpdateAsync(int id, CarEquipmentDto carEquipment)

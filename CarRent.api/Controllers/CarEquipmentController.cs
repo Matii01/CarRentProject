@@ -26,10 +26,24 @@ namespace CarRent.api.Controllers
             return Ok(item);
         }
 
+        [HttpGet("getForCar/{id:int}")]
+        public async Task<IActionResult> GetCarEquipmentForCar(int id)
+        {
+            var item = await _services.CarEquipmentService.GetEquipmentForCarAsync(id);
+            return Ok(item);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateCarEquipment([FromBody] CarEquipmentDto equipment)
         {
             var created = await _services.CarEquipmentService.CreateAsync(equipment);
+            return CreatedAtAction(nameof(CreateCarEquipment), created);
+        }
+
+        [HttpPost("addEquipment")]
+        public async Task<IActionResult> AssignEquipmentToCar([FromBody] CarEquipmentCarDto equipment)
+        {
+            var created = await _services.CarEquipmentService.AssignCarEquipmentToCar(equipment);
             return CreatedAtAction(nameof(CreateCarEquipment), created);
         }
 
@@ -40,6 +54,12 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("removeCarEquipmentFromCar/{id:int}")]
+        public async Task<IActionResult> RemoveCarEquipmentFromCar(int id)
+        {
+            await _services.CarEquipmentService.RemoveEquipmentFromCar(id);
+            return NoContent();
+        }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCarEquipment(int id)

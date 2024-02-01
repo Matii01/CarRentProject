@@ -11,6 +11,7 @@ function MyTableWithPagination({
   searchTerm,
   serachBy,
   size,
+  onChoose,
 }) {
   const [filtered, setFiltered] = useState([]);
   const [pagedList, setPagedList] = useState([]);
@@ -151,6 +152,15 @@ function MyTableWithPagination({
                         <i
                           className="fa-solid fa-trash"
                           onClick={() => handleDelete(type.id)}
+                          style={{ cursor: "pointer" }}
+                        ></i>
+                      </td>
+                    )}
+                    {onChoose && (
+                      <td>
+                        <i
+                          className="fa-solid fa-plus"
+                          onClick={() => onChoose(type)}
                           style={{ cursor: "pointer" }}
                         ></i>
                       </td>

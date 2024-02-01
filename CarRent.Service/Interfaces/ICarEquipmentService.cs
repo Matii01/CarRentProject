@@ -10,8 +10,11 @@ namespace CarRent.Service.Interfaces
     public interface ICarEquipmentService
     {
         Task<IEnumerable<CarEquipmentDto>> GetAllAsync();
+        Task<IEnumerable<CarEquipmentForCarDto>> GetEquipmentForCarAsync(int carId);
         Task<CarEquipmentDto> GetByIdAsync(int id);
         Task<CarEquipmentDto> CreateAsync(CarEquipmentDto carEquipment);
+        Task<CarEquipmentForCarDto> AssignCarEquipmentToCar(CarEquipmentCarDto carEquipment);
+        Task RemoveEquipmentFromCar(int id);
         Task UpdateAsync(int id, CarEquipmentDto carEquipment);
         Task DeleteAsync(int id);
     }

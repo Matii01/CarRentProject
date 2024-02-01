@@ -240,9 +240,15 @@ function CarDetails() {
     <>
       <ToastContainer />
       <Container fluid>
-        <Row>
+        <hr />
+        <Row className="ps-2">
           <Col>
             <p>Car details for {param.carId}</p>
+          </Col>
+          <Col>
+            <Nav.Link as={NavLink} to={`/car/${param.carId}/equipment`}>
+              Wyposażenie
+            </Nav.Link>
           </Col>
           <Col>
             <Nav.Link as={NavLink} to={`pricelist`}>
@@ -260,6 +266,7 @@ function CarDetails() {
             </Nav.Link>
           </Col>
         </Row>
+        <hr />
         <Row>
           <Col md="8">
             <Card>
