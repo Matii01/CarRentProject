@@ -283,6 +283,14 @@ function EditWorkerSidebar({ workerId }) {
                   onChange={handleCheckboxChange}
                 />
                 <EditSidebarCheckbox
+                  name="Wyposażenie"
+                  mainCategory="Samochody"
+                  item={allPages
+                    .find((i) => i.title === "Samochody")
+                    .children.find((i) => i.name == "Wyposażenie")}
+                  onChange={handleCheckboxChange}
+                />
+                <EditSidebarCheckbox
                   name="Marki"
                   mainCategory="Samochody"
                   item={allPages
@@ -481,6 +489,7 @@ const genereateNew = [
     children: [
       { name: "Samochody", path: "/cars", isActive: false },
       { name: "Dodaj", path: "/cars/add", isActive: false },
+      { name: "Wyposażenie", path: "car/equipment", isActive: false },
       { name: "Marki", path: "/cars/makes", isActive: false },
       { name: "Silniki", path: "/cars/engines", isActive: false },
       { name: "Typy", path: "/cars/types", isActive: false },

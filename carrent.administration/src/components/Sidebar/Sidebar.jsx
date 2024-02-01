@@ -37,6 +37,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
   const carPages = [
     { name: "Samochody", path: "/cars" },
     { name: "Dodaj", path: "/cars/add" },
+    { name: "Wyposażenie", path: "car/equipment" },
     { name: "Marki", path: "/cars/makes" },
     { name: "Silniki", path: "/cars/engines" },
     { name: "Typy", path: "/cars/types" },
