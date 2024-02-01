@@ -37,7 +37,7 @@ function EditCarEquipment({ equipment, onCancel, updateView }) {
   };
 
   return (
-    <Card>
+    <Card className="p-2">
       <Card.Header>
         <Card.Title as="h5">Wyposażenie - edycja</Card.Title>
       </Card.Header>

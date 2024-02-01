@@ -68,6 +68,19 @@ function CarEquipment() {
     setIsEditMode(false);
   };
 
+  const onDeleteClick = (itemId) => {
+    console.log(itemId);
+    jwtInterceptor
+      .delete(`CarEquipment/${itemId}`)
+      .then((data) => {
+        const newList = equipmentList.filter((x) => x.id != itemId);
+        setEquipmentList(newList);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   if (!equipmentList) {
     return <p>Loading ...</p>;
   }
@@ -118,6 +131,7 @@ function CarEquipment() {
                   searchTerm={searchTerm}
                   serachBy={"name"}
                   onDoubleClick={onDoubleClick}
+                  handleDelete={onDeleteClick}
                 />
               </Card.Body>
             </Card>
