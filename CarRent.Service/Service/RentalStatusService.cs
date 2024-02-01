@@ -68,6 +68,7 @@ namespace CarRent.Service.Service
             var rentalStatus = await _repository.RentalStatus
                 .GetAsync(id, trackChanges)
                 .SingleOrDefaultAsync() ?? throw new ArgumentException("Rental Status not found");
+
             rentalStatus.Status = newValue.Status;
             rentalStatus.Remarks = newValue.Remarks;
             rentalStatus.IsDefault = newValue.IsDefault;

@@ -37,6 +37,7 @@ namespace CarRent.Service
         public readonly Lazy<IApplicationSettingsService> _applicationSettingsService;
         public readonly Lazy<IUsersService> _usersService;
         public readonly Lazy<INewsletterService> _newsletterService;
+        public readonly Lazy<ICarEquipmentService> _carEquipmentService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -76,6 +77,9 @@ namespace CarRent.Service
 
             _workerSidebarService = new Lazy<IWorkerSidebarService>(() =>
                 new WorkerSidebarService(repositoryManager, mapper));
+
+            _carEquipmentService = new Lazy<ICarEquipmentService>(() =>
+                new CarEquipmentService(repositoryManager, mapper));
 
             _carMaintenanceService = new Lazy<ICarMaintenanceService>(() =>
                 new CarMaintenanceService(repositoryManager, RentalService, mapper));
@@ -159,6 +163,7 @@ namespace CarRent.Service
         public IApplicationSettingsService ApplicationSettingsService => _applicationSettingsService.Value;
         public IUsersService UsersService  => _usersService.Value;
         public INewsletterService NewsletterService => _newsletterService.Value;
+        public ICarEquipmentService CarEquipmentService => _carEquipmentService.Value;
 
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;

@@ -71,5 +71,8 @@ namespace CarRent.data.Models
 
         public bool? IsVisible { get; set; }
 
+        public List<CarEquipmentCar> CarEquipmentCars { get; } = new();
+        public List<CarEquipment> CarsEquipment { get; } = new();
+
     }
 }

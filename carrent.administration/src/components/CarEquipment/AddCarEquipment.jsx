@@ -2,41 +2,46 @@ import { useState } from "react";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
-function AddGearbox({ onAdd }) {
-  const [newGearbox, setNewGerabox] = useState({ name: "" });
+function AddCarEquipment({ onAdd }) {
+  const [newEquipment, setNewEquipment] = useState({
+    name: "",
+    description: "",
+  });
+
   const onSubmit = (event) => {
     event.preventDefault();
-    AddNewGearbox();
+    AddNewCarEquipment();
   };
 
-  const AddNewGearbox = () => {
-    console.log(newGearbox);
+  const AddNewCarEquipment = () => {
+    console.log(newEquipment);
     jwtInterceptor
-      .post(`/GearboxType/create`, JSON.stringify(newGearbox), {
+      .post(`/CarEquipment/create`, JSON.stringify(newEquipment), {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((data) => {
-        onAdd(data.data.createdGearbox);
-        setNewGerabox({ name: "" });
+        console.log(data.data);
+        onAdd(data.data);
+        setNewEquipment({ name: "", description: "" });
       })
       .catch((error) => console.log(error));
   };
 
   const handleCancel = () => {
-    setNewGerabox({ name: "", description: "" });
+    setNewEquipment({ name: "", description: "" });
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setNewGerabox((prev) => ({ ...prev, [name]: value }));
+    setNewEquipment((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <Card className="p-2">
       <Card.Header>
-        <Card.Title as="h5">Skrzynia biegów - dodawanie</Card.Title>
+        <Card.Title as="h5">Wyposażenie - dodawanie</Card.Title>
       </Card.Header>
       <Card.Body className="table-full-width table-responsive px-0">
         <Form onSubmit={onSubmit}>
@@ -63,7 +68,17 @@ function AddGearbox({ onAdd }) {
               required
               type="text"
               name="name"
-              value={newGearbox.name}
+              value={newEquipment.name}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Opis</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              name="description"
+              value={newEquipment.description}
               onChange={handleChange}
             />
           </Form.Group>
@@ -73,4 +88,4 @@ function AddGearbox({ onAdd }) {
   );
 }
 
-export default AddGearbox;
+export default AddCarEquipment;

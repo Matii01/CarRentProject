@@ -30,6 +30,7 @@ namespace CarRent.Service.Interfaces
         IApplicationSettingsService ApplicationSettingsService { get; }
         IUsersService UsersService {  get; }
         INewsletterService NewsletterService { get; }
+        ICarEquipmentService CarEquipmentService { get; }
 
 
         IGenericService<CarTypeDto> CarTypeService { get; }

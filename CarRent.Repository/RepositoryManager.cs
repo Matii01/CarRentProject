@@ -26,6 +26,8 @@ namespace CarRent.Repository
         private readonly Lazy<IGenericRepository<PricelistDate>> _pricelistDateRepository;
         private readonly Lazy<IGenericRepository<CarOpinion>> _carOpinionRepository;
         private readonly Lazy<IGenericRepository<CarImages>> _carImagesRepository;
+        private readonly Lazy<IGenericRepository<CarEquipment>> _carEquipmentRepository;
+        private readonly Lazy<IGenericRepository<CarEquipmentCar>> _carEquipmentCarRepository;
 
         //CarMaintenances
         private readonly Lazy<IGenericRepository<CarMaintenance>> _carMaintenancesRepository;
@@ -121,6 +123,12 @@ namespace CarRent.Repository
 
             _carOpinionRepository = new Lazy<IGenericRepository<CarOpinion>>(() =>
                 new GenericRepository<CarOpinion>(_context));
+
+            _carEquipmentRepository = new Lazy<IGenericRepository<CarEquipment>>(() =>
+                new GenericRepository<CarEquipment>(_context));
+            
+            _carEquipmentCarRepository = new Lazy<IGenericRepository<CarEquipmentCar>>(() =>
+                new GenericRepository<CarEquipmentCar>(_context));
 
             _carImagesRepository = new Lazy<IGenericRepository<CarImages>>(() => 
                 new GenericRepository<CarImages>(_context));
@@ -247,6 +255,8 @@ namespace CarRent.Repository
         public IGenericRepository<CarOpinion> CarOpinion => _carOpinionRepository.Value;
         public IGenericRepository<RecommendedCars> RecommendedCars  => _recommendedCarsRepository.Value;
         public IGenericRepository<CarImages> CarImages => _carImagesRepository.Value;
+        public IGenericRepository<CarEquipment> CarEquipment => _carEquipmentRepository.Value;
+        public IGenericRepository<CarEquipmentCar> CarEquipmentCar => _carEquipmentCarRepository.Value;
 
         public IRentalRepository Rentals => _rentalRepository.Value;
         public IGenericRepository<RentalStatus> RentalStatus => _rentalStatusRepository.Value;

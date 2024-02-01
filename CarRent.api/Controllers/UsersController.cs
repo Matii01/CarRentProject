@@ -254,8 +254,8 @@ namespace CarRent.api.Controllers
             
             user.FirstName = updated.FirstName ?? user.FirstName;
             user.LastName = updated.LastName ?? user.LastName;
-            user.Email = updated.Email ?? user.Email;
             user.PhoneNumber = updated.PhoneNumber ?? user.PhoneNumber;
+            //user.Email = updated.Email ?? user.Email;
            
             await _userManager.UpdateAsync(user);
 

@@ -98,6 +98,10 @@ namespace CarRent.api
             CreateMap<WorkOrderPriorityDto, WorkOrderPriority>()
                  .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
+            CreateMap<CarEquipment, CarEquipmentDto>();
+            CreateMap<CarEquipmentDto, CarEquipment>()
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
+
             /*
                 CreateMap<Company, CompanyDto>()
                     .ForMember(c => c.FullAddress,
