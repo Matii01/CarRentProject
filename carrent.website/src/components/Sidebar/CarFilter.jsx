@@ -181,7 +181,6 @@ function CarFilter({
 
           <Form.Group>
             <hr />
-
             <Accordion>
               <Accordion.Header>Body Type</Accordion.Header>
               <Accordion.Body style={{ maxHeight: 200, overflowY: "auto" }}>
@@ -199,8 +198,29 @@ function CarFilter({
                   ))}
               </Accordion.Body>
             </Accordion>
+          </Form.Group>
+          <Form.Group>
+            <hr />
+            <Accordion>
+              <Accordion.Header>Vehicle Equipment</Accordion.Header>
+              <Accordion.Body style={{ maxHeight: 200, overflowY: "auto" }}>
+                {data &&
+                  data.carEquipment &&
+                  data.carEquipment.map((type) => (
+                    <FormCheck
+                      key={type.id}
+                      id={type.id}
+                      name="CarEquipmentId"
+                      type="checkbox"
+                      label={type.name}
+                      onChange={handleCheckboxChange}
+                    ></FormCheck>
+                  ))}
+              </Accordion.Body>
+            </Accordion>
             <hr />
           </Form.Group>
+
           <Form.Group className="text-center">
             <Button className="mt-3 customButton ps-4 pe-4 w-75" type="submit">
               Apply Filters

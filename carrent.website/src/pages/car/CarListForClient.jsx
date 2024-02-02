@@ -29,6 +29,7 @@ function CarListForClient() {
     EngineTypeId: [],
     CarTypeId: [],
     MakeId: [],
+    CarEquipmentId: [],
     PriceMin: null,
     PriceMax: null,
     MinSeatsNum: null,
