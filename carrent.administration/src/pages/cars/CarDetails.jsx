@@ -108,10 +108,10 @@ function CarDetails() {
         },
       })
       .then(() => {
-        console.log("car updated");
+        // toast
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("błąd")
       });
   };
 

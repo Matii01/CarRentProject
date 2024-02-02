@@ -29,7 +29,7 @@ namespace CarRent.Repository.Repositories
             var list = context.Cars
              .Where(x => x.IsActive == true)
              .Where(x => x.IsVisible == true)
-             .Search(parameters)
+             .Search(context, parameters)
              .Select(x => new CarListDtoForClient(
                  x.Id,
                  x.Name,
@@ -58,7 +58,7 @@ namespace CarRent.Repository.Repositories
             var list = context.Cars
                 .Where(x => x.IsActive == true)
                 .OrderByDescending(x=>x.Id)
-                .Search(parameters)
+                .Search(context, parameters)
                 .Select(x => new CarListDto(
                     x.Id,
                     x.Name,

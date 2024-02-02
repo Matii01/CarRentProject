@@ -15,7 +15,7 @@ namespace CarRent.Repository.Extensions
 {
     public static class CarRepositoryExtensions
     {
-        public static IQueryable<Car> Search(this IQueryable<Car> cars, CarParameters param)
+        public static IQueryable<Car> Search(this IQueryable<Car> cars, CarRentContext context, CarParameters param)
         {
             if(param.PriceMin.HasValue)
             {
@@ -27,6 +27,12 @@ namespace CarRent.Repository.Extensions
 
             }
 
+            if(param.CarEquipmentId?.Length > 0)
+            {
+                cars = cars
+                    .Where(x =>x .CarsEquipment.Count >= param.CarEquipmentId.Length)
+                    .Where(x => x.CarsEquipment.Any(s => param.CarEquipmentId.Contains(s.Id)));
+            }
             if (param.GearboxTypeId?.Length > 0)
             {
                 cars = cars.Where(x => param.GearboxTypeId.Contains(x.GearBoxTypeId));
@@ -54,9 +60,20 @@ namespace CarRent.Repository.Extensions
             return cars;
         }
 
-        public static async Task<PagedList<CarListDtoForClient>> GetPagedListAsync(this IQueryable<Car> cars, CarParameters param)
+        public static bool CarHaveEquipment(int carId ,int[] equipment, CarRentContext context)
         {
-            cars = cars.Search(param);
+
+            return true;
+            
+            //var eq = context.Cars.Where(x => x.Id == carId)
+            //    .Select(x => x.CarsEquipment).ToList();
+
+            //return eq.Count() > 0;
+        }
+
+        public static async Task<PagedList<CarListDtoForClient>> GetPagedListAsync(this IQueryable<Car> cars, CarRentContext context, CarParameters param)
+        {
+            cars = cars.Search(context, param);
 
             int TotalCount = cars.Count();
 

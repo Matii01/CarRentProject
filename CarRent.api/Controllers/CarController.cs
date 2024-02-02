@@ -88,7 +88,8 @@ namespace CarRent.api.Controllers
                 GearboxType: await _services.GearboxTypeService.GetAllActiveAsync(false),
                 EngineType: await _services.EngineTypeService.GetAllActiveAsync(false),
                 CarMakes: await _services.CarMakeService.GetAllActiveCarMakesAsync(false),
-                CarType: await _services.CarTypeService.GetAllActiveAsync(false)
+                CarType: await _services.CarTypeService.GetAllActiveAsync(false),
+                CarEquipment: await _services.CarEquipmentService.GetForFiltersAsync()
             );
 
             return Ok(carSortingInfo);

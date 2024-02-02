@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
+   
     public record CarEquipmentDto(
         int Id,
         string Name,
         string? Description 
+    );
+
+    public record CarEquipmentForFiltersDto(
+        int Id,
+        string Name
     );
 
     public record CarEquipmentForCarDto(

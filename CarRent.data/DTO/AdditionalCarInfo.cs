@@ -30,6 +30,7 @@ namespace CarRent.data.DTO
         IEnumerable<GearboxTypeDto> GearboxType,
         IEnumerable<EngineTypeDto> EngineType,
         IEnumerable<CarMakeDto> CarMakes,
-        IEnumerable<CarTypeDto> CarType
+        IEnumerable<CarTypeDto> CarType,
+        IEnumerable<CarEquipmentForFiltersDto> CarEquipment
     );
 }

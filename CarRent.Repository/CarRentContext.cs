@@ -23,6 +23,16 @@ namespace CarRent.Repository
 
         }
 
+        /*
+          modelBuilder.Entity<Car>()
+                .HasMany(e => e.CarsEquipment)
+                .WithMany(e => e.Cars)
+                .UsingEntity("CarEquipmentCar",
+                    l => l.HasOne(typeof(data.Models.CarRent.CarEquipment)).WithMany().HasForeignKey("CarEquipmentId").HasPrincipalKey(nameof(data.Models.CarRent.CarEquipment.Id)),
+                    r => r.HasOne(typeof(Car)).WithMany().HasForeignKey("CarId").HasPrincipalKey(nameof(Car.Id)),
+                    j => j.HasKey("CarId", "CarEquipmentId"));
+         */
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -39,6 +49,11 @@ namespace CarRent.Repository
                 .WithOne(e => e.Invoice)
                 .HasForeignKey(e => e.InvoiceId)
                 .HasPrincipalKey(e => e.Id);
+
+            modelBuilder.Entity<Car>()
+                .HasMany(e => e.CarsEquipment)
+                .WithMany(e => e.Cars)
+                    .UsingEntity<CarEquipmentCar>();
 
         }
 

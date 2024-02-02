@@ -30,6 +30,7 @@ function CarList() {
     ACTypeId: null,
     EngineTypeId: [],
     CarTypeId: [],
+    CarEquipmentId: [],
     MakeId: [],
     PriceMin: null,
     PriceMax: null,
@@ -104,8 +105,8 @@ function CarList() {
       ...prevState,
       [name]: selected,
     }));
-    console.log(id);
-    console.log(selected);
+    //console.log(id);
+    //console.log(selected);
   };
 
   const onFiltrClick = () => {
@@ -218,6 +219,33 @@ function CarList() {
                               title={x.name}
                               type="checkbox"
                               name="GearboxTypeId"
+                              onChange={handleCheckboxChange}
+                            />
+                          </Col>
+                        </Row>
+                      ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col>
+                <Dropdown>
+                  <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                    Wyposażenie
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="pt-2 ps-3">
+                    {forFilter.carEquipment &&
+                      forFilter.carEquipment.map((x) => (
+                        <Row key={x.id}>
+                          <Col className="me-1">
+                            <label>{x.name}</label>
+                          </Col>
+                          <Col>
+                            <input
+                              id={x.id}
+                              title={x.name}
+                              type="checkbox"
+                              name="CarEquipmentId"
                               onChange={handleCheckboxChange}
                             />
                           </Col>

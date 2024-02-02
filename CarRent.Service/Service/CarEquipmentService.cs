@@ -30,6 +30,17 @@ namespace CarRent.Service.Service
             return items;
         }
 
+        public async Task<IEnumerable<CarEquipmentForFiltersDto>> GetForFiltersAsync()
+        {
+            var items = await _repository.CarEquipment
+                .GetAllAsync(false, "Id", false)
+                .Where(x => x.IsActive == true)
+                .Select(x => new CarEquipmentForFiltersDto(x.Id, x.Name))
+                .ToListAsync();
+
+            return items;
+        }
+
         public async Task<IEnumerable<CarEquipmentForCarDto>> GetEquipmentForCarAsync(int carId)
         {
             var items = await _repository.CarEquipmentCar
