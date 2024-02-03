@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, ListGroup, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import TechDetailCard from "../../components/Cars/TechDetailCard";
 import BookCar from "../../components/Cars/BookCar";
@@ -67,27 +67,27 @@ function CarDetailsForClient() {
             </Row>
             <Row className="mt-2">
               <Row>
-                <h3>Dane Technicze</h3>
+                <h3>Technicalities</h3>
               </Row>
               <Row>
                 <Col>
                   <TechDetailCard
                     title={car.ac}
-                    subtitle={"klimatyzacja"}
+                    subtitle={"Air conditioning"}
                     icon={"fa-solid fa-c"}
                   />
                 </Col>
                 <Col>
                   <TechDetailCard
                     title={car.engine}
-                    subtitle={"silnik"}
+                    subtitle={"Engine"}
                     icon={"fa-solid fa-gear"}
                   />
                 </Col>
                 <Col>
                   <TechDetailCard
                     title={car.gearbox}
-                    subtitle={"skrzynia biegów"}
+                    subtitle={"Gearbox"}
                     icon={"fa-solid fa-gears"}
                   />
                 </Col>
@@ -95,11 +95,21 @@ function CarDetailsForClient() {
             </Row>
             <Row className="mt-2">
               <Row>
-                <h3>Opis</h3>
+                <h3>Description</h3>
               </Row>
               <Row>
                 <p>{car.description}</p>
               </Row>
+            </Row>
+            <Row>
+              <h5>Car equipment</h5>
+              <ListGroup className="p-2 mb-2">
+                {car.carEquipment &&
+                  car.carEquipment.length > 0 &&
+                  car.carEquipment.map((it) => (
+                    <ListGroup.Item key={it.id}>{it.name}</ListGroup.Item>
+                  ))}
+              </ListGroup>
             </Row>
             <Row>
               <Col>

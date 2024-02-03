@@ -104,7 +104,8 @@ namespace CarRent.data.DTO
         string Gearbox, 
         string Ac, 
         decimal Price,
-        IEnumerable<CarImageDto>? CarImages
+        IEnumerable<CarImageDto>? CarImages,
+        IEnumerable<CarEquipmentDto>? CarEquipment
     )
     {
         public IEnumerable<RentalDatesDto> ExcludedDates { get; set; }

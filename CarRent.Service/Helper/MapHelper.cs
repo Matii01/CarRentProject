@@ -164,6 +164,10 @@ namespace CarRent.Service.Helper
                 .Select(x => new CarImageDto(x.Id, x.CarId, x.ImgUrl))
                 .ToList();
 
+            var equipment = car.CarsEquipment.Where(x => x.IsActive == true)
+                .Select(x => new CarEquipmentDto(x.Id, x.Name, x.Description))
+                .ToList();
+
             return new CarDetailsPage
             (
                 car.Id,
@@ -175,7 +179,8 @@ namespace CarRent.Service.Helper
                 car.GearBoxType.Name,
                 car.AirConditioningType.Name,
                 0,
-                images
+                images,
+                equipment
             );
         }
         public static User MapUserForRegistrationDtoToUser(UserForRegistrationDto userForRegistration)

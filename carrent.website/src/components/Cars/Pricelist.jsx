@@ -27,7 +27,7 @@ function Pricelist({ id }) {
 
   return (
     <>
-      <p>Pricelist</p>
+      <h5>Pricelist</h5>
       <Table striped bordered hover className="text-center">
         <thead>
           <tr>
