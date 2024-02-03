@@ -111,7 +111,7 @@ function CarDetails() {
         // toast
       })
       .catch((error) => {
-        toast.error("błąd")
+        toast.error("błąd");
       });
   };
 
@@ -232,6 +232,23 @@ function CarDetails() {
     });
   };
 
+  const handleFirebaseImage = (event) => {
+    //setImageUpload(event.target.files[0]);
+    const imageUpload = event.target.files[0];
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `${v4() + imageUpload.name}`);
+
+    uploadBytes(imageRef, imageUpload).then((response) => {
+      getDownloadURL(response.ref).then((url) => {
+        console.log(url);
+        setCar((prev) => ({
+          ...prev,
+          carImage: url,
+        }));
+      });
+    });
+  };
+
   if (!carInfo) {
     return <p>Loading ...</p>;
   }
@@ -243,7 +260,7 @@ function CarDetails() {
         <hr />
         <Row className="ps-2">
           <Col>
-            <p>Car details for {param.carId}</p>
+            <p>Szczegóły {param.carId}</p>
           </Col>
           <Col>
             <Nav.Link as={NavLink} to={`/car/${param.carId}/equipment`}>
@@ -273,7 +290,7 @@ function CarDetails() {
               <Card.Header>
                 <Row>
                   <Col>
-                    <Card.Title as="h4">Edit Car</Card.Title>
+                    <Card.Title as="h4">Edycja</Card.Title>
                   </Col>
 
                   <Col className="d-flex justify-content-end">
@@ -319,7 +336,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Name</label>
+                        <label>Nazwa</label>
                         <Form.Control
                           name="name"
                           type="text"
@@ -330,7 +347,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Make</label>
+                        <label>Marka</label>
                         <Form.Control
                           as="select"
                           name="carMake"
@@ -360,7 +377,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Year Of Production</label>
+                        <label>Rok produkcji</label>
                         <Form.Control
                           type="number"
                           name="yearOfProduction"
@@ -371,7 +388,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Car Drive</label>
+                        <label>Napęd na</label>
                         <Form.Control
                           as="select"
                           name="carDriveId"
@@ -388,7 +405,7 @@ function CarDetails() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>Car Type</label>
+                        <label>Typ nadwozia</label>
                         <Form.Control
                           as="select"
                           name="carTypeId"
@@ -407,7 +424,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Engine Type </label>
+                        <label>Silnik</label>
                         <Form.Control
                           as="select"
                           name="engineTypeId"
@@ -424,7 +441,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Gearbox Type</label>
+                        <label>Skrzynia biegów</label>
                         <Form.Control
                           as="select"
                           name="gearBoxTypeId"
@@ -441,7 +458,7 @@ function CarDetails() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>Air Condition</label>
+                        <label>Klimatyzacja</label>
                         <Form.Control
                           as="select"
                           name="airConditioningTypeId"
@@ -460,7 +477,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Kilometr Limit </label>
+                        <label>Limit kilometrów</label>
                         <Form.Control
                           as="select"
                           name="kilometrLimitId"
@@ -477,7 +494,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Number Of Doors </label>
+                        <label>Liczba drzwi</label>
                         <Form.Control
                           type="number"
                           name="numberOfDoors"
@@ -488,7 +505,7 @@ function CarDetails() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>Number Of Seats</label>
+                        <label>Miejsca</label>
                         <Form.Control
                           type="number"
                           name="numberOfSeats"
@@ -501,7 +518,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Number Of Mileage </label>
+                        <label>Przebieg</label>
                         <Form.Control
                           type="number"
                           name="carMileage"
@@ -512,7 +529,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>Horsepower </label>
+                        <label>Moc (KM)</label>
                         <Form.Control
                           type="number"
                           name="horsepower"
@@ -523,7 +540,7 @@ function CarDetails() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>0 to 100 Acceleration </label>
+                        <label>Przyspieszenie 0 - 100</label>
                         <Form.Control
                           type="number"
                           name="acceleration0to100"
@@ -536,7 +553,7 @@ function CarDetails() {
                   <Row>
                     <Col className="pr-1" md="4">
                       <Form.Group>
-                        <label>Average Combustion</label>
+                        <label>Średnie spalanie</label>
                         <Form.Control
                           type="number"
                           name="averageCombustion"
@@ -547,7 +564,7 @@ function CarDetails() {
                     </Col>
                     <Col className="px-1" md="4">
                       <Form.Group>
-                        <label>TrunkCapacity </label>
+                        <label>Bagażnik</label>
                         <Form.Control
                           type="number"
                           name="trunkCapacity"
@@ -558,7 +575,7 @@ function CarDetails() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label>OverlimitFee </label>
+                        <label>Za przekroczenie</label>
                         <Form.Control
                           type="number"
                           name="overlimitFee"
@@ -568,11 +585,22 @@ function CarDetails() {
                       </Form.Group>
                     </Col>
                   </Row>
-
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="carImage">
+                        <Form.Label>Zdjęcie główne</Form.Label>
+                        <Form.Control
+                          type="file"
+                          name="CarImage"
+                          onChange={handleFirebaseImage}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                   <Row>
                     <Col md="12">
                       <Form.Group>
-                        <label>Description</label>
+                        <label>Opis</label>
                         <Form.Control
                           as="textarea"
                           name="description"
