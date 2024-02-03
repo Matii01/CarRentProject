@@ -147,10 +147,8 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {
-            //var car = await _services.CarService.CreateCarAsync(newCar);
-            await _services.CarService.CreateCarAsync(newCar);
-            
-            return Ok(""); 
+            var car = await _services.CarService.CreateCarAsync(newCar);
+            return Ok(car); 
         }
 
         [Authorize(Roles = "Administrator,CarAdd")]

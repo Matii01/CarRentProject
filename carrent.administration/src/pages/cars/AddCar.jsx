@@ -73,9 +73,9 @@ function AddCar() {
           "Content-Type": "application/json",
         },
       })
-      .then(() => {
+      .then((data) => {
         setCar(initialState);
-        navigate("/cars");
+        navigate(`/car/details/${data.data.id}`);
       })
       .catch((error) => {
         console.log(error);
