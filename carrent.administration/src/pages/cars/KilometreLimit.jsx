@@ -113,7 +113,7 @@ function KilometreLimit() {
               <Card.Body>
                 <MyTableWithPagination
                   items={items}
-                  thead={["Id", "Wartość", "Actions"]}
+                  thead={["Id", "Wartość", ""]}
                   item={["id", "limitValue"]}
                   searchTerm={searchTerm}
                   serachBy={"limitValue"}

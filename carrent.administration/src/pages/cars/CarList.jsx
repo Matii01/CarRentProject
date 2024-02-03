@@ -280,7 +280,14 @@ function CarList() {
               </Col>
             </Row>
             <TableWithPagination
-              thead={["ID", "Name", "Make", "Engine", "Gearbox", "AC"]}
+              thead={[
+                "ID",
+                "Nazwa",
+                "Marka",
+                "Silnik",
+                "Skrzynia biegów",
+                "Klimatyzacja",
+              ]}
               items={carList}
               searchTerm={searchTerm}
               item={["id", "name", "make", "engine", "gearbox", "ac"]}

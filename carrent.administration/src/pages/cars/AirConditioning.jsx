@@ -112,7 +112,7 @@ function AirConditioning() {
               <Card.Body>
                 <MyTableWithPagination
                   items={items}
-                  thead={["Id", "Model", "Actions"]}
+                  thead={["Id", "Rodzaj", ""]}
                   item={["id", "name"]}
                   searchTerm={searchTerm}
                   serachBy={"name"}
