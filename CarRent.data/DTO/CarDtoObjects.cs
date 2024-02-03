@@ -95,7 +95,17 @@ namespace CarRent.data.DTO
         );
 
     public record CarDetailsPage(
-        int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price)
+        int Id, 
+        string Name, 
+        string Description, 
+        string Make, 
+        string PictureUrl, 
+        string Engine, 
+        string Gearbox, 
+        string Ac, 
+        decimal Price,
+        IEnumerable<CarImageDto>? CarImages
+    )
     {
         public IEnumerable<RentalDatesDto> ExcludedDates { get; set; }
     }

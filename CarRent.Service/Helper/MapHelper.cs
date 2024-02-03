@@ -160,6 +160,10 @@ namespace CarRent.Service.Helper
         }
         public static CarDetailsPage MapCarToCarDetailsPageForClient(Car car)
         {
+            var images = car.CarImages.Where(x=>x.IsActive == true)
+                .Select(x => new CarImageDto(x.Id, x.CarId, x.ImgUrl))
+                .ToList();
+
             return new CarDetailsPage
             (
                 car.Id,
@@ -170,7 +174,8 @@ namespace CarRent.Service.Helper
                 car.EngineType.Name, 
                 car.GearBoxType.Name,
                 car.AirConditioningType.Name,
-                0
+                0,
+                images
             );
         }
         public static User MapUserForRegistrationDtoToUser(UserForRegistrationDto userForRegistration)

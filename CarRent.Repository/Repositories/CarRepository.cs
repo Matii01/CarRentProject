@@ -113,6 +113,7 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.EngineType)
                 .Include(x => x.GearBoxType)
                 .Include(x => x.AirConditioningType)
+                .Include(x => x.CarImages)
                 .SingleOrDefaultAsync();
             
             return car;

@@ -7,19 +7,27 @@ import BookCar from "../../components/Cars/BookCar";
 import Pricelist from "../../components/Cars/Pricelist";
 import CarOpinionList from "../../components/Cars/CarOpinionList";
 import axiosInstance from "../../utils/axiosConfig";
+import AdditionalImgModal from "../../components/Modal/AdditionalImgModal";
 
 function CarDetailsForClient() {
   const [car, setCar] = useState({});
+  const [carImages, setCarImages] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
   const param = useParams();
   const navigation = useNavigate();
 
   useEffect(() => {
-    //details/{id:int}
     axiosInstance
       .get(`Car/details/${param.carId}`)
       .then((data) => {
-        console.log(data);
+        console.log(data.data);
         setCar(data.data);
+        setCarImages([
+          data.data.pictureUrl,
+          ...data.data.carImages.map((it) => {
+            return it.imgUrl;
+          }),
+        ]);
       })
       .catch((error) => {
         console.log(error);
@@ -32,8 +40,18 @@ function CarDetailsForClient() {
       "https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_960_720.jpg%201x,%20https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_1280.jpg";
   }
 
+  const openAdditionalImg = () => {
+    console.log("open additional");
+    setModalShow(true);
+  };
+
   return (
     <>
+      <AdditionalImgModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        imgs={carImages}
+      />
       <Container className="mt-5 mb-5">
         <Row>
           <Col lg={8}>
@@ -41,7 +59,11 @@ function CarDetailsForClient() {
               <h2>{car.name}</h2>
             </Row>
             <Row>
-              <Image className="roundedImg" src={url} />
+              <Image
+                className="roundedImg"
+                src={url}
+                onClick={openAdditionalImg}
+              />
             </Row>
             <Row className="mt-2">
               <Row>

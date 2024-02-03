@@ -43,6 +43,8 @@ namespace CarRent.Service.Service
         public async Task<CarDetailsPage> GetCarDetailsForClientAsync(int id)
         {
             var item = await _repository.Car.GetCarForClientAsync(id);
+
+
             return MapHelper.MapCarToCarDetailsPageForClient(item);
         }
 
