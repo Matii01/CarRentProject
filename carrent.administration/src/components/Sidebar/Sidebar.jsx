@@ -93,13 +93,9 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               {/* <img src={require("assets/img/reactlogo.png")} alt="..." /> */}
             </div>
           </a>
-          <a
-            className="simple-text"
-            href="#"
-            style={{ textDecoration: "none" }}
-          >
-            Car Rent Admin
-          </a>
+          <NavLink to={`/`} className={`${styles.navLink}`}>
+            <p>Administrator</p>
+          </NavLink>
         </div>
         <Nav>
           <li
