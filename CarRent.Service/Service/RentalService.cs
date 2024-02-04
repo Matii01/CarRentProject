@@ -108,11 +108,16 @@ namespace CarRent.Service.Service
             await SendUpdateRentalStatusNotification(rentalId, newStatus);
         }
 
-        public async Task UpdateInvoiceStatusAsync(int invoiceId, UpdateInvoiceStatusDto newStatus)
+        public async Task UpdateInvoiceAsync(int invoiceId, UpdateInvoiceDto newStatus)
         {
             var toUpdate = await _repository.Invoice
                 .GetAsync(invoiceId, true)
                 .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+
+            if(toUpdate.IsEditable == true && newStatus.Paid <= toUpdate.TotalToPay)
+            {
+                toUpdate.TotalPaid = newStatus.Paid;
+            }
 
             toUpdate.InvoiceStatus = newStatus.NewStatus;
             await _repository.SaveAsync();
@@ -146,6 +151,9 @@ namespace CarRent.Service.Service
                 PaymentIntentId = paymentIntent,
                 IsActive = true, 
                 InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
+                TotalPaid = price.Gross,
+                TotalToPay = price.Gross,
+                IsEditable = false,
                 Client = new IndividualClient
                 {
                     FirstName = clientDetails.FirstName, 
@@ -222,6 +230,7 @@ namespace CarRent.Service.Service
                 IsActive = true,
                 TotalPaid = data?.Invoice?.Paid ?? 0,
                 TotalToPay = totalGross,
+                IsEditable = totalGross != (data?.Invoice?.Paid ?? 0),
                 CreatedDate = DateTime.Now,
                 PaymentDate = data?.Invoice?.PaymentTerm,
                 InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
@@ -554,7 +563,7 @@ namespace CarRent.Service.Service
             }
         }
 
-        private async Task SendUpdateInvoiceStatusNotification(int invoiceId, UpdateInvoiceStatusDto item)
+        private async Task SendUpdateInvoiceStatusNotification(int invoiceId, UpdateInvoiceDto item)
         {
             string? UserId = await GetUserIdFromInvoiceNr(invoiceId);
 

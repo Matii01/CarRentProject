@@ -166,7 +166,24 @@ function RentalDetails() {
                   <FirmClientData client={data.invoiceFirm.client} />
                 )}
               </Col>
-              <Col>{/* <PaymentData /> */}</Col>
+              <Col>
+                <Card>
+                  <Card.Header>Statusy wypożyczeń</Card.Header>
+                  <Card.Body>
+                    <Row className="mb-4">
+                      <Col className="w-100">
+                        <Button
+                          className="w-100"
+                          variant="dark"
+                          onClick={onUpdateRentalClick}
+                        >
+                          Aktualizuj statusy wypożyczenia
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </Col>
             </Row>
           </Col>
           <Col>
@@ -184,7 +201,7 @@ function RentalDetails() {
               {data.invoiceIndividual && (
                 <UpdateRentalStatus
                   statuses={statuses}
-                  invoiceId={data.invoiceIndividual.id}
+                  invoice={data.invoiceIndividual}
                   invoiceStatusId={data.invoiceIndividual.invoiceStatusId}
                   rentalId={param.rentalId}
                   onUpdateRentalClick={onUpdateRentalClick}
@@ -194,7 +211,7 @@ function RentalDetails() {
               {data.invoiceFirm && (
                 <UpdateRentalStatus
                   statuses={statuses}
-                  invoiceId={data.invoiceFirm.id}
+                  invoice={data.invoiceFirm}
                   invoiceStatusId={data.invoiceFirm.invoiceStatusId}
                   rentalId={param.rentalId}
                   onUpdateRentalClick={onUpdateRentalClick}

@@ -45,6 +45,9 @@ namespace CarRent.Repository.Repositories
                         x.InvoiceStatus,
                         x.Number,
                         x.Comment,
+                        x.TotalToPay,
+                        x.TotalPaid,
+                        x.IsEditable,
                         x.Client,
                         x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
                             y.InvoiceId,
@@ -267,6 +270,9 @@ namespace CarRent.Repository.Repositories
                         invoice.Number,
                         invoice.Comment,
                         true,
+                        invoice.TotalToPay,
+                        invoice.TotalPay,
+                        invoice.IsEditable,
                         invoice.Client as IndividualClient,
                         invoice.InvoiceItems
                     ));
@@ -281,6 +287,9 @@ namespace CarRent.Repository.Repositories
                         invoice.Number,
                         invoice.Comment,
                         true,
+                        invoice.TotalToPay,
+                        invoice.TotalPay,
+                        invoice.IsEditable,
                         new FirmClientDto(c.PostCode,c.City, c.NIP, c.CompanyName, c.StreetAndNumber),
                         invoice.InvoiceItems
                     ), 

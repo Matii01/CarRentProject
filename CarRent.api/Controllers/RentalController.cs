@@ -177,11 +177,11 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "Administrator,Worker")]
         [HttpPost("UpdateInvoiceStatus/{invoiceId:int}")]
-        public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceStatusDto statusDto)
+        public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceDto statusDto)
         {
             // To do send notification
             await Console.Out.WriteLineAsync("Update invoice");
-            await _services.RentalService.UpdateInvoiceStatusAsync(invoiceId, statusDto);
+            await _services.RentalService.UpdateInvoiceAsync(invoiceId, statusDto);
             return Ok("");
         }
 

@@ -14,7 +14,7 @@ namespace CarRent.Service.Interfaces
     {
         Task<bool> IsAvailable(NewRentalForClient newRental);
         Task UpdateRentalStatusAsync(int rentalId, UpdateRentalStatusDto newStatus);
-        Task UpdateInvoiceStatusAsync(int rentalId, UpdateInvoiceStatusDto newStatus);
+        Task UpdateInvoiceAsync(int rentalId, UpdateInvoiceDto newStatus);
         Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId);
         Task<PagedList<RentalListDataDto>> GetRentalsListAsync(RentalParameters param, bool tractChanges);
         Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId);

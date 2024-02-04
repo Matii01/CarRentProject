@@ -27,6 +27,7 @@ namespace CarRent.data.Models.CarRent
         public decimal? TotalPaid {  get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? PaymentDate {  get; set; }
+        public bool? IsEditable { get; set; }
         public Client Client { get; set; } = null!;
         public ICollection<InvoiceItem> InvoicesItems { get; set;} 
     }

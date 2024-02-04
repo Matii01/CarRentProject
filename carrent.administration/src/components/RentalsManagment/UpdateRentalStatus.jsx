@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 
 function UpdateRentalStatus({
   statuses,
-  invoiceId,
+  invoice,
   invoiceStatusId,
   onUpdateRentalClick,
   onRefresh,
 }) {
   const [oldStatus, setOldStatus] = useState(invoiceStatusId);
+  const [paid, setPaid] = useState(invoice.totalPay);
   const [selectedInvoiceStatusId, setSelectedInvoiceStatusId] =
     useState(invoiceStatusId);
 
@@ -24,21 +25,23 @@ function UpdateRentalStatus({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    updateInvoiceStatus();
 
-    if (oldStatus != selectedInvoiceStatusId) {
-      updateInvoiceStatus();
-    }
+    // if (oldStatus != selectedInvoiceStatusId) {
+    // updateInvoiceStatus();
+    // }
   };
 
   const updateInvoiceStatus = () => {
     const data = {
       oldStatus: oldStatus,
       newStatus: selectedInvoiceStatusId,
+      paid: paid,
     };
 
     console.log(data);
     jwtInterceptor
-      .post(`Rental/UpdateInvoiceStatus/${invoiceId}`, JSON.stringify(data), {
+      .post(`Rental/UpdateInvoiceStatus/${invoice.id}`, JSON.stringify(data), {
         headers: {
           "Content-Type": "application/json",
         },
@@ -58,42 +61,67 @@ function UpdateRentalStatus({
     setSelectedInvoiceStatusId(event.target.value);
   };
 
+  const handlePayChange = (event) => {
+    setPaid(event.target.value);
+  };
+
   return (
     <>
       <Card>
-        <Card.Header>Status</Card.Header>
+        <Card.Header>
+          Płatność {invoice.isEditable ? " " : "- edycja zablokowana"}
+        </Card.Header>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-4">
-              <Col className="w-100">
-                <Button
-                  className="w-75"
-                  variant="dark"
-                  onClick={onUpdateRentalClick}
-                >
-                  Aktualizuj statusy wypożyczenia
-                </Button>
-              </Col>
-            </Row>
-            <Form.Group className="mb-3" controlId="formGroupEmail">
-              <Form.Label>Płatność</Form.Label>
-              <Form.Select
-                value={selectedInvoiceStatusId}
-                onChange={handleChange}
-              >
-                {statuses.invoiceStatus &&
-                  statuses.invoiceStatus.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-              </Form.Select>
-            </Form.Group>
+          <Row>
+            <Col>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="" controlId="formGroupEmail">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    value={selectedInvoiceStatusId}
+                    onChange={handleChange}
+                  >
+                    {statuses.invoiceStatus &&
+                      statuses.invoiceStatus.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </Form.Select>
+                </Form.Group>
 
-            <Button variant="dark" type="submit">
-              Aktualizuj statusy płatności
-            </Button>
-          </Form>
+                <Form.Group>
+                  <Form.Label>Do zapłaty</Form.Label>
+                  <Form.Control
+                    disabled
+                    type="number"
+                    value={invoice.totalToPay}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Zapłacono</Form.Label>
+                  <Form.Control
+                    disabled={!invoice.isEditable}
+                    type="number"
+                    min={0}
+                    max={invoice.totalToPay}
+                    value={paid}
+                    onChange={handlePayChange}
+                  />
+                </Form.Group>
+
+                <Button
+                  className="mt-3"
+                  variant="dark"
+                  type="submit"
+                  disabled={!invoice.isEditable}
+                >
+                  Aktualizuj płatność
+                </Button>
+              </Form>
+            </Col>
+          </Row>
         </Card.Body>
       </Card>
     </>
@@ -101,6 +129,22 @@ function UpdateRentalStatus({
 }
 
 export default UpdateRentalStatus;
+
+/**
+ <Col>
+    <Row className="mb-4">
+      <Col className="w-100">
+        <Button
+          className="w-75"
+          variant="dark"
+          onClick={onUpdateRentalClick}
+        >
+          Aktualizuj statusy wypożyczenia
+        </Button>
+      </Col>
+    </Row>
+  </Col>
+ */
 
 /**
  

@@ -67,9 +67,10 @@ namespace CarRent.data.DTO
         int NewStatus
     );
 
-    public record UpdateInvoiceStatusDto(
+    public record UpdateInvoiceDto(
         int OldStatus,
-        int NewStatus
+        int NewStatus,
+        decimal? Paid
     );
 
     public record RentalListDto(
@@ -165,6 +166,9 @@ namespace CarRent.data.DTO
         int? InvoiceStatusId,
         string Number,
         string? Comment,
+        decimal? TotalToPay,
+        decimal? TotalPay,
+        bool? IsEditable,
         Client? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems);
 
@@ -174,6 +178,9 @@ namespace CarRent.data.DTO
         string Number,
         string? Comment,
         bool? IsIndividual,
+        decimal? TotalToPay,
+        decimal? TotalPay,
+        bool? IsEditable,
         FirmClientDto? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems
     );
@@ -184,6 +191,9 @@ namespace CarRent.data.DTO
         string Number,
         string? Comment,
         bool? IsIndividual,
+        decimal? TotalToPay,
+        decimal? TotalPay,
+        bool? IsEditable,
         IndividualClient? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems
     );
