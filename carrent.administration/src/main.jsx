@@ -74,6 +74,7 @@ import NewRental from "./pages/managment/NewRental";
 import NewsletterPage from "./pages/managment/NewsletterPage";
 import CarEquipment from "./pages/cars/CarEquipment";
 import AssignEquipment from "./pages/cars/AssignEquipment";
+import ReportPage from "./pages/analyses/ReportPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -158,6 +159,7 @@ const router = createBrowserRouter([
       { path: "analyses/car", element: <CarAnalyses /> },
       { path: "analyses/users", element: <UsersAnalyses /> },
       { path: "newsletter", element: <NewsletterPage /> },
+      { path: "report", element: <ReportPage /> },
     ],
   },
   {

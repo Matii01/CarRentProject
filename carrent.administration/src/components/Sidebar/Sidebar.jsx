@@ -58,6 +58,7 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Zlecenia", path: "/workOrder" },
     { name: "O firmie", path: "/company" },
     { name: "Newsletter", path: "/newsletter" },
+    { name: "Raporty", path: "/report" },
   ];
 
   const managment = [
