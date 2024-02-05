@@ -3,6 +3,7 @@ using CarRent.Service.Interfaces;
 using MimeKit;
 using Spire.Doc;
 using Spire.Doc.Documents;
+using Spire.Xls;
 
 
 namespace CarRent.Service.Service
@@ -29,7 +30,6 @@ namespace CarRent.Service.Service
             }
             else
             {
-
                 throw new NotImplementedException();
             }
         }
@@ -45,10 +45,56 @@ namespace CarRent.Service.Service
                 document.Replace(key, replacements[key], false, true);
             }
 
-            document.SaveToFile(outputPath, FileFormat.Docx);
+            document.SaveToFile(outputPath, Spire.Doc.FileFormat.Docx);
         }
 
-        private  string GetPathForDocInvoiceTemplateFile()
+        public string GenerateExcelDocument(List<InvoiceForReportDto> rows, string filePath)
+        {
+            Workbook workbook = new Workbook();
+            Worksheet sheet = workbook.Worksheets[0];
+
+            string[] headers = new string[] { "ID", "Client", "Total Paid", "Total To Paid", "Created Date", "Payment Date" };
+
+            // insert headers into the first row
+            for(int i = 0; i < headers.Length; i++)
+            {
+                sheet.Range[1, i+1].Text = headers[i];
+            }
+
+            for(int i = 0; i < rows.Count; i++)
+            {
+                var invoice = rows[i];
+                sheet.Range[i + 2, 1].NumberValue = invoice.Id;
+                sheet.Range[i + 2, 2].Text = invoice.Client;
+                sheet.Range[i + 2, 3].NumberValue = (double)(invoice.TotalPaid != null ? invoice.TotalPaid : 0);
+                sheet.Range[i + 2, 4].NumberValue = (double)(invoice.TotalToPay != null ? invoice.TotalToPay : 0);
+                if (invoice.CreatedDate.HasValue)
+                {
+                    sheet.Range[i + 2, 5].DateTimeValue = invoice.CreatedDate.Value;
+                }
+                else
+                {
+                    sheet.Range[i + 2, 5].Text = "N/A";
+                }
+                if (invoice.PaymentDate.HasValue)
+                {
+                    sheet.Range[i + 2, 6].DateTimeValue = invoice.PaymentDate.Value;
+                }
+                else
+                {
+                    sheet.Range[i + 2, 6].Text = "N/A";
+                }
+            }
+
+            filePath = @"C:\Users\msi\Desktop\file.xlsx";
+            
+            sheet.AllocatedRange.AutoFitColumns();
+            workbook.SaveToFile(filePath);
+            
+            return filePath;
+        }
+
+        private string GetPathForDocInvoiceTemplateFile()
         {
             try
             {

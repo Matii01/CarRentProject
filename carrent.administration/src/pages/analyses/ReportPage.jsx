@@ -4,6 +4,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import InvoiceReportData from "../../components/Rabats/InvoceReportData";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import InvoiceReportTable from "../../components/Rabats/InvoiceReportTable";
+import { saveAs } from "file-saver";
 
 function ReportPage() {
   const INVOICEREPORT = "INVOICEREPORT";
@@ -27,6 +28,22 @@ function ReportPage() {
       });
   };
 
+  const getInvoiceDocumentReport = async () => {
+    try {
+      const response = await jwtInterceptor.get(`Report/getInvoiceDocument`, {
+        responseType: "blob", // Important to handle binary data properly
+      });
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, "document.xlsx");
+    } catch (error) {
+      console.error("Download failed", error);
+    }
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -40,7 +57,13 @@ function ReportPage() {
   };
 
   const onGenerateClick = () => {
-    console.log("geneate excel");
+    switch (selectedReport) {
+      case INVOICEREPORT:
+        getInvoiceDocumentReport();
+        break;
+      default:
+        console.log("nie wybrano");
+    }
   };
 
   const handleChange = (event) => {
