@@ -31,7 +31,7 @@ namespace CarRent.Service.Interfaces
         IUsersService UsersService {  get; }
         INewsletterService NewsletterService { get; }
         ICarEquipmentService CarEquipmentService { get; }
-
+        IReportService ReportService { get; }
 
         IGenericService<CarTypeDto> CarTypeService { get; }
         IGenericService<CarDriveDto> CarDriveService { get; }

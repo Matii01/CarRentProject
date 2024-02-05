@@ -38,6 +38,7 @@ namespace CarRent.Service
         public readonly Lazy<IUsersService> _usersService;
         public readonly Lazy<INewsletterService> _newsletterService;
         public readonly Lazy<ICarEquipmentService> _carEquipmentService;
+        public readonly Lazy<IReportService> _reportService;
 
         public readonly Lazy<IGenericService<CarTypeDto>> _carTypeService;
         public readonly Lazy<IGenericService<CarDriveDto>> _carDriveService;
@@ -102,8 +103,11 @@ namespace CarRent.Service
             _notificationService = new Lazy<INotificationService>(() =>
                 new NotificationService(repositoryManager, mapper));
 
-              _aboutCompanyService = new Lazy<IAboutCompanyService>(() =>
+            _aboutCompanyService = new Lazy<IAboutCompanyService>(() =>
                 new AboutCompanyService(repositoryManager, mapper));
+
+            _reportService = new Lazy<IReportService>(() =>
+                new ReportService(repositoryManager, mapper));
 
             _applicationSettingsService = new Lazy<IApplicationSettingsService>(() =>
                new ApplicationSettingsService(repositoryManager, mapper));
@@ -164,6 +168,7 @@ namespace CarRent.Service
         public IUsersService UsersService  => _usersService.Value;
         public INewsletterService NewsletterService => _newsletterService.Value;
         public ICarEquipmentService CarEquipmentService => _carEquipmentService.Value;
+        public IReportService ReportService => _reportService.Value;
 
         public IGenericService<CarTypeDto> CarTypeService => _carTypeService.Value;
         public IGenericService<CarDriveDto> CarDriveService => _carDriveService.Value;
