@@ -11,5 +11,6 @@ namespace CarRent.Service.Interfaces
     {
         Task<IEnumerable<ForMonthReport>> GetMonthReport(ReportParamDto parameters);
         Task<IEnumerable<InvoiceForReportDto>> GetInvoiceReport(InvoiceParamDto parameters);
+        Task<IEnumerable<ForCarsReport>> GetCarsReport(ReportParamDto parameters);
     }
 }

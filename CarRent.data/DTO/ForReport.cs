@@ -34,6 +34,18 @@ namespace CarRent.data.DTO
         public decimal Amount { get; set; }
     }
 
+    public class ForCarsReport
+    {
+        public int CarId {  get; set; }
+        public string CarName {  get; set; }
+        public decimal Cost { get; set; }
+        public int RentalCount { get; set; }
+        public int TotalRentalDays {  get; set; }
+        public double AverageRentalDays {  get; set; }
+    }
+
+
+
     public record InvoiceForReportDto(
         int Id, 
         string Client, 

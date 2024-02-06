@@ -28,6 +28,13 @@ namespace CarRent.api.Controllers
             return Ok(report);
         }
 
+        [HttpGet("carsReport")]
+        public async Task<IActionResult> GetCarsReport([FromQuery] ReportParamDto parameters)
+        {
+            var report = await _services.ReportService.GetCarsReport(parameters);
+            return Ok(report);
+        }
+
         [HttpGet("getInvoiceDocument")]
         public async Task<IActionResult> GenerateInvoice([FromQuery] InvoiceParamDto parameters)
         {

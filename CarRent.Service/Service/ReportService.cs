@@ -64,6 +64,50 @@ namespace CarRent.Service.Service
             return list;
         }
 
+        public async Task<IEnumerable<ForCarsReport>> GetCarsReport(ReportParamDto parameters)
+        {
+            var list = await _repository.Rentals
+                .FindByCondition(x => x.IsActive == true, false)
+                .Include(x=>x.Car)
+                .Include(x=>x.InvoiceItem)
+                .Search(parameters)
+                .ToListAsync();
+
+            var carList = new List<ForCarsReport>();
+            foreach (var item in list)
+            {
+                ForCarsReport newItem = new()
+                {
+                    CarId = item.CarId,
+                    CarName = item.Car.Name,
+                    Cost = item?.InvoiceItem?.PaidAmount ?? 0,
+                    RentalCount = 1,
+                    TotalRentalDays = (item.RentalEnd - item.RentalStart).Days,
+                    AverageRentalDays = (item.RentalEnd - item.RentalStart).Days,
+                };
+                AddCarToReport(carList, newItem);
+            }
+
+            return carList;
+        }
+
+        private static void AddCarToReport(List<ForCarsReport> list, ForCarsReport item)
+        {
+            var toUpdate = list.Find(x => x.CarId == item.CarId);
+
+            if (toUpdate == null)
+            {
+                list.Add(item);
+            }
+            else
+            {
+                toUpdate.Cost += item.Cost;
+                toUpdate.TotalRentalDays += item.TotalRentalDays;
+                toUpdate.RentalCount++;
+                toUpdate.AverageRentalDays = toUpdate.TotalRentalDays / toUpdate.RentalCount;
+            }
+        }
+
         private static void AddMonthReportToList(List<ForMonthReport> list, ForMonthReport item)
         {
             var toUpdate = list.Find(x => x.Year == item.Year && x.MonthValue == item.MonthValue);
@@ -107,6 +151,6 @@ namespace CarRent.Service.Service
             }
 
             return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthNumber);
-        }
+        } 
     }
 }

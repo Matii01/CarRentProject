@@ -51,6 +51,21 @@ namespace CarRent.Repository.Extensions
             return rentals;
         }
 
+        public static IQueryable<Rental> Search(this IQueryable<Rental> rentals, ReportParamDto param)
+        {
+            if (param.DateFrom != null)
+            {
+                rentals = rentals.Where(x => x.RentalStart >= param.DateFrom);
+            }
+
+            if (param.DateTo != null)
+            {
+                rentals = rentals.Where(x => x.RentalEnd <= param.DateTo);
+            }
+
+            return rentals;
+        }
+
         public static IQueryable<Invoice> Search(this IQueryable<Invoice> invoices, CarRentContext context, OrderParameters param)
         {
             return invoices;

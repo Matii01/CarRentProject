@@ -53,7 +53,7 @@ namespace CarRent.Service.Service
             Workbook workbook = new Workbook();
             Worksheet sheet = workbook.Worksheets[0];
 
-            string[] headers = new string[] { "ID", "Client", "Total Paid", "Total To Paid", "Created Date", "Payment Date" };
+            string[] headers = new string[] { "ID", "Klient", "Zapłacono", "Do zapłaty", "Data powstania", "Data płatności" };
 
             // insert headers into the first row
             for(int i = 0; i < headers.Length; i++)

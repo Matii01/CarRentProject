@@ -8,6 +8,8 @@ import { saveAs } from "file-saver";
 import { ToastContainer, toast } from "react-toastify";
 import MonthReportData from "../../components/MyReports/MonthReportData";
 import MonthReportTable from "../../components/MyReports/MonthReportTable";
+import CarReportData from "../../components/MyReports/CarReportData";
+import CarReportTable from "../../components/MyReports/CarReportTable";
 
 function ReportPage() {
   const INVOICEREPORT = "INVOICEREPORT";
@@ -21,6 +23,8 @@ function ReportPage() {
   });
   const [monthReport, setMonthReport] = useState([]);
   const [monthParams, setMonthParams] = useState({ DateFrom: "", DateTo: "" });
+  const [carReport, setCarReport] = useState([]);
+  const [carParams, setCarParams] = useState({ DateFrom: "", DateTo: "" });
 
   const getInvoiceReport = () => {
     const query = transformObjectToQueryString(invoiceParams);
@@ -65,7 +69,18 @@ function ReportPage() {
   };
   const getMonthDocumentReport = () => {};
 
-  const getCarsReport = () => {};
+  const getCarsReport = () => {
+    const query = transformObjectToQueryString(carParams);
+    jwtInterceptor
+      .get(`Report/carsReport?${query}`)
+      .then((data) => {
+        console.log(data.data);
+        setCarReport(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const getCarsDocumentReport = () => {};
 
   const onSubmit = (event) => {
@@ -144,6 +159,12 @@ function ReportPage() {
                       setMonthData={setMonthParams}
                     />
                   )}
+                  {selectedReport === CARS && (
+                    <CarReportData
+                      carData={carParams}
+                      setCarData={setCarParams}
+                    />
+                  )}
                 </Row>
                 <Row className="mt-2">
                   <Col>
@@ -169,6 +190,9 @@ function ReportPage() {
           )}
           {selectedReport === MONTH && monthReport.length > 0 && (
             <MonthReportTable data={monthReport} />
+          )}
+          {selectedReport === CARS && carReport.length > 0 && (
+            <CarReportTable data={carReport} />
           )}
         </Row>
       </Container>
