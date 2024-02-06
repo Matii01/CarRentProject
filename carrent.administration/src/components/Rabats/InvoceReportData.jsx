@@ -22,7 +22,7 @@ function InvoiceReportData({ invoiceData, setInvoceData }) {
 
   return (
     <Row>
-      <Col xl={3} md={6}>
+      <Col xl={3} md={5}>
         <Form.Group>
           <Form.Label>Od</Form.Label>
           <Form.Control
@@ -33,7 +33,7 @@ function InvoiceReportData({ invoiceData, setInvoceData }) {
           />
         </Form.Group>
       </Col>
-      <Col xl={3} md={6}>
+      <Col xl={3} md={5}>
         <Form.Group>
           <Form.Label>Do</Form.Label>
           <Form.Control

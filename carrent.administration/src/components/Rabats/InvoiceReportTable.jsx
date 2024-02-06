@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MyTable from "../Table/MyTable";
+import { formatDate } from "../../utils/formDate";
 
 function InvoiceReportTable({ data }) {
   const [transformedData, setTransformedData] = useState([]);
-
   useEffect(() => {
-    const transformed = data.map((it, index) => {
+    const transformed = data.map((it) => {
       return {
-        id: index + 1,
         ...it,
+        createdDate: formatDate(it.createdDate),
+        paymentDate: formatDate(it.paymentDate),
       };
     });
     setTransformedData(transformed);
@@ -25,7 +26,7 @@ function InvoiceReportTable({ data }) {
           "Data powstania",
           "Data płatności",
         ]}
-        items={data}
+        items={transformedData}
         item={[
           "id",
           "client",
