@@ -42,8 +42,66 @@ namespace CarRent.api.Controllers
 
             _services.GenerateDocumentService.GenerateExcelDocument(report.ToList(), "");
 
-            string path = @"C:\Users\msi\Desktop\file.xlsx";
+            //string path = @"C:\Users\msi\Desktop\InvoiceReport.xlsx";
             
+            var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
+            string path = $@"{excelPath}\CarsReport.xlsx";
+
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(path));
+        }
+
+        [HttpGet("getCarsDocument")]
+        public async Task<IActionResult> GenerateCarsReportExcel([FromQuery] ReportParamDto parameters)
+        {
+            var report = await _services.ReportService.GetCarsReport(parameters);
+
+            _services.GenerateDocumentService.GenerateExcelDocument(report.ToList(), "");
+
+            var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
+            string path = $@"{excelPath}\CarsReport.xlsx";
+            
+            //string path = @"C:\Users\msi\Desktop\CarsReport.xlsx";
+
+
+            if (!System.IO.File.Exists(path))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(path));
+        }
+
+        [HttpGet("getMonthsDocument")]
+        public async Task<IActionResult> GenerateMonthsReportExcel([FromQuery] ReportParamDto parameters)
+        {
+            var report = await _services.ReportService.GetMonthReport(parameters);
+
+            _services.GenerateDocumentService.GenerateExcelDocument(report.ToList(), "");
+
+            var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
+            string path = $@"{excelPath}\MonthReport.xlsx";
+            //string path = @"C:\Users\msi\Desktop\MonthReport.xlsx";
+
+
             if (!System.IO.File.Exists(path))
             {
                 return NotFound();

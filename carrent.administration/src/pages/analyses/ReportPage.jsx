@@ -49,7 +49,7 @@ function ReportPage() {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
-      saveAs(blob, "document.xlsx");
+      saveAs(blob, "invoiceReport.xlsx");
     } catch (error) {
       console.error("Download failed", error);
     }
@@ -67,7 +67,21 @@ function ReportPage() {
         console.log(error);
       });
   };
-  const getMonthDocumentReport = () => {};
+  const getMonthDocumentReport = async () => {
+    try {
+      const response = await jwtInterceptor.get(`Report/getMonthsDocument`, {
+        responseType: "blob", // Important to handle binary data properly
+      });
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, "monthReport.xlsx");
+    } catch (error) {
+      console.error("Download failed", error);
+    }
+  };
 
   const getCarsReport = () => {
     const query = transformObjectToQueryString(carParams);
@@ -81,7 +95,22 @@ function ReportPage() {
         console.log(error);
       });
   };
-  const getCarsDocumentReport = () => {};
+
+  const getCarsDocumentReport = async () => {
+    try {
+      const response = await jwtInterceptor.get(`Report/getCarsDocument`, {
+        responseType: "blob", // Important to handle binary data properly
+      });
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, "carsReport.xlsx");
+    } catch (error) {
+      console.error("Download failed", error);
+    }
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();

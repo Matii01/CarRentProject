@@ -48,6 +48,39 @@ namespace CarRent.Service.Service
             document.SaveToFile(outputPath, Spire.Doc.FileFormat.Docx);
         }
 
+        public string GenerateExcelDocument(List<ForCarsReport> rows, string filePath)
+        {
+            Workbook workbook = new ();
+            Worksheet sheet = workbook.Worksheets[0];
+
+            string[] headers = new string[] { "ID", "CarName", "Cost", "RentalCount", "TotalRentalDays", "AverageRentalDays" };
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                sheet.Range[1, i + 1].Text = headers[i];
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var invoice = rows[i];
+                sheet.Range[i + 2, 1].NumberValue = invoice.CarId;
+                sheet.Range[i + 2, 2].Text = invoice.CarName;
+                sheet.Range[i + 2, 3].NumberValue = (double)invoice.Cost;
+                sheet.Range[i + 2, 4].NumberValue = invoice.RentalCount;
+                sheet.Range[i + 2, 5].NumberValue = invoice.TotalRentalDays;
+                sheet.Range[i + 2, 6].NumberValue = invoice.AverageRentalDays;
+            }
+
+
+            var excelPath = GetPathForExcelDocuments();
+            filePath = $@"{excelPath}\CarsReport.xlsx";
+
+            sheet.AllocatedRange.AutoFitColumns();
+            workbook.SaveToFile(filePath);
+
+            return filePath;
+        }
+
         public string GenerateExcelDocument(List<InvoiceForReportDto> rows, string filePath)
         {
             Workbook workbook = new Workbook();
@@ -86,12 +119,65 @@ namespace CarRent.Service.Service
                 }
             }
 
-            filePath = @"C:\Users\msi\Desktop\file.xlsx";
-            
+            var excelPath = GetPathForExcelDocuments();
+            filePath = $@"{excelPath}\InvoiceReport.xlsx";
+
             sheet.AllocatedRange.AutoFitColumns();
             workbook.SaveToFile(filePath);
             
             return filePath;
+        }
+
+        public string GenerateExcelDocument(List<ForMonthReport> rows, string filePath)
+        {
+            Workbook workbook = new ();
+            Worksheet sheet = workbook.Worksheets[0];
+
+            string[] headers = new string[] { "Nr", "Rok", "Miesiąc", "Przychód" };
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                sheet.Range[1, i + 1].Text = headers[i];
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var invoice = rows[i];
+                sheet.Range[i + 2, 1].NumberValue = i+1;
+                sheet.Range[i + 2, 2].NumberValue = invoice.Year;
+                sheet.Range[i + 2, 3].Text = invoice.Month;
+                sheet.Range[i + 2, 4].NumberValue = (double)invoice.Amount;
+            }
+
+            //filePath = @"C:\Users\msi\Desktop\MonthReport.xlsx";
+            var excelPath = GetPathForExcelDocuments();
+            filePath = $@"{excelPath}\MonthReport.xlsx";
+
+            sheet.AllocatedRange.AutoFitColumns();
+            workbook.SaveToFile(filePath);
+
+            return filePath;
+        }
+        
+        public string GetPathForExcelDocuments()
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string parentDirectory = Directory.GetParent(currentDirectory).FullName;
+            string templateFile = Path.Combine(parentDirectory, "ExcelFiles");
+
+            bool folderExists = Directory.Exists(templateFile);
+            if (folderExists)
+            {
+                Console.WriteLine("The folder exists.");
+            }
+            else
+            {
+                Console.WriteLine("The folder does not exist.");
+            }
+
+            Console.WriteLine(currentDirectory);
+            Console.WriteLine(templateFile);
+            return templateFile;
         }
 
         private string GetPathForDocInvoiceTemplateFile()
