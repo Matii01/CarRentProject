@@ -9,6 +9,7 @@ namespace CarRent.Service.Interfaces
 {
     public interface IReportService
     {
+        Task<IEnumerable<ForMonthReport>> GetMonthReport(ReportParamDto parameters);
         Task<IEnumerable<InvoiceForReportDto>> GetInvoiceReport(InvoiceParamDto parameters);
     }
 }

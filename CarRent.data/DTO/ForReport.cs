@@ -15,10 +15,24 @@ namespace CarRent.data.DTO
     //    decimal? Max,
     //    int? StatusId
     //);
+
+    public record ReportParamDto(
+       DateTime? DateFrom,
+       DateTime? DateTo
+   );
+
     public record InvoiceParamDto(
         DateTime? CreatedDateFrom,
         DateTime? CreatedDateTo
     );
+
+    public class ForMonthReport
+    {
+        public string Month { get; set; }
+        public int Year { get; set; }
+        public int MonthValue { get; set; }
+        public decimal Amount { get; set; }
+    }
 
     public record InvoiceForReportDto(
         int Id, 

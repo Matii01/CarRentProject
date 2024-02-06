@@ -5,15 +5,22 @@ import InvoiceReportData from "../../components/Rabats/InvoceReportData";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import InvoiceReportTable from "../../components/Rabats/InvoiceReportTable";
 import { saveAs } from "file-saver";
+import { ToastContainer, toast } from "react-toastify";
+import MonthReportData from "../../components/MyReports/MonthReportData";
+import MonthReportTable from "../../components/MyReports/MonthReportTable";
 
 function ReportPage() {
   const INVOICEREPORT = "INVOICEREPORT";
+  const MONTH = "MONTH";
+  const CARS = "CARS";
   const [selectedReport, setSelectedReport] = useState("");
   const [invoiceReport, setInvoiceReport] = useState([]);
   const [invoiceParams, setInvoiceParams] = useState({
     CreatedDateFrom: "",
     CreatedDateTo: "",
   });
+  const [monthReport, setMonthReport] = useState([]);
+  const [monthParams, setMonthParams] = useState({ DateFrom: "", DateTo: "" });
 
   const getInvoiceReport = () => {
     const query = transformObjectToQueryString(invoiceParams);
@@ -44,6 +51,23 @@ function ReportPage() {
     }
   };
 
+  const getMonthReport = () => {
+    const query = transformObjectToQueryString(monthParams);
+    jwtInterceptor
+      .get(`Report/monthReport?${query}`)
+      .then((data) => {
+        console.log(data.data);
+        setMonthReport(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const getMonthDocumentReport = () => {};
+
+  const getCarsReport = () => {};
+  const getCarsDocumentReport = () => {};
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -51,8 +75,14 @@ function ReportPage() {
       case INVOICEREPORT:
         getInvoiceReport();
         break;
+      case MONTH:
+        getMonthReport();
+        break;
+      case CARS:
+        getCarsReport();
+        break;
       default:
-        console.log("nie wybrano");
+        toast.info("nie wybrano szablonu");
     }
   };
 
@@ -61,8 +91,14 @@ function ReportPage() {
       case INVOICEREPORT:
         getInvoiceDocumentReport();
         break;
+      case MONTH:
+        getMonthDocumentReport();
+        break;
+      case CARS:
+        getCarsDocumentReport();
+        break;
       default:
-        console.log("nie wybrano");
+        toast.info("nie wybrano szablonu");
     }
   };
 
@@ -72,6 +108,7 @@ function ReportPage() {
 
   return (
     <>
+      <ToastContainer />
       <Container>
         <Row>
           <Card>
@@ -88,6 +125,8 @@ function ReportPage() {
                       >
                         <option>Wybierz...</option>
                         <option value={INVOICEREPORT}>Faktur</option>
+                        <option value={MONTH}>Miesięcy</option>
+                        <option value={CARS}>Samochodów</option>
                       </Form.Select>
                     </Form.Group>
                   </Col>
@@ -97,6 +136,12 @@ function ReportPage() {
                     <InvoiceReportData
                       invoiceData={invoiceParams}
                       setInvoceData={setInvoiceParams}
+                    />
+                  )}
+                  {selectedReport === MONTH && (
+                    <MonthReportData
+                      monthData={monthParams}
+                      setMonthData={setMonthParams}
                     />
                   )}
                 </Row>
@@ -121,6 +166,9 @@ function ReportPage() {
         <Row>
           {selectedReport === INVOICEREPORT && invoiceReport.length > 0 && (
             <InvoiceReportTable data={invoiceReport} />
+          )}
+          {selectedReport === MONTH && monthReport.length > 0 && (
+            <MonthReportTable data={monthReport} />
           )}
         </Row>
       </Container>
