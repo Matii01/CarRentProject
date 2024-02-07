@@ -92,6 +92,21 @@ namespace CarRent.Service.Service
             return workOrder;
         }
 
+        public async Task RemoveWorkerFromWorkOrderAsync(WorkOrderToAssign workOrder)
+        {
+            var t = await _repository
+                .WorkOrderWorker
+                .FindByCondition(
+                    x=> x.IsActive == true && 
+                    x.WorkerId == workOrder.WorkerId && 
+                    x.WorkOrderId == workOrder.WorkOrderId, true)
+                .SingleOrDefaultAsync();
+
+            t.IsActive = false;
+            await _repository.SaveAsync();
+        }
+
+
 
         public async Task ChangeWorkOrderStatusAsync(StatusToChange status)
         {

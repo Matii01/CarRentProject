@@ -14,6 +14,7 @@ namespace CarRent.Service.Interfaces
         Task<DataForWorkOrderFilters> GetDataForWorkOrderFilters();
         Task UpdateWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder);
         Task CompleatWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder);
+        Task RemoveWorkerFromWorkOrderAsync(WorkOrderToAssign workOrder);
         Task DeleteWorkOrderAsync(int workOrderId);
     }
 }

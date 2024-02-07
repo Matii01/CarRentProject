@@ -76,7 +76,25 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
   };
 
   const onRemoveWorker = (Id) => {
-    console.log(Id);
+    jwtInterceptor
+      .post(
+        "WorkOrder/removeFormWorkOrder",
+        JSON.stringify({
+          WorkOrderId: workOrderId,
+          WorkerId: Id,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        getWorkOrder();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleNewWorkerChange = (event) => {
@@ -95,6 +113,7 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
       })
       .then((data) => {
         console.log(data);
+        getWorkOrder();
       })
       .catch((error) => {
         console.log(error);
@@ -302,6 +321,7 @@ function EditWorkOrder({ forFilters, workOrderId, onCancel, updateView }) {
                     items={workOrder.workers}
                     item={["workerId", "name"]}
                     handleDelete={onRemoveWorker}
+                    ItemId="workerId"
                   />
                 )}
                 {!(workOrder.workers && workOrder.workers.length > 0) && (

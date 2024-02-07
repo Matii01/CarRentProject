@@ -123,6 +123,14 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,Worker")]
+        [HttpPost("removeFormWorkOrder")]
+        public async Task<IActionResult> RemoveWorkerFromWorkOrder([FromBody] WorkOrderToAssign workOrder)
+        {
+            await _services.WorkOrderService.RemoveWorkerFromWorkOrderAsync(workOrder);
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Administrator,Worker")]
         [HttpDelete("delete/${workOrderId}")]
         public async Task<IActionResult> DeleteWorkOrder(int workOrderId)
         {
