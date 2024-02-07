@@ -33,22 +33,12 @@ async function refreshToken() {
 }
 
 const getRefreshToken = () => {
-  if (localStorage.getItem("refreshToken") !== null) {
-    console.log("The refreshToken key exists");
-    console.log(localStorage.getItem("refreshToken"));
-  } else {
-    console.log("The website key does NOT exist");
-  }
-
   const refrshToken = localStorage.getItem("refreshToken");
-
   return refrshToken;
 };
 
 const getAccessToken = () => {
   const accessToken = localStorage.getItem("accessToken");
-  console.log("get acces token");
-  console.log(accessToken);
   return accessToken;
 };
 

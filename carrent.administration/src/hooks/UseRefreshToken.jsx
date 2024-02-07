@@ -52,7 +52,6 @@ function useRefreshToken() {
     if (item) {
       return true;
     }
-    //console.log("token null");
     return false;
   };
 
@@ -68,11 +67,9 @@ function useRefreshToken() {
   const fetchData = (url) => {
     const refreshToken = localStorage.getItem("refreshToken");
     const accessToken = localStorage.getItem("accessToken");
-    console.log("AC:");
-    console.log(accessToken);
-    //headers: {
-    //  Authorization: `Bearer ${getAccessToken()}`,
-    //},
+    // console.log("AC:");
+    // console.log(accessToken);
+
     axios
       .post(
         `${config.API_URL}${url}`,

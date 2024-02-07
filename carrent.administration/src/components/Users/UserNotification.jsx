@@ -5,8 +5,11 @@ import { Card, Row, Col, Button } from "react-bootstrap";
 import TableWithPagination from "../Table/TableWithPagination";
 import AddNotificationForUser from "./AddNotificationForUser";
 import { formatDate } from "../../utils/formDate";
+import ShowNotification from "./ShowNotification";
 
 function UserNotification({ userId }) {
+  const [selectedItem, setSelectedItem] = useState({});
+  const [showNotification, setShowNotification] = useState(false);
   const [showAddNotification, setShowAddNotification] = useState(false);
   const [metaData, setMetaData] = useState([]);
   const [items, setItems] = useState([]);
@@ -70,8 +73,10 @@ function UserNotification({ userId }) {
   };
 
   const handleRowDoubleClick = (id) => {
-    //const item = items.find((x) => x.id == id);
-    //setSelectedItem(item);
+    const item = items.find((x) => x.id == id);
+    setSelectedItem(item);
+    setShowNotification(true);
+    setShowAddNotification(false);
   };
 
   const onNotificationAdd = () => {
@@ -80,6 +85,7 @@ function UserNotification({ userId }) {
 
   const toogleAddNotification = () => {
     setShowAddNotification(!showAddNotification);
+    setShowNotification(false);
   };
 
   return (
@@ -104,6 +110,11 @@ function UserNotification({ userId }) {
                 />
               )}
             </Col>
+          </Row>
+          <Row>
+            {selectedItem && showNotification && (
+              <ShowNotification item={selectedItem} />
+            )}
           </Row>
           <Row className="mt-3">
             <Col>
