@@ -10,12 +10,10 @@ import {
   Tabs,
 } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import Permissions from "../../components/Workers/Permissions";
 import EditWorkerSidebar from "../../components/Workers/EditWorkerSidebar";
 import AddNewWorker from "../../components/Workers/AddNewWorker";
-import MyTable from "../../components/Table/MyTable";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -28,6 +26,10 @@ function WorkersPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    getWorkers();
+  }, []);
+
+  const getWorkers = () => {
     jwtInterceptor
       .get(`Users/allWorkers`)
       .then((data) => {
@@ -40,7 +42,7 @@ function WorkersPage() {
           setError("Brak uprawnień");
         }
       });
-  }, []);
+  };
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -50,10 +52,21 @@ function WorkersPage() {
     setSelectedWorker(id.id);
     setIsEditMode(true);
   };
-  const handleChange = () => {};
+
+  const handleChange = (event) => {
+    const { value } = event.target;
+    console.log(value);
+    setSerachTerm(value);
+  };
 
   const onAddWorker = () => {
     setIsEditMode(false);
+  };
+
+  const workerAdded = (worker) => {
+    const newWorkerList = [worker, ...workerList];
+    setWorkerList(newWorkerList);
+    onDoubleClick(worker);
   };
 
   if (error) {
@@ -109,15 +122,8 @@ function WorkersPage() {
                   item={["firstName", "lastName", "email"]}
                   onDoubleClick={onDoubleClick}
                   searchTerm={searchTerm}
+                  serachBy={"firstName"}
                 />
-
-                {/* <CarInfoTable
-                  thead={["Imie", "Nazwisko", "email", "Actions"]}
-                  items={workerList}
-                  item={["firstName", "lastName", "email"]}
-                  searchTerm={searchTerm}
-                  onDoubleClick={onDoubleClick}
-                /> */}
               </Card.Body>
             </Card>
           </Col>
@@ -132,7 +138,7 @@ function WorkersPage() {
                 </Tab>
               </Tabs>
             )}
-            {!isEditMode && <AddNewWorker />}
+            {!isEditMode && <AddNewWorker onAdd={workerAdded} />}
           </Col>
         </Row>
       </Container>
@@ -140,3 +146,11 @@ function WorkersPage() {
   );
 }
 export default WorkersPage;
+
+/* <CarInfoTable
+        thead={["Imie", "Nazwisko", "email", "Actions"]}
+        items={workerList}
+        item={["firstName", "lastName", "email"]}
+        searchTerm={searchTerm}
+        onDoubleClick={onDoubleClick}
+      /> */

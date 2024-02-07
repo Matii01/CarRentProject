@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Card, Col, Container, Form, Button, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
-function AddNewWorker() {
+function AddNewWorker({ onAdd }) {
   const initialState = {
-    userName: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -20,7 +19,7 @@ function AddNewWorker() {
     console.log(newUser);
     if (newUser.password !== newUser.confirm) {
       console.log(passwordError);
-      setPasswordError("Confirm password != password");
+      setPasswordError("Potwierdź hasło != hasło");
       return;
     }
     registerNewUser();
@@ -79,10 +78,7 @@ function AddNewWorker() {
         },
       })
       .then((data) => {
-        if (data === 201) {
-          console.log("register ok");
-          //navigate("/login");
-        }
+        onAdd(data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -121,18 +117,7 @@ function AddNewWorker() {
                       />
                     </Form.Group>
                   </Row>
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridUserName">
-                      <Form.Label>Nazwa użytkownika</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="Nazwa użytkownika"
-                        name="userName"
-                        onChange={handleChange}
-                      />
-                    </Form.Group>
-                  </Row>
+
                   <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
                       <Form.Label>Email</Form.Label>

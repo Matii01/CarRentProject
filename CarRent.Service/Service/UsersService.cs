@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,14 @@ namespace CarRent.Service.Service
         {
             _userManager = userManager;
             _roleManager = roleManager;
+        }
+
+        public async Task<User> GetWorkerByEmail(string userEmail)
+        {
+            var user =  await _userManager
+                .FindByEmailAsync(userEmail) ?? throw new Exception("not found");
+            
+            return user;
         }
 
         public async Task<IList<User>> GetWorkersListAsync()

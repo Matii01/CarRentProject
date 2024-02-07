@@ -50,7 +50,9 @@ namespace CarRent.api.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            return StatusCode(201);
+            
+            var worker = await _userManager.FindByEmailAsync(newWorker.Email);
+            return CreatedAtAction(nameof(RegisterNewWorker),  worker);
         }
 
         [HttpPost("login")]
