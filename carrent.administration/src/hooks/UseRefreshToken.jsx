@@ -1,7 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setUserName, setUserRoles } from "./../shared/userSlice";
-import jwtInterceptor from "../utils/jwtInterceptor";
+import {
+  setUserName,
+  setUserRoles,
+  setAccesToken,
+  setRefreshToken,
+} from "./../shared/userSlice";
 import { useEffect } from "react";
+import axios from "axios";
+import config from "../../config";
 
 function useRefreshToken() {
   const dispatch = useDispatch();
@@ -54,7 +60,7 @@ function useRefreshToken() {
     //console.log("try to retrive data from token");
 
     if (isTokensSet()) {
-      const url = "/token/retrieve";
+      const url = "token/retrieve";
       fetchData(url);
     }
   };
@@ -62,12 +68,22 @@ function useRefreshToken() {
   const fetchData = (url) => {
     const refreshToken = localStorage.getItem("refreshToken");
     const accessToken = localStorage.getItem("accessToken");
-    jwtInterceptor
-      .post(`${url}`, JSON.stringify({ accessToken, refreshToken }), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    console.log("AC:");
+    console.log(accessToken);
+    //headers: {
+    //  Authorization: `Bearer ${getAccessToken()}`,
+    //},
+    axios
+      .post(
+        `${config.API_URL}${url}`,
+        JSON.stringify({ accessToken, refreshToken }),
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((data) => {
         setLocalStorage(data.data);
       })
@@ -82,6 +98,8 @@ function useRefreshToken() {
     localStorage.setItem("refreshToken", data.token.refreshToken);
     dispatch(setUserName({ userName: data.userName }));
     dispatch(setUserRoles({ role: data.role }));
+    dispatch(setAccesToken({ accessToken: data.token.accessToken }));
+    dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
   };
 }
 

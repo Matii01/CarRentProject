@@ -3,7 +3,12 @@ import { useState } from "react";
 import { Row, Col, Container, Form, Button, Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { setUserName, setUserRoles } from "../../shared/userSlice";
+import {
+  setAccesToken,
+  setRefreshToken,
+  setUserName,
+  setUserRoles,
+} from "../../shared/userSlice";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 
 function Login() {
@@ -55,8 +60,9 @@ function Login() {
         },
       })
       .then((data) => {
-        console.log(data);
+        console.log(data.data);
         setData(data.data);
+        console.log("tocens set");
         navigate("/");
       })
       .catch((error) => {
@@ -69,6 +75,8 @@ function Login() {
     localStorage.setItem("refreshToken", data.token.refreshToken);
     dispatch(setUserName({ userName: data.userName }));
     dispatch(setUserRoles({ role: data.role }));
+    dispatch(setAccesToken({ accessToken: data.token.accessToken }));
+    dispatch(setRefreshToken({ refreshToken: data.token.refreshToken }));
   }
 
   const url =
