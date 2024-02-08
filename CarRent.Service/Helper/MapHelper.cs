@@ -192,6 +192,7 @@ namespace CarRent.Service.Helper
                 UserName = userForRegistration.Email,
                 Email = userForRegistration.Email,
                 PhoneNumber = userForRegistration.PhoneNumber,
+                IsActive = true,
             };
         }
     }

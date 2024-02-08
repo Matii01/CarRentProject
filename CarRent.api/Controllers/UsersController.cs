@@ -242,7 +242,7 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "User")]
         [HttpPost("UpdatePersonalDetails")]
-        public async Task<IActionResult> GetUserPersonalDetails(UserPersonalDataDto updated)
+        public async Task<IActionResult> UpdateUserPersonalDetails(UserPersonalDataDto updated)
         {
             var username = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
@@ -261,5 +261,15 @@ namespace CarRent.api.Controllers
 
             return Ok(updated);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete("deleteWorker/{id}")]
+        public async Task<IActionResult> DeleteUser(string workerId)
+        {
+            await _services.UsersService.DeleteWorker(workerId);
+
+            return Ok("");
+        }
+
     }
 }

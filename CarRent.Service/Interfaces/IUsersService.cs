@@ -12,5 +12,6 @@ namespace CarRent.Service.Interfaces
         Task<User> GetWorkerByEmail(string userEmail);
         Task<IList<User>> GetWorkersListAsync();
         Task<IList<User>> GetUsersListAsync();
+        Task DeleteWorker(string id);
     }
 }

@@ -32,6 +32,25 @@ namespace CarRent.Service.Service
             return user;
         }
 
+        public async Task<User> GetWorkerById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id)
+                ?? throw new Exception("not found");
+
+            return user;
+
+            //await _userManager.UpdateAsync(user);
+        }
+
+        public async Task DeleteWorker(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id)
+                ?? throw new Exception("not found");
+
+            user.IsActive = false;
+            await _userManager.UpdateAsync(user);
+        }
+
         public async Task<IList<User>> GetWorkersListAsync()
         {
             const string roleName = "Worker";
@@ -43,7 +62,7 @@ namespace CarRent.Service.Service
 
             var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
 
-            return usersInRole;
+            return usersInRole.Where(x=> x.IsActive == true).ToList();
         }
 
         public async Task<IList<User>> GetUsersListAsync()
@@ -60,7 +79,7 @@ namespace CarRent.Service.Service
             //var users = usersInRole.ToUserPageList();
             //var pagedList = await PagedList<User>.ToPagedList(usersInRole, 1, 1);
 
-            return usersInRole;
+            return usersInRole.Where(x => x.IsActive == true).ToList();
         }
     }
 }

@@ -6,7 +6,6 @@ import {
   setRefreshToken,
 } from "./../shared/userSlice";
 import { useEffect } from "react";
-import axios from "axios";
 import config from "../../config";
 import jwtInterceptor from "../utils/jwtInterceptor";
 
