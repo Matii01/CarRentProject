@@ -8,7 +8,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 
 function CarPriceList() {
-  const [priceList, setPriceList] = useState();
+  const [priceList, setPriceList] = useState([]);
   const [selectedPricelist, setSelectedPricelist] = useState(null);
   const param = useParams();
 
@@ -33,7 +33,8 @@ function CarPriceList() {
     getPriceLists();
   };
 
-  const onPricelistAdded = () => {
+  const onPricelistAdded = (priceList) => {
+    onChoose(priceList);
     getPriceLists();
   };
 
@@ -45,8 +46,19 @@ function CarPriceList() {
     setSelectedPricelist(null);
   };
 
-  const handleDelete = (id) => {
-    console.log(id);
+  const handleDelete = (itemId) => {
+    jwtInterceptor
+      .delete(`CarPriceList/deletePricelist/${itemId}`)
+      .then((data) => {
+        const newList = priceList.filter((it) => it.id !== itemId);
+        setPriceList(newList);
+        if (selectedPricelist.id === itemId) {
+          onCancelClick();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   if (!priceList) {

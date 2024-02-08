@@ -11,6 +11,7 @@ namespace CarRent.Service.Interfaces
     public interface IPriceListService
     {
         //Task<IEnumerable<PricelistItemDto>> GetPriceList(int Id, bool trackChanges);
+        Task<decimal> GetCarPriceForOneDay(int carId);
         Task<IEnumerable<PricelistItemDto>> GetCarPricelistForClient(int carId);
         Task<IEnumerable<PriceListDto>> GetPriceListsForCar(int carId, bool trackChanges);
         Task<IEnumerable<PricelistItemDto>> GetPricelistItems(int priceListId);
@@ -24,8 +25,10 @@ namespace CarRent.Service.Interfaces
         Task ChangeDefaultPriceList(int newDefaultPriceListId);
         Task UpdatePriceListItem(int id, PricelistItemDto pricelistItem);
         Task UpdatePriceListDates(int id, PricelistDateDto pricelistDate);
+        Task DeletePriceList(int id);
         Task RemovePosition(int itemId);
         Task RemovePriceListDate(int itemId);
+
 
         /*
         Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges);

@@ -129,6 +129,7 @@ namespace CarRent.api.Controllers
         //    return Ok();
         //}
 
+
         [HttpPost("priceForDates/{carId:int}")]
         public async Task<IActionResult> CalculatePrice ([FromBody] NewRentalForClient rental)
         {
@@ -137,6 +138,12 @@ namespace CarRent.api.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpDelete("deletePricelist/{id:int}")]
+        public async Task<IActionResult> DeletePriceList(int id)
+        {
+            await _services.PriceListService.DeletePriceList(id);
+            return Ok("");
+        }
 
         [HttpDelete("deletePricelistDate/{id:int}")]
         public async Task<IActionResult> DeletePricelistDate(int id)

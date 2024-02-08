@@ -19,6 +19,7 @@ namespace CarRent.Repository.Interfaces
         CarRentContext Context {  get; }
 
         IGenericRepository<Car> NewCar {  get; }
+        IGenericRepository<PriceList> NewPriceList { get; }
 
         ICarRepository Car { get; }
         IPriceListRepository PriceList { get; }

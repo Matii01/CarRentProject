@@ -238,6 +238,11 @@ namespace CarRent.Service.Service
             return priceForCar;
         }
 
+        public async Task<decimal> GetCarPriceForOneDay(int carId)
+        {
+            return await _repository.PriceList.GetCarPriceForOneDay(carId);
+        }
+
         private async Task<PricelistItem?> GetPriceListItemForCarAndDate(NewRentalForClient rental)
         {
             var priceList = await _repository.PriceList
@@ -257,6 +262,11 @@ namespace CarRent.Service.Service
         {
             TimeSpan difference = rental.DateTo - rental.DateFrom;
             return (int)difference.TotalDays;
+        }
+
+        public Task DeletePriceList(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

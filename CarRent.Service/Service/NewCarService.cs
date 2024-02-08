@@ -135,6 +135,16 @@ namespace CarRent.Service.Service
         {
             var car = await _repository.NewCar
                 .GetAsync(id, trackChanges)
+                .Include(x => x.CarMake)
+                .Include(x => x.EngineType)
+                .Include(x => x.GearBoxType)
+                .Include(x => x.AirConditioningType)
+                .Include(x => x.CarImages)
+                .Include(x => x.CarsEquipment)
+                .Include(x => x.CarType)
+                .Include(x => x.KilometrLimit)
+                .Include(x => x.CarDrive)
+
                 .SingleOrDefaultAsync();
 
             if (car is null)
@@ -204,7 +214,7 @@ namespace CarRent.Service.Service
 
             foreach (var item in pagedList.Items)
             {
-                item.Price = await _repository.PriceList.GetCarPriceForOneDay(item.Id);
+                item.Price = await _priceList.GetCarPriceForOneDay(item.Id);
             }
 
             return pagedList;
@@ -240,7 +250,7 @@ namespace CarRent.Service.Service
 
             foreach (var item in list)
             {
-                item.Price = await _repository.PriceList.GetCarPriceForOneDay(item.CarId);
+                item.Price = await _priceList.GetCarPriceForOneDay(item.CarId);
             }
             return list;
         }

@@ -15,6 +15,7 @@ namespace CarRent.Repository
         private readonly CarRentContext _context;
 
         private readonly Lazy<IGenericRepository<Car>> _newCarRepository;
+        private readonly Lazy<IGenericRepository<PriceList>> _newPricesListRepository;
 
         private readonly Lazy<ICarRepository> _carRepository;
         private readonly Lazy<IPriceListRepository> _priceListRepository;
@@ -93,8 +94,13 @@ namespace CarRent.Repository
             _newCarRepository = new Lazy<IGenericRepository<Car>>(() =>
                 new GenericRepository<Car>(_context));
 
+            _newPricesListRepository = new Lazy<IGenericRepository<PriceList>>(()=>
+                new GenericRepository<PriceList>(_context));
+
+
             _carRepository = new Lazy<ICarRepository>(() =>
                 new CarRepository(_context, PriceList));
+
             _priceListRepository = new Lazy<IPriceListRepository>(() =>
                 new PriceListRepository(_context));
 
@@ -250,7 +256,7 @@ namespace CarRent.Repository
         public CarRentContext Context { get => _context; }
 
         public IGenericRepository<Car> NewCar => _newCarRepository.Value;
-
+        public IGenericRepository<PriceList> NewPriceList => _newPricesListRepository.Value;
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;

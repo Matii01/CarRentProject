@@ -108,7 +108,7 @@ function CarDetails() {
         },
       })
       .then(() => {
-        // toast
+        toast.success("Zapisano zmiany");
       })
       .catch((error) => {
         toast.error("błąd");
@@ -350,7 +350,7 @@ function CarDetails() {
                         <label>Marka</label>
                         <Form.Control
                           as="select"
-                          name="carMake"
+                          name="carMakeId"
                           value={car.carMakeId}
                           onChange={handleChange}
                         >

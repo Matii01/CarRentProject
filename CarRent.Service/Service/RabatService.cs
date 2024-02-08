@@ -81,7 +81,7 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<CarRabatDto>> GetCarRabats(int carId)
         {
             var carRabats = await _repository.Rabat
-                .FindByCondition(x => x.IsActive == true, false)
+                .FindByCondition(x => x.IsActive == true && x.CarId == carId, false)
                 .Select(x => new CarRabatDto(x.Id, x.RabatPercentValue, x.DateFrom, x.DateTo))
                 .ToListAsync();
 

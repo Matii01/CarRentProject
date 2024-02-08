@@ -11,7 +11,7 @@ function AddPricelist({ carId, onAdded }) {
   const onSubmit = (event) => {
     event.preventDefault();
     if (pricelistName.trim() === "") {
-      setError("the name cannot be empty");
+      setError("nazwa nie może być pusta");
     } else {
       sendNewpriceList();
     }
@@ -32,7 +32,7 @@ function AddPricelist({ carId, onAdded }) {
       )
       .then((data) => {
         console.log(data);
-        onAdded();
+        onAdded(data.data);
         toast.success("dodano");
       })
       .catch((error) => {
