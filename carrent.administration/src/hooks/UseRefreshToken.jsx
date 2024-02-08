@@ -8,26 +8,29 @@ import {
 import { useEffect } from "react";
 import axios from "axios";
 import config from "../../config";
+import jwtInterceptor from "../utils/jwtInterceptor";
 
 function useRefreshToken() {
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = useSelector((state) => state.user.userName);
 
   const onFirstRender = () => {
+    console.log("on first");
     retriveData();
   };
 
   const everySomeMinutes = () => {
-    if (isLogin) {
-      //console.log("try to refresh token");
+    if (isLogin != "") {
+      console.log("try to refresh token");
       refreshToken();
     } else {
-      //console.log("is not log in");
+      console.log("is not log in");
     }
   };
 
   const timeToWait = () => {
     return 10 * 60 * 1000;
+    //return 10 * 1000;
   };
 
   useEffect(() => {
@@ -44,7 +47,8 @@ function useRefreshToken() {
   }, []);
 
   const refreshToken = () => {
-    fetchData(`/token/refresh`);
+    console.log("refresh token");
+    fetchData(`token/refresh`);
   };
 
   const isTokensSet = () => {
@@ -70,7 +74,7 @@ function useRefreshToken() {
     // console.log("AC:");
     // console.log(accessToken);
 
-    axios
+    jwtInterceptor
       .post(
         `${config.API_URL}${url}`,
         JSON.stringify({ accessToken, refreshToken }),

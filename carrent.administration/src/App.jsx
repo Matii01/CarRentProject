@@ -34,10 +34,35 @@ function App() {
   useRefreshToken();
 
   useEffect(() => {
+    //console.log("is Admin: " + isAdmin);
+    //console.log("is worker: " + isWorker);
     if (location.pathname === "/" && !isAdmin && !isWorker) {
       navigate("/login");
     }
   }, []);
+
+  const tryToRefreshToken = () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const accessToken = localStorage.getItem("accessToken");
+
+    axios
+      .post(
+        `${config.API_URL}token/retrieve`,
+        JSON.stringify({ accessToken, refreshToken }),
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((data) => {
+        setLocalStorage(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const toggleSidebar = () => {
     setHideSidebar(!hideSidebar);
