@@ -22,24 +22,25 @@ function App() {
   const [hasImage, setHasImage] = React.useState(true);
   const [hideSidebar, setHideSidebar] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const color = "black";
   const image = sidebarImage;
   const mainPanel = React.useRef(null);
-
-  useRefreshToken();
-
-  const toggleSidebar = () => {
-    setHideSidebar(!hideSidebar);
-  };
-
   const user = useSelector((state) => state.user);
-
   const isAdmin = user.role.includes("Administrator");
   const isWorker = user.role.includes("Worker");
 
-  const goToLogin = () => {
-    navigate("/login");
+  useRefreshToken();
+
+  useEffect(() => {
+    if (location.pathname === "/" && !isAdmin && !isWorker) {
+      navigate("/login");
+    }
+  }, []);
+
+  const toggleSidebar = () => {
+    setHideSidebar(!hideSidebar);
   };
 
   return (
