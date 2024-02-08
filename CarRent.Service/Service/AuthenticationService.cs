@@ -56,8 +56,6 @@ namespace CarRent.Service.Service
                 //await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             }
 
-            // Add data to address 
-
             return result;
         }
 

@@ -9,6 +9,7 @@ namespace CarRent.Service.Interfaces
 {
     public interface IUserAddressService
     {
+        Task AddAddressFromRegisterData(string id, UserForRegistrationDto data);
         Task AddAddressesAsync(string id, AddressDto address);
         Task<IEnumerable<AddressDto>> GetAddressesAsync(string userId);
         Task<AddressDto?> GetDefaultAddressesAsync(string userId);

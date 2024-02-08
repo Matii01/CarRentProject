@@ -1,4 +1,5 @@
-﻿using CarRent.data.Models.CarRent;
+﻿using CarRent.data.Models;
+using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
 using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
@@ -12,6 +13,8 @@ namespace CarRent.Repository
     public class RepositoryManager : IRepositoryManager
     {
         private readonly CarRentContext _context;
+
+        private readonly Lazy<IGenericRepository<Car>> _newCarRepository;
 
         private readonly Lazy<ICarRepository> _carRepository;
         private readonly Lazy<IPriceListRepository> _priceListRepository;
@@ -85,6 +88,10 @@ namespace CarRent.Repository
         public RepositoryManager(CarRentContext context)
         {
             _context = context;
+
+
+            _newCarRepository = new Lazy<IGenericRepository<Car>>(() =>
+                new GenericRepository<Car>(_context));
 
             _carRepository = new Lazy<ICarRepository>(() =>
                 new CarRepository(_context, PriceList));
@@ -241,6 +248,9 @@ namespace CarRent.Repository
 
 
         public CarRentContext Context { get => _context; }
+
+        public IGenericRepository<Car> NewCar => _newCarRepository.Value;
+
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;

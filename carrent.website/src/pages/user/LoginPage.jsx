@@ -69,9 +69,9 @@ function LoginPage() {
           <Col xs={12} md={6}>
             <Form onSubmit={handleLoginClik}>
               <Form.Group className="mb-3">
-                <Form.Label>Login</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
-                  placeholder="Enter login"
+                  placeholder="Enter email"
                   name="username"
                   onChange={handleChange}
                 />

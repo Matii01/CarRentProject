@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.Models
 {
-    public class Car : BaseModel
+    //public class Car : BaseModel
+    public class Car : BaseDictionaryModel
     {
         [Key]
-        public int Id { get; set; }
-
+        public override int Id { get; set; }
         [Required]
         public string Name { get; set; } = null!;
         public int CarMakeId { get; set; }

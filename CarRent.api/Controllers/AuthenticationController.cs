@@ -9,11 +9,12 @@ namespace CarRent.api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : BaseController
     {
         private readonly UserManager<User> _userManager;
         private readonly IAuthenticationService _authenticationService;
-        public AuthenticationController(UserManager<User> userManager, IAuthenticationService authenticationService)
+
+        public AuthenticationController(IServiceManager serviceManager, UserManager<User> userManager, IAuthenticationService authenticationService) : base(serviceManager)
         {
             _userManager = userManager;
             _authenticationService = authenticationService;
@@ -33,6 +34,11 @@ namespace CarRent.api.Controllers
                 }
                 return BadRequest(ModelState);
             }
+
+            var user = await _userManager.FindByEmailAsync(newUser.Email);
+            await _services.UserAddressService.AddAddressFromRegisterData(user.Id, newUser);
+
+
             return StatusCode(201);
         }
 
