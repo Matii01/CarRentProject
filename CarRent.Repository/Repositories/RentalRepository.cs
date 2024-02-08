@@ -175,11 +175,6 @@ namespace CarRent.Repository.Repositories
                         x.Rental.RentalEnd)
                 ).ToListAsync();
 
-            //var itemsDa = context.UserRentals
-            //   .Where(x => x.UserAccountId == userId)
-            //   .Include(x => x.Rental)
-            //   .ThenInclude(x => x.Car);
-
             return items;
         }
 

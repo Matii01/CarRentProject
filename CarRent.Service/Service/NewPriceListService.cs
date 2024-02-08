@@ -115,7 +115,7 @@ namespace CarRent.Service.Service
 
         public async Task<IEnumerable<PricelistItemDto>> GetCarPricelistForClient(int carId)
         {
-            var pricelist = GetCarPriceListForClient(carId)
+            var pricelist = await GetCarPriceListForClient(carId)
                 .SingleOrDefaultAsync();
 
             if (pricelist == null)
@@ -138,7 +138,7 @@ namespace CarRent.Service.Service
                 .Include(x => x.PricelistItems)
                 .Where(x => x.CarId == carId)
                 .Where(x => x.PricelistDates
-                    .Any(x => x.DateFrom <= currentData && x.DateTo >= currentData));
+                    .Any(x => x.IsActive == true && x.DateFrom <= currentData && x.DateTo >= currentData));
 
             return pricelist;
         }
@@ -150,7 +150,6 @@ namespace CarRent.Service.Service
 
             if (item == null)
             {
-                // ToDo:  zmień to 
                 return new PriceForCar(0, 0, 0, 0, 0);
                 //throw new Exception("No pricelist for car for this date");
             }
@@ -247,19 +246,21 @@ namespace CarRent.Service.Service
 
         public async Task<decimal> GetCarPriceForOneDay(int carId)
         {
+            //return 0;
             var currentData = DateTime.Now;
 
-            var priceList = _repository
-                .NewPriceList
+            var priceList = _repository.NewPriceList
                 .FindByCondition(x => x.IsActive == true && x.IsDefault == true, false)
                 .Include(x => x.PricelistDates)
                 .Include(x => x.PricelistItems)
                 .Where(x => x.CarId == carId)
                 .Where(x => x.PricelistDates
-                    .Any(x => x.DateFrom <= currentData && x.DateTo >= currentData));
+                    .Any(x => x.IsActive == true &&
+                    ( x.DateFrom <= currentData && x.DateTo >= currentData)
+                    ));
 
             var listItem = await priceList
-                .Select(x => x.PricelistItems.Where(x => x.Days == 1))
+                .Select(x => x.PricelistItems.Where(x => x.Days == 1 && x.IsActive == true))
                 .SingleOrDefaultAsync();
 
             if (listItem == null)
@@ -267,7 +268,7 @@ namespace CarRent.Service.Service
                 return 0;
             }
 
-            var item = listItem.SingleOrDefault();
+            var item = listItem.FirstOrDefault(); 
 
             if (item == null)
             {
