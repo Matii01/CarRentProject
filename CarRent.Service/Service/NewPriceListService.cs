@@ -95,6 +95,7 @@ namespace CarRent.Service.Service
         {
             var newDefault = await _repository.NewPriceList
                    .GetAsync(newDefaultPriceListId, true)
+                   .Where(x=>x.IsActive == true)
                    .SingleOrDefaultAsync() ?? throw new Exception("");
 
             var list = await _repository.NewPriceList
@@ -146,11 +147,13 @@ namespace CarRent.Service.Service
         {
             var pricelist = _repository.NewPriceList
                 .FindByCondition(x => x.IsActive == true && x.IsDefault == true, false)
-                .Include(x => x.PricelistDates)
-                .Include(x => x.PricelistItems)
+                .Include(x => x.PricelistDates.Where(y => y.IsActive == true))
+                .Include(x => x.PricelistItems.Where(y => y.IsActive == true))
                 .Where(x => x.CarId == carId)
                 .Where(x => x.PricelistDates
                     .Any(x => x.IsActive == true && x.DateFrom <= currentData && x.DateTo >= currentData));
+
+
 
             return pricelist;
         }
@@ -259,7 +262,6 @@ namespace CarRent.Service.Service
 
         public async Task<decimal> GetCarPriceForOneDay(int carId)
         {
-            //return 0;
             var currentData = DateTime.Now;
 
             var priceList = _repository.NewPriceList

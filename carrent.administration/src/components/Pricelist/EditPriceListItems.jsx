@@ -127,7 +127,6 @@ function EditPricelistItems({ pricelistId, onCancel }) {
 
   return (
     <>
-      <Row>{pricelistId}</Row>
       <Row>
         <Form className="m-2 pe-4" onSubmit={onSubmit}>
           <Row>
