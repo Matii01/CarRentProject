@@ -153,6 +153,8 @@ namespace CarRent.Service.Service
                 InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
                 TotalPaid = price.Gross,
                 TotalToPay = price.Gross,
+                CreatedDate = DateTime.Now,
+                PaymentDate = DateTime.Now,
                 IsEditable = false,
                 Client = new IndividualClient
                 {

@@ -1,6 +1,7 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Parameters;
+using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarById(int id)
         {
             var car = await _services.CarService.GetCarById(id, false);
+
             if (car == null)
             {
                 return NotFound("Car not found");
@@ -148,7 +150,8 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {
             var car = await _services.CarService.CreateCarAsync(newCar);
-            return Ok(car); 
+
+            return await GetCarById(car.Id);
         }
 
         [Authorize(Roles = "Administrator,CarAdd")]

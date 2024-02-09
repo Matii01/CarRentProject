@@ -18,8 +18,13 @@ function useRefreshToken() {
     retriveData();
   };
 
+  const getUserName = () => {
+    return isLogin;
+  };
+
   const everySomeMinutes = () => {
-    if (isLogin != "") {
+    const name = getUserName();
+    if (name != "") {
       console.log("try to refresh token");
       refreshToken();
     } else {
@@ -28,8 +33,8 @@ function useRefreshToken() {
   };
 
   const timeToWait = () => {
-    return 10 * 60 * 1000;
     //return 10 * 1000;
+    return 10 * 60 * 1000;
   };
 
   useEffect(() => {
@@ -43,10 +48,10 @@ function useRefreshToken() {
     }, seconds);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isLogin]);
 
   const refreshToken = () => {
-    console.log("refresh token");
+    //console.log("refresh token");
     fetchData(`token/refresh`);
   };
 
@@ -64,6 +69,8 @@ function useRefreshToken() {
     if (isTokensSet()) {
       const url = "token/retrieve";
       fetchData(url);
+    } else {
+      console.log("token do not set");
     }
   };
 

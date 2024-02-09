@@ -46,6 +46,7 @@ namespace CarRent.data.DTO
     );
 
     public record CarDetailForWorkerDto(
+        int Id,
         string Name,
         int CarMakeId,
         string CarModel,

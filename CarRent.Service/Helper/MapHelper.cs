@@ -85,6 +85,7 @@ namespace CarRent.Service.Helper
             }
 
             return new CarDetailForWorkerDto(
+                car.Id,
                 car.Name,
                 car.CarMake.Id,
                 car.CarModel,

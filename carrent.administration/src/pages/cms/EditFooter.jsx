@@ -75,7 +75,17 @@ function EditFooter() {
       });
   };
 
-  const onEditedLinks = () => {};
+  const onEditedLinks = () => {
+    jwtInterceptor
+      .get("ContentManagement/footer")
+      .then((data) => {
+        console.log(data);
+        setPage(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
