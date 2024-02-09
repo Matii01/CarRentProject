@@ -183,6 +183,7 @@ namespace CarRent.Service.Service
         {
             var pricelistDate = await _repository.PricelistDate
                 .FindByCondition(x => x.PriceListId == priceListId && x.IsActive == true, false)
+                .OrderByDescending(x=> x.DateFrom)
                 .Select(x => new PricelistDateDto(x.Id, x.PriceListId, x.DateFrom, x.DateTo))
                 .ToListAsync();
 

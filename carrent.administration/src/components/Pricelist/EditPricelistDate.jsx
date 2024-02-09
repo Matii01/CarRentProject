@@ -4,6 +4,7 @@ import fetchData from "../../functions/fetchData";
 import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { formatDate } from "./../../utils/formDate";
+import { toast } from "react-toastify";
 
 function EditPricelistDate({ pricelistId, onCancel }) {
   const initialState = {
@@ -62,6 +63,8 @@ function EditPricelistDate({ pricelistId, onCancel }) {
       })
       .catch((error) => {
         console.log(error);
+        console.log(error.response.data);
+        toast.error(error.response.data);
       });
   };
 

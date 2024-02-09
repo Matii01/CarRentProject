@@ -65,8 +65,8 @@ function EditPricelistItems({ pricelistId, onCancel }) {
         setNewItem(initialState);
       })
       .catch((error) => {
-        console.log(error);
-        toast.error("Błąd");
+        console.log(error.response.data);
+        toast.error(error.response.data.Message);
       });
   };
 
