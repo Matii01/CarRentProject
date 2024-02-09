@@ -61,10 +61,17 @@ function carDriveReducer(state, action) {
 function CarDrives() {
   const [state, dispatch] = useReducer(carDriveReducer, initialState);
   const [searchTerm, setSerachTerm] = useState("");
+  const [selected, setSelected] = useState();
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (selected) {
+      onDoubleClick(selected);
+    }
+  }, [selected]);
 
   const getData = () => {
     jwtInterceptor
@@ -112,7 +119,6 @@ function CarDrives() {
   };
 
   const onDoubleClick = (drive) => {
-    console.log(drive);
     dispatch({
       type: "SET_NEW_DRIVE",
       payload: drive,
@@ -196,7 +202,7 @@ function CarDrives() {
           type: "SET_DRIVE",
           payload: newCarDrives,
         });
-        onCancel();
+        setSelected(data.data);
         toast.success("Dodano");
       })
       .catch((error) => {

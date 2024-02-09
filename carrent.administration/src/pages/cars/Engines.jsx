@@ -63,10 +63,17 @@ function enginesReducer(state, action) {
 function Engines() {
   const [state, dispatch] = useReducer(enginesReducer, initialState);
   const [serachTerm, setSerachTerm] = useState("");
+  const [selected, setSelected] = useState();
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (selected) {
+      onDoubleClick(selected);
+    }
+  }, [selected]);
 
   const getData = () => {
     jwtInterceptor
@@ -195,11 +202,11 @@ function Engines() {
       .then((data) => {
         if (data.status === 201) {
           const newEngines = [data.data, ...state.filteredEngines];
-
           dispatch({
             type: "SET_ENGINES",
             payload: newEngines,
           });
+          setSelected(data.data);
 
           toast.success("Pomyślnie dodano");
         }
@@ -246,7 +253,9 @@ function Engines() {
               <Card.Header>
                 <Row>
                   <Col>
-                    <Button onClick={onCancel}>Dodaj</Button>
+                    <Button size="sm" onClick={onCancel}>
+                      Dodaj
+                    </Button>
                   </Col>
                   <Col xs={2}>
                     <p>Silniki</p>
@@ -254,6 +263,7 @@ function Engines() {
                   <Col>
                     <Form className="d-flex" onSubmit={handleSearch}>
                       <Form.Control
+                        size="sm"
                         name="serachTerm"
                         type="search"
                         placeholder="Search"
@@ -261,7 +271,7 @@ function Engines() {
                         aria-label="Search"
                         onChange={handleChange}
                       />
-                      <Button variant="outline-success" type="submit">
+                      <Button size="sm" variant="outline-success" type="submit">
                         Search
                       </Button>
                     </Form>

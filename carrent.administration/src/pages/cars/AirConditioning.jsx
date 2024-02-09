@@ -29,7 +29,10 @@ function AirConditioning() {
   };
 
   const handleDelete = (id) => {
-    console.log("delete: " + id);
+    if (selectedItem.id == id) {
+      onCancel();
+      setSelectedItem(null);
+    }
     jwtInterceptor.delete(`AirConditioning/${id}`).then((results) => {
       getData();
       toast.success("usunięto");

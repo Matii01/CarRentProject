@@ -62,10 +62,17 @@ function carTypeReducer(state, action) {
 function CarTypes() {
   const [state, dispatch] = useReducer(carTypeReducer, initialState);
   const [searchTerm, setSerachTerm] = useState("");
+  const [selected, setSelected] = useState();
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (selected) {
+      onDoubleClick(selected);
+    }
+  }, [selected]);
 
   const getData = () => {
     jwtInterceptor
@@ -194,7 +201,7 @@ function CarTypes() {
           type: "SET_TYPES",
           payload: newTypes,
         });
-        onCancel();
+        setSelected(data.data);
         toast.success("Pomyślnie dodano");
       })
       .catch((error) => {

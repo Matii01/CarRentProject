@@ -59,6 +59,10 @@ function GearboxType() {
         if (data.status === 204) {
           filterView(id);
           toast.success("Usunięto");
+          if (selectedGearbox.id == id) {
+            onCancel();
+            setSelectedItem(null);
+          }
         }
       })
       .catch((error) => {

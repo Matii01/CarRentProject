@@ -41,6 +41,10 @@ function CarEquipment() {
   const addElement = (equipment) => {
     const newCarEquipment = [equipment, ...equipmentList];
     setEquipmentList(newCarEquipment);
+
+    setSelectedEquipment(equipment);
+    setIsEditMode(true);
+
     toast.success("Dodano");
   };
 
@@ -75,6 +79,9 @@ function CarEquipment() {
       .then((data) => {
         const newList = equipmentList.filter((x) => x.id != itemId);
         setEquipmentList(newList);
+        if (selectedEquipment.id == itemId) {
+          onCancel();
+        }
       })
       .catch((error) => {
         console.log(error);

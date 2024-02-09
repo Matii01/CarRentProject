@@ -61,6 +61,9 @@ function CarMakes() {
   };
 
   const handleDelete = (id) => {
+    if (selectedMake.id === id) {
+      onCancel();
+    }
     deleteCarMake(id);
   };
 
