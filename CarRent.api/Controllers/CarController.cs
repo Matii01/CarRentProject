@@ -175,6 +175,7 @@ namespace CarRent.api.Controllers
         [HttpPut("edit/{id:int}")]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
+            await Console.Out.WriteLineAsync("asdasd");
             await _services.CarService.UpdateCarAsync(id, car, true);
 
             return NoContent();

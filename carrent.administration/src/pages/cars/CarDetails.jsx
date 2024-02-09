@@ -44,7 +44,7 @@ function CarDetails() {
     carDriveId: 0,
     carImages: [],
   };
-  const [car, setCar] = useState(initialState);
+  const [car, setCar] = useState({});
   const [carInfo, setCarInfo] = useState();
   const [isRecommended, setIsRecommended] = useState(false);
   const param = useParams();
@@ -73,7 +73,6 @@ function CarDetails() {
     jwtInterceptor
       .get(`car/${param.carId}`)
       .then((data) => {
-        console.log(data);
         setCar(data.data);
       })
       .catch((error) => {
@@ -101,8 +100,10 @@ function CarDetails() {
   };
 
   const updateCar = () => {
+    const { id, carImages, ...toSend } = car;
+    console.log(toSend);
     jwtInterceptor
-      .put(`car/edit/${param.carId}`, JSON.stringify(car), {
+      .put(`car/edit/${param.carId}`, JSON.stringify(toSend), {
         headers: {
           "Content-Type": "application/json",
         },
@@ -169,7 +170,7 @@ function CarDetails() {
   const SetCarVisibility = (value) => {
     setCar((prev) => ({
       ...prev,
-      IsVisible: value,
+      isVisible: value,
     }));
   };
 
@@ -294,7 +295,7 @@ function CarDetails() {
                   </Col>
 
                   <Col className="d-flex justify-content-end">
-                    {!car.IsVisible && (
+                    {!car.isVisible && (
                       <Button
                         variant="dark"
                         size="sm"
@@ -303,7 +304,7 @@ function CarDetails() {
                         Ustaw jako widoczny
                       </Button>
                     )}
-                    {car.IsVisible && (
+                    {car.isVisible && (
                       <Button variant="dark" size="sm" onClick={SetCarAsHide}>
                         Ustaw jako ukryty
                       </Button>
