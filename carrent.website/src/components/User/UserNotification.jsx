@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card, Table } from "react-bootstrap";
+import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import NotificationDetails from "./NotificationDetails";
 import axiosInstance from "../../utils/axiosConfig";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
+import CarPagination from "../Pagination/CarPagination";
 
 function UserNotification() {
   const [items, setItems] = useState([]);
@@ -10,9 +11,11 @@ function UserNotification() {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [params, setParams] = useState({
+    PageNumber: 1,
+    PageSize: 10,
     CreatedStart: " ",
     CreatedEnd: "",
-    IsRead: false,
+    IsRead: true,
   });
 
   useEffect(() => {
@@ -26,7 +29,7 @@ function UserNotification() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [params.IsRead, params.PageNumber, params.PageSize]);
 
   const transformAndSetItems = (items) => {
     const transformed = items.map((it) => ({
@@ -46,8 +49,24 @@ function UserNotification() {
   };
 
   const removeItem = (id) => {
-    const list = items.filter((it) => it.id != id);
-    setItems(list);
+    if (params.IsRead === false) {
+      const list = items.filter((it) => it.id != id);
+      setItems(list);
+    }
+  };
+
+  const toggleView = () => {
+    setParams((prev) => ({
+      ...prev,
+      IsRead: !params.IsRead,
+    }));
+  };
+
+  const onPageChange = (num) => {
+    setParams((prev) => ({
+      ...prev,
+      PageNumber: num,
+    }));
   };
 
   return (
@@ -55,7 +74,21 @@ function UserNotification() {
       <>
         {!showDetails && (
           <Card>
-            <Card.Header className="cardHeader">Notification</Card.Header>
+            <Card.Header className="cardHeader">
+              <Row>
+                <Col>Notification</Col>
+                <Col className="d-flex justify-content-end">
+                  <Button
+                    className="customButton me-2"
+                    size="sm"
+                    onClick={toggleView}
+                  >
+                    {params.IsRead && "Only new"}
+                    {!params.IsRead && "All"}
+                  </Button>
+                </Col>
+              </Row>
+            </Card.Header>
             <Card.Body>
               <Table>
                 <thead>
@@ -77,6 +110,15 @@ function UserNotification() {
                 </tbody>
               </Table>
             </Card.Body>
+            <Row>
+              <Col className="ms-2">
+                <CarPagination
+                  paginationData={metaData}
+                  pageChange={onPageChange}
+                  size="md"
+                />
+              </Col>
+            </Row>
           </Card>
         )}
         {showDetails && (

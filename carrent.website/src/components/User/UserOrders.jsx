@@ -3,8 +3,6 @@ import UserRentalList from "./UserRentalList";
 import UserRentalDetails from "./UserRentalDetails";
 import axiosInstance from "../../utils/axiosConfig";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
-import { Row } from "react-bootstrap";
-import CarPagination from "../Pagination/CarPagination";
 
 function UserOrders() {
   const [isLoading, setIsLoading] = useState(false);

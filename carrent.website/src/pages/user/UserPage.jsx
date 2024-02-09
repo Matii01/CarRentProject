@@ -66,9 +66,6 @@ function UserPage() {
     selectedView = <UserNotification />;
   }
 
-  // https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc
-  // https://sell-react-b5.vercel.app/img/photo/kyle-loftus-589739-unsplash-avatar.jpg
-
   const url =
     "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
 
