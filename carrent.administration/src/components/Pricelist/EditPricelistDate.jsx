@@ -15,8 +15,17 @@ function EditPricelistDate({ pricelistId, onCancel }) {
   const [newData, setNewData] = useState(initialState);
 
   useEffect(() => {
+    setState();
     getData();
   }, [pricelistId]);
+
+  const setState = () => {
+    setNewData((prev) => ({
+      PriceId: pricelistId,
+      DateFrom: "",
+      DateTo: "",
+    }));
+  };
 
   const getData = () => {
     jwtInterceptor
