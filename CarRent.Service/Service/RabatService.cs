@@ -51,6 +51,7 @@ namespace CarRent.Service.Service
                     x.DateFrom <= data &&
                     x.DateTo >= data
                     , false)
+                .OrderByDescending(x => x.DateFrom)
                 .Select(x => new RabatValueDto(x.RabatPercentValue))
                 .SingleOrDefaultAsync();
 
