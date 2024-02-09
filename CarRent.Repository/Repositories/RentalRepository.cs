@@ -160,10 +160,10 @@ namespace CarRent.Repository.Repositories
             return GetTransformedPagedList(pagedList);
         }
 
-        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
+        public async Task<PagedList<UserRentalListDto>> GetUserRentalsAsync(OrderParameters param)
         {
-            var items = await context.UserRentals
-                .Where(x => x.UserAccountId == userId)
+            var items = context.UserRentals
+                .Where(x => x.UserAccountId == param.ClientId)
                 .Include(x => x.Rental)
                 .ThenInclude(x => x.Car)
                 .OrderByDescending(x => x.Rental.RentalStart)
@@ -174,9 +174,12 @@ namespace CarRent.Repository.Repositories
                         x.Rental.Car.Name,
                         x.Rental.RentalStart,
                         x.Rental.RentalEnd)
-                ).ToListAsync();
+                );
 
-            return items;
+            var pagedList = await PagedList<UserRentalListDto>
+                .ToPagedList(items, param.PageNumber, param.PageSize);
+
+            return pagedList;
         }
 
         //public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)

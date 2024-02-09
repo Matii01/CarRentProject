@@ -44,9 +44,9 @@ namespace CarRent.Service.Service
             return list;
         }
 
-        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
+        public async Task<PagedList<UserRentalListDto>> GetUserRentalsAsync(OrderParameters param)
         {
-            var list = await _repository.Rentals.GetUserRentalsAsync(userId);
+            var list = await _repository.Rentals.GetUserRentalsAsync(param);
             return list;
         }
 

@@ -60,7 +60,7 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "User")]
         [HttpGet("UserRental")]
-        public async Task<IActionResult> GetUserRental()
+        public async Task<IActionResult> GetUserRental([FromQuery] OrderParameters param)
         {
             var username = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
@@ -70,7 +70,8 @@ namespace CarRent.api.Controllers
                 return NotFound();
             }
 
-            var items = await _services.RentalService.GetUserRentalsAsync(user.Id);
+            param.ClientId = user.Id;
+            var items = await _services.RentalService.GetUserRentalsAsync(param);
 
             return Ok(items);
         }

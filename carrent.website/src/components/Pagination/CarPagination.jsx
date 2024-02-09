@@ -1,14 +1,19 @@
 import { Pagination } from "react-bootstrap";
 import styles from "./CarPagination.module.css"; // Import your custom CSS module
 
-function CarPagination({ paginationData, pageChange }) {
+function CarPagination({ paginationData, pageChange, size }) {
   const handleNumClick = (num) => {
     console.log(num);
     pageChange(num);
   };
 
+  let paginationSize = "lg";
+  if (size) {
+    paginationSize = size;
+  }
+
   return (
-    <Pagination size="lg">
+    <Pagination size={paginationSize}>
       {/* <Pagination.First /> */}
       {paginationData.hasPrevious && (
         <Pagination.Prev
