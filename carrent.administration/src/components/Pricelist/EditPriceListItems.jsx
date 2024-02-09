@@ -16,8 +16,18 @@ function EditPricelistItems({ pricelistId, onCancel }) {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
+    setState();
     getData();
   }, [pricelistId]);
+
+  const setState = () => {
+    setNewItem((prev) => ({
+      priceListId: pricelistId,
+      days: "",
+      price: "",
+      overlimitFee: 0,
+    }));
+  };
 
   const getData = () => {
     jwtInterceptor
@@ -43,21 +53,22 @@ function EditPricelistItems({ pricelistId, onCancel }) {
   };
 
   const AddNewItem = () => {
-    jwtInterceptor
-      .post(`CarPriceList/addItem`, JSON.stringify(newItem), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        toast.success("Dodano");
-        getData();
-        setNewItem(initialState);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Błąd");
-      });
+    console.log(newItem);
+    // jwtInterceptor
+    //   .post(`CarPriceList/addItem`, JSON.stringify(newItem), {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then((data) => {
+    //     toast.success("Dodano");
+    //     getData();
+    //     setNewItem(initialState);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error("Błąd");
+    //   });
   };
 
   const UpdateSelectedItem = () => {
@@ -117,6 +128,7 @@ function EditPricelistItems({ pricelistId, onCancel }) {
 
   return (
     <>
+      <Row>{pricelistId}</Row>
       <Row>
         <Form className="m-2 pe-4" onSubmit={onSubmit}>
           <Row>

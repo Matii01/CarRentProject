@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -47,6 +48,17 @@ namespace CarRent.Service.Service
 
         public async Task<PricelistItem> AddPosition(NewtPricelistItemDto item)
         {
+            var items = await _repository.PricelistItem
+                .FindByCondition(x => x.IsActive &&
+                    x.PriceListId == item.PriceListId &&
+                    x.Days == item.Days,
+                    false
+                    ).ToListAsync();
+            if (!items.IsNullOrEmpty())
+            {
+                throw new PriceListItemExistException();
+            }
+
             var newItem = new PricelistItem
             {
                 PriceListId = item.PriceListId,
@@ -178,6 +190,7 @@ namespace CarRent.Service.Service
         {
             var priceListItem = await _repository.PricelistItem
                 .FindByCondition(x => x.PriceListId == priceListId && x.IsActive == true, false)
+                .OrderBy(x => x.Days)
                 .Select(x => new PricelistItemDto(x.Id, x.Days, x.Price, x.OverlimitFee))
                 .ToListAsync();
 
