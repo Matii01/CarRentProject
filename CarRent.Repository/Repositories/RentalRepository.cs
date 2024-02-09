@@ -166,6 +166,7 @@ namespace CarRent.Repository.Repositories
                 .Where(x => x.UserAccountId == userId)
                 .Include(x => x.Rental)
                 .ThenInclude(x => x.Car)
+                .OrderByDescending(x => x.Rental.RentalStart)
                 .Select(x => new UserRentalListDto(
                         x.RentalId,
                         x.Rental.InvoiceItem.InvoiceId,
