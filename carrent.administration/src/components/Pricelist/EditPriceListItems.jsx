@@ -53,22 +53,21 @@ function EditPricelistItems({ pricelistId, onCancel }) {
   };
 
   const AddNewItem = () => {
-    console.log(newItem);
-    // jwtInterceptor
-    //   .post(`CarPriceList/addItem`, JSON.stringify(newItem), {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((data) => {
-    //     toast.success("Dodano");
-    //     getData();
-    //     setNewItem(initialState);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     toast.error("Błąd");
-    //   });
+    jwtInterceptor
+      .post(`CarPriceList/addItem`, JSON.stringify(newItem), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        toast.success("Dodano");
+        getData();
+        setNewItem(initialState);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Błąd");
+      });
   };
 
   const UpdateSelectedItem = () => {
