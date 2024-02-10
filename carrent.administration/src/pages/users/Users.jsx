@@ -4,6 +4,7 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import ManageUser from "../../components/Users/ManageUser";
 import { ToastContainer } from "react-toastify";
+import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
@@ -24,7 +25,10 @@ function UsersPage() {
 
   const onCancel = () => {};
 
-  const handleChange = () => {};
+  const handleChange = (event) => {
+    const { value } = event.target;
+    setSerachTerm(value);
+  };
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -60,25 +64,26 @@ function UsersPage() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>
                 </Row>
               </Card.Header>
               <Card.Body>
-                <CarInfoTable
-                  thead={["Imie", "Nazwisko", "email", "Actions"]}
+                <MyTableWithPagination
+                  thead={["Imie", "Nazwisko", "email"]}
                   items={usersList}
                   item={["firstName", "lastName", "email"]}
                   searchTerm={searchTerm}
+                  serachBy={"firstName"}
                   onDoubleClick={onDoubleClick}
                 />
               </Card.Body>

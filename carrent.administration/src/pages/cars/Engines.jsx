@@ -266,13 +266,13 @@ function Engines() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         onChange={handleChange}
                       />
                       <Button size="sm" variant="outline-success" type="submit">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>

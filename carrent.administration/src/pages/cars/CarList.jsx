@@ -271,7 +271,7 @@ function CarList() {
                     size="sm"
                     name="serachTerm"
                     type="search"
-                    placeholder="Search"
+                    placeholder="Szukaj"
                     className="me-2"
                     aria-label="Search"
                     onChange={hangleSerachChange}
