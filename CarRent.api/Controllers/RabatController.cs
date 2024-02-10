@@ -51,7 +51,7 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPost("addCarRabat/{carId:int}")]
         public async Task<IActionResult> AddCarRabat(int carId, [FromBody] CarRabatDto rabatDto)
         {
@@ -59,7 +59,7 @@ namespace CarRent.api.Controllers
             return Ok();
         }
 
-        [Authorize(Roles ="Administrator,Worker")]
+        [Authorize(Roles ="Administrator,UserEditor")]
         [HttpPost("addUserRabat")]
         public async Task<IActionResult> AddRabat([FromBody] NewRabatForUserDto rabat)
         {
@@ -67,7 +67,7 @@ namespace CarRent.api.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,CarEditor")]
         [HttpDelete("deleteCarRabat/{id:int}")]
         public async Task<IActionResult> DeleteCarRabat(int id)
         {
@@ -75,7 +75,7 @@ namespace CarRent.api.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,UserEditor")]
         [HttpDelete("deleteUserRabat/{id:int}")]
         public async Task<IActionResult> DeleteUserRabat(int id)
         {

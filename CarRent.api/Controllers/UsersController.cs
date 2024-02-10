@@ -23,7 +23,7 @@ namespace CarRent.api.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,UserViewer")]
         [HttpGet("allUsers")]
         public async Task<IActionResult> GetUsersList()
         {

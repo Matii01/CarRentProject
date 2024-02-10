@@ -77,6 +77,10 @@ jwtInterceptor.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    if (error.response.status === 403 && !originalRequest._retry) {
+      toast.error("brak uprawnień");
+      console.log("brak uprawnień");
+    }
     return Promise.reject(error);
   }
 );
