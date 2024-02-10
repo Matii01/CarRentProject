@@ -74,7 +74,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarDetailsForClient(int id)
         {
             var carDetails = await _services.CarService.GetCarDetailsForClientAsync(id);
-            carDetails.ExcludedDates = await _services.RentalService.GetFutureRentalDatesForCarAsync(id);
+            carDetails.ExcludedDates = await _services.CarService.GetExcludedDatesForCarAsync(id);
 
             if(carDetails is null)
             {

@@ -39,9 +39,6 @@ namespace CarRent.api.Controllers
             var user = User.Identity.Name;
             var userId = await _authentication.FindUserByUserName(user);
 
-            await Console.Out.WriteLineAsync(carMaintenance.ToString());
-            await Console.Out.WriteLineAsync(userId);
-
             var item = new CarMaintenanceDto(
                     0, 
                     carMaintenance.CarId,

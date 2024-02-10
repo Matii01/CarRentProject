@@ -243,5 +243,15 @@ namespace CarRent.Service.Service
             item.IsActive = false;
             await _repository.SaveAsync();
         }
+
+        public async Task<List<RentalDatesDto>> GetExcludedDatesForCarAsync(int carId)
+        {
+            var maintenanceDates = await _maintenance.GetFutureMaintenanceDatesForCarAsync(carId);
+            var carRentals = await _rentals.GetFutureRentalDatesForCarAsync(carId);
+            var dates = maintenanceDates.Select(x => new RentalDatesDto(x.DateStart, x.DateEnd));
+            var newDates = dates.Concat(carRentals);
+
+            return newDates.ToList();
+        }
     }
 }

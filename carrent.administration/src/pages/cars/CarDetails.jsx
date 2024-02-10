@@ -44,6 +44,11 @@ function CarDetails() {
     carDriveId: 0,
     carImages: [],
   };
+  const [isLoading, setIsLoading] = useState({
+    car: true,
+    carInfo: true,
+    carRecommended: true,
+  });
   const [car, setCar] = useState({});
   const [carInfo, setCarInfo] = useState();
   const [isRecommended, setIsRecommended] = useState(false);
@@ -66,6 +71,12 @@ function CarDetails() {
         console.log("error fetching the makes: ", error);
         //setError(error);
         //setLoading(false);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          carInfo: false,
+        }));
       });
   };
 
@@ -77,6 +88,12 @@ function CarDetails() {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          car: false,
+        }));
       });
   };
 
@@ -88,6 +105,12 @@ function CarDetails() {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          carRecommended: false,
+        }));
       });
   };
 
@@ -250,7 +273,11 @@ function CarDetails() {
     });
   };
 
-  if (!carInfo) {
+  if (!carInfo || !car) {
+    return <p>Loading ...</p>;
+  }
+
+  if (isLoading.car || isLoading.carInfo || isLoading.carRecommended) {
     return <p>Loading ...</p>;
   }
 

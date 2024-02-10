@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using CarRent.data.DTO;
 using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
@@ -9,6 +10,7 @@ using CarRent.Repository.Parameters;
 using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -295,6 +297,16 @@ namespace CarRent.Service.Service
 
             MapHelper.UpdateCar(ref car, newCar);
             await _repository.SaveAsync();
+        }
+
+        public async Task<List<RentalDatesDto>> GetExcludedDatesForCarAsync(int carId)
+        {
+            var maintenanceDates = await _maintenance.GetFutureMaintenanceDatesForCarAsync(carId);
+            var carRentals = await _rentals.GetFutureRentalDatesForCarAsync(carId);
+            var dates = maintenanceDates.Select(x => new RentalDatesDto(x.DateStart, x.DateEnd));
+            var newDates = dates.Concat(carRentals);
+
+            return newDates.ToList();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace CarRent.Service.Interfaces
         Task<IEnumerable<CarImageDto>> GetCarImages(int id);
         Task<IEnumerable<Car>> GetAvailableCarsInDates(NewRentalForClient rental);
         Task<IEnumerable<CarListDto>> GetAvailableCarsWithPriceForDatesAsync(NewRentalForClient rental);
+        Task<List<RentalDatesDto>> GetExcludedDatesForCarAsync(int carId);
         Task<Car> CreateCarAsync(NewCarDto car);
         Task AddCarImg(CarImageDto img);
         Task AddToRecommendedAsync(int carId);
