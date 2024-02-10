@@ -16,6 +16,7 @@ import EditWorkerSidebar from "../../components/Workers/EditWorkerSidebar";
 import AddNewWorker from "../../components/Workers/AddNewWorker";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import DeleteWorker from "../../components/Users/DeleteWorker";
 
 function WorkersPage() {
   const [error, setError] = useState();
@@ -49,7 +50,8 @@ function WorkersPage() {
   };
 
   const onDoubleClick = (id) => {
-    setSelectedWorker(id.id);
+    console.log(id);
+    setSelectedWorker(id);
     setIsEditMode(true);
   };
 
@@ -67,6 +69,12 @@ function WorkersPage() {
     const newWorkerList = [worker, ...workerList];
     setWorkerList(newWorkerList);
     onDoubleClick(worker);
+  };
+
+  const onDeleteWorker = () => {
+    setIsEditMode(false);
+    setSelectedWorker("");
+    getWorkers();
   };
 
   if (error) {
@@ -129,14 +137,33 @@ function WorkersPage() {
           </Col>
           <Col md="6">
             {isEditMode && selectedWorker && (
-              <Tabs>
-                <Tab eventKey="pe" title="Uprawnienia">
-                  <Permissions workerId={selectedWorker} />
-                </Tab>
-                <Tab eventKey="sidebar" title="Meu boczne">
-                  <EditWorkerSidebar workerId={selectedWorker} />
-                </Tab>
-              </Tabs>
+              <Card>
+                <Card.Header>
+                  <h5>
+                    {selectedWorker.firstName} {selectedWorker.lastName}
+                  </h5>
+                </Card.Header>
+                <Card.Body>
+                  <Row>
+                    <Col>
+                      <Tabs>
+                        <Tab eventKey="pe" title="Uprawnienia">
+                          <Permissions workerId={selectedWorker.id} />
+                        </Tab>
+                        <Tab eventKey="sidebar" title="Meu boczne">
+                          <EditWorkerSidebar workerId={selectedWorker.id} />
+                        </Tab>
+                        <Tab eventKey="delete" title="Usuwanie">
+                          <DeleteWorker
+                            onDelete={onDeleteWorker}
+                            workerId={selectedWorker.id}
+                          />
+                        </Tab>
+                      </Tabs>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
             )}
             {!isEditMode && <AddNewWorker onAdd={workerAdded} />}
           </Col>
@@ -146,11 +173,3 @@ function WorkersPage() {
   );
 }
 export default WorkersPage;
-
-/* <CarInfoTable
-        thead={["Imie", "Nazwisko", "email", "Actions"]}
-        items={workerList}
-        item={["firstName", "lastName", "email"]}
-        searchTerm={searchTerm}
-        onDoubleClick={onDoubleClick}
-      /> */

@@ -263,7 +263,7 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpDelete("deleteWorker/{id}")]
+        [HttpDelete("deleteWorker/{workerId}")]
         public async Task<IActionResult> DeleteUser(string workerId)
         {
             await _services.UsersService.DeleteWorker(workerId);

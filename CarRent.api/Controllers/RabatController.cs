@@ -1,7 +1,9 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -9,9 +11,12 @@ namespace CarRent.api.Controllers
     [Route("[controller]")]
     public class RabatController : BaseController
     {
-        public RabatController(IServiceManager serviceManager) 
+        private readonly UserManager<User> _userManager;
+
+        public RabatController(IServiceManager serviceManager, UserManager<User> userManager) 
             : base(serviceManager)
         {
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "Administrator,Worker")]
@@ -19,6 +24,22 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetUserRabat(string userId)
         {
             var list = await _services.RabatService.GetUserRabats(userId);
+            return Ok(list);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("myRabats")]
+        public async Task<IActionResult> GetUserRabat()
+        {
+            var username = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var list = await _services.RabatService.GetUserRabats(user.Id);
             return Ok(list);
         }
 
