@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 async function refreshToken() {
   console.log("try to refresh");
@@ -79,7 +80,6 @@ jwtInterceptor.interceptors.response.use(
     }
     if (error.response.status === 403 && !originalRequest._retry) {
       toast.error("brak uprawnień");
-      console.log("brak uprawnień");
     }
     return Promise.reject(error);
   }

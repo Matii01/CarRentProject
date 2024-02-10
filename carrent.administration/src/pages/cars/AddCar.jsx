@@ -14,6 +14,7 @@ import { storage } from "./../../hooks/useFirebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import { useSelector } from "react-redux";
 
 const initialState = {
   Name: "",
@@ -47,6 +48,7 @@ function AddCar() {
   const [error, setError] = useState(false);
   const [imageUpload, setImageUpload] = useState(null);
   const [additionalImg, setAdditionalImg] = useState([]);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -145,9 +147,14 @@ function AddCar() {
     }));
   };
 
+  if (!(roles.includes("Administrator") || roles.includes("CarAdd"))) {
+    return <p>Brak uprawnień</p>;
+  }
+
   if (loading) {
     return <p>Loading ... </p>;
   }
+
   if (error) {
     return <p>error</p>;
   }

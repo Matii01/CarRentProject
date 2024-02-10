@@ -10,12 +10,14 @@ import { ToastContainer, toast } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import AddCarEquipment from "../../components/CarEquipment/AddCarEquipment";
 import EditCarEquipment from "../../components/CarEquipment/EditCarEquipment";
+import { useSelector } from "react-redux";
 
 function CarEquipment() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedEquipment, setSelectedEquipment] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -87,6 +89,12 @@ function CarEquipment() {
         console.log(error);
       });
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!equipmentList) {
     return <p>Loading ...</p>;

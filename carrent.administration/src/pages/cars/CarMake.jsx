@@ -7,6 +7,7 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
@@ -14,6 +15,7 @@ function CarMakes() {
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedMake, setSelectedMake] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -102,6 +104,12 @@ function CarMakes() {
         console.log(error);
       });
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   return (
     <>

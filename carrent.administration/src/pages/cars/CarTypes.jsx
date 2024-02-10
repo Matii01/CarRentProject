@@ -5,6 +5,7 @@ import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { useSelector } from "react-redux";
 
 const initialState = {
   newCarType: { id: 0, name: "" },
@@ -63,6 +64,7 @@ function CarTypes() {
   const [state, dispatch] = useReducer(carTypeReducer, initialState);
   const [searchTerm, setSerachTerm] = useState("");
   const [selected, setSelected] = useState();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     getData();
@@ -231,6 +233,12 @@ function CarTypes() {
         toast.error("Błąd");
       });
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (state.loading) {
     return <p>Lodaing</p>;

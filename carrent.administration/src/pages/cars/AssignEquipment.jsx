@@ -5,12 +5,14 @@ import MyTableWithPagination from "../../components/Table/MyTableWithPagination"
 import MyTable from "../../components/Table/MyTable";
 import { useParams } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function AssignEquipment() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [carEquipment, setCarEquipment] = useState([]);
   const param = useParams();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     getEquipmentList();
@@ -96,6 +98,10 @@ function AssignEquipment() {
         console.log(error);
       });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("CarEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   return (
     <>

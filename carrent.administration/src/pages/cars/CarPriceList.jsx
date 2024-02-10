@@ -6,12 +6,13 @@ import EditPriceList from "../../components/Pricelist/EditPriceList";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function CarPriceList() {
   const [priceList, setPriceList] = useState([]);
   const [selectedPricelist, setSelectedPricelist] = useState(null);
   const param = useParams();
-
+  const roles = useSelector((state) => state.user.role);
   useEffect(() => {
     getPriceLists();
   }, []);
@@ -60,6 +61,10 @@ function CarPriceList() {
         console.log(error);
       });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("PriceListEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!priceList) {
     return <p>Loading ... </p>;

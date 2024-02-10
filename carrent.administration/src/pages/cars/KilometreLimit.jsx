@@ -7,12 +7,14 @@ import AddKilometreLimit from "../../components/KilometreLimit/AddKilometreLimit
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function KilometreLimit() {
   const [items, setItems] = useState();
   const [searchTerm, setSerachTerm] = useState("");
   const [isEditMode, setIEditMode] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     getData();
@@ -68,6 +70,12 @@ function KilometreLimit() {
     setItems(newItems);
     toast.success("Zapisano zmiany");
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (items == null) {
     return <p>Loading ... </p>;

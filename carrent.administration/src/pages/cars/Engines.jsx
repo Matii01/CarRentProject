@@ -6,6 +6,7 @@ import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const initialState = {
   newEngine: { id: 0, name: "" },
@@ -64,6 +65,7 @@ function Engines() {
   const [state, dispatch] = useReducer(enginesReducer, initialState);
   const [serachTerm, setSerachTerm] = useState("");
   const [selected, setSelected] = useState();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     getData();
@@ -238,6 +240,12 @@ function Engines() {
         toast.error("Błąd");
       });
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (state.loading) {
     return <p>Lodaing</p>;

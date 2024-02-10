@@ -3,6 +3,7 @@ import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import EditFooterLinks from "./EditFooterLinks";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function EditFooter() {
   const [validated, setValidated] = useState(false);
@@ -19,6 +20,7 @@ function EditFooter() {
     tikTokLink: "",
     links: [],
   });
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -86,6 +88,10 @@ function EditFooter() {
         console.log(error);
       });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("PageEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   return (
     <>

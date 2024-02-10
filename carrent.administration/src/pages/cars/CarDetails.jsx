@@ -19,6 +19,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { useSelector } from "react-redux";
 
 function CarDetails() {
   const initialState = {
@@ -53,6 +54,7 @@ function CarDetails() {
   const [carInfo, setCarInfo] = useState();
   const [isRecommended, setIsRecommended] = useState(false);
   const param = useParams();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     fetchCarInfo();
@@ -272,6 +274,10 @@ function CarDetails() {
       });
     });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("CarEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!carInfo || !car) {
     return <p>Loading ...</p>;

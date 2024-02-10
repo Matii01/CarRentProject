@@ -5,11 +5,13 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import ManageUser from "../../components/Users/ManageUser";
 import { ToastContainer } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { useSelector } from "react-redux";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -38,6 +40,10 @@ function UsersPage() {
     console.log(item);
     setSelectedUser(item);
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("UserViewer"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!usersList) {
     return <p>Loading ... </p>;
