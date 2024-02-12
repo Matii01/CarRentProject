@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 import axiosInstance from "../../utils/axiosConfig";
 
 function LoginPage() {
+  const [error, setError] = useState();
   const [loginForm, setLoginForm] = useState({
-    username: "ATestowy",
+    username: "dad4@op.pl",
     password: "Pa$$w0rd",
   });
   const [setLocalStorage] = SetLocalStorage();
@@ -33,7 +34,7 @@ function LoginPage() {
         navigate("/car/cars");
       })
       .catch((error) => {
-        console.log(error);
+        setError("Incorrect login or password");
       });
   };
 
@@ -52,6 +53,7 @@ function LoginPage() {
       ...prevState,
       [name]: value,
     }));
+    setError("");
   };
 
   const goToRegister = () => {
@@ -107,6 +109,9 @@ function LoginPage() {
                     Create account
                   </Button>
                 </Col>
+              </Row>
+              <Row className="text-center p-3 text-danger fs-5">
+                {error && <p>{error}</p>}
               </Row>
             </Form>
           </Col>
