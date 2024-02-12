@@ -126,6 +126,7 @@ namespace CarRent.Repository
        
         public DbSet<NewsletterSubscriber> NewsletterSubscriber { get; set; }
         public DbSet<SendHistory> SendHistory { get; set; }
+        public DbSet<Message> Message { get; set; }
 
     }
 }

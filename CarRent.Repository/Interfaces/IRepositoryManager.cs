@@ -86,7 +86,10 @@ namespace CarRent.Repository.Interfaces
         // newsletter
         IGenericRepository<NewsletterSubscriber> NewsletterSubscriber { get; }
         IGenericRepository<SendHistory> SendHistory { get; }
-        
+
+        IGenericRepository<Message> Message { get; }
+
+
         Task SaveAsync();
     }
 }

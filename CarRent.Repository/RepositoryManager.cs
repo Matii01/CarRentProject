@@ -85,6 +85,7 @@ namespace CarRent.Repository
 
         private readonly Lazy<IGenericRepository<NewsletterSubscriber>> _newsletterSubscriberRepository;
         private readonly Lazy<IGenericRepository<SendHistory>> _sendHistoryRepository;
+        private readonly Lazy<IGenericRepository<Message>> _messageRepository;
 
         public RepositoryManager(CarRentContext context)
         {
@@ -250,6 +251,9 @@ namespace CarRent.Repository
 
             _sendHistoryRepository = new Lazy<IGenericRepository<SendHistory>>(() =>
                 new GenericRepository<SendHistory>(_context));
+
+            _messageRepository= new Lazy<IGenericRepository<Message>>(()=>
+                new GenericRepository<Message>(_context));
         }
 
 
@@ -307,6 +311,7 @@ namespace CarRent.Repository
         public IGenericRepository<ApplicationSettings> ApplicationSettings => _applicationSettingsRepository.Value;
         public IGenericRepository<NewsletterSubscriber> NewsletterSubscriber => _newsletterSubscriberRepository.Value;
         public IGenericRepository<SendHistory> SendHistory => _sendHistoryRepository.Value;
+        public IGenericRepository<Message> Message => _messageRepository.Value;
 
         public async Task SaveAsync()
         {

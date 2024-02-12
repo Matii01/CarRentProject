@@ -23,12 +23,15 @@ import styles from "./Sidebar.module.css";
 import DropdownList from "./DropDownList";
 
 function Sidebar({ hide, toggleSidebar, color, image, routes }) {
-  const analyses = [
-    { name: "Samochodów", path: "analyses/car" },
-    { name: "Klientów", path: "analyses/users" },
+  const rentals = [
+    { name: "Zamówienia", path: "/rentals" },
+    { name: "Opinie", path: "/opinion" },
+    { name: "Zlecenia", path: "/workOrder" },
+    { name: "O firmie", path: "/company" },
+    { name: "Newsletter", path: "/newsletter" },
+    { name: "Raporty", path: "/report" },
+    { name: "Wiadomości", path: "/messages" },
   ];
-
-  // { name: "Menu", path: "" },
   const pages = [
     { name: "Strona Główna", path: "/cms/home" },
     { name: "Footer", path: "/cms/footer" },
@@ -46,21 +49,10 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
     { name: "Klimatyzacje", path: "/cars/AirConditioning" },
     { name: "Limity kilometrów", path: "/cars/limits" },
   ];
-
   const usersPages = [
     { name: "Użytkownicy", path: "/users/users" },
     { name: "Pracownicy", path: "/users/workers" },
   ];
-
-  const rentals = [
-    { name: "Zamówienia", path: "/rentals" },
-    { name: "Opinie", path: "/opinion" },
-    { name: "Zlecenia", path: "/workOrder" },
-    { name: "O firmie", path: "/company" },
-    { name: "Newsletter", path: "/newsletter" },
-    { name: "Raporty", path: "/report" },
-  ];
-
   const managment = [
     { name: "Statusy Wypozyczeń", path: "/rental/status" },
     { name: "Statusy Faktur", path: "/invoice/status" },
@@ -104,13 +96,6 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
               false ? "active active-pro" : activeRoute("admin/upgrade")
             }
           ></li>
-          {/* <li>
-            <DropdownList
-              title="analizy"
-              icon="nc-icon nc-alien-33"
-              pages={analyses}
-            />
-          </li> */}
           <li>
             <DropdownList
               title="Firma"

@@ -184,6 +184,14 @@ function EditWorkerSidebar({ workerId }) {
                     .children.find((i) => i.name == "Raporty")}
                   onChange={handleCheckboxChange}
                 />
+                <EditSidebarCheckbox
+                  name="Wiadomości"
+                  mainCategory="Firma"
+                  item={allPages
+                    .find((i) => i.title === "Firma")
+                    .children.find((i) => i.name == "Wiadomości")}
+                  onChange={handleCheckboxChange}
+                />
               </Accordion.Body>
             </Accordion>
           </Row>
@@ -480,6 +488,7 @@ const genereateNew = [
       { name: "O firmie", path: "/company", isActive: false },
       { name: "Newsletter", path: "/newsletter", isActive: false },
       { name: "Raporty", path: "/report", isActive: false },
+      { name: "Wiadomości", path: "/messages", isActive: false },
     ],
   },
   {

@@ -4,6 +4,7 @@ using CarRent.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Repository.Migrations
 {
     [DbContext(typeof(CarRentContext))]
-    partial class CarRentContextModelSnapshot : ModelSnapshot
+    [Migration("20240212175536_AddedMessageTable")]
+    partial class AddedMessageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1213,9 +1216,6 @@ namespace CarRent.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WhoAnswerId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WhoAnswerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

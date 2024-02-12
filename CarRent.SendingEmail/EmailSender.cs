@@ -47,6 +47,12 @@ namespace CarRent.SendingEmail
             }
         }
 
+        public void SendAnswerMessage(string email, string title, string message)
+        {
+            var answer = new Message(new string[] { $"{email}" }, title, message);
+            SendEmail(answer);
+        }
+
         private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
