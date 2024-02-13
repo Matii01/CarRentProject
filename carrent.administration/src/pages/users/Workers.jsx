@@ -17,6 +17,7 @@ import AddNewWorker from "../../components/Workers/AddNewWorker";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
 import DeleteWorker from "../../components/Users/DeleteWorker";
+import { useSelector } from "react-redux";
 
 function WorkersPage() {
   const [error, setError] = useState();
@@ -24,6 +25,7 @@ function WorkersPage() {
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,6 +78,10 @@ function WorkersPage() {
     setSelectedWorker("");
     getWorkers();
   };
+
+  if (!roles.includes("Administrator")) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (error) {
     return <p>{error}</p>;

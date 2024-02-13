@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 function AnswerMessage({ id, onSend, onCancel }) {
   const [answer, setAnswer] = useState({ Title: "", AnswerText: "" });
+  const [isLoading, setIsloading] = useState(false);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -13,9 +15,10 @@ function AnswerMessage({ id, onSend, onCancel }) {
     }));
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(answer);
+    setIsloading(true);
+
     jwtInterceptor
       .post(`Messages/AnswerMessage/${id}`, JSON.stringify(answer), {
         headers: {
@@ -23,8 +26,9 @@ function AnswerMessage({ id, onSend, onCancel }) {
         },
       })
       .then((data) => {
-        console.log(data.data);
+        setIsloading(false);
         onSend(data.data);
+        console.log(data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -32,44 +36,55 @@ function AnswerMessage({ id, onSend, onCancel }) {
   };
 
   return (
-    <Card>
-      <Card.Header>
-        <Row>
-          <Col className="d-flex justify-content-end">
-            <Button size="sm" variant="dark" onClick={onCancel}>
-              Anuluj
-            </Button>
-          </Col>
-        </Row>
-      </Card.Header>
-      <Card.Body>
-        <Form onSubmit={onSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Tytuł</Form.Label>
-            <Form.Control
-              type="text"
-              name="Title"
-              value={answer.Title}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Odpowieź</Form.Label>
-            <Form.Control
-              as={"textarea"}
-              style={{ height: "150px" }}
-              name="AnswerText"
-              value={answer.AnswerText}
-              onChange={handleChange}
-            />
-          </Form.Group>
+    <>
+      {isLoading && (
+        <Card>
+          <LoadingSpinner />
+        </Card>
+      )}
+      {!isLoading && (
+        <Card>
+          <Card.Header>
+            <Row>
+              <Col className="d-flex justify-content-end">
+                <Button size="sm" variant="dark" onClick={onCancel}>
+                  Anuluj
+                </Button>
+              </Col>
+            </Row>
+          </Card.Header>
+          <Card.Body>
+            <Form onSubmit={onSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Tytuł</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  name="Title"
+                  value={answer.Title}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Treść</Form.Label>
+                <Form.Control
+                  required
+                  as={"textarea"}
+                  style={{ height: "150px" }}
+                  name="AnswerText"
+                  value={answer.AnswerText}
+                  onChange={handleChange}
+                />
+              </Form.Group>
 
-          <Button variant="dark" type="submit">
-            Wyślij
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+              <Button variant="dark" type="submit">
+                Wyślij
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      )}
+    </>
   );
 }
 

@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import { formatDate } from "../../utils/formDate";
 import jwtInterceptor from "../../utils/jwtInterceptor";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import TableWithPagination from "../../components/Table/TableWithPagination";
 import ManageMessage from "../../components/Message/ManageMessage";
+import MessageFiltrs from "../../components/Message/MessageFiltrs";
 
 function MessagesPage() {
   const [metaData, setMetaData] = useState([]);
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState();
+  const [showFiltrs, setShowFiltrs] = useState(false);
   const [filtrs, setFiltrs] = useState({
     PageNumber: 1,
     PageSize: 10,
@@ -41,6 +43,7 @@ function MessagesPage() {
   };
 
   const getFilteredItems = () => {
+    setSelectedItem(null);
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
       .get(`Messages/getMessages?${queryString}`)
@@ -74,11 +77,62 @@ function MessagesPage() {
     setSelectedItem(item);
   };
 
+  const refreshView = (it) => {
+    const transformed = {
+      ...it,
+      createdDate: formatDate(it.createdDate),
+      answeredDate: it.answeredDate === null ? "" : formatDate(it.answeredDate),
+      isAnswered: it.isAnswered === true ? "tak" : "nie",
+      whoAnswerId: it.whoAnswer === null ? " " : it.whoAnswer,
+    };
+    const transformedList = items.map((item) => {
+      if (item.id == transformed.id) {
+        return transformed;
+      }
+      return item;
+    });
+    setSelectedItem(transformed);
+    setItems(transformedList);
+  };
+
   return (
     <Row>
       <Col>
         <Card>
-          <Card.Header>Wiadomości</Card.Header>
+          <Card.Header>
+            <Row>
+              <Col>Wiadomości</Col>
+              <Col className="d-flex justify-content-end">
+                {!showFiltrs && (
+                  <Button
+                    variant="dark"
+                    size="sm"
+                    onClick={() => setShowFiltrs(true)}
+                  >
+                    Pokaż filtry
+                  </Button>
+                )}
+                {showFiltrs && (
+                  <Button
+                    variant="dark"
+                    size="sm"
+                    onClick={() => setShowFiltrs(false)}
+                  >
+                    Ukryj filtry
+                  </Button>
+                )}
+              </Col>
+            </Row>
+          </Card.Header>
+          <Card.Body>
+            {showFiltrs && (
+              <MessageFiltrs
+                onSubmit={getFilteredItems}
+                filtrs={filtrs}
+                setFiltrs={setFiltrs}
+              />
+            )}
+          </Card.Body>
           <Card.Body>
             <TableWithPagination
               thead={["ID", "Imie", "Email", "Data dodania", "Odpowiedziano"]}
@@ -93,7 +147,11 @@ function MessagesPage() {
           </Card.Body>
         </Card>
       </Col>
-      <Col>{selectedItem && <ManageMessage message={selectedItem} />}</Col>
+      <Col>
+        {selectedItem && (
+          <ManageMessage message={selectedItem} onSubmit={refreshView} />
+        )}
+      </Col>
     </Row>
   );
 }

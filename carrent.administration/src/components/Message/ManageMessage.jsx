@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
 import AnswerMessage from "./AnswerMessage";
 
-function ManageMessage({ message }) {
+function ManageMessage({ message, onSubmit }) {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleSubmit = (event) => {
@@ -10,7 +10,10 @@ function ManageMessage({ message }) {
     setShowAnswer(true);
   };
 
-  const onSend = (item) => {};
+  const onSend = (item) => {
+    onSubmit(item);
+    setShowAnswer(false);
+  };
 
   const handleChange = () => {};
 
@@ -58,14 +61,6 @@ function ManageMessage({ message }) {
                 </Form.Group>
               </Row>
 
-              <Form.Group className="mb-3" controlId="formGridAddress1">
-                <Form.Label>Kto odpowiedział</Form.Label>
-                <Form.Control
-                  value={message.whoAnswerId}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
               <Form.Group className="mb-3" controlId="formGridAddress2">
                 <Form.Label>Wiadomość</Form.Label>
                 <Form.Control
@@ -75,10 +70,32 @@ function ManageMessage({ message }) {
                   onChange={handleChange}
                 />
               </Form.Group>
-              {message.isAnswered && (
+
+              {message.isAnswered === "tak" && (
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Kto odpowiedział</Form.Label>
+                  <Form.Control
+                    value={message.whoAnswerId}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              )}
+              {message.isAnswered === "tak" && (
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Odpowiedź</Form.Label>
+                  <Form.Control
+                    as={"textarea"}
+                    style={{ height: "150px" }}
+                    value={message.answerText}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              )}
+
+              {message.isAnswered === "tak" && (
                 <Button variant="dark">Odpowiedź została już wysłana</Button>
               )}
-              {!showAnswer && !message.isAnswered && (
+              {!showAnswer && message.isAnswered === "nie" && (
                 <Button variant="dark" type="submit">
                   Odpowiedź
                 </Button>
