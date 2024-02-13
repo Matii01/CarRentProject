@@ -163,10 +163,14 @@ namespace CarRent.Service.Service
                 .ToArrayAsync();
 
 
-            var usersInRole = await _userManager.GetUsersInRoleAsync("Worker");
+            var usersInRole = await _userManager
+                .GetUsersInRoleAsync("Worker");
+
 
             return new DataForWorkOrderFilters(statuses, priorities,
-                usersInRole.Select(x => new WorkersForWorkOrder(x.Id, $"{x.FirstName} {x.LastName}")));
+                usersInRole
+                .Where(x=>x.IsActive == true)
+                .Select(x => new WorkersForWorkOrder(x.Id, $"{x.FirstName} {x.LastName}")));
         }
         
         public async Task UpdateWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder)
