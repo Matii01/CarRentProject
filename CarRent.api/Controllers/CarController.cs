@@ -23,11 +23,6 @@ namespace CarRent.api.Controllers
         {
             var list = await _services.CarService.GetCarListForClientAsync(parameters, false);
 
-            if (list.Items.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
             return Ok(list);
         }
 
@@ -36,11 +31,6 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCars([FromQuery] CarParameters parameters)
         {
             var list = await _services.CarService.GetCarsForWorkerAsync(parameters, false);
-
-            if (list.Items.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
 
             return Ok(list);
         }
@@ -208,10 +198,11 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,CarEditor")]
-        [HttpDelete("delete")]
-        public Task<IActionResult> DeleteCar(int id)
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteCar(int id)
         {
-            throw new NotImplementedException();
+            await _services.CarService.DeleteCar(id);    
+            return Ok("");
         }
 
         /// <summary>

@@ -173,7 +173,7 @@ function AddCar() {
                 <Row className={rowClasses}>
                   <Col xs={12} sm={6}>
                     <Form.Group controlId="carName">
-                      <Form.Label>Name</Form.Label>
+                      <Form.Label>Nazwa</Form.Label>
                       <Form.Control
                         className="border border-dark"
                         type="text"

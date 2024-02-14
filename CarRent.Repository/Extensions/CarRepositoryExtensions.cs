@@ -29,9 +29,60 @@ namespace CarRent.Repository.Extensions
 
             if(param.CarEquipmentId?.Length > 0)
             {
-                cars = cars
-                    .Where(x =>x .CarsEquipment.Count >= param.CarEquipmentId.Length)
-                    .Where(x => x.CarsEquipment.Any(s => param.CarEquipmentId.Contains(s.Id)));
+
+                var carlist = context.Cars
+                    .Include(x => x.CarEquipmentCars);
+
+
+                List<int> query = new List<int>();
+                foreach(var car in carlist)
+                {
+                    bool add = true;
+                    foreach(var t in param.CarEquipmentId)
+                    {
+                        if (!car.CarEquipmentCars.Select(x=>x.CarEquipmentId).Contains(t))
+                        {
+                            add = false;
+                        }
+                    }
+                    if (add)
+                    {
+                        query.Add(car.Id);
+                    }
+                    add = true;
+                }
+
+                cars = cars.Where(x => query.Contains(x.Id));
+
+                //cars = cars
+                //    .Where(
+                //        x => x.CarEquipmentCars
+                //        .Any(s => param.CarEquipmentId
+                //        .Contains(s.CarEquipmentId) &&
+                //        x.CarEquipmentCars.Where(x => x.IsActive == true)
+                //        .Count() >= param.CarEquipmentId.Length));
+
+
+                //.Where(x => x.CarEquipmentCars
+                //.Where(x => x.IsActive == true)
+                //.Select(x=>x.CarEquipment.Id)
+                //.Any(s => param.CarEquipmentId.Contains(s)));
+
+
+                //var t = cars.Select(x => x.CarEquipmentCars).ToList();
+                //foreach(var x in t)
+                //{
+                //    foreach(var y in x)
+                //    {
+                //        Console.WriteLine(y.CarEquipmentId+", ");
+                //    }
+                //}
+
+                //.Where(x => x.IsActive == true)
+
+                //.Select(x => x.CarEquipment.Id)
+                //.Any(s => param.CarEquipmentId.Contains(s)));
+
             }
             if (param.GearboxTypeId?.Length > 0)
             {

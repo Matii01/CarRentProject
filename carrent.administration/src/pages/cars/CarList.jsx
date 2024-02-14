@@ -54,6 +54,7 @@ function CarList() {
   }, []);
 
   const getFilteredCars = () => {
+    console.log(filtrs.CarEquipmentId);
     const queryString = transformObjectToQueryString(filtrs);
     jwtInterceptor
       .get(`car/workerCars?${queryString}`)

@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import {
   Badge,
@@ -53,6 +53,7 @@ function CarDetails() {
   const [car, setCar] = useState({});
   const [carInfo, setCarInfo] = useState();
   const [isRecommended, setIsRecommended] = useState(false);
+  const navigate = useNavigate();
   const param = useParams();
   const roles = useSelector((state) => state.user.role);
 
@@ -273,6 +274,17 @@ function CarDetails() {
         }));
       });
     });
+  };
+
+  const deleteCar = () => {
+    jwtInterceptor
+      .delete(`car/delete/${car.id}`)
+      .then((data) => {
+        navigate("/cars");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   if (!(roles.includes("Administrator") || roles.includes("CarEditor"))) {
@@ -735,34 +747,16 @@ function CarDetails() {
             </Card>
           </Row>
         </Row>
+        <Row>
+          <Col className="d-flex justify-content-end">
+            <Button variant="danger" onClick={deleteCar}>
+              Usuń samochód
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </>
   );
 }
 
 export default CarDetails;
-
-/*
-const setCarImage = (path) => {
-    setCar((prevState) => ({
-      ...prevState,
-      CarImage: path,
-    }));
-  };
-
-  const handleImage = async (event) => {
-    const formData = new FormData();
-    formData.append("file", event.target.files[0]);
-
-    fetchData("https://localhost:7091/car/uploadCarImage", {
-      method: "POST",
-      body: formData,
-    })
-      .then((data) => {
-        setCarImage(data.path);
-      })
-      .catch((error) => {
-        console.log("error fetching the makes: ", error);
-      });
-  }; 
-  */

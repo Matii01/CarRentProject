@@ -195,7 +195,6 @@ namespace CarRent.Service.Service
         public async Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
         {
             var currentData = DateTime.Now;
-
             var list = _repository.NewCar
                 .FindByCondition(x => x.IsActive == true && x.IsVisible == true, trackChanges)
                 .Search(_repository.Context, carParameters)
