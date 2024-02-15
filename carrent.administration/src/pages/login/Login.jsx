@@ -114,13 +114,13 @@ function Login() {
               <Button variant="dark" type="button" onClick={onLoginClick}>
                 Login
               </Button>
-              <Button
+              {/* <Button
                 variant="dark"
                 type="button"
                 onClick={onLoginAsWorkerClick}
               >
                 Login as Worker
-              </Button>
+              </Button> */}
             </Col>
             <Col className="mt-4 mb-4">
               <Card.Img src={url} />

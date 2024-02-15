@@ -21,7 +21,7 @@ namespace CarRent.api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly CarRentContext _db;
         public RentalController(IServiceManager serviceManager, CarRentContext db,
-        UserManager<User> userManager, IAboutCompanyService aboutCompanyService)
+        UserManager<User> userManager)
             : base(serviceManager)
         {
             _userManager = userManager;

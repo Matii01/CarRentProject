@@ -15,6 +15,7 @@ namespace CarRent.Service.Service
         public NotificationService(IRepositoryManager repository, IMapper mapper, IApplicationSettingsService settingsService)
             : base(repository, mapper)
         {
+            _settingsService = settingsService;
         }
 
         // Remember to check if Notification should be send
