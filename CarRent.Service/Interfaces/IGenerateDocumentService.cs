@@ -11,7 +11,7 @@ namespace CarRent.Service.Interfaces
     {
         //Dictionary<string, string> GenerateValueForDocument();
         string GetPathForExcelDocuments();
-        string GenerateInvoiceDocxDocumentAsync(NewInvoiceDto invoiceDto);
+        string GenerateInvoiceDocxDocumentAsync(NewInvoiceDto invoiceDto, AboutCompanyDto aboutCompany);
         string GenerateExcelDocument(List<InvoiceForReportDto> rows, string filePath);
         string GenerateExcelDocument(List<ForCarsReport> rows, string filePath);
         string GenerateExcelDocument(List<ForMonthReport> rows, string filePath);

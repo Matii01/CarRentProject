@@ -38,7 +38,6 @@ namespace CarRent.Repository.Repositories
                 .ThenInclude(x => x.CarMake);
 
 
-
             var transformedData = await invoice
                 .Select(x => new InvoiceWithClient(
                         x.Id,
@@ -48,6 +47,8 @@ namespace CarRent.Repository.Repositories
                         x.TotalToPay,
                         x.TotalPaid,
                         x.IsEditable,
+                        x.CreatedDate,
+                        x.PaymentDate,
                         x.Client,
                         x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
                             y.InvoiceId,
@@ -272,6 +273,8 @@ namespace CarRent.Repository.Repositories
                         invoice.TotalToPay,
                         invoice.TotalPay,
                         invoice.IsEditable,
+                        invoice.CreatedDate,
+                        invoice.PaymentDate,
                         invoice.Client as IndividualClient,
                         invoice.InvoiceItems
                     ));

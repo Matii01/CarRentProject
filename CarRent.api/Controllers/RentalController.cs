@@ -21,7 +21,7 @@ namespace CarRent.api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly CarRentContext _db;
         public RentalController(IServiceManager serviceManager, CarRentContext db,
-        UserManager<User> userManager)
+        UserManager<User> userManager, IAboutCompanyService aboutCompanyService)
             : base(serviceManager)
         {
             _userManager = userManager;
@@ -226,9 +226,10 @@ namespace CarRent.api.Controllers
         [HttpGet("generateInvoice/{rentalId:int}")]
         public async Task<IActionResult> GenerateInvoiceForRental(int rentalId)
         {
+            var aboutCompany = await _services.AboutCompanyService.GetAboutCompany();
             await Console.Out.WriteLineAsync("invoice will be generated");
             var data = await _services.RentalService.GetDataForGenerateInvoice(rentalId);
-            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data);
+            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data, aboutCompany);
 
             return Ok("");
         }
@@ -236,9 +237,9 @@ namespace CarRent.api.Controllers
         [HttpGet("getInvoiceDocument/{rentalId:int}")]
         public async Task<IActionResult> GenerateInvoice(int rentalId)
         {
-            //await Console.Out.WriteLineAsync("invoice will be generated");
+            var aboutCompany = await _services.AboutCompanyService.GetAboutCompany();
             var data = await _services.RentalService.GetDataForGenerateInvoice(rentalId);
-            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data);
+            var path = _services.GenerateDocumentService.GenerateInvoiceDocxDocumentAsync(data, aboutCompany);
 
             if (!System.IO.File.Exists(path))
             {
