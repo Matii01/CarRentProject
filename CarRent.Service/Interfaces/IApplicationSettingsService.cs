@@ -12,5 +12,8 @@ namespace CarRent.Service.Interfaces
     {
         Task<ApplicationSettingsDto> GetApplicationSettings();
         Task UpdateApplicationSettings(ApplicationSettingsDto settings);
+        Task<bool> CheckSendRabatNotificationAsync();
+        Task<bool> CheckUpdateInvoiceNotificationAsync();
+        Task<bool> CheckUpdateRentalStatusNotificationAsync();
     }
 }

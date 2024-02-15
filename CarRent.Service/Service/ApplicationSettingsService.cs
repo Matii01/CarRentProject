@@ -51,6 +51,48 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
+        public async Task<bool> CheckSendRabatNotificationAsync() 
+        {
+            var value = await _repository.ApplicationSettings
+               .FindByCondition(x => x.IsActive == true, false)
+               .Select(x => x.SendNotificationOnRentalCreate)
+               .SingleOrDefaultAsync();
+
+            if(value == null)
+            {
+                return false;
+            }
+            return value.Value;
+        }
+
+        public async Task<bool> CheckUpdateInvoiceNotificationAsync() 
+        {
+            var value = await _repository.ApplicationSettings
+               .FindByCondition(x => x.IsActive == true, false)
+               .Select(x => x.SendNotificationOnInvoiceStatusUpdate)
+               .SingleOrDefaultAsync();
+
+            if (value == null)
+            {
+                return false;
+            }
+            return value.Value;
+        }
+
+        public async Task<bool> CheckUpdateRentalStatusNotificationAsync() 
+        {
+            var value = await _repository.ApplicationSettings
+               .FindByCondition(x => x.IsActive == true, false)
+               .Select(x => x.SendNotificationOnRentalStatusUpdate)
+               .SingleOrDefaultAsync();
+
+            if (value == null)
+            {
+                return false;
+            }
+            return value.Value;
+        }
+
         private async Task<ApplicationSettingsDto> CreateApplicationSettings()
         {
             _repository.ApplicationSettings.Create(new ApplicationSettings()

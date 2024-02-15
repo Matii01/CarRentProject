@@ -102,7 +102,7 @@ namespace CarRent.Service
                  new WorkOrderService(userManager, repositoryManager, mapper));
 
             _notificationService = new Lazy<INotificationService>(() =>
-                new NotificationService(repositoryManager, mapper));
+                new NotificationService(repositoryManager, mapper, ApplicationSettingsService));
 
             _aboutCompanyService = new Lazy<IAboutCompanyService>(() =>
                 new AboutCompanyService(repositoryManager, mapper));
