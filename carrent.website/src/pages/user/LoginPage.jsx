@@ -8,8 +8,8 @@ import axiosInstance from "../../utils/axiosConfig";
 function LoginPage() {
   const [error, setError] = useState();
   const [loginForm, setLoginForm] = useState({
-    username: "dad4@op.pl",
-    password: "Pa$$w0rd",
+    username: "",
+    password: "",
   });
   const [setLocalStorage] = SetLocalStorage();
   const navigate = useNavigate();

@@ -38,13 +38,3 @@ function NotificationDetails({ item, onGoBack, onMessageRead }) {
 }
 
 export default NotificationDetails;
-
-/**
- *  int Id,
-    string? UserId,
-    string? Title,
-    string? Message,
-    DateTime? CreatedDate,
-    DateTime? ReadDate,
-    bool? IsRead  
- */

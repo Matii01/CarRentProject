@@ -83,8 +83,8 @@ function UserNotification() {
                     size="sm"
                     onClick={toggleView}
                   >
-                    {params.IsRead && "Only new"}
-                    {!params.IsRead && "All"}
+                    {params.IsRead && "New"}
+                    {!params.IsRead && "Old"}
                   </Button>
                 </Col>
               </Row>
@@ -93,9 +93,9 @@ function UserNotification() {
               <Table>
                 <thead>
                   <tr>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
+                    <th>id</th>
+                    <th>Title</th>
+                    <th>Date</th>
                   </tr>
                 </thead>
                 <tbody>
