@@ -245,7 +245,7 @@ function EditContactPage() {
                         required
                         type="text"
                         placeholder="Numer telefonu"
-                        name="phoneDetails"
+                        name="phoneNumber"
                         value={page.phoneNumber}
                         onChange={handleChange}
                       />
