@@ -18,11 +18,11 @@
 import React, { Component } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
-import { Button, Nav, NavDropdown } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import styles from "./Sidebar.module.css";
 import DropdownList from "./DropDownList";
 
-function Sidebar({ hide, toggleSidebar, color, image, routes }) {
+function Sidebar({ hide, color, image }) {
   const rentals = [
     { name: "Zamówienia", path: "/rentals" },
     { name: "Opinie", path: "/opinion" },
@@ -138,17 +138,3 @@ function Sidebar({ hide, toggleSidebar, color, image, routes }) {
 }
 
 export default Sidebar;
-
-/*
-<li
-    className={
-      true ? "active active-pro" : activeRoute("/admin/upgrade")
-    }
-  >
-    <NavLink to={"admin/upgrade"} className="nav-link">
-      {/* <i className={"prop.icon"} /> }
-
-      <p>adsa</p>
-    </NavLink>
-  </li>
-*/
