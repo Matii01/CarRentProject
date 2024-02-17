@@ -17,9 +17,11 @@ function LoginPage() {
 
   useEffect(() => {
     if (user.isLogin) {
+      console.log("is login");
       navigate("/user");
     }
-  }, []);
+    console.log("is logout");
+  }, [user]);
 
   const login = () => {
     console.log(loginForm);

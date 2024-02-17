@@ -1,12 +1,5 @@
-import { NavLink } from "react-router-dom";
-import {
-  Container,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Form,
-  Button,
-} from "react-bootstrap";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import SetLocalStorage from "../../hooks/SetLocalStorage";
 import styles from "./NavBar.module.css";
@@ -16,15 +9,17 @@ import NotificationElement from "./NotificationElement";
 function NavBar() {
   const user = useSelector((state) => state.user);
   const [a, b, logout] = SetLocalStorage();
-  const userName = user.name;
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("log out !!!!");
     logout();
+    navigate("/login");
   };
+
   useEffect(() => {
     console.log(user);
   }, [user]);
+
   return (
     <Navbar
       expand="lg"
@@ -49,18 +44,6 @@ function NavBar() {
             <Nav.Link to="/contact" as={NavLink}>
               Contact
             </Nav.Link>
-            {/* <NavDropdown title="Client" id="">
-              <NavDropdown.Item to="/car/cars" as={NavLink}>
-                Car List Client
-              </NavDropdown.Item>
-              <NavDropdown.Item to="/user" as={NavLink}>
-                User
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown> */}
           </Nav>
           <Nav>
             {!user.isLogin && (
@@ -85,16 +68,6 @@ function NavBar() {
               <Nav.Link onClick={handleLogout}>Log out</Nav.Link>
             )}
           </Nav>
-
-          {/* <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>
