@@ -1,7 +1,6 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Row, Col, Container, Form, Button, Card } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   setAccesToken,
@@ -17,8 +16,15 @@ function Login() {
     username: "JaneDoe",
     password: "Pa$$word1000",
   });
+  const userName = useSelector((state) => state.user.userName);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userName !== "") {
+      navigate("/");
+    }
+  }, [userName]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -26,30 +32,6 @@ function Login() {
       ...prevState,
       [name]: value,
     }));
-  };
-
-  const onLoginAsWorkerClick = () => {
-    jwtInterceptor
-      .post(
-        `authentication/login`,
-        JSON.stringify({
-          username: "ANijaka",
-          password: "Pa$$word1000",
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((data) => {
-        console.log(data);
-        setData(data.data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const onLoginClick = () => {
@@ -82,7 +64,6 @@ function Login() {
   const url =
     "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
 
-  //#f7f7f8
   return (
     <div style={{ width: "100%", height: "100vh", backgroundColor: "#f7f7f8" }}>
       <Container
@@ -114,13 +95,6 @@ function Login() {
               <Button variant="dark" type="button" onClick={onLoginClick}>
                 Login
               </Button>
-              {/* <Button
-                variant="dark"
-                type="button"
-                onClick={onLoginAsWorkerClick}
-              >
-                Login as Worker
-              </Button> */}
             </Col>
             <Col className="mt-4 mb-4">
               <Card.Img src={url} />
