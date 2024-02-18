@@ -13,15 +13,16 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 function Login() {
   const dispatch = useDispatch();
   const [loginForm, setLoginForm] = useState({
-    username: "JaneDoe",
-    password: "Pa$$word1000",
+    username: "",
+    password: "",
   });
   const userName = useSelector((state) => state.user.userName);
+  const roles = useSelector((state) => state.user.role);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userName !== "") {
+    if (userName !== "" && !roles.includes("User")) {
       navigate("/");
     }
   }, [userName]);

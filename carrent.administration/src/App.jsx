@@ -23,13 +23,19 @@ function App() {
   const image = sidebarImage;
   const mainPanel = React.useRef(null);
   const user = useSelector((state) => state.user);
+  const roles = useSelector((state) => state.user.role);
   const isAdmin = user.role.includes("Administrator");
   const isWorker = user.role.includes("Worker");
 
   useRefreshToken();
 
   useEffect(() => {
-    if (location.pathname === "/" && !isAdmin && !isWorker) {
+    if (
+      location.pathname === "/" &&
+      !isAdmin &&
+      !isWorker &&
+      !roles.includes("User")
+    ) {
       navigate("/login");
     }
   }, []);
