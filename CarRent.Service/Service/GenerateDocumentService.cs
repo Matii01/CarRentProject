@@ -14,16 +14,12 @@ namespace CarRent.Service.Service
         {
             if (invoiceDto.IsIndividual && invoiceDto.InvoiceIndividual != null)
             {
-                //string directory = AppDomain.CurrentDomain.BaseDirectory;
-                //Console.WriteLine("Executable Directory: " + directory);
-
-                string filePath = @"C:\Users\msi\Desktop\faktura.docx"; // Path to your source Word document
-                string outputFile = @"C:\Users\msi\Desktop\faktura1.docx"; // Path to save the modified Word document
+                string inputFile = GetPathForDocInvoiceTemplateFile();
+                string outputFile = GetPathForDocInvoiceResultFile();
 
                 var item = GenerateValueForIndividualClientDocument(invoiceDto.InvoiceIndividual, aboutCompany);
-                var templatePath = GetPathForDocInvoiceTemplateFile();
 
-                GenerateDocumentFromTemplate(filePath, outputFile, item);
+                GenerateDocumentFromTemplate(inputFile, outputFile, item);
 
 
                 return outputFile;
@@ -88,7 +84,6 @@ namespace CarRent.Service.Service
 
             string[] headers = new string[] { "ID", "Klient", "Zapłacono", "Do zapłaty", "Data powstania", "Data płatności" };
 
-            // insert headers into the first row
             for(int i = 0; i < headers.Length; i++)
             {
                 sheet.Range[1, i+1].Text = headers[i];
@@ -149,7 +144,6 @@ namespace CarRent.Service.Service
                 sheet.Range[i + 2, 4].NumberValue = (double)invoice.Amount;
             }
 
-            //filePath = @"C:\Users\msi\Desktop\MonthReport.xlsx";
             var excelPath = GetPathForExcelDocuments();
             filePath = $@"{excelPath}\MonthReport.xlsx";
 
@@ -182,13 +176,17 @@ namespace CarRent.Service.Service
 
         private string GetPathForDocInvoiceTemplateFile()
         {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string solutionFolder = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.FullName;
+
+            Console.WriteLine("Solution Folder: " + solutionFolder);
             try
             {
                 string currentDirectory = Directory.GetCurrentDirectory();
                 string parentDirectory = Directory.GetParent(currentDirectory).FullName;
                 string templateFile = Path.Combine(parentDirectory, "documentTemplates");
                 string filePath = Path.Combine(templateFile, "faktura.docx");
-                
+                Console.WriteLine(filePath);
                 return filePath;
             }
             catch (Exception ex)
