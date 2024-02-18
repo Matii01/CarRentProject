@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace CarRent.Repository.Repositories
 {
 
-    // ToDo delete all ToAsync method 
     public class GenericRepository<T> : RepositoryBase<T>, IGenericRepository<T> where T : BaseDictionaryModel
     {
         public GenericRepository(CarRentContext context) : base(context)
@@ -56,25 +55,6 @@ namespace CarRent.Repository.Repositories
         {
             return FindByCondition(x => x.Id == id, trackChanges);
         }
-
-        //public async Task DeleteAsync(int id)
-        //{
-        //
-        //}
     }
 }
 
-
-/*
-  public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges)
-        {
-            var query = All(trackChanges);
-
-            if (!string.IsNullOrEmpty(typeof(T).GetProperty(typeof(T).BaseType.GetProperty("SortBy").GetValue(null).ToString())))
-            {
-                query = query.OrderBy(x => x.GetType().GetProperty(typeof(T).GetProperty("SortBy").GetValue(null).ToString()).GetValue(x));
-            }
-
-            return await query.ToListAsync();
-        }
- */

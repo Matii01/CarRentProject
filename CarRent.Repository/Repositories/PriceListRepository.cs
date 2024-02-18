@@ -85,17 +85,6 @@ namespace CarRent.Repository.Repositories
         public IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges)
         {
             throw new NotImplementedException();
-
-            //DateTime dateTime = DateTime.Now;
-
-            //var priceList = FindByCondition(
-            //        x => x.CarId == carId &&
-            //        x.IsActive == true &&
-            //        x.DateFrom <= dateTime &&
-            //        x.DateTo >= dateTime
-            //        , trackChanges);
-
-            //return priceList;
         }
     }
 }

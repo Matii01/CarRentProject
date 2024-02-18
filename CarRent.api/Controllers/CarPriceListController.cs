@@ -48,10 +48,6 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .GetPricelistItems(priceListId);
 
-            //if (result.IsNullOrEmpty())
-            //{
-            //    return NotFound();
-            //}
 
             return Ok(result);
         }
@@ -127,14 +123,6 @@ namespace CarRent.api.Controllers
 
             return Ok();
         }
-
-        //[HttpPut("updatePricelistDate/{id:int}")]
-        //public async Task<IActionResult> UpdatePricelistDate(int id, [FromBody] PricelistItemDto priceList)
-        //{
-
-        //    return Ok();
-        //}
-
 
         [HttpPost("priceForDates/{carId:int}")]
         public async Task<IActionResult> CalculatePrice ([FromBody] NewRentalForClient rental)

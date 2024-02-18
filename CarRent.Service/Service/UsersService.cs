@@ -38,8 +38,6 @@ namespace CarRent.Service.Service
                 ?? throw new Exception("not found");
 
             return user;
-
-            //await _userManager.UpdateAsync(user);
         }
 
         public async Task DeleteWorker(string id)
@@ -76,9 +74,6 @@ namespace CarRent.Service.Service
 
             var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
             
-            //var users = usersInRole.ToUserPageList();
-            //var pagedList = await PagedList<User>.ToPagedList(usersInRole, 1, 1);
-
             return usersInRole.Where(x => x.IsActive == true).ToList();
         }
     }

@@ -106,18 +106,3 @@ namespace CarRent.Service.Service
     }
 }
 
-
-/*
- WorkerPaths workerPath = new()
-    {
-        Title = sidebar.Title,
-        Icon = sidebar.Icon,
-        IsActive = sidebar.IsActive,
-        Paths = sidebar.Children.Select(x => new PathItem
-        {
-            Name = x.Name,
-            Path = x.Path,
-            IsActive = x.IsActive,
-        }).ToList(),
-    };
- */

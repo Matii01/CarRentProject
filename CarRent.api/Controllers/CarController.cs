@@ -205,11 +205,7 @@ namespace CarRent.api.Controllers
             return Ok("");
         }
 
-        /// <summary>
-        /// Store file in folder and return path to stored file
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        
         [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPost("uploadCarImage")]
         public async Task<IActionResult> UploadCarImage([FromForm] IFormFile file)
@@ -219,7 +215,6 @@ namespace CarRent.api.Controllers
                 return BadRequest("No file is uploaded.");
             }
 
-            //var path = "C:\\Users\\msi\\source\\repos\\Project\\CarRentProject\\CarRent.websiteTs\\public";
             var newPath = "D:\\React\\Tests\\react-app-test\\public";
             var targetDirectory = Path.Combine(newPath, "CarImages");
             var filePath = Path.Combine(targetDirectory, file.FileName);

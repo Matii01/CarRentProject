@@ -42,7 +42,6 @@ namespace CarRent.api.Controllers
             return Ok(list);
         }
 
-        //[HttpGet("details/{id:int}")]
         [HttpGet("rentalDetail/{paymentId}")]
         public async Task<IActionResult> GetRentalDetailsByPaymentId(string paymentId)
         {
@@ -170,8 +169,6 @@ namespace CarRent.api.Controllers
         [HttpPost("UpdateRentalStatus/{rentalId:int}")]
         public async Task<IActionResult> UpdateRentalStatus(int rentalId, [FromBody] UpdateRentalStatusDto statusDto )
         {
-            // To do send notification
-
             await _services.RentalService.UpdateRentalStatusAsync(rentalId, statusDto);
             return Ok("");
         }
@@ -180,7 +177,6 @@ namespace CarRent.api.Controllers
         [HttpPost("UpdateInvoiceStatus/{invoiceId:int}")]
         public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceDto statusDto)
         {
-            // To do send notification
             await Console.Out.WriteLineAsync("Update invoice");
             await _services.RentalService.UpdateInvoiceAsync(invoiceId, statusDto);
             return Ok("");
@@ -191,36 +187,8 @@ namespace CarRent.api.Controllers
         [HttpPost("replaceCar")]
         public async Task<IActionResult> ChangeRentalCar([FromBody] ChangeRentedCar newData)
         {
-            // new CarId, RentalId, Remark 
-            // Should first check if new car is available and only if it is, change car 
-            //_services.RentalService.ChangeCar
-
             await _services.RentalService.ChangeRentedCarAsync(newData);
             return Ok("");
-        }
-
-        [Authorize(Roles = "Administrator,Worker")]
-        [HttpPost("replaceCar/{rentalId:int}")]
-        public async Task<IActionResult> CancelRental(int rentalId)
-        {
-            // new CarId, RentalId, Remark 
-            // Should first check if new car is available and only if it is, change car 
-            //_services.RentalService.ChangeCar
-
-            //await _services.RentalService.ChangeRentedCarAsync(newData);
-            return Ok("");
-        }
-
-        [Authorize(Roles = "User")]
-        [HttpPost("AddNewUserRentalTest")]
-        public async Task<IActionResult> AddRentalTest([FromBody] object allRentalData)
-        {
-            return Ok(1);
-
-            //var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
-            //await Console.Out.WriteLineAsync(temp.ToString());
-            //await Console.Out.WriteLineAsync("asdasdasd");
-            //return Ok(1);
         }
 
         [HttpGet("generateInvoice/{rentalId:int}")]
@@ -255,38 +223,6 @@ namespace CarRent.api.Controllers
 
             return File(memory, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Path.GetFileName(path));
         }
-        
     }
 }
 
-
-
-/*
-       [Authorize(Roles = "User")]
-       [HttpPost("AddNewUserRental")]
-       public async Task<IActionResult> AddRental([FromBody] object allRentalData)
-       {
-           var temp = JsonConvert.DeserializeObject<AllRentalDataDto>(allRentalData.ToString());
-
-           if(temp == null)
-           {
-               return Ok(false);
-           }
-
-           var username = User.Identity.Name;
-           var user = await _userManager.FindByNameAsync(username);
-
-           if (user == null)
-           {
-               return Ok(false);
-           }
-
-           var result = await _services.RentalService.CreateRentalAndInvoiceAndAssignUser
-               (user.Id,
-               temp.Invoice,
-               temp.NewRentalForClient,
-               temp.ClientDetails
-               );
-
-           return Ok(result);
-       }*/

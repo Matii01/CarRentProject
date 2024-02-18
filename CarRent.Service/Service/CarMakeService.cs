@@ -39,9 +39,6 @@ namespace CarRent.Service.Service
                 .Select(x => new CarMakeDto(x.Id, x.Name, x.Description))
                 .ToList();
             return carMakesDto;
-
-            //var carMakes = await _repository.CarMake.
-            //throw new NotImplementedException();
         }
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {

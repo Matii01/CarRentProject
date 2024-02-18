@@ -18,7 +18,6 @@ namespace CarRent.Service.Service
             _settingsService = settingsService;
         }
 
-        // Remember to check if Notification should be send
         public async Task<List<NotificationDto>> GetNotificationsAsync()
         {
 
@@ -36,7 +35,6 @@ namespace CarRent.Service.Service
                     )).ToListAsync();
             return item;
         }
-
 
         public async Task<int> GetNotificationsCountAsync(NotificationParameters notificationParams)
         {

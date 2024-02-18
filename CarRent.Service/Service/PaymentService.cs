@@ -60,7 +60,6 @@ namespace CarRent.Service.Service
 
         public async Task UpdatePaymentSucceeded(string intentId)
         {
-            Console.WriteLine("PAYMENT SUCCEEDED !!!!!!!!!!!!!!");
 
             var rentalData = await _repository.DataForRental
                 .FindByCondition(x => x.PaymentIntentId == intentId, false)

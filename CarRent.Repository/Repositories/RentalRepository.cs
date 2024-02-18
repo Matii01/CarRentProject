@@ -183,7 +183,6 @@ namespace CarRent.Repository.Repositories
             return pagedList;
         }
 
-        //public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)
         public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int rentalId)
         {
             var invoiceId = await GetInvoiceIdByRentalId(rentalId);

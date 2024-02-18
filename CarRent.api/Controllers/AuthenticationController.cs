@@ -68,9 +68,7 @@ namespace CarRent.api.Controllers
                 return Unauthorized();
 
             var loginDate = await _authenticationService.Login(true);
-            // var tokenDto = await _authenticationService.CreateToken(true);
 
-           // Response.Cookies.Append("")
             return Ok(loginDate);
         }
     }

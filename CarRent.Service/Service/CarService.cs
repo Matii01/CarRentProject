@@ -27,7 +27,6 @@ namespace CarRent.Service.Service
         public async Task<PagedList<CarListDtoForClient>> GetCarListForClientAsync(CarParameters carParameters, bool trackChanges)
         {
             var list = await _repository.Car.GetCarsForClientAsync(carParameters, trackChanges);
-            //var items = MapHelper.MapCarToCarListDtoForClient(list);
 
             return list;
         }
@@ -35,7 +34,6 @@ namespace CarRent.Service.Service
         public async Task<PagedList<CarListDto>> GetCarsForWorkerAsync(CarParameters carParameters, bool trackChanges)
         {
             var list = await _repository.Car.GetCarsForWorkerAsync(carParameters, trackChanges);
-            //var items = MapHelper.MapCarToCarListDto(list);
 
             return list;
         }
@@ -50,7 +48,6 @@ namespace CarRent.Service.Service
 
         public async Task<CarDetailForWorkerDto?> GetCarById(int id, bool trackChanges)
         {
-            // TODO 
             var car = await _repository.Car
                 .GetCarAsync(id, trackChanges);
             

@@ -35,7 +35,6 @@ namespace CarRent.api.Controllers
         [HttpPost("subscribe")]
         public async Task<IActionResult> SubscribeToNewLetter([FromBody]string newSubscription)
         {
-            //await Console.Out.WriteLineAsync(newSubscription);
             await _services.NewsletterService.NewSubscription(newSubscription);
             return Ok();
         }
@@ -48,7 +47,6 @@ namespace CarRent.api.Controllers
             await _services.NewsletterService.SendNewMessage(newMessage);
             return Ok();
         }
-
         
 
         [Authorize(Roles = "Administrator,Worker")]

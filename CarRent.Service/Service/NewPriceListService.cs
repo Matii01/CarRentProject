@@ -166,7 +166,6 @@ namespace CarRent.Service.Service
             if (item == null)
             {
                 return new PriceForCar(0, 0, 0, 0, 0);
-                //throw new Exception("No pricelist for car for this date");
             }
 
             decimal total = item.Price * CalculateRentalDays(rental);

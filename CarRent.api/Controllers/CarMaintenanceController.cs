@@ -64,15 +64,6 @@ namespace CarRent.api.Controllers
             var result = await _services.CarMaintenanceService.EditCarMaintenanceAsync(id, carMaintenance, userId);
             return Ok(result);
         }
-
-        [Authorize]
-        [HttpPost("EditMaintenance2/{id}")]
-        public async Task<IActionResult> EditMaintenance1(int id, [FromBody] CarMaintenanceDto carMaintenance)
-        {
-            await Console.Out.WriteLineAsync("id :: :  "+id);
-            await Console.Out.WriteLineAsync("Edit maintainmeaf adds");
-            return Ok("");
-        }
     }
 }
 

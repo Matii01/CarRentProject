@@ -19,7 +19,6 @@ namespace CarRent.api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarTypes()
         {
-            //var carTypes = await _services.CarTypeService.GetAllAsync(false); 
             var carTypes = await _services.CarTypeService.GetAllActiveAsync(false); 
             return Ok(carTypes);
         }

@@ -19,7 +19,6 @@ namespace CarRent.api.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetCarMakes()
         {
-            //var list = await _context.CarMakes.ToListAsync();
             var list = await _services.CarMakeService.GetAllCarMakesAsync(false);
 
             return Ok(list);
@@ -28,7 +27,6 @@ namespace CarRent.api.Controllers
         [HttpGet("get/{id:int}")]
         public async Task<IActionResult> GetCarMakesById(int id)
         {
-            //var carMake = await _context.CarMakes.Where(x => x.Id.Equals(id)).SingleOrDefaultAsync();
             var carMake = await _services.CarMakeService.GetCarMakeAsync(id, false);
 
             return Ok(carMake);
@@ -37,7 +35,6 @@ namespace CarRent.api.Controllers
         [HttpGet(Name = "CarMake")]
         public async Task<IActionResult> GetActiveCarMakes()
         {
-            // ToDo 
             var list = await _services.CarMakeService.GetAllActiveCarMakesAsync(false);
 
             return Ok(list);

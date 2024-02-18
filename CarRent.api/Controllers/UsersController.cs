@@ -123,7 +123,6 @@ namespace CarRent.api.Controllers
             return CreatedAtAction("AddUserAddresses", address);
         }
 
-        //[Authorize(Roles = "User")]
         [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword passwords)
@@ -255,7 +254,6 @@ namespace CarRent.api.Controllers
             user.FirstName = updated.FirstName ?? user.FirstName;
             user.LastName = updated.LastName ?? user.LastName;
             user.PhoneNumber = updated.PhoneNumber ?? user.PhoneNumber;
-            //user.Email = updated.Email ?? user.Email;
            
             await _userManager.UpdateAsync(user);
 

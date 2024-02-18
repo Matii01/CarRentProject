@@ -25,7 +25,6 @@ namespace CarRent.Service.Service
         {
             _notification = notification;
         }
-
         public async Task<IEnumerable<RabatDto>> GetCurrentRabat()
         {
             var rabats = await _repository.Rabat
@@ -35,12 +34,7 @@ namespace CarRent.Service.Service
 
             return rabats;
         }
-
-        /// <summary>
-        /// Return current rabat for given car or rabat with value 0
-        /// </summary>
-        /// <param name="carId"></param>
-        /// <returns></returns>
+       
         public async Task<RabatValueDto> GetRabatForCar(int carId)
         {
             var data = DateTime.Now;
@@ -58,11 +52,6 @@ namespace CarRent.Service.Service
             return carRabat ?? new RabatValueDto(0);
         }
 
-        /// <summary>
-        /// Return current rabat for given user or rabat with value 0
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         public async Task<RabatValueDto> GetUserRabat(string userId)
         {
             var data = DateTime.Now;
@@ -204,13 +193,6 @@ namespace CarRent.Service.Service
             return false;
         }
 
-
-        /// <summary>
-        /// Combine rabat for user and for car and return rabat for rental 
-        /// </summary>
-        /// <param name="carId"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         public async Task<RabatValueDto> CalculateRabat(int carId, string? userId)
         {
             if(userId != null)
