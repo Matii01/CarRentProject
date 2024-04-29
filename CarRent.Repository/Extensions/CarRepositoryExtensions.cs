@@ -17,17 +17,31 @@ namespace CarRent.Repository.Extensions
     {
         public static IQueryable<Car> Search(this IQueryable<Car> cars, CarRentContext context, CarParameters param)
         {
-            if(param.PriceMin.HasValue)
+            if (param.GearboxTypeId?.Length > 0)
             {
-
+                cars = cars.Where(x => param.GearboxTypeId.Contains(x.GearBoxTypeId));
             }
-
-            if(param.PriceMax.HasValue)
+            if (param.ACTypeId.HasValue)
             {
-
+                cars = cars.Where(x => x.AirConditioningTypeId == param.ACTypeId);
             }
-
-            if(param.CarEquipmentId?.Length > 0)
+            if (param.EngineTypeId?.Length > 0)
+            {
+                cars = cars.Where(x => param.EngineTypeId.Contains(x.EngineTypeId));
+            }
+            if (param.CarTypeId?.Length > 0)
+            {
+                cars = cars.Where(x => param.CarTypeId.Contains(x.CarTypeId));
+            }
+            if (param.MakeId?.Length > 0)
+            {
+                cars = cars.Where(x => param.MakeId.Contains(x.CarMakeId));
+            }
+            if (param.MinSeatsNum.HasValue)
+            {
+                cars = cars.Where(x => x.NumberOfSeats >= param.MinSeatsNum);
+            }
+            if (param.CarEquipmentId?.Length > 0)
             {
 
                 var carlist = context.Cars
@@ -54,72 +68,17 @@ namespace CarRent.Repository.Extensions
 
                 cars = cars.Where(x => query.Contains(x.Id));
 
-                //cars = cars
-                //    .Where(
-                //        x => x.CarEquipmentCars
-                //        .Any(s => param.CarEquipmentId
-                //        .Contains(s.CarEquipmentId) &&
-                //        x.CarEquipmentCars.Where(x => x.IsActive == true)
-                //        .Count() >= param.CarEquipmentId.Length));
-
-
-                //.Where(x => x.CarEquipmentCars
-                //.Where(x => x.IsActive == true)
-                //.Select(x=>x.CarEquipment.Id)
-                //.Any(s => param.CarEquipmentId.Contains(s)));
-
-
-                //var t = cars.Select(x => x.CarEquipmentCars).ToList();
-                //foreach(var x in t)
-                //{
-                //    foreach(var y in x)
-                //    {
-                //        Console.WriteLine(y.CarEquipmentId+", ");
-                //    }
-                //}
-
-                //.Where(x => x.IsActive == true)
-
-                //.Select(x => x.CarEquipment.Id)
-                //.Any(s => param.CarEquipmentId.Contains(s)));
-
             }
-            if (param.GearboxTypeId?.Length > 0)
+            if (param.PriceMin.HasValue)
             {
-                cars = cars.Where(x => param.GearboxTypeId.Contains(x.GearBoxTypeId));
+
             }
-            if (param.ACTypeId.HasValue)
+            if (param.PriceMax.HasValue)
             {
-                cars = cars.Where(x => x.AirConditioningTypeId == param.ACTypeId);
+
             }
-            if (param.EngineTypeId?.Length > 0)
-            {
-                cars = cars.Where(x => param.EngineTypeId.Contains(x.EngineTypeId));
-            }
-            if (param.CarTypeId?.Length > 0)
-            {
-                cars = cars.Where(x => param.CarTypeId.Contains(x.CarTypeId));
-            }
-            if (param.MakeId?.Length > 0)
-            {
-                cars = cars.Where(x => param.MakeId.Contains(x.CarMakeId));
-            }
-            if (param.MinSeatsNum.HasValue)
-            {
-                cars = cars.Where(x => x.NumberOfSeats >= param.MinSeatsNum);
-            }
+
             return cars;
-        }
-
-        public static bool CarHaveEquipment(int carId ,int[] equipment, CarRentContext context)
-        {
-
-            return true;
-            
-            //var eq = context.Cars.Where(x => x.Id == carId)
-            //    .Select(x => x.CarsEquipment).ToList();
-
-            //return eq.Count() > 0;
         }
 
         public static async Task<PagedList<CarListDtoForClient>> GetPagedListAsync(this IQueryable<Car> cars, CarRentContext context, CarParameters param)
