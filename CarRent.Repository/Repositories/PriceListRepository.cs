@@ -33,7 +33,7 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.PricelistItems)
                 .Where(x =>x.CarId == carId )
                 .Where(x => x.PricelistDates
-                    .Any(x => x.DateFrom<=currentData && x.DateTo >= currentData));
+                    .Any(x => x.IsActive == true && x.DateFrom<=currentData && x.DateTo >= currentData));
 
             return pricelist;
         }
@@ -49,10 +49,10 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.PricelistItems)
                 .Where(x => x.CarId == carId)
                 .Where(x => x.PricelistDates
-                    .Any(x => x.DateFrom <= currentData && x.DateTo >= currentData));
+                    .Any(x => x.IsActive == true && x.DateFrom <= currentData && x.DateTo >= currentData));
 
             var listItem = await pricelist
-                .Select(x => x.PricelistItems.Where(x => x.Days == 1))
+                .Select(x => x.PricelistItems.Where(x => x.Days == 1 && x.IsActive == true))
                 .SingleOrDefaultAsync();
 
             if(listItem == null)
@@ -60,7 +60,7 @@ namespace CarRent.Repository.Repositories
                 return 0;
             }
 
-            var item = listItem.SingleOrDefault();
+            var item = listItem.FirstOrDefault();
 
             if(item == null)
             {
@@ -85,17 +85,6 @@ namespace CarRent.Repository.Repositories
         public IQueryable<PriceList> GetCurrentPriceList(int carId, bool trackChanges)
         {
             throw new NotImplementedException();
-
-            //DateTime dateTime = DateTime.Now;
-
-            //var priceList = FindByCondition(
-            //        x => x.CarId == carId &&
-            //        x.IsActive == true &&
-            //        x.DateFrom <= dateTime &&
-            //        x.DateTo >= dateTime
-            //        , trackChanges);
-
-            //return priceList;
         }
     }
 }

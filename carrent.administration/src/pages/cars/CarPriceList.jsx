@@ -6,12 +6,13 @@ import EditPriceList from "../../components/Pricelist/EditPriceList";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function CarPriceList() {
-  const [priceList, setPriceList] = useState();
+  const [priceList, setPriceList] = useState([]);
   const [selectedPricelist, setSelectedPricelist] = useState(null);
   const param = useParams();
-
+  const roles = useSelector((state) => state.user.role);
   useEffect(() => {
     getPriceLists();
   }, []);
@@ -33,7 +34,8 @@ function CarPriceList() {
     getPriceLists();
   };
 
-  const onPricelistAdded = () => {
+  const onPricelistAdded = (priceList) => {
+    onChoose(priceList);
     getPriceLists();
   };
 
@@ -45,9 +47,24 @@ function CarPriceList() {
     setSelectedPricelist(null);
   };
 
-  const handleDelete = (id) => {
-    console.log(id);
+  const handleDelete = (itemId) => {
+    jwtInterceptor
+      .delete(`CarPriceList/deletePricelist/${itemId}`)
+      .then((data) => {
+        const newList = priceList.filter((it) => it.id !== itemId);
+        setPriceList(newList);
+        if (selectedPricelist.id === itemId) {
+          onCancelClick();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("PriceListEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!priceList) {
     return <p>Loading ... </p>;

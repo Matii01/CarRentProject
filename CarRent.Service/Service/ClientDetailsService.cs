@@ -74,8 +74,6 @@ namespace CarRent.Service.Service
             clientDetails.PostCode = newValue.PostCode;
 
             await _repository.SaveAsync();
-
-            //throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(int id)

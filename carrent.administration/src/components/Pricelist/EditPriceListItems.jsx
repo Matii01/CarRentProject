@@ -16,8 +16,18 @@ function EditPricelistItems({ pricelistId, onCancel }) {
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
+    setState();
     getData();
   }, [pricelistId]);
+
+  const setState = () => {
+    setNewItem((prev) => ({
+      priceListId: pricelistId,
+      days: "",
+      price: "",
+      overlimitFee: 0,
+    }));
+  };
 
   const getData = () => {
     jwtInterceptor
@@ -55,8 +65,8 @@ function EditPricelistItems({ pricelistId, onCancel }) {
         setNewItem(initialState);
       })
       .catch((error) => {
-        console.log(error);
-        toast.error("Błąd");
+        console.log(error.response.data);
+        toast.error(error.response.data.Message);
       });
   };
 

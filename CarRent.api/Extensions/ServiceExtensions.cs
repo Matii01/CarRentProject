@@ -48,8 +48,6 @@ namespace CarRent.api.Extensions
 
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<ICarService, CarService>();
-            //services.AddScoped<ICarMakeService, CarMakeService>();
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -59,9 +57,6 @@ namespace CarRent.api.Extensions
 
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
-
-            // Bind the JwtSettings section and add it do DI
-            //services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         }
 
         public static void ConfigureJwtSettings(this IServiceCollection services, IConfiguration configuration)
@@ -83,13 +78,6 @@ namespace CarRent.api.Extensions
 
             }).AddEntityFrameworkStores<CarRentContext>()
               .AddDefaultTokenProviders();
-
-            //services.AddAuthentication();
-            //services.AddIdentity<User, IdentityRole>(o =>
-            //{
-
-            //}).AddEntityFrameworkStores<CarRentContext>()
-            //  .AddDefaultTokenProviders();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)

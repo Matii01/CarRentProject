@@ -49,6 +49,7 @@ function EditFooterLinks({ links, onEdit }) {
       )
       .then((data) => {
         console.log(data.data);
+        onEdit();
         toast.success("Zapiasano zmiany");
       })
       .catch((error) => {

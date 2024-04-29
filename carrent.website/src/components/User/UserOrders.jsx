@@ -2,25 +2,33 @@ import { useEffect, useState } from "react";
 import UserRentalList from "./UserRentalList";
 import UserRentalDetails from "./UserRentalDetails";
 import axiosInstance from "../../utils/axiosConfig";
+import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 
 function UserOrders() {
   const [isLoading, setIsLoading] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [rentalDetailData, setRentalDetailData] = useState({});
   const [rentalList, setRentalList] = useState([]);
+  const [metaData, setMetaData] = useState({});
+  const [filterInfo, setFilterInfo] = useState({
+    PageNumber: 1,
+    PageSize: 10,
+  });
 
   useEffect(() => {
+    const queryString = transformObjectToQueryString(filterInfo);
     setIsLoading(true);
     axiosInstance
-      .get(`rental/UserRental`)
+      .get(`rental/UserRental?${queryString}`)
       .then((data) => {
         console.log(data.data);
-        setRentalList(data.data);
+        setMetaData(data.data.metaData);
+        setRentalList(data.data.items);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [filterInfo.PageNumber, filterInfo.PageSize]);
 
   const getRentalDetails = (id) => {
     setIsLoading(true);
@@ -48,6 +56,13 @@ function UserOrders() {
     setShowDetails(false);
   };
 
+  const onPageChange = (num) => {
+    setFilterInfo((prev) => ({
+      ...prev,
+      PageNumber: num,
+    }));
+  };
+
   return (
     <>
       <UserRentalList
@@ -55,6 +70,8 @@ function UserOrders() {
         onDetailsClick={onDetailsClick}
         hidden={showDetails}
         isLoading={isLoading}
+        metaData={metaData}
+        onPageChange={onPageChange}
       />
       {showDetails && !isLoading && (
         <UserRentalDetails

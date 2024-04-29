@@ -1,5 +1,5 @@
 const config = {
-  API_URL: "http://192.168.0.103:19035",
+  API_URL: "http://192.168.0.104:19035",
   //API_URL: "https://localhost:7091",
   // other configurations
   STRIPE_KEY:

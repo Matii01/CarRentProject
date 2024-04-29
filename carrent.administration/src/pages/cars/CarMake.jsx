@@ -7,6 +7,7 @@ import CarInfoTable from "../../components/Table/CarInfoTable";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function CarMakes() {
   const [makes, setMake] = useState([]);
@@ -14,6 +15,7 @@ function CarMakes() {
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedMake, setSelectedMake] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -61,6 +63,9 @@ function CarMakes() {
   };
 
   const handleDelete = (id) => {
+    if (selectedMake.id === id) {
+      onCancel();
+    }
     deleteCarMake(id);
   };
 
@@ -100,6 +105,12 @@ function CarMakes() {
       });
   };
 
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
+
   return (
     <>
       <ToastContainer />
@@ -123,14 +134,14 @@ function CarMakes() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>

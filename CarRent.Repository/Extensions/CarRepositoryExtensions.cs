@@ -17,22 +17,6 @@ namespace CarRent.Repository.Extensions
     {
         public static IQueryable<Car> Search(this IQueryable<Car> cars, CarRentContext context, CarParameters param)
         {
-            if(param.PriceMin.HasValue)
-            {
-
-            }
-
-            if(param.PriceMax.HasValue)
-            {
-
-            }
-
-            if(param.CarEquipmentId?.Length > 0)
-            {
-                cars = cars
-                    .Where(x =>x .CarsEquipment.Count >= param.CarEquipmentId.Length)
-                    .Where(x => x.CarsEquipment.Any(s => param.CarEquipmentId.Contains(s.Id)));
-            }
             if (param.GearboxTypeId?.Length > 0)
             {
                 cars = cars.Where(x => param.GearboxTypeId.Contains(x.GearBoxTypeId));
@@ -57,18 +41,44 @@ namespace CarRent.Repository.Extensions
             {
                 cars = cars.Where(x => x.NumberOfSeats >= param.MinSeatsNum);
             }
+            if (param.CarEquipmentId?.Length > 0)
+            {
+
+                var carlist = context.Cars
+                    .Include(x => x.CarEquipmentCars);
+
+
+                List<int> query = new List<int>();
+                foreach(var car in carlist)
+                {
+                    bool add = true;
+                    foreach(var t in param.CarEquipmentId)
+                    {
+                        if (!car.CarEquipmentCars.Select(x=>x.CarEquipmentId).Contains(t))
+                        {
+                            add = false;
+                        }
+                    }
+                    if (add)
+                    {
+                        query.Add(car.Id);
+                    }
+                    add = true;
+                }
+
+                cars = cars.Where(x => query.Contains(x.Id));
+
+            }
+            if (param.PriceMin.HasValue)
+            {
+
+            }
+            if (param.PriceMax.HasValue)
+            {
+
+            }
+
             return cars;
-        }
-
-        public static bool CarHaveEquipment(int carId ,int[] equipment, CarRentContext context)
-        {
-
-            return true;
-            
-            //var eq = context.Cars.Where(x => x.Id == carId)
-            //    .Select(x => x.CarsEquipment).ToList();
-
-            //return eq.Count() > 0;
         }
 
         public static async Task<PagedList<CarListDtoForClient>> GetPagedListAsync(this IQueryable<Car> cars, CarRentContext context, CarParameters param)

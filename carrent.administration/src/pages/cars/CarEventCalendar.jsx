@@ -8,6 +8,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { formatDate } from "../../utils/formDate";
 import EditService from "../../components/CalendarEvent/EditService";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { ToastContainer } from "react-toastify";
 
 function CarEventCalendar() {
   const param = useParams();
@@ -86,8 +87,10 @@ function CarEventCalendar() {
   };
 
   const ServiseEdit = (id) => {
-    setEditedId(id);
+    console.log(id);
+    setEditedId(id.id);
     setIsEdit(true);
+    setShowAddEvent(false);
   };
 
   const onAddClick = () => {
@@ -95,8 +98,13 @@ function CarEventCalendar() {
     setIsEdit(false);
   };
 
+  const refreshView = () => {
+    getService();
+  };
+
   return (
     <>
+      <ToastContainer />
       <Container>
         <Row className="mt-2 mb-2"></Row>
         <Row>
@@ -124,7 +132,7 @@ function CarEventCalendar() {
               </Card.Header>
               <Card.Body>
                 <MyTableWithPagination
-                  thead={["ID", "Nazwa", "Data od", "Data do", "Status"]}
+                  thead={["ID", "Nazwa", "Data od", "Data do", "Koszt"]}
                   items={service}
                   item={["id", "carName", "dateStart", "dateEnd", "totalCost"]}
                   onDoubleClick={ServiseEdit}
@@ -139,7 +147,11 @@ function CarEventCalendar() {
           )}
           {isEdit && (
             <Col md={6}>
-              <EditService id={editedId} setIsEdit={() => setIsEdit(false)} />
+              <EditService
+                id={editedId}
+                setIsEdit={() => setIsEdit(false)}
+                onEdited={refreshView}
+              />
             </Col>
           )}
         </Row>

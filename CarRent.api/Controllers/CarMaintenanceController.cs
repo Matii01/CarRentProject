@@ -39,9 +39,6 @@ namespace CarRent.api.Controllers
             var user = User.Identity.Name;
             var userId = await _authentication.FindUserByUserName(user);
 
-            await Console.Out.WriteLineAsync(carMaintenance.ToString());
-            await Console.Out.WriteLineAsync(userId);
-
             var item = new CarMaintenanceDto(
                     0, 
                     carMaintenance.CarId,
@@ -66,15 +63,6 @@ namespace CarRent.api.Controllers
 
             var result = await _services.CarMaintenanceService.EditCarMaintenanceAsync(id, carMaintenance, userId);
             return Ok(result);
-        }
-
-        [Authorize]
-        [HttpPost("EditMaintenance2/{id}")]
-        public async Task<IActionResult> EditMaintenance1(int id, [FromBody] CarMaintenanceDto carMaintenance)
-        {
-            await Console.Out.WriteLineAsync("id :: :  "+id);
-            await Console.Out.WriteLineAsync("Edit maintainmeaf adds");
-            return Ok("");
         }
     }
 }

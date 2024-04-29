@@ -1,6 +1,7 @@
 ﻿using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Parameters;
+using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,6 @@ namespace CarRent.api.Controllers
         {
             var list = await _services.CarService.GetCarListForClientAsync(parameters, false);
 
-            if (list.Items.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
             return Ok(list);
         }
 
@@ -36,11 +32,6 @@ namespace CarRent.api.Controllers
         {
             var list = await _services.CarService.GetCarsForWorkerAsync(parameters, false);
 
-            if (list.Items.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-
             return Ok(list);
         }
 
@@ -48,6 +39,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarById(int id)
         {
             var car = await _services.CarService.GetCarById(id, false);
+
             if (car == null)
             {
                 return NotFound("Car not found");
@@ -72,7 +64,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> GetCarDetailsForClient(int id)
         {
             var carDetails = await _services.CarService.GetCarDetailsForClientAsync(id);
-            carDetails.ExcludedDates = await _services.RentalService.GetFutureRentalDatesForCarAsync(id);
+            carDetails.ExcludedDates = await _services.CarService.GetExcludedDatesForCarAsync(id);
 
             if(carDetails is null)
             {
@@ -148,7 +140,8 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateCar([FromBody] NewCarDto newCar)
         {
             var car = await _services.CarService.CreateCarAsync(newCar);
-            return Ok(car); 
+
+            return await GetCarById(car.Id);
         }
 
         [Authorize(Roles = "Administrator,CarAdd")]
@@ -172,6 +165,7 @@ namespace CarRent.api.Controllers
         [HttpPut("edit/{id:int}")]
         public async Task<IActionResult> UpdateCar(int id, [FromBody] NewCarDto car)
         {
+            await Console.Out.WriteLineAsync("asdasd");
             await _services.CarService.UpdateCarAsync(id, car, true);
 
             return NoContent();
@@ -204,17 +198,14 @@ namespace CarRent.api.Controllers
         }
 
         [Authorize(Roles = "Administrator,CarEditor")]
-        [HttpDelete("delete")]
-        public Task<IActionResult> DeleteCar(int id)
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeleteCar(int id)
         {
-            throw new NotImplementedException();
+            await _services.CarService.DeleteCar(id);    
+            return Ok("");
         }
 
-        /// <summary>
-        /// Store file in folder and return path to stored file
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        
         [Authorize(Roles = "Administrator,CarEditor")]
         [HttpPost("uploadCarImage")]
         public async Task<IActionResult> UploadCarImage([FromForm] IFormFile file)
@@ -224,7 +215,6 @@ namespace CarRent.api.Controllers
                 return BadRequest("No file is uploaded.");
             }
 
-            //var path = "C:\\Users\\msi\\source\\repos\\Project\\CarRentProject\\CarRent.websiteTs\\public";
             var newPath = "D:\\React\\Tests\\react-app-test\\public";
             var targetDirectory = Path.Combine(newPath, "CarImages");
             var filePath = Path.Combine(targetDirectory, file.FileName);

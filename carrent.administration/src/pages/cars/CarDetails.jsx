@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import {
   Badge,
@@ -19,6 +19,7 @@ import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { useSelector } from "react-redux";
 
 function CarDetails() {
   const initialState = {
@@ -44,10 +45,17 @@ function CarDetails() {
     carDriveId: 0,
     carImages: [],
   };
-  const [car, setCar] = useState(initialState);
+  const [isLoading, setIsLoading] = useState({
+    car: true,
+    carInfo: true,
+    carRecommended: true,
+  });
+  const [car, setCar] = useState({});
   const [carInfo, setCarInfo] = useState();
   const [isRecommended, setIsRecommended] = useState(false);
+  const navigate = useNavigate();
   const param = useParams();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     fetchCarInfo();
@@ -66,6 +74,12 @@ function CarDetails() {
         console.log("error fetching the makes: ", error);
         //setError(error);
         //setLoading(false);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          carInfo: false,
+        }));
       });
   };
 
@@ -73,11 +87,16 @@ function CarDetails() {
     jwtInterceptor
       .get(`car/${param.carId}`)
       .then((data) => {
-        console.log(data);
         setCar(data.data);
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          car: false,
+        }));
       });
   };
 
@@ -89,6 +108,12 @@ function CarDetails() {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoading((prev) => ({
+          ...prev,
+          carRecommended: false,
+        }));
       });
   };
 
@@ -101,14 +126,16 @@ function CarDetails() {
   };
 
   const updateCar = () => {
+    const { id, carImages, ...toSend } = car;
+    console.log(toSend);
     jwtInterceptor
-      .put(`car/edit/${param.carId}`, JSON.stringify(car), {
+      .put(`car/edit/${param.carId}`, JSON.stringify(toSend), {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then(() => {
-        // toast
+        toast.success("Zapisano zmiany");
       })
       .catch((error) => {
         toast.error("błąd");
@@ -169,7 +196,7 @@ function CarDetails() {
   const SetCarVisibility = (value) => {
     setCar((prev) => ({
       ...prev,
-      IsVisible: value,
+      isVisible: value,
     }));
   };
 
@@ -249,7 +276,26 @@ function CarDetails() {
     });
   };
 
-  if (!carInfo) {
+  const deleteCar = () => {
+    jwtInterceptor
+      .delete(`car/delete/${car.id}`)
+      .then((data) => {
+        navigate("/cars");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  if (!(roles.includes("Administrator") || roles.includes("CarEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
+
+  if (!carInfo || !car) {
+    return <p>Loading ...</p>;
+  }
+
+  if (isLoading.car || isLoading.carInfo || isLoading.carRecommended) {
     return <p>Loading ...</p>;
   }
 
@@ -294,7 +340,7 @@ function CarDetails() {
                   </Col>
 
                   <Col className="d-flex justify-content-end">
-                    {!car.IsVisible && (
+                    {!car.isVisible && (
                       <Button
                         variant="dark"
                         size="sm"
@@ -303,7 +349,7 @@ function CarDetails() {
                         Ustaw jako widoczny
                       </Button>
                     )}
-                    {car.IsVisible && (
+                    {car.isVisible && (
                       <Button variant="dark" size="sm" onClick={SetCarAsHide}>
                         Ustaw jako ukryty
                       </Button>
@@ -350,7 +396,7 @@ function CarDetails() {
                         <label>Marka</label>
                         <Form.Control
                           as="select"
-                          name="carMake"
+                          name="carMakeId"
                           value={car.carMakeId}
                           onChange={handleChange}
                         >
@@ -701,34 +747,16 @@ function CarDetails() {
             </Card>
           </Row>
         </Row>
+        <Row>
+          <Col className="d-flex justify-content-end">
+            <Button variant="danger" onClick={deleteCar}>
+              Usuń samochód
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </>
   );
 }
 
 export default CarDetails;
-
-/*
-const setCarImage = (path) => {
-    setCar((prevState) => ({
-      ...prevState,
-      CarImage: path,
-    }));
-  };
-
-  const handleImage = async (event) => {
-    const formData = new FormData();
-    formData.append("file", event.target.files[0]);
-
-    fetchData("https://localhost:7091/car/uploadCarImage", {
-      method: "POST",
-      body: formData,
-    })
-      .then((data) => {
-        setCarImage(data.path);
-      })
-      .catch((error) => {
-        console.log("error fetching the makes: ", error);
-      });
-  }; 
-  */

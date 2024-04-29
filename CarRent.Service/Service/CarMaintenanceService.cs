@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
@@ -28,7 +29,6 @@ namespace CarRent.Service.Service
             _rentalService = rentalService;
         }
 
-
         public async Task<CarMaintenanceDto> GetCarMaintenanceByIdAsync(int id, bool trackChanges)
         {
             var item = await _repository.CarMaintenances
@@ -37,7 +37,6 @@ namespace CarRent.Service.Service
 
             return _mapper.Map<CarMaintenanceDto>(item);
         }
-
         public async Task<CarMaintenanceDto> EditCarMaintenanceAsync(int id, CarMaintenanceDto carMaintenance, string userId)
         {
             var carHaveRental = await _rentalService.CarHaveRentalInThisDate(
@@ -63,7 +62,6 @@ namespace CarRent.Service.Service
             return _mapper.Map<CarMaintenanceDto>(item);
         }
 
-
         public async Task<IEnumerable<CarMaintenanceListDto>> GetCarMaintenanceListAsync(MaintenanceParameters param)
         {
             var list = await _repository.CarMaintenances
@@ -83,13 +81,12 @@ namespace CarRent.Service.Service
 
         public async Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance)
         {
-
             var carHaveRental = await _rentalService.CarHaveRentalInThisDate(
                 carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd);
 
             if (carHaveRental || await CarHaveMaintenanceInThisDate(carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd))
             {
-                throw new Exception("The car is occupied on this date");
+                throw new DatesTakenException();
             }
             var newMaintenance = _mapper.Map<CarMaintenance>(carMaintenance);
 
@@ -98,7 +95,6 @@ namespace CarRent.Service.Service
 
             return _mapper.Map<CarMaintenanceDto>(newMaintenance);
         }
-
         
         public async Task<bool> CarHaveMaintenanceInThisDate(
                 int CarId, 
@@ -130,6 +126,15 @@ namespace CarRent.Service.Service
                 .ToListAsync();
 
             return list;
+        }
+
+        public async Task<IEnumerable<CarMaintenanceDatesDto>> GetFutureMaintenanceDatesForCarAsync(int CarId)
+        {
+            var currentDate = DateTime.Now.AddDays(-1);
+            return await _repository.CarMaintenances
+                .FindByCondition(x => x.CarId == CarId && x.DateStart >= currentDate, false)
+                .Select(x => new CarMaintenanceDatesDto(x.DateStart, x.DateEnd))
+                .ToListAsync();
         }
 
         private async Task<bool> CanChangeDates(

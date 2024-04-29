@@ -6,27 +6,34 @@ import {
   setRefreshToken,
 } from "./../shared/userSlice";
 import { useEffect } from "react";
-import axios from "axios";
 import config from "../../config";
+import jwtInterceptor from "../utils/jwtInterceptor";
 
 function useRefreshToken() {
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = useSelector((state) => state.user.userName);
 
   const onFirstRender = () => {
+    console.log("on first");
     retriveData();
   };
 
+  const getUserName = () => {
+    return isLogin;
+  };
+
   const everySomeMinutes = () => {
-    if (isLogin) {
-      //console.log("try to refresh token");
+    const name = getUserName();
+    if (name != "") {
+      console.log("try to refresh token");
       refreshToken();
     } else {
-      //console.log("is not log in");
+      console.log("is not log in");
     }
   };
 
   const timeToWait = () => {
+    //return 10 * 1000;
     return 10 * 60 * 1000;
   };
 
@@ -41,10 +48,11 @@ function useRefreshToken() {
     }, seconds);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isLogin]);
 
   const refreshToken = () => {
-    fetchData(`/token/refresh`);
+    //console.log("refresh token");
+    fetchData(`token/refresh`);
   };
 
   const isTokensSet = () => {
@@ -61,6 +69,8 @@ function useRefreshToken() {
     if (isTokensSet()) {
       const url = "token/retrieve";
       fetchData(url);
+    } else {
+      console.log("token do not set");
     }
   };
 
@@ -70,7 +80,7 @@ function useRefreshToken() {
     // console.log("AC:");
     // console.log(accessToken);
 
-    axios
+    jwtInterceptor
       .post(
         `${config.API_URL}${url}`,
         JSON.stringify({ accessToken, refreshToken }),

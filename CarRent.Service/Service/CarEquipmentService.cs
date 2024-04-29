@@ -137,6 +137,20 @@ namespace CarRent.Service.Service
             
             item.IsActive = false;
             await _repository.SaveAsync();
+            await DeleteEquipmentFromCar(id);
+        }
+
+        private async Task DeleteEquipmentFromCar(int id)
+        {
+            var list = await _repository.CarEquipmentCar
+                .FindByCondition(x => x.CarEquipmentId == id, true)
+                .ToListAsync();
+
+            foreach (var item in list)
+            {
+                item.IsActive = false;
+            }
+            await _repository.SaveAsync();
         }
     }
 }

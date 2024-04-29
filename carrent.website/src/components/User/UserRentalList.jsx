@@ -1,13 +1,20 @@
-import { Button, Card, Table } from "react-bootstrap";
+import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import CardOverlay from "../Overlay/CardOverlay";
+import CarPagination from "../Pagination/CarPagination";
 
-function UserRentalList({ items, onDetailsClick, hidden, isLoading }) {
+function UserRentalList({
+  items,
+  onDetailsClick,
+  hidden,
+  isLoading,
+  metaData,
+  onPageChange,
+}) {
   const formatDate = (date) => {
     return date.slice(0, 10);
   };
 
   const goToDetails = (id) => {
-    console.log(id);
     onDetailsClick(id);
   };
 
@@ -48,6 +55,15 @@ function UserRentalList({ items, onDetailsClick, hidden, isLoading }) {
               ))}
           </tbody>
         </Table>
+        <Row>
+          <Col className="ms-2">
+            <CarPagination
+              paginationData={metaData}
+              pageChange={onPageChange}
+              size="md"
+            />
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   );

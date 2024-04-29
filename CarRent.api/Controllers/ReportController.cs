@@ -42,7 +42,6 @@ namespace CarRent.api.Controllers
 
             _services.GenerateDocumentService.GenerateExcelDocument(report.ToList(), "");
 
-            //string path = @"C:\Users\msi\Desktop\InvoiceReport.xlsx";
             
             var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
             string path = $@"{excelPath}\CarsReport.xlsx";
@@ -72,8 +71,6 @@ namespace CarRent.api.Controllers
             var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
             string path = $@"{excelPath}\CarsReport.xlsx";
             
-            //string path = @"C:\Users\msi\Desktop\CarsReport.xlsx";
-
 
             if (!System.IO.File.Exists(path))
             {
@@ -99,7 +96,6 @@ namespace CarRent.api.Controllers
 
             var excelPath = _services.GenerateDocumentService.GetPathForExcelDocuments();
             string path = $@"{excelPath}\MonthReport.xlsx";
-            //string path = @"C:\Users\msi\Desktop\MonthReport.xlsx";
 
 
             if (!System.IO.File.Exists(path))

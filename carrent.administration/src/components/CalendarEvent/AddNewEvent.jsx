@@ -25,9 +25,9 @@ function AddNewEvent({ onCancel }) {
 
   let selectedView = (
     <ListGroup as="ul">
-      <ListGroup.Item as="li" action onClick={() => changeView(RENT)}>
+      {/* <ListGroup.Item as="li" action onClick={() => changeView(RENT)}>
         Wynajem
-      </ListGroup.Item>
+      </ListGroup.Item> */}
 
       <ListGroup.Item as="li" action onClick={() => changeView(SERVICE)}>
         Serwis

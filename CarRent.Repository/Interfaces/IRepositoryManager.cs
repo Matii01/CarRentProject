@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CarRent.data.DTO;
+using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
 using CarRent.data.Models.Company;
@@ -16,6 +17,9 @@ namespace CarRent.Repository.Interfaces
     public interface IRepositoryManager
     {
         CarRentContext Context {  get; }
+
+        IGenericRepository<Car> NewCar {  get; }
+        IGenericRepository<PriceList> NewPriceList { get; }
 
         ICarRepository Car { get; }
         IPriceListRepository PriceList { get; }
@@ -82,7 +86,10 @@ namespace CarRent.Repository.Interfaces
         // newsletter
         IGenericRepository<NewsletterSubscriber> NewsletterSubscriber { get; }
         IGenericRepository<SendHistory> SendHistory { get; }
-        
+
+        IGenericRepository<Message> Message { get; }
+
+
         Task SaveAsync();
     }
 }

@@ -16,6 +16,8 @@ import EditWorkerSidebar from "../../components/Workers/EditWorkerSidebar";
 import AddNewWorker from "../../components/Workers/AddNewWorker";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import { ToastContainer, toast } from "react-toastify";
+import DeleteWorker from "../../components/Users/DeleteWorker";
+import { useSelector } from "react-redux";
 
 function WorkersPage() {
   const [error, setError] = useState();
@@ -23,6 +25,7 @@ function WorkersPage() {
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +52,8 @@ function WorkersPage() {
   };
 
   const onDoubleClick = (id) => {
-    setSelectedWorker(id.id);
+    console.log(id);
+    setSelectedWorker(id);
     setIsEditMode(true);
   };
 
@@ -68,6 +72,16 @@ function WorkersPage() {
     setWorkerList(newWorkerList);
     onDoubleClick(worker);
   };
+
+  const onDeleteWorker = () => {
+    setIsEditMode(false);
+    setSelectedWorker("");
+    getWorkers();
+  };
+
+  if (!roles.includes("Administrator")) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (error) {
     return <p>{error}</p>;
@@ -129,14 +143,33 @@ function WorkersPage() {
           </Col>
           <Col md="6">
             {isEditMode && selectedWorker && (
-              <Tabs>
-                <Tab eventKey="pe" title="Uprawnienia">
-                  <Permissions workerId={selectedWorker} />
-                </Tab>
-                <Tab eventKey="sidebar" title="Meu boczne">
-                  <EditWorkerSidebar workerId={selectedWorker} />
-                </Tab>
-              </Tabs>
+              <Card>
+                <Card.Header>
+                  <h5>
+                    {selectedWorker.firstName} {selectedWorker.lastName}
+                  </h5>
+                </Card.Header>
+                <Card.Body>
+                  <Row>
+                    <Col>
+                      <Tabs>
+                        <Tab eventKey="pe" title="Uprawnienia">
+                          <Permissions workerId={selectedWorker.id} />
+                        </Tab>
+                        <Tab eventKey="sidebar" title="Meu boczne">
+                          <EditWorkerSidebar workerId={selectedWorker.id} />
+                        </Tab>
+                        <Tab eventKey="delete" title="Usuwanie">
+                          <DeleteWorker
+                            onDelete={onDeleteWorker}
+                            workerId={selectedWorker.id}
+                          />
+                        </Tab>
+                      </Tabs>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
             )}
             {!isEditMode && <AddNewWorker onAdd={workerAdded} />}
           </Col>
@@ -146,11 +179,3 @@ function WorkersPage() {
   );
 }
 export default WorkersPage;
-
-/* <CarInfoTable
-        thead={["Imie", "Nazwisko", "email", "Actions"]}
-        items={workerList}
-        item={["firstName", "lastName", "email"]}
-        searchTerm={searchTerm}
-        onDoubleClick={onDoubleClick}
-      /> */

@@ -8,12 +8,14 @@ import AddGearbox from "../../components/Gearbox/AddGearbox";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { useSelector } from "react-redux";
 
 function GearboxType() {
   const [gearboxList, setGearboxList] = useState();
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedGearbox, setSelectedGearbox] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -59,6 +61,10 @@ function GearboxType() {
         if (data.status === 204) {
           filterView(id);
           toast.success("Usunięto");
+          if (selectedGearbox.id == id) {
+            onCancel();
+            setSelectedItem(null);
+          }
         }
       })
       .catch((error) => {
@@ -83,6 +89,12 @@ function GearboxType() {
     setGearboxList(edited);
     setIsEditMode(false);
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!gearboxList) {
     return <p>Loading ...</p>;
@@ -113,14 +125,14 @@ function GearboxType() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>

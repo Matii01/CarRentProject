@@ -11,12 +11,13 @@ namespace CarRent.Service.Service
 {
     public class NotificationService : ServiceBase, INotificationService
     {
-        public NotificationService(IRepositoryManager repository, IMapper mapper)
+        private IApplicationSettingsService _settingsService;
+        public NotificationService(IRepositoryManager repository, IMapper mapper, IApplicationSettingsService settingsService)
             : base(repository, mapper)
         {
+            _settingsService = settingsService;
         }
 
-        // Remember to check if Notification should be send
         public async Task<List<NotificationDto>> GetNotificationsAsync()
         {
 
@@ -34,7 +35,6 @@ namespace CarRent.Service.Service
                     )).ToListAsync();
             return item;
         }
-
 
         public async Task<int> GetNotificationsCountAsync(NotificationParameters notificationParams)
         {
@@ -68,20 +68,19 @@ namespace CarRent.Service.Service
 
         public async Task SendAddedRabatNotificationAsync(string UserId, NewRabatForUserDto rabat)
         {
-            string Message = $"przyznano raba {rabat.RabatPercentValue} procent, rabat jest ważny do {rabat.DateOfExpiration}";
-            NewNotificationDto notification = new (UserId, "New Rabat", Message);
-            await CreateNotificationAsync(notification);
+            if (await _settingsService.CheckSendRabatNotificationAsync())
+            {
+                string Message = $"A discount of {rabat.RabatPercentValue}% has been granted, the discount is valid until {rabat.DateOfExpiration}";
+                NewNotificationDto notification = new(UserId, "New Rabat", Message);
+                await CreateNotificationAsync(notification);
+            }
         }
 
         public async Task SendUpdateInvoiceStatusNotificationAsync(string UserId, string OldStatus, string NewStatus)
         {
-            var item = await _repository.ApplicationSettings
-                .FindByCondition(x => x.IsActive == true, false)
-                .SingleOrDefaultAsync();
-
-            if (item != null && item.SendNotificationOnInvoiceStatusUpdate == true)
+            if (await _settingsService.CheckUpdateInvoiceNotificationAsync())
             {
-                string Message = $"Zmiana statusu faktury z {OldStatus} na {NewStatus}";
+                string Message = $"Invoice status change from {OldStatus} to {NewStatus}";
                 NewNotificationDto notification = new(UserId, "Invoice Status Update", Message);
                 await CreateNotificationAsync(notification);
             }
@@ -92,22 +91,19 @@ namespace CarRent.Service.Service
                 .FindByCondition(x => x.IsActive == true, false)
                 .SingleOrDefaultAsync();
 
-            if (item != null && item.SendNotificationOnRentalStatusUpdate == true)
+            if (await _settingsService.CheckUpdateRentalStatusNotificationAsync())
             {
-                string Message = $"Zmiana statusu z {OldStatus} na {NewStatus}";
+                string Message = $"Change the status from {OldStatus} to {NewStatus}";
                 NewNotificationDto notification = new(UserId, "Rental Status Update", Message);
                 await CreateNotificationAsync(notification);
             }
         }
+
         public async Task SendAddedRentalNotificationAsync(string UserId, NewRentalForClient rental)
         {
-            var item = await _repository.ApplicationSettings
-                .FindByCondition(x => x.IsActive == true, false)
-                .SingleOrDefaultAsync();
-
-            if (item != null && item.SendNotificationOnRentalCreate == true)
+            if (await _settingsService.CheckUpdateRentalStatusNotificationAsync())
             {
-                string Message = $"Dodano nowe wypożyczenie. \nOd: {rental.DateFrom} \nDo {rental.DateTo}";
+                string Message = $"A new rental has been added. \nFrom: {rental.DateFrom} \nTo {rental.DateTo}";
                 NewNotificationDto notification = new(UserId, "Create Rental", Message);
                 await CreateNotificationAsync(notification);
             }

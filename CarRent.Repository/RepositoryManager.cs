@@ -1,4 +1,5 @@
-﻿using CarRent.data.Models.CarRent;
+﻿using CarRent.data.Models;
+using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
 using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
@@ -12,6 +13,9 @@ namespace CarRent.Repository
     public class RepositoryManager : IRepositoryManager
     {
         private readonly CarRentContext _context;
+
+        private readonly Lazy<IGenericRepository<Car>> _newCarRepository;
+        private readonly Lazy<IGenericRepository<PriceList>> _newPricesListRepository;
 
         private readonly Lazy<ICarRepository> _carRepository;
         private readonly Lazy<IPriceListRepository> _priceListRepository;
@@ -81,13 +85,23 @@ namespace CarRent.Repository
 
         private readonly Lazy<IGenericRepository<NewsletterSubscriber>> _newsletterSubscriberRepository;
         private readonly Lazy<IGenericRepository<SendHistory>> _sendHistoryRepository;
+        private readonly Lazy<IGenericRepository<Message>> _messageRepository;
 
         public RepositoryManager(CarRentContext context)
         {
             _context = context;
 
+
+            _newCarRepository = new Lazy<IGenericRepository<Car>>(() =>
+                new GenericRepository<Car>(_context));
+
+            _newPricesListRepository = new Lazy<IGenericRepository<PriceList>>(()=>
+                new GenericRepository<PriceList>(_context));
+
+
             _carRepository = new Lazy<ICarRepository>(() =>
                 new CarRepository(_context, PriceList));
+
             _priceListRepository = new Lazy<IPriceListRepository>(() =>
                 new PriceListRepository(_context));
 
@@ -237,10 +251,16 @@ namespace CarRent.Repository
 
             _sendHistoryRepository = new Lazy<IGenericRepository<SendHistory>>(() =>
                 new GenericRepository<SendHistory>(_context));
+
+            _messageRepository= new Lazy<IGenericRepository<Message>>(()=>
+                new GenericRepository<Message>(_context));
         }
 
 
         public CarRentContext Context { get => _context; }
+
+        public IGenericRepository<Car> NewCar => _newCarRepository.Value;
+        public IGenericRepository<PriceList> NewPriceList => _newPricesListRepository.Value;
         public ICarRepository Car => _carRepository.Value;
         public IPriceListRepository PriceList => _priceListRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;
@@ -291,6 +311,7 @@ namespace CarRent.Repository
         public IGenericRepository<ApplicationSettings> ApplicationSettings => _applicationSettingsRepository.Value;
         public IGenericRepository<NewsletterSubscriber> NewsletterSubscriber => _newsletterSubscriberRepository.Value;
         public IGenericRepository<SendHistory> SendHistory => _sendHistoryRepository.Value;
+        public IGenericRepository<Message> Message => _messageRepository.Value;
 
         public async Task SaveAsync()
         {

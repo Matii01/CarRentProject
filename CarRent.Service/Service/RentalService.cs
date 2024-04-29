@@ -44,9 +44,9 @@ namespace CarRent.Service.Service
             return list;
         }
 
-        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
+        public async Task<PagedList<UserRentalListDto>> GetUserRentalsAsync(OrderParameters param)
         {
-            var list = await _repository.Rentals.GetUserRentalsAsync(userId);
+            var list = await _repository.Rentals.GetUserRentalsAsync(param);
             return list;
         }
 
@@ -153,6 +153,8 @@ namespace CarRent.Service.Service
                 InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
                 TotalPaid = price.Gross,
                 TotalToPay = price.Gross,
+                CreatedDate = DateTime.Now,
+                PaymentDate = DateTime.Now,
                 IsEditable = false,
                 Client = new IndividualClient
                 {
@@ -212,11 +214,6 @@ namespace CarRent.Service.Service
 
         private async Task CreateRentalsAndInvoiceWithIndividual(NewRentalFromWorker data)
         {
-            //if (await CarIsBusy(newRental))
-            //{
-            //    throw new Exception("Car have rental on this time");
-            //}
-            
             var DefaultRentalStatusId = await GetDefaultRentalStatus();
             string invoiceNumber = await GenerateInvoiceNumber();
 
@@ -318,12 +315,6 @@ namespace CarRent.Service.Service
 
             return items;
         }
-
-        private async Task CreateRentalsAndInvoiceWithFirm(NewRentalFromWorker data)
-        {
-
-        }
-
 
         public async Task<InvoiceClient> AddInvoiceClient(int invoiceId, int clientId)
         {
@@ -477,12 +468,6 @@ namespace CarRent.Service.Service
             return result.Id;
         }
 
-        private async Task<string> GetInvoiceNumber()
-        {
-            string number = "NR/12";
-            return number;
-        }
-
         private async Task<string> GenerateInvoiceNumber()
         {
             var lastInvoiceNumber = await _repository.Invoice
@@ -521,11 +506,6 @@ namespace CarRent.Service.Service
         private int GetInvoiceStatusForPaidInvoice()
         {
             return 2;
-        }
-
-        private async Task<int> GetInvoiceStatusForOutstandingInvoice()
-        {
-            return 0;
         }
 
         private async Task<string> GetInvoiceStatusNameById(int id)

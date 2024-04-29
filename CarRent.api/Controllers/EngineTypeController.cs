@@ -17,7 +17,6 @@ namespace CarRent.api.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllEngineTypes()
         {
-           // var list = await _services.EngineTypeService.GetAllAsync(false);
             var list = await _services.EngineTypeService.GetAllActiveAsync(false);
             return Ok(list);
         }
@@ -60,7 +59,6 @@ namespace CarRent.api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteEngineType(int id)
         {
-            //var engineType = await _services.EngineTypeService.GetAsync(id, true);
             await _services.EngineTypeService.DeleteAsync(id);
             return NoContent();
         }

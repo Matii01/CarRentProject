@@ -3,8 +3,9 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { useParams } from "react-router";
 import { formatDate } from "../../utils/formDate";
+import { toast } from "react-toastify";
 
-function EditService({ id, setIsEdit }) {
+function EditService({ id, setIsEdit, onEdited }) {
   const parms = useParams();
   const [item, setItem] = useState({
     carId: parms.carId,
@@ -12,7 +13,7 @@ function EditService({ id, setIsEdit }) {
     dateStart: "",
     dateEnd: "",
     description: "",
-    remark: "",
+    remarks: "",
     totalCost: "",
   });
 
@@ -43,11 +44,12 @@ function EditService({ id, setIsEdit }) {
         },
       })
       .then((data) => {
-        console.log(data);
-        //onCancelClik();
+        onEdited();
+        toast.success("zapisano zmiany");
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Bład");
       });
   };
 
@@ -144,8 +146,8 @@ function EditService({ id, setIsEdit }) {
                   <Form.Control
                     as="textarea"
                     type="test"
-                    name="remark"
-                    value={item.remark}
+                    name="remarks"
+                    value={item.remarks}
                     onChange={handleChange}
                     style={{ height: 100 }}
                   />

@@ -71,7 +71,7 @@ namespace CarRent.api.Controllers
             return Ok("");
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,UserEditor")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateNotification([FromBody] NewNotificationDto notification)
         {

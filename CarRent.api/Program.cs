@@ -19,7 +19,17 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Add db connection
 builder.Services.ConfigureDbContext(builder.Configuration);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.ConfigureExceptionHandler();
 // Configure the HTTP request pipeline.
 

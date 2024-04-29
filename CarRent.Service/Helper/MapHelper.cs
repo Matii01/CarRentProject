@@ -85,6 +85,7 @@ namespace CarRent.Service.Helper
             }
 
             return new CarDetailForWorkerDto(
+                car.Id,
                 car.Name,
                 car.CarMake.Id,
                 car.CarModel,
@@ -192,6 +193,7 @@ namespace CarRent.Service.Helper
                 UserName = userForRegistration.Email,
                 Email = userForRegistration.Email,
                 PhoneNumber = userForRegistration.PhoneNumber,
+                IsActive = true,
             };
         }
     }

@@ -10,20 +10,16 @@ namespace CarRent.Service.Service
 {
     public class GenerateDocumentService : IGenerateDocumentService
     {
-        public string GenerateInvoiceDocxDocumentAsync(NewInvoiceDto invoiceDto)
+        public string GenerateInvoiceDocxDocumentAsync(NewInvoiceDto invoiceDto, AboutCompanyDto aboutCompany)
         {
             if (invoiceDto.IsIndividual && invoiceDto.InvoiceIndividual != null)
             {
-                //string directory = AppDomain.CurrentDomain.BaseDirectory;
-                //Console.WriteLine("Executable Directory: " + directory);
+                string inputFile = GetPathForDocInvoiceTemplateFile();
+                string outputFile = GetPathForDocInvoiceResultFile();
 
-                string filePath = @"C:\Users\msi\Desktop\faktura.docx"; // Path to your source Word document
-                string outputFile = @"C:\Users\msi\Desktop\faktura1.docx"; // Path to save the modified Word document
+                var item = GenerateValueForIndividualClientDocument(invoiceDto.InvoiceIndividual, aboutCompany);
 
-                var item = GenerateValueForIndividualClientDocument(invoiceDto.InvoiceIndividual);
-                var templatePath = GetPathForDocInvoiceTemplateFile();
-
-                GenerateDocumentFromTemplate(filePath, outputFile, item);
+                GenerateDocumentFromTemplate(inputFile, outputFile, item);
 
 
                 return outputFile;
@@ -88,7 +84,6 @@ namespace CarRent.Service.Service
 
             string[] headers = new string[] { "ID", "Klient", "Zapłacono", "Do zapłaty", "Data powstania", "Data płatności" };
 
-            // insert headers into the first row
             for(int i = 0; i < headers.Length; i++)
             {
                 sheet.Range[1, i+1].Text = headers[i];
@@ -149,7 +144,6 @@ namespace CarRent.Service.Service
                 sheet.Range[i + 2, 4].NumberValue = (double)invoice.Amount;
             }
 
-            //filePath = @"C:\Users\msi\Desktop\MonthReport.xlsx";
             var excelPath = GetPathForExcelDocuments();
             filePath = $@"{excelPath}\MonthReport.xlsx";
 
@@ -182,13 +176,17 @@ namespace CarRent.Service.Service
 
         private string GetPathForDocInvoiceTemplateFile()
         {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string solutionFolder = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.FullName;
+
+            Console.WriteLine("Solution Folder: " + solutionFolder);
             try
             {
                 string currentDirectory = Directory.GetCurrentDirectory();
                 string parentDirectory = Directory.GetParent(currentDirectory).FullName;
                 string templateFile = Path.Combine(parentDirectory, "documentTemplates");
                 string filePath = Path.Combine(templateFile, "faktura.docx");
-                
+                Console.WriteLine(filePath);
                 return filePath;
             }
             catch (Exception ex)
@@ -223,37 +221,41 @@ namespace CarRent.Service.Service
             return keyValuePairs;
         }
         
-        private Dictionary<string, string> GenerateValueForIndividualClientDocument(InvoiceWithIndividualClient invoice)
+
+        private Dictionary<string, string> GenerateValueForIndividualClientDocument(InvoiceWithIndividualClient invoice, AboutCompanyDto aboutCompany)
         {
+            var rental = invoice.InvoiceItems.First();
+            var totalToPay = invoice?.TotalToPay - invoice?.TotalPay ?? 0;
+
             var keyValuePairs = new Dictionary<string, string>()
             {
-                { "@FakturaNr@"         , "nr/15515" },
-                { "@dataW@"             , "2024-12-12" },
-                { "@dataD@"             , "2024-12-13" },
-                { "@firma@"             , "Nazwa firmy" },
-                { "@nabywca@"           , "Adam Nijaki" },
+                { "@FakturaNr@"         , invoice.Number },
+                { "@dataW@"             , invoice.CreatedDate.Value.ToShortDateString()??"" },
+                { "@dataD@"             , rental.Rental?.RentalStart.ToShortDateString() ?? "" },
+                { "@firma@"             , aboutCompany.Name },
+                { "@nabywca@"           , $"{invoice.Client.FirstName} {invoice.Client.LastName}" },
                 { "@nrKlienta@"         , "123456789" },
-                { "@nrNIP@"             , "3465465465465" },
+                { "@nrNIP@"             , aboutCompany.NIP },
                 { "@nazwaBanku@"        , "PKO BP" },
                 { "@nrKonta@"           , "5654645456465456" },
-                { "@nazwaT@"            , "Skoda Fabia IV" },
+                { "@nazwaT@"            , rental.Rental?.CarName ?? "" },
                 { "@nrK@"               , "65465156156165564" },
                 { "@ilosc@"             , "1" },
                 { "@jm@"                , "szt" },
-                { "@CBrutto@"           , "150" },
-                { "@CNetto@"            , "130" },
-                { "@VATP@"              , "23" },
-                { "@VATK@"              , "20" },
+                { "@CBrutto@"           , rental.Gross.ToString() },
+                { "@CNetto@"            , rental.Net.ToString() },
+                { "@VATP@"              , rental.VAT.ToString() },
+                { "@VATK@"              , rental.VATValue.ToString() },
                 { "@Lp@"                , "1" },
-                { "@kwotaVAT@"          , "20" },
-                { "@nettoR@"            , "0" },
-                { "@bruttoR@"           , "150" },
-                { "@kwotaDZ@"           , "155" },
-                { "@sposobP@"           , "2024-12-12" },
-                { "@termin@"            , "2024-12-12" },
-                { "@dokumentWystawil@"  , "Nikt" },
-                { "@FAdres@"            , "Adres firmy" },
-                { "@NAdres@"            , "asdasd" },
+                { "@kwotaVAT@"          , rental.VATValue.ToString()  },
+                { "@nettoR@"            , rental.Net.ToString() },
+                { "@bruttoR@"           , invoice?.TotalToPay?.ToString()?? "" },
+                { "@kwotaDZ@"           , totalToPay.ToString() },
+                { "@sposobP@"           , "" },
+                { "@termin@"            , invoice?.PaymentDate.Value.ToShortDateString() ?? "" },
+                { "@dokumentWystawil@"  , "" },
+                { "@FAdres@"            , aboutCompany.Address?? "" },
+                { "@NAdres@"            , invoice.Client?.Address??" " },
             };
 
             return keyValuePairs;

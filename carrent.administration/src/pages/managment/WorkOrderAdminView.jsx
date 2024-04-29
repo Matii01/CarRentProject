@@ -41,6 +41,7 @@ function WorkOrderAdminView() {
     jwtInterceptor
       .get("WorkOrder/forFilters")
       .then((data) => {
+        console.log(data.data);
         setForFilters(data.data);
       })
       .catch((error) => {

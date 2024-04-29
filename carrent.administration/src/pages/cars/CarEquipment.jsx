@@ -10,12 +10,14 @@ import { ToastContainer, toast } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
 import AddCarEquipment from "../../components/CarEquipment/AddCarEquipment";
 import EditCarEquipment from "../../components/CarEquipment/EditCarEquipment";
+import { useSelector } from "react-redux";
 
 function CarEquipment() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
   const [selectedEquipment, setSelectedEquipment] = useState();
   const [isEditMode, setIsEditMode] = useState(false);
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -41,6 +43,10 @@ function CarEquipment() {
   const addElement = (equipment) => {
     const newCarEquipment = [equipment, ...equipmentList];
     setEquipmentList(newCarEquipment);
+
+    setSelectedEquipment(equipment);
+    setIsEditMode(true);
+
     toast.success("Dodano");
   };
 
@@ -75,11 +81,20 @@ function CarEquipment() {
       .then((data) => {
         const newList = equipmentList.filter((x) => x.id != itemId);
         setEquipmentList(newList);
+        if (selectedEquipment.id == itemId) {
+          onCancel();
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
 
   if (!equipmentList) {
     return <p>Loading ...</p>;
@@ -110,14 +125,14 @@ function CarEquipment() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>

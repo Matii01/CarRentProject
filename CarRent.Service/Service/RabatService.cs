@@ -25,7 +25,6 @@ namespace CarRent.Service.Service
         {
             _notification = notification;
         }
-
         public async Task<IEnumerable<RabatDto>> GetCurrentRabat()
         {
             var rabats = await _repository.Rabat
@@ -35,12 +34,7 @@ namespace CarRent.Service.Service
 
             return rabats;
         }
-
-        /// <summary>
-        /// Return current rabat for given car or rabat with value 0
-        /// </summary>
-        /// <param name="carId"></param>
-        /// <returns></returns>
+       
         public async Task<RabatValueDto> GetRabatForCar(int carId)
         {
             var data = DateTime.Now;
@@ -51,17 +45,13 @@ namespace CarRent.Service.Service
                     x.DateFrom <= data &&
                     x.DateTo >= data
                     , false)
+                .OrderByDescending(x => x.DateFrom)
                 .Select(x => new RabatValueDto(x.RabatPercentValue))
                 .SingleOrDefaultAsync();
 
             return carRabat ?? new RabatValueDto(0);
         }
 
-        /// <summary>
-        /// Return current rabat for given user or rabat with value 0
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         public async Task<RabatValueDto> GetUserRabat(string userId)
         {
             var data = DateTime.Now;
@@ -81,7 +71,7 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<CarRabatDto>> GetCarRabats(int carId)
         {
             var carRabats = await _repository.Rabat
-                .FindByCondition(x => x.IsActive == true, false)
+                .FindByCondition(x => x.IsActive == true && x.CarId == carId, false)
                 .Select(x => new CarRabatDto(x.Id, x.RabatPercentValue, x.DateFrom, x.DateTo))
                 .ToListAsync();
 
@@ -203,13 +193,6 @@ namespace CarRent.Service.Service
             return false;
         }
 
-
-        /// <summary>
-        /// Combine rabat for user and for car and return rabat for rental 
-        /// </summary>
-        /// <param name="carId"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         public async Task<RabatValueDto> CalculateRabat(int carId, string? userId)
         {
             if(userId != null)

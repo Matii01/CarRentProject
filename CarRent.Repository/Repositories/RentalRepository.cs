@@ -38,7 +38,6 @@ namespace CarRent.Repository.Repositories
                 .ThenInclude(x => x.CarMake);
 
 
-
             var transformedData = await invoice
                 .Select(x => new InvoiceWithClient(
                         x.Id,
@@ -48,6 +47,8 @@ namespace CarRent.Repository.Repositories
                         x.TotalToPay,
                         x.TotalPaid,
                         x.IsEditable,
+                        x.CreatedDate,
+                        x.PaymentDate,
                         x.Client,
                         x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
                             y.InvoiceId,
@@ -160,12 +161,13 @@ namespace CarRent.Repository.Repositories
             return GetTransformedPagedList(pagedList);
         }
 
-        public async Task<IEnumerable<UserRentalListDto>> GetUserRentalsAsync(string userId)
+        public async Task<PagedList<UserRentalListDto>> GetUserRentalsAsync(OrderParameters param)
         {
-            var items = await context.UserRentals
-                .Where(x => x.UserAccountId == userId)
+            var items = context.UserRentals
+                .Where(x => x.UserAccountId == param.ClientId)
                 .Include(x => x.Rental)
                 .ThenInclude(x => x.Car)
+                .OrderByDescending(x => x.Rental.RentalStart)
                 .Select(x => new UserRentalListDto(
                         x.RentalId,
                         x.Rental.InvoiceItem.InvoiceId,
@@ -173,17 +175,14 @@ namespace CarRent.Repository.Repositories
                         x.Rental.Car.Name,
                         x.Rental.RentalStart,
                         x.Rental.RentalEnd)
-                ).ToListAsync();
+                );
 
-            //var itemsDa = context.UserRentals
-            //   .Where(x => x.UserAccountId == userId)
-            //   .Include(x => x.Rental)
-            //   .ThenInclude(x => x.Car);
+            var pagedList = await PagedList<UserRentalListDto>
+                .ToPagedList(items, param.PageNumber, param.PageSize);
 
-            return items;
+            return pagedList;
         }
 
-        //public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int id)
         public async Task<UserRentalDetailDto> GetUserRentalDetailAsync(string userId, int rentalId)
         {
             var invoiceId = await GetInvoiceIdByRentalId(rentalId);
@@ -273,6 +272,8 @@ namespace CarRent.Repository.Repositories
                         invoice.TotalToPay,
                         invoice.TotalPay,
                         invoice.IsEditable,
+                        invoice.CreatedDate,
+                        invoice.PaymentDate,
                         invoice.Client as IndividualClient,
                         invoice.InvoiceItems
                     ));

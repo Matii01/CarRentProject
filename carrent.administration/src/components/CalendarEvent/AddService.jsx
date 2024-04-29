@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { useParams } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 
 function AddService() {
   const parms = useParams();
@@ -26,10 +27,9 @@ function AddService() {
       })
       .then((data) => {
         console.log(data);
-        //onCancelClik();
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.response.data.Message);
       });
   };
 
@@ -54,6 +54,7 @@ function AddService() {
 
   return (
     <>
+      <ToastContainer />
       <Row>
         <Form onSubmit={onSubmit}>
           <Row>
@@ -71,8 +72,6 @@ function AddService() {
               </Button>
             </Col>
           </Row>
-        </Form>
-        <Form className="m-2">
           <Form.Group
             className="mb-3 pe-3"
             controlId="exampleForm.ControlInput1"
@@ -81,6 +80,7 @@ function AddService() {
               <Col>
                 <Form.Label>Data obowiązywania od</Form.Label>
                 <Form.Control
+                  required
                   type="date"
                   name="dateStart"
                   value={item.dateStart}
@@ -90,6 +90,7 @@ function AddService() {
               <Col>
                 <Form.Label>Data obowiązywania do</Form.Label>
                 <Form.Control
+                  required
                   type="date"
                   name="dateEnd"
                   value={item.dateEnd}
@@ -101,6 +102,7 @@ function AddService() {
               <Col>
                 <Form.Label>Koszt</Form.Label>
                 <Form.Control
+                  required
                   type="number"
                   name="totalCost"
                   value={item.totalCost}

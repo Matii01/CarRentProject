@@ -20,29 +20,17 @@ namespace CarRent.Repository
         public CarRentContext(DbContextOptions options)
             : base(options)
         {
-
+            
         }
-
-        /*
-          modelBuilder.Entity<Car>()
-                .HasMany(e => e.CarsEquipment)
-                .WithMany(e => e.Cars)
-                .UsingEntity("CarEquipmentCar",
-                    l => l.HasOne(typeof(data.Models.CarRent.CarEquipment)).WithMany().HasForeignKey("CarEquipmentId").HasPrincipalKey(nameof(data.Models.CarRent.CarEquipment.Id)),
-                    r => r.HasOne(typeof(Car)).WithMany().HasForeignKey("CarId").HasPrincipalKey(nameof(Car.Id)),
-                    j => j.HasKey("CarId", "CarEquipmentId"));
-         */
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             modelBuilder.Entity<Rental>()
                 .HasOne(x => x.InvoiceItem)
                 .WithOne(i => i.Rental)
                 .HasForeignKey<InvoiceItem>(i => i.RentalId);
-            //                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Invoice>()
                 .HasMany(e => e.InvoicesItems)
@@ -84,10 +72,7 @@ namespace CarRent.Repository
         public DbSet<RentalStatus> RentalStatuses { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceStatus> InvoicesStatus { get; set; }
-        //public DbSet<InvoiceClient> InvoiceClients { get; set; }
-        //public DbSet<InvoiceCompanyClient> InvoiceCompanyClients { get; set; }
-        //public DbSet<CompanyClientDetails> CompanyClientsDetails { get; set;}
-        //public DbSet<ClientDetails> ClientDetails { get; set; }
+       
         public DbSet<InvoiceItem> InvoicesItems { get; set; }
         public DbSet<FirmClient> FirmClients { get; set; }
         public DbSet<IndividualClient> IndividualClients { get; set; }
@@ -126,6 +111,7 @@ namespace CarRent.Repository
        
         public DbSet<NewsletterSubscriber> NewsletterSubscriber { get; set; }
         public DbSet<SendHistory> SendHistory { get; set; }
+        public DbSet<Message> Message { get; set; }
 
     }
 }

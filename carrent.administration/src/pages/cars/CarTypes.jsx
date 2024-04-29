@@ -5,6 +5,7 @@ import styles from "./../../components/Table/Table.module.css";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
 import MyTableWithPagination from "../../components/Table/MyTableWithPagination";
+import { useSelector } from "react-redux";
 
 const initialState = {
   newCarType: { id: 0, name: "" },
@@ -62,10 +63,18 @@ function carTypeReducer(state, action) {
 function CarTypes() {
   const [state, dispatch] = useReducer(carTypeReducer, initialState);
   const [searchTerm, setSerachTerm] = useState("");
+  const [selected, setSelected] = useState();
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (selected) {
+      onDoubleClick(selected);
+    }
+  }, [selected]);
 
   const getData = () => {
     jwtInterceptor
@@ -194,7 +203,7 @@ function CarTypes() {
           type: "SET_TYPES",
           payload: newTypes,
         });
-        onCancel();
+        setSelected(data.data);
         toast.success("Pomyślnie dodano");
       })
       .catch((error) => {
@@ -225,6 +234,12 @@ function CarTypes() {
       });
   };
 
+  if (
+    !(roles.includes("Administrator") || roles.includes("CarDetailsEditor"))
+  ) {
+    return <p>Brak uprawnień</p>;
+  }
+
   if (state.loading) {
     return <p>Lodaing</p>;
   }
@@ -252,13 +267,13 @@ function CarTypes() {
                         size="sm"
                         name="serachTerm"
                         type="search"
-                        placeholder="Search"
+                        placeholder="Szukaj"
                         className="me-2"
                         aria-label="Search"
                         onChange={handleChange}
                       />
                       <Button variant="outline-success" type="submit" size="sm">
-                        Search
+                        Szukaj
                       </Button>
                     </Form>
                   </Col>

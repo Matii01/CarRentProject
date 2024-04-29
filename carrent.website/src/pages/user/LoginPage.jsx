@@ -6,9 +6,10 @@ import { useSelector } from "react-redux";
 import axiosInstance from "../../utils/axiosConfig";
 
 function LoginPage() {
+  const [error, setError] = useState();
   const [loginForm, setLoginForm] = useState({
-    username: "ATestowy",
-    password: "Pa$$w0rd",
+    username: "",
+    password: "",
   });
   const [setLocalStorage] = SetLocalStorage();
   const navigate = useNavigate();
@@ -16,9 +17,11 @@ function LoginPage() {
 
   useEffect(() => {
     if (user.isLogin) {
+      console.log("is login");
       navigate("/user");
     }
-  }, []);
+    console.log("is logout");
+  }, [user]);
 
   const login = () => {
     console.log(loginForm);
@@ -33,7 +36,7 @@ function LoginPage() {
         navigate("/car/cars");
       })
       .catch((error) => {
-        console.log(error);
+        setError("Incorrect login or password");
       });
   };
 
@@ -52,6 +55,7 @@ function LoginPage() {
       ...prevState,
       [name]: value,
     }));
+    setError("");
   };
 
   const goToRegister = () => {
@@ -69,9 +73,9 @@ function LoginPage() {
           <Col xs={12} md={6}>
             <Form onSubmit={handleLoginClik}>
               <Form.Group className="mb-3">
-                <Form.Label>Login</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
-                  placeholder="Enter login"
+                  placeholder="Enter email"
                   name="username"
                   onChange={handleChange}
                 />
@@ -107,6 +111,9 @@ function LoginPage() {
                     Create account
                   </Button>
                 </Col>
+              </Row>
+              <Row className="text-center p-3 text-danger fs-5">
+                {error && <p>{error}</p>}
               </Row>
             </Form>
           </Col>

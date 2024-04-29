@@ -20,6 +20,12 @@ namespace CarRent.Service.Service
 
         }
 
+        public async Task AddAddressFromRegisterData(string id, UserForRegistrationDto data)
+        {
+            var address = new AddressDto(0, data.FirstName, data.LastName, null, null, null, null, null, true);
+            await AddAddressesAsync(id, address);
+        }
+
         public async Task AddAddressesAsync(string id, AddressDto address)
         {
             UserAddress userAddress = new ()

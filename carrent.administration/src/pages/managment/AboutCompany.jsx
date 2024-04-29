@@ -175,7 +175,7 @@ function AboutCompany() {
                 </Form.Group>
 
                 <Button variant="dark" type="submit">
-                  Submit
+                  Zapisz
                 </Button>
               </Form>
             </Card.Body>

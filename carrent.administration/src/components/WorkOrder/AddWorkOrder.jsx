@@ -84,7 +84,7 @@ function AddWorkOrder({ onAdd, forFilters }) {
                   >
                     <option value={null}>Select... </option>
                     {forFilters &&
-                      forFilters.priorities.map((type) => (
+                      forFilters.statuses.map((type) => (
                         <option key={type.id} value={type.id}>
                           {type.name}
                         </option>
@@ -102,7 +102,7 @@ function AddWorkOrder({ onAdd, forFilters }) {
                   >
                     <option value={null}>Select... </option>
                     {forFilters &&
-                      forFilters.statuses.map((type) => (
+                      forFilters.priorities.map((type) => (
                         <option key={type.id} value={type.id}>
                           {type.name}
                         </option>

@@ -60,13 +60,13 @@ function EditPriceList({ priceList, onCancel, onEdit }) {
   };
 
   if (!priceList) {
-    return <p>First choose a pricelist</p>;
+    return <p>Najpierw wybież cennik</p>;
   }
 
   return (
     <Card className="p-2">
       <Card.Header>
-        <Card.Title as="h5">Cennik - edycja</Card.Title>
+        <Card.Title as="h5">Cennik - edycja </Card.Title>
       </Card.Header>
       <Card.Body className="table-full-width table-responsive px-0">
         <Tabs

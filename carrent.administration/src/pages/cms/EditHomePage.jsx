@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function EditHomePage() {
   const [validated, setValidated] = useState(false);
@@ -11,6 +12,7 @@ function EditHomePage() {
     homePageTextOne: "",
     homePageTextTwo: "",
   });
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -62,6 +64,11 @@ function EditHomePage() {
         console.log(error);
       });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("PageEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
+
   return (
     <>
       <ToastContainer />

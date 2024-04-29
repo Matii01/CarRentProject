@@ -3,6 +3,7 @@ using CarRent.Service.Interfaces;
 using CarRent.data.DTO;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarRent.api.Controllers
 {
@@ -47,10 +48,6 @@ namespace CarRent.api.Controllers
             var result = await _services.PriceListService
                 .GetPricelistItems(priceListId);
 
-            //if (result.IsNullOrEmpty())
-            //{
-            //    return NotFound();
-            //}
 
             return Ok(result);
         }
@@ -64,6 +61,7 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPost("defaultPriceList/{id:int}")]
         public async Task<IActionResult> ChangeDefaultPriceList(int id)
         {
@@ -71,6 +69,7 @@ namespace CarRent.api.Controllers
             return Ok("");
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPost("addItem")]
         public async Task<IActionResult> AddItemToPricelist(NewtPricelistItemDto newItem)
         {
@@ -81,6 +80,7 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPost("addDate")]
         public async Task<IActionResult> AddPricelistDate(PricelistDateDto pricelistDate)
         {
@@ -93,6 +93,7 @@ namespace CarRent.api.Controllers
             return CreatedAtAction(nameof(AddPricelistDate), pricelistDate);
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPost("create/{carId:int}")]
         public async Task<IActionResult> CreateCarPriceList(PriceListDto priceList)
         {
@@ -103,7 +104,7 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
-
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> UpdatePricelist(PriceListDto priceList)
         {
@@ -113,6 +114,7 @@ namespace CarRent.api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpPut("updatePricelistItem/{id:int}")]
         public async Task<IActionResult> UpdatePricelistItem(int id, [FromBody] PricelistItemDto priceList)
         {
@@ -122,22 +124,15 @@ namespace CarRent.api.Controllers
             return Ok();
         }
 
-        //[HttpPut("updatePricelistDate/{id:int}")]
-        //public async Task<IActionResult> UpdatePricelistDate(int id, [FromBody] PricelistItemDto priceList)
-        //{
-
-        //    return Ok();
-        //}
-
-        [HttpPost("priceForDates/{carId:int}")]
-        public async Task<IActionResult> CalculatePrice ([FromBody] NewRentalForClient rental)
+        [Authorize(Roles = "Administrator,PriceListEditor")]
+        [HttpDelete("deletePricelist/{id:int}")]
+        public async Task<IActionResult> DeletePriceList(int id)
         {
-            //var result = await _services.PriceListService.GetPriceForCarForDate(rental);
-            //return Ok(result);
-            throw new NotImplementedException();
+            await _services.PriceListService.DeletePriceList(id);
+            return Ok("");
         }
 
-
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpDelete("deletePricelistDate/{id:int}")]
         public async Task<IActionResult> DeletePricelistDate(int id)
         {
@@ -145,6 +140,7 @@ namespace CarRent.api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Administrator,PriceListEditor")]
         [HttpDelete("deletePricelistItem/{id:int}")]
         public async Task<IActionResult> DeletePricelistItem(int id)
         {

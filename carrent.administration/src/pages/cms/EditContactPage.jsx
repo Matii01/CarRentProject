@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import jwtInterceptor from "../../utils/jwtInterceptor";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function EditContactPage() {
   const [validated, setValidated] = useState(false);
@@ -22,6 +23,7 @@ function EditContactPage() {
     textRowOne: "",
     textRowTwo: "",
   });
+  const roles = useSelector((state) => state.user.role);
 
   useEffect(() => {
     jwtInterceptor
@@ -74,6 +76,11 @@ function EditContactPage() {
         toast.error("Błąd");
       });
   };
+
+  if (!(roles.includes("Administrator") || roles.includes("PageEditor"))) {
+    return <p>Brak uprawnień</p>;
+  }
+
   return (
     <>
       <ToastContainer />
@@ -238,7 +245,7 @@ function EditContactPage() {
                         required
                         type="text"
                         placeholder="Numer telefonu"
-                        name="phoneDetails"
+                        name="phoneNumber"
                         value={page.phoneNumber}
                         onChange={handleChange}
                       />

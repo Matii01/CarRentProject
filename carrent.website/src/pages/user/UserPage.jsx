@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserWishList from "../../components/User/UserWishlist";
 import UserNotification from "../../components/User/UserNotification";
+import ShowRabat from "../../components/User/ShowRabat";
 
 function UserPage() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function UserPage() {
   const address = "ADDRESS";
   const wishlist = "WISHLIST";
   const notification = "NOTIFICATION";
+  const rabats = "RABATS";
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -66,8 +68,9 @@ function UserPage() {
     selectedView = <UserNotification />;
   }
 
-  // https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc
-  // https://sell-react-b5.vercel.app/img/photo/kyle-loftus-589739-unsplash-avatar.jpg
+  if (view === rabats) {
+    selectedView = <ShowRabat />;
+  }
 
   const url =
     "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
@@ -112,6 +115,9 @@ function UserPage() {
                     onClick={() => changeView(notification)}
                   >
                     Notification
+                  </ListGroup.Item>
+                  <ListGroup.Item action onClick={() => changeView(rabats)}>
+                    Discount
                   </ListGroup.Item>
                 </ListGroup>
               </Card>

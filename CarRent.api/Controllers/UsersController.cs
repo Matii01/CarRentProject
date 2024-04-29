@@ -23,7 +23,7 @@ namespace CarRent.api.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "Administrator,Worker")]
+        [Authorize(Roles = "Administrator,UserViewer")]
         [HttpGet("allUsers")]
         public async Task<IActionResult> GetUsersList()
         {
@@ -123,7 +123,6 @@ namespace CarRent.api.Controllers
             return CreatedAtAction("AddUserAddresses", address);
         }
 
-        //[Authorize(Roles = "User")]
         [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword passwords)
@@ -242,7 +241,7 @@ namespace CarRent.api.Controllers
 
         [Authorize(Roles = "User")]
         [HttpPost("UpdatePersonalDetails")]
-        public async Task<IActionResult> GetUserPersonalDetails(UserPersonalDataDto updated)
+        public async Task<IActionResult> UpdateUserPersonalDetails(UserPersonalDataDto updated)
         {
             var username = User.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
@@ -255,11 +254,20 @@ namespace CarRent.api.Controllers
             user.FirstName = updated.FirstName ?? user.FirstName;
             user.LastName = updated.LastName ?? user.LastName;
             user.PhoneNumber = updated.PhoneNumber ?? user.PhoneNumber;
-            //user.Email = updated.Email ?? user.Email;
            
             await _userManager.UpdateAsync(user);
 
             return Ok(updated);
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete("deleteWorker/{workerId}")]
+        public async Task<IActionResult> DeleteUser(string workerId)
+        {
+            await _services.UsersService.DeleteWorker(workerId);
+
+            return Ok("");
+        }
+
     }
 }

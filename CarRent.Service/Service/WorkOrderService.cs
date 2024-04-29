@@ -91,7 +91,6 @@ namespace CarRent.Service.Service
 
             return workOrder;
         }
-
         public async Task RemoveWorkerFromWorkOrderAsync(WorkOrderToAssign workOrder)
         {
             var t = await _repository
@@ -105,9 +104,6 @@ namespace CarRent.Service.Service
             t.IsActive = false;
             await _repository.SaveAsync();
         }
-
-
-
         public async Task ChangeWorkOrderStatusAsync(StatusToChange status)
         {
             var toChange = await _repository.WorkOrder
@@ -117,7 +113,6 @@ namespace CarRent.Service.Service
             toChange.WorkOrderStatusId = status.StatusId;
             await _repository.SaveAsync();
         }
-
         public async Task ChangeWorkOrderPriorityAsync(PriorityToChange priority)
         {
             var toChange = await _repository.WorkOrder
@@ -127,7 +122,6 @@ namespace CarRent.Service.Service
             toChange.WorkOrderStatusId = priority.PriorityId;
             await _repository.SaveAsync();
         }
-
         public async Task<PagedList<WorkOrderDto>> GetWorkOrderByParamsAsync(WorkOrderParameters orderParams)
         {
             var items = _repository.WorkOrder
@@ -163,10 +157,14 @@ namespace CarRent.Service.Service
                 .ToArrayAsync();
 
 
-            var usersInRole = await _userManager.GetUsersInRoleAsync("Worker");
+            var usersInRole = await _userManager
+                .GetUsersInRoleAsync("Worker");
+
 
             return new DataForWorkOrderFilters(statuses, priorities,
-                usersInRole.Select(x => new WorkersForWorkOrder(x.Id, $"{x.FirstName} {x.LastName}")));
+                usersInRole
+                .Where(x=>x.IsActive == true)
+                .Select(x => new WorkersForWorkOrder(x.Id, $"{x.FirstName} {x.LastName}")));
         }
         
         public async Task UpdateWorkOrderAsync(int workOrderId, WorkOrderForUpdateDto workOrder)
@@ -193,8 +191,6 @@ namespace CarRent.Service.Service
             var toUpdate = await _repository.WorkOrder
                 .GetAsync(workOrderId, true)
                 .SingleOrDefaultAsync() ?? throw new Exception("not found");
-
-            //TODO get status from service 
 
             int compleatedStatusId = await _repository.WorkOrderStatus
                 .FindByCondition(x => x.IsActive == true && x.IsDefaultForCompleated == true, false)

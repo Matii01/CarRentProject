@@ -13,11 +13,9 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setUserName: (state, action) => {
-      console.log("update userName");
       state.userName = action.payload.userName;
     },
     setUserRoles: (state, action) => {
-      console.log("update role");
       state.role = action.payload.role;
     },
     setAccesToken: (state, action) => {

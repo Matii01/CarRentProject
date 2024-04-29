@@ -1,6 +1,8 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import styles from "./ContactPage.module.css";
 import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+import axiosInstance from "../../utils/axiosConfig";
 
 function ContactPage() {
   const data = useLoaderData();
@@ -80,11 +82,62 @@ function ContactPage() {
 }
 
 function ContactForm({ title, textOne, textTwo }) {
+  const [message, setMessage] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setMessage((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
+    console.log(message);
+    axiosInstance
+      .post(`Messages/sendMessage`, JSON.stringify(message), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        setShow(true);
+        setMessage({
+          name: "",
+          email: "",
+          message: "",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Thank you </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Your message has been sent </Modal.Body>
+        <Modal.Footer>
+          <Button className="customButton" onClick={handleClose}>
+            Understood
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Container>
         <Row className="mb-4">
           <Col>
@@ -96,15 +149,36 @@ function ContactForm({ title, textOne, textTwo }) {
             <Form onSubmit={onSubmit}>
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Name" />
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  value={message.name}
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Your Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter your email" />
+                <Form.Control
+                  required
+                  type="email"
+                  placeholder="Enter your email"
+                  value={message.email}
+                  name="email"
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Your message</Form.Label>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control
+                  required
+                  as="textarea"
+                  rows={3}
+                  name="message"
+                  value={message.message}
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Button className="customButton" type="submit">

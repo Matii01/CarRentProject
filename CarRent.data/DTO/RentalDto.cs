@@ -169,6 +169,8 @@ namespace CarRent.data.DTO
         decimal? TotalToPay,
         decimal? TotalPay,
         bool? IsEditable,
+        DateTime? CreatedDate,
+        DateTime? PaymentDate,
         Client? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems);
 
@@ -194,6 +196,8 @@ namespace CarRent.data.DTO
         decimal? TotalToPay,
         decimal? TotalPay,
         bool? IsEditable,
+        DateTime? CreatedDate,
+        DateTime? PaymentDate,
         IndividualClient? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems
     );

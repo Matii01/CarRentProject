@@ -24,9 +24,6 @@ namespace CarRent.Service.Service
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
 
-        //private readonly TokenService _tokenService;
-        //private readonly JwtSettings _jwtSettings;
-
         private const string EnvironmentSecretName = "SECRET";
         private User? _user;
         public string Secret { get; set; } = Environment.GetEnvironmentVariable(EnvironmentSecretName);
@@ -55,8 +52,6 @@ namespace CarRent.Service.Service
                 }
                 //await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             }
-
-            // Add data to address 
 
             return result;
         }

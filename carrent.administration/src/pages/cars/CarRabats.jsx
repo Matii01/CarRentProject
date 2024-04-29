@@ -56,7 +56,7 @@ function CarRabats() {
       })
       .then((data) => {
         console.log(data);
-        toast.error("Pomyślnie zapisano");
+        toast.success("Pomyślnie zapisano");
         getRabats();
       })
       .catch((error) => {

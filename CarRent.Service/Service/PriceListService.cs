@@ -149,14 +149,6 @@ namespace CarRent.Service.Service
 
         public async Task<bool> CarPriceListExistForThisDateTime(PricelistDateDto dateDto)
         {
-            //var result = await _repository.PricelistDate
-            //    .FindByCondition(
-            //        x => x.PriceListId == dateDto.PriceId &&
-            //        x.IsActive == true &&
-            //        !((dateDto.DateFrom > x.DateTo && dateDto.DateTo > x.DateTo) ||
-            //            (dateDto.DateFrom < x.DateFrom && dateDto.DateTo < x.DateFrom))
-            //        , false)
-            //    .ToListAsync();
             var result = await _repository.PricelistDate
                 .FindByCondition(
                     x => x.PriceListId == dateDto.PriceId &&
@@ -221,9 +213,7 @@ namespace CarRent.Service.Service
 
             if (item == null)
             {
-                // ToDo:  zmień to 
                 return new PriceForCar(0, 0, 0, 0, 0); 
-                //throw new Exception("No pricelist for car for this date");
             }
 
             await Console.Out.WriteLineAsync(item.Price.ToString());
@@ -232,10 +222,14 @@ namespace CarRent.Service.Service
 
             var rabatValue = total * (rabat.RabatPercentValue / 100);
 
-            //PriceForCar priceForCar = new (rabat.RabatPercentValue, net, total, 23, total - net);
             PriceForCar priceForCar = new (rabatValue, net, total, 23, total - net);
 
             return priceForCar;
+        }
+
+        public async Task<decimal> GetCarPriceForOneDay(int carId)
+        {
+            return await _repository.PriceList.GetCarPriceForOneDay(carId);
         }
 
         private async Task<PricelistItem?> GetPriceListItemForCarAndDate(NewRentalForClient rental)
@@ -257,6 +251,11 @@ namespace CarRent.Service.Service
         {
             TimeSpan difference = rental.DateTo - rental.DateFrom;
             return (int)difference.TotalDays;
+        }
+
+        public Task DeletePriceList(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
