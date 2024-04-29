@@ -1,23 +1,23 @@
-﻿using CarRent.data.DTO;
+﻿using CarRent.data.Configurations;
 using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Stripe;
 
 namespace CarRent.api.Controllers
 {
     public class PaymentController : BaseController
     {
-        private const string WhSecret = "whsec_61de8ec88cb683302205c12bc3749d33dbf237cd2429bb4c3a721ecb879953f5";
+        private readonly WhSecretConfiguration _secretConfig;
         private readonly UserManager<User> _userManager;
 
-        public PaymentController(IServiceManager serviceManager, UserManager<User> userManager) 
+        public PaymentController(IServiceManager serviceManager, UserManager<User> userManager, WhSecretConfiguration secretConfig) 
             : base(serviceManager)
         {
             _userManager = userManager;
+            _secretConfig = secretConfig;
         }
 
         [Authorize(Roles = "User")]
@@ -39,7 +39,7 @@ namespace CarRent.api.Controllers
             var json = await new StreamReader(Request.Body).ReadToEndAsync();
 
             var stripeEvent = EventUtility.ConstructEvent(json,
-                Request.Headers["Stripe-Signature"], WhSecret);
+                Request.Headers["Stripe-Signature"], _secretConfig.WhSecret);
 
             PaymentIntent intent;
             switch (stripeEvent.Type) 

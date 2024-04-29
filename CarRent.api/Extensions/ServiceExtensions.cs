@@ -1,4 +1,5 @@
-﻿using CarRent.data.Models.Auth;
+﻿using CarRent.data.Configurations;
+using CarRent.data.Models.Auth;
 using CarRent.data.Models.User;
 using CarRent.Repository;
 using CarRent.Repository.Interfaces;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
 using System.Text;
@@ -33,7 +35,7 @@ namespace CarRent.api.Extensions
 
         /// <summary>
         /// 
-        /// </summary>
+        /// </summary>  
         /// <param name="service"></param>
         /// <param name="configuration"></param>
         /// <exception cref="InvalidOperationException"></exception>
@@ -56,6 +58,8 @@ namespace CarRent.api.Extensions
                 .Get<EmailConfiguration>();
 
             services.AddSingleton(emailConfig);
+            services.AddSingleton(configuration.GetSection("Secret").Get<WhSecretConfiguration>());
+
             services.AddScoped<IEmailSender, EmailSender>();
         }
 
