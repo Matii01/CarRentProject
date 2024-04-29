@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class CarTypeController : BaseController
     {
         public CarTypeController(IServiceManager service) : base(service)

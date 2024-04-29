@@ -15,7 +15,6 @@ using System.Security.Claims;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class RentalController : BaseController
     {
         private readonly UserManager<User> _userManager;

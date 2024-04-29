@@ -3,7 +3,6 @@ using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class CarEquipmentController : BaseController
     {
         public CarEquipmentController(IServiceManager serviceManager)

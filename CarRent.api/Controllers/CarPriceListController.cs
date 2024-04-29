@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class CarPriceListController : BaseController
     {
         public CarPriceListController(IServiceManager serviceManager)

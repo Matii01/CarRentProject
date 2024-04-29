@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class CarMaintenanceController : BaseController
     {
         private readonly IAuthenticationService _authentication;

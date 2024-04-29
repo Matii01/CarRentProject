@@ -9,7 +9,6 @@ using Stripe;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class PaymentController : BaseController
     {
         private const string WhSecret = "whsec_61de8ec88cb683302205c12bc3749d33dbf237cd2429bb4c3a721ecb879953f5";

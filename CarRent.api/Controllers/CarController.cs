@@ -10,7 +10,6 @@ using System.Collections.Generic;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class CarController : BaseController
     {
         public CarController(IServiceManager serviceManager) 

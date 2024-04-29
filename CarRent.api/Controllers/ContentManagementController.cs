@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     [Authorize(Roles = "Administrator,PageEditor")]
     public class ContentManagementController : BaseController
     {

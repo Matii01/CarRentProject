@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarRent.api.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class BaseController : ControllerBase
     {
         protected readonly IServiceManager _services;

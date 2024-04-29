@@ -9,7 +9,6 @@ using System.Numerics;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class WorkOrderController : BaseController
     {
         private readonly UserManager<User> _userManager;

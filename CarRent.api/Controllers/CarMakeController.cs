@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    // ToDo create service 
-
-    [Route("[controller]")]
     public class CarMakeController : BaseController
     {
         public CarMakeController(IServiceManager service) 

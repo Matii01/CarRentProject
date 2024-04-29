@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class KilometrLimitController : BaseController
     {
         public KilometrLimitController(IServiceManager serviceManager)

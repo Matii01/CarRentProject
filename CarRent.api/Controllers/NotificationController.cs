@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class NotificationController : BaseController
     {
         private readonly UserManager<User> _userManager;

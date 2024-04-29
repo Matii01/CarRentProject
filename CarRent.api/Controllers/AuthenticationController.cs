@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     public class AuthenticationController : BaseController
     {
         private readonly UserManager<User> _userManager;

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class AboutCompanyController : BaseController
     {
         public AboutCompanyController(IServiceManager serviceManager)

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
-    [Route("[controller]")]
     public class InvoiceStatusController : BaseController
     {
         public InvoiceStatusController(IServiceManager serviceManager) 
