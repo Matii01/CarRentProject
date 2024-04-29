@@ -5,18 +5,11 @@ using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
-using CarRent.Repository.Migrations;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CarRent.Service.Service
 {

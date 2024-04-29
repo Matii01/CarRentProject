@@ -1,12 +1,8 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.CarRent;
 using CarRent.Repository.Parameters;
-using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
 
 namespace CarRent.api.Controllers
 {

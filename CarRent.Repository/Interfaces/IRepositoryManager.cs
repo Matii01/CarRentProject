@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarRent.data.DTO;
-using CarRent.data.Models;
+﻿using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.CMS;
 using CarRent.data.Models.Company;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Repository.Interfaces
 {
@@ -21,7 +14,6 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<Car> NewCar {  get; }
         IGenericRepository<PriceList> NewPriceList { get; }
 
-        ICarRepository Car { get; }
         IPriceListRepository PriceList { get; }
         IGenericRepository<AirConditioningType> AirConditioningType { get; }
         IGenericRepository<CarDrive> CarDrive { get; }
