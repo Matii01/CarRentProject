@@ -1,20 +1,19 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
     public class NotificationController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        public NotificationController(UserManager<User> userManager, IServiceManager serviceManager)
+        private readonly IAuthenticationService _authentication;
+
+        public NotificationController(IServiceManager serviceManager, IAuthenticationService authentication)
             : base(serviceManager)
         {
-            _userManager = userManager;
+            _authentication = authentication;
         }
 
         [Authorize(Roles = "Administrator,Worker")]
@@ -29,15 +28,8 @@ namespace CarRent.api.Controllers
         [HttpGet("myNotification")]
         public async Task<IActionResult> GetUserNotifications([FromQuery] NotificationParameters param)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user is null) 
-            {
-                return NotFound();
-            }
-
-            param.UserId = user.Id;
+            var userId = await _authentication.GetUserIdByClaims(User);
+            param.UserId = userId;
 
             var list = await _services.NotificationService.GetNotificationsByParamsAsync(param);
             return Ok(list);
@@ -47,15 +39,8 @@ namespace CarRent.api.Controllers
         [HttpGet("myNewNotification")]
         public async Task<IActionResult> GetNewNotificationsCount([FromQuery] NotificationParameters param)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            param.UserId = user.Id;
+            var userId = await _authentication.GetUserIdByClaims(User);
+            param.UserId = userId;
 
             var count = await _services.NotificationService.GetNotificationsCountAsync(param);
             return Ok(count);
