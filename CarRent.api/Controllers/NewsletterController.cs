@@ -2,7 +2,6 @@
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers

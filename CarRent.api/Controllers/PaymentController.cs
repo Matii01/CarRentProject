@@ -1,8 +1,6 @@
 ﻿using CarRent.data.Configurations;
-using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 
@@ -11,12 +9,12 @@ namespace CarRent.api.Controllers
     public class PaymentController : BaseController
     {
         private readonly WhSecretConfiguration _secretConfig;
-        private readonly UserManager<User> _userManager;
+        private readonly IAuthenticationService _authentication;
 
-        public PaymentController(IServiceManager serviceManager, UserManager<User> userManager, WhSecretConfiguration secretConfig) 
+        public PaymentController(IServiceManager serviceManager, IAuthenticationService authentication, WhSecretConfiguration secretConfig) 
             : base(serviceManager)
         {
-            _userManager = userManager;
+            _authentication = authentication;
             _secretConfig = secretConfig;
         }
 
@@ -24,11 +22,8 @@ namespace CarRent.api.Controllers
         [HttpPost("NewPayment")]
         public async Task<IActionResult> CreateCharge([FromBody] object allRentalData)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-
-            var intent = await _services.PaymentService.CreatePayment(user.Id, allRentalData.ToString());
+            var userId = await _authentication.GetUserIdByClaims(User);
+            var intent = await _services.PaymentService.CreatePayment(userId, allRentalData.ToString());
 
             return Ok(new { ClientSecret = intent.ClientSecret });
         }
