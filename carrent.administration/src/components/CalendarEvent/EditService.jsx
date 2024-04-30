@@ -26,6 +26,7 @@ function EditService({ id, setIsEdit, onEdited }) {
           ...data.data,
           dateStart: formatDate(data.data.dateStart),
           dateEnd: formatDate(data.data.dateEnd),
+          remarks: data.data.remarks ? data.data.remarks : ""
         }));
       })
       .catch((error) => {
