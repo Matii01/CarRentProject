@@ -6,11 +6,6 @@ using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -148,8 +143,6 @@ namespace CarRent.Service.Service
                 .Where(x => x.CarId == carId)
                 .Where(x => x.PricelistDates
                     .Any(x => x.IsActive == true && x.DateFrom <= currentData && x.DateTo >= currentData));
-
-
 
             return pricelist;
         }

@@ -15,7 +15,7 @@ namespace CarRent.data.Models.CarRent
         public int CarId { get; set; }
         public Car Car { get; set; } = null!;
         public bool? IsDefault {  get; set; }
-        public ICollection<PricelistDate>? PricelistDates { get;} 
-        public ICollection<PricelistItem>? PricelistItems { get;}
+        public ICollection<PricelistDate> PricelistDates { get;} = new List<PricelistDate>();
+        public ICollection<PricelistItem> PricelistItems { get;} = new List<PricelistItem>();
     }
 }
