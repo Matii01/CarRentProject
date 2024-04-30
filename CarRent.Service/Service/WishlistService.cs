@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
@@ -72,7 +73,7 @@ namespace CarRent.Service.Service
                 .FindByCondition(
                     x => x.UserId == userId &&
                     x.CarId == carId, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             item.IsActive = false;
             await _repository.SaveAsync();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
@@ -131,7 +132,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.Notification
                 .GetAsync(notificationId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             toUpdate.IsRead = true;
             toUpdate.ReadDate = DateTime.Now;
@@ -143,7 +144,7 @@ namespace CarRent.Service.Service
         {
             var toDelete = await _repository.Notification
                 .GetAsync(notificationId, true)
-                .SingleOrDefaultAsync()?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             toDelete.IsActive = false;
             await _repository.SaveAsync();

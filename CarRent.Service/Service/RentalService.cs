@@ -2,17 +2,12 @@
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -102,7 +97,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.Rentals
                 .GetAsync(rentalId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             toUpdate.RentalStatusId = newStatus.NewStatus;
             await _repository.SaveAsync();
@@ -113,7 +108,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.Invoice
                 .GetAsync(invoiceId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             if(toUpdate.IsEditable == true && newStatus.Paid <= toUpdate.TotalToPay)
             {
@@ -139,7 +134,7 @@ namespace CarRent.Service.Service
         {
             if (await CarIsBusy(newRental))
             {
-                throw new Exception("Car have rental on this time");
+                throw new DataNotFoundException("Car have rental on this time");
             }
 
             var price = await _priceList.GetPriceForCarForDate(userId, newRental);
@@ -293,7 +288,7 @@ namespace CarRent.Service.Service
             }
             else
             {
-                throw new Exception("No client data");
+                throw new DataNotFoundException("No client data");
             }
         }
 
@@ -369,11 +364,11 @@ namespace CarRent.Service.Service
         {
             var rental = await _repository.Rentals
                 .GetAsync(newCar.RentalId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("can not find rental");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("can not find rental");
 
             if (!await IsAvailable(new NewRentalForClient(newCar.NewCarId, rental.RentalStart, rental.RentalEnd)))
             {
-                throw new Exception("car is not free");
+                throw new DataNotFoundException("car is not free");
             }
 
             rental.CarId = newCar.NewCarId;

@@ -2,16 +2,10 @@
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -217,7 +211,7 @@ namespace CarRent.Service.Service
         {
             var rabat = await _repository.Rabat
                 .GetAsync(rabatId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             rabat.IsActive = false;
             await _repository.SaveAsync();
@@ -227,7 +221,7 @@ namespace CarRent.Service.Service
         {
             var userRabat = await _repository.RabatForUser
                 .GetAsync(rabatId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             userRabat.IsActive = false; 
             await _repository.SaveAsync();

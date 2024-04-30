@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -34,7 +35,7 @@ namespace CarRent.Service.Service
             var item = await _repository.WorkOrderStatus
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<WorkOrderStatusDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrder not found");
 
             return item;
         }
@@ -63,7 +64,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.WorkOrderStatus
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrder not found");
 
             toUpdate.Name = newValue.Name;
             toUpdate.Description = newValue.Description;
@@ -74,7 +75,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.WorkOrderStatus
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrder not found");
 
             toUpdate.IsActive = false;
             await _repository.SaveAsync();

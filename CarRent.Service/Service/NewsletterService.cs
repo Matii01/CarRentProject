@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.Company;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
@@ -74,7 +75,6 @@ namespace CarRent.Service.Service
                 return;
             }
 
-
             var sub = new NewsletterSubscriber()
             {
                 Email = newSubscription,
@@ -123,7 +123,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository
                 .SendHistory.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
             
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -133,7 +133,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository
                 .NewsletterSubscriber.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             item.IsSubscribe = false;
             item.UnsubscribeDate = DateTime.Now;
@@ -144,7 +144,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository
                 .NewsletterSubscriber.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -154,7 +154,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository
                 .NewsletterSubscriber.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             item.IsSubscribe = true;
             item.UnsubscribeDate = null;

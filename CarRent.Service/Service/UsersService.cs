@@ -1,15 +1,6 @@
 ﻿using CarRent.data.Models.User;
-using CarRent.Repository.Parameters;
-using CarRent.Service.Extensions;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {

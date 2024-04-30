@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Extensions;
@@ -9,12 +10,6 @@ using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -56,7 +51,7 @@ namespace CarRent.Service.Service
                         x.WorkOrderStatusId != compleatedStatusId,
                         workers
                     ))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrder not found"); ;
             return item;
         }
 
@@ -108,7 +103,7 @@ namespace CarRent.Service.Service
         {
             var toChange = await _repository.WorkOrder
                 .GetAsync(status.WorkOrderId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrderStatus not found");
 
             toChange.WorkOrderStatusId = status.StatusId;
             await _repository.SaveAsync();
@@ -117,7 +112,7 @@ namespace CarRent.Service.Service
         {
             var toChange = await _repository.WorkOrder
                 .GetAsync(priority.WorkOrderId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("WorkOrderPriority not found");
 
             toChange.WorkOrderStatusId = priority.PriorityId;
             await _repository.SaveAsync();
@@ -171,7 +166,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.WorkOrder
                 .GetAsync(workOrderId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
 
             toUpdate.Title = workOrder.Title;
@@ -190,7 +185,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.WorkOrder
                 .GetAsync(workOrderId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             int compleatedStatusId = await _repository.WorkOrderStatus
                 .FindByCondition(x => x.IsActive == true && x.IsDefaultForCompleated == true, false)
@@ -209,7 +204,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.WorkOrder
                .GetAsync(workOrderId, true)
-               .SingleOrDefaultAsync() ?? throw new Exception("not found");
+               .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             toUpdate.IsActive = false;
             await _repository.SaveAsync();

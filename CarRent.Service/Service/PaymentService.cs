@@ -1,20 +1,13 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Models.CarRent;
-using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
-using CarRent.Repository.Migrations;
 using CarRent.SendingEmail;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {

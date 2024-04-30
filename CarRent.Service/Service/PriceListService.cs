@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -30,12 +31,8 @@ namespace CarRent.Service.Service
         {
             var pricelist = await _repository.PriceList
                 .GetCarPriceListForClient(carId)
-                .SingleOrDefaultAsync();
-
-            if (pricelist == null)
-            {
-                return null;
-            }
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");  
+ 
             return await GetPricelistItems(pricelist.Id);
         }
 
@@ -88,7 +85,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.PriceList
                 .GetPriceListsById(priceList.Id, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");  
 
             toUpdate.Name = priceList.Name;
             await _repository.SaveAsync();
@@ -98,7 +95,7 @@ namespace CarRent.Service.Service
         public async Task UpdatePriceListItem(int id, PricelistItemDto pricelistItem)
         {
             var toUpdate = await _repository.PricelistItem.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             toUpdate.Price = pricelistItem.Price;
             toUpdate.OverlimitFee = pricelistItem.OverlimitFee;
@@ -142,8 +139,8 @@ namespace CarRent.Service.Service
                 await _repository.SaveAsync();
             }
             else
-            { 
-                throw new Exception("pricelist for this car for this DataTime already exist");
+            {
+                throw new DataNotFoundException("Pricelist for this car for this DataTime already exist");
             }
         }
 
@@ -170,8 +167,8 @@ namespace CarRent.Service.Service
             var item = await
                 _repository.PricelistItem
                 .FindByCondition(x => x.Id == itemId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not Found");
-            
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
+
             item.IsActive = false;
             await _repository.SaveAsync();
         }
@@ -181,8 +178,8 @@ namespace CarRent.Service.Service
             var item = await
                _repository.PricelistDate
                .FindByCondition(x => x.Id == itemId, true)
-               .SingleOrDefaultAsync();
-
+               .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");  
+             
             item.IsActive = false;
             await _repository.SaveAsync();
         }
@@ -191,7 +188,7 @@ namespace CarRent.Service.Service
         {
             var newDefault = await _repository.PriceList
                 .GetPriceListsById(newDefaultPriceListId, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             var list = await _repository.PriceList
                 .GetPriceListsForCar(newDefault.CarId, true)

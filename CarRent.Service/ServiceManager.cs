@@ -90,7 +90,7 @@ namespace CarRent.Service
                 () => new WishlistService(repositoryManager, mapper));
 
             _carOpinionService = new Lazy<ICarOpinionService>(() =>
-                 new CarOpinionService(userManager, repositoryManager, mapper));
+                 new CarOpinionService(repositoryManager, mapper));
 
             _workOrderService = new Lazy<IWorkOrderService>(() =>
                  new WorkOrderService(userManager, repositoryManager, mapper));
