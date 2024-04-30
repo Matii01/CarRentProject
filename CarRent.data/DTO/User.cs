@@ -68,9 +68,9 @@ namespace CarRent.data.DTO
 
     public record ChangePassword
     (
-        string? OldPassword,
-        string? NewPassword,
-        string? RetypePassword
+        string OldPassword,
+        string NewPassword,
+        string RetypePassword
     );
 
     public record DefaultRentalData

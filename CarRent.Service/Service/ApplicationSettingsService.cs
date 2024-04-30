@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.Company;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -42,7 +38,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.ApplicationSettings
                 .FindByCondition(x => x.IsActive == true, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("ApplicationSettings not found");
 
             toUpdate.SendNotificationOnRentalStatusUpdate = settings.SendNotificationOnRentalStatusUpdate;
             toUpdate.SendNotificationOnInvoiceStatusUpdate = settings.SendNotificationOnInvoiceStatusUpdate;

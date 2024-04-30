@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace CarRent.Service.Service
 {
@@ -60,7 +57,7 @@ namespace CarRent.Service.Service
             var carDrive = await _repository.CarDrive
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<CarDriveDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarDrive not found");  
 
             return carDrive;
         }
@@ -69,7 +66,7 @@ namespace CarRent.Service.Service
         {
             var carDrive = await _repository.CarDrive
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("CarDrive not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarDrive not found");
             carDrive.Name = newCarDrive.Name;
             carDrive.Description = newCarDrive.Description;
 
@@ -80,7 +77,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.CarDrive
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarDrive not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

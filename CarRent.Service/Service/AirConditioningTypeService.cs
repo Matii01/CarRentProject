@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -53,7 +49,7 @@ namespace CarRent.Service.Service
             var airCondition = await _repository.AirConditioningType
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<AirConditioningTypeDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("AirConditioningType not found");
 
             return airCondition;
         }
@@ -62,7 +58,7 @@ namespace CarRent.Service.Service
         {
             var airCondition = await _repository.AirConditioningType
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("AirConditioningType not found");
             
             airCondition.Name = newValue.Name;
 
@@ -73,7 +69,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.AirConditioningType
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("AirConditioningType not found");
  
             engineType.IsActive = false;
 

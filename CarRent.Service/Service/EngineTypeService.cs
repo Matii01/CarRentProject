@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -50,7 +51,7 @@ namespace CarRent.Service.Service
             var engineType = await _repository.EngineType
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<EngineTypeDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("EngineType not found");  
         
             return engineType;
         }
@@ -59,7 +60,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.EngineType
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("EngineType not found");
             engineType.Name = newEngineType.Name;
 
             await _repository.SaveAsync();
@@ -69,7 +70,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.EngineType
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("EngineType not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

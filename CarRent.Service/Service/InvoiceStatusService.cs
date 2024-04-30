@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+ 
 namespace CarRent.Service.Service
 {
     public class InvoiceStatusService : IGenericService<InvoiceStatusDto>
@@ -59,15 +55,15 @@ namespace CarRent.Service.Service
                .GetAsync(id, trackChanges)
                .Select(x => _mapper.Map<InvoiceStatusDto>(x))
                .SingleOrDefaultAsync();
-
-            return status ?? throw new Exception("Rental status not found");
+           
+            return status ?? throw new DataNotFoundException("Rental status not found");
         }
 
         public async Task UpdateAsync(int id, InvoiceStatusDto newValue, bool trackChanges)
         {
             var status = await _repository.InvoiceStatus
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("Rental Status not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Rental status not found");
 
             status.Name = newValue.Name;
             status.Description = newValue.Description;
@@ -79,7 +75,7 @@ namespace CarRent.Service.Service
         {
             var status = await _repository.InvoiceStatus
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Rental status not found");
             status.IsActive = false;
 
             await _repository.SaveAsync();

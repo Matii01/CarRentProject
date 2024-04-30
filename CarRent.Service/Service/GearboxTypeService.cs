@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -54,7 +50,7 @@ namespace CarRent.Service.Service
             var gearbox = await _repository.GearboxType
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<GearboxTypeDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("GearboxType not found");
 
             return gearbox;
         }
@@ -63,7 +59,7 @@ namespace CarRent.Service.Service
         {
             var gearbox = await _repository.GearboxType
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("GearboxType not found");
             gearbox.Name = newValue.Name;
 
             await _repository.SaveAsync();
@@ -73,7 +69,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.GearboxType
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("GearboxType not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

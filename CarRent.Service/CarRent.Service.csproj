@@ -20,8 +20,4 @@
     <ProjectReference Include="..\CarRent.SendingEmail\CarRent.SendingEmail.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>

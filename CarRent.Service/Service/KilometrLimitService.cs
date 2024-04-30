@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -54,7 +55,8 @@ namespace CarRent.Service.Service
             var kilometrLimit = await _repository.KilometrLimit
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<KilometrLimitDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("KilometrLimit not found"); 
+            
             return kilometrLimit;
         }
 
@@ -62,7 +64,7 @@ namespace CarRent.Service.Service
         {
             var kilometrLimit = await _repository.KilometrLimit
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("KilometrLimit not found");
             kilometrLimit.LimitValue = newValue.LimitValue;
 
             await _repository.SaveAsync();
@@ -72,7 +74,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.KilometrLimit
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("KilometrLimit not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

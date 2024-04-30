@@ -1,13 +1,10 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CarRent.Service.Service
 {
@@ -43,8 +40,8 @@ namespace CarRent.Service.Service
         public async Task<CarMakeDto> GetCarMakeAsync(int id, bool trackChanges)
         {
             var carMake = await _repository.CarMake
-                .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new Exception("CarMake not found");
+                .GetAsync(id, trackChanges) 
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarMake not found");
             var carMakeDto = new CarMakeDto(carMake.Id, carMake.Name, carMake.Description);
 
             return carMakeDto;
@@ -68,7 +65,7 @@ namespace CarRent.Service.Service
         {
             var carMakeEntity = await _repository.CarMake
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new Exception("CarMake not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarMake not found");
 
             carMakeEntity.Name = carMake.Name;
             carMakeEntity.Description = carMake.Description;
@@ -80,7 +77,7 @@ namespace CarRent.Service.Service
         {
             var engineType = await _repository.CarMake
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarMake not found");
             engineType.IsActive = false;
 
             await _repository.SaveAsync();

@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -54,7 +50,7 @@ namespace CarRent.Service.Service
             var clientDetails = await _repository.ClientDetails
                 .GetAsync(id, trackChanges)
                 .Select(x => _mapper.Map<ClientDetailsDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("ClientDetails not found");  
 
             return clientDetails;
         }
@@ -63,7 +59,7 @@ namespace CarRent.Service.Service
         {
             var clientDetails = await _repository.ClientDetails
                 .GetAsync(id, trackChanges)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("ClientDetails not found");
 
             clientDetails.City = newValue.City;
             clientDetails.Address = newValue.Address;
@@ -80,7 +76,7 @@ namespace CarRent.Service.Service
         {
             var clientDetails = await _repository.ClientDetails
                  .GetAsync(id, true)
-                 .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                 .SingleOrDefaultAsync() ?? throw new DataNotFoundException("ClientDetails not found");
 
             clientDetails.IsActive = false;
             await _repository.SaveAsync();

@@ -159,6 +159,12 @@ namespace CarRent.Service.Service
         public async Task<UserLoginData> RefreshToken(TokenDto tokenDto)
         {
             var principial = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+
+            if(principial is null || principial.Identity?.Name is null)
+            {
+                throw new Exception("RefreshTokenBadRequest");
+            }
+
             var user = await _userManager.FindByNameAsync(principial.Identity.Name);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
@@ -179,6 +185,12 @@ namespace CarRent.Service.Service
         public async Task<UserLoginData> RetrieveData(TokenDto tokenDto)
         {
             var principial = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+            
+            if (principial is null || principial.Identity?.Name is null)
+            {
+                throw new Exception("");
+            }
+
             var user = await _userManager.FindByNameAsync(principial.Identity.Name);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {

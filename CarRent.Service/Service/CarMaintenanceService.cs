@@ -46,7 +46,7 @@ namespace CarRent.Service.Service
 
             var item = await _repository.CarMaintenances
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Item not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarMaintenance not found");
 
             item.UserId = userId;
             item.TotalCost = carMaintenance.TotalCost;

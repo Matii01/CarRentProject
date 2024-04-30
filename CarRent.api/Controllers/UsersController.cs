@@ -13,14 +13,18 @@ namespace CarRent.api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAuthenticationService _authentication;
+
         public UsersController(
             IServiceManager serviceManager,
+            IAuthenticationService authentication,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
             : base(serviceManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _authentication = authentication;
         }
 
         [Authorize(Roles = "Administrator,UserViewer")]
@@ -64,13 +68,7 @@ namespace CarRent.api.Controllers
         [HttpGet("GetUserAddresses")]
         public async Task<IActionResult> GetUserAddresses()
         {
-            var username = User?.Identity?.Name ?? throw new Exception("");
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = await _authentication.GetUserByClaims(User);
 
             var items = await _services.UserAddressService.GetAddressesAsync(user.Id);
             return Ok(items);
@@ -80,13 +78,7 @@ namespace CarRent.api.Controllers
         [HttpGet("GetDefaultDataForRental")]
         public async Task<IActionResult> GetDefaultDataForRental()
         {
-            var username = User?.Identity?.Name ?? throw new Exception("");
-            var user = await _userManager.FindByNameAsync(username);
-            
-            if (user is null) {
-                return NotFound();
-            }
-
+            var user = await _authentication.GetUserByClaims(User);
             var item = await _services.UserAddressService.GetDefaultAddressesAsync(user.Id);
             
             if(item is null) {
@@ -111,15 +103,9 @@ namespace CarRent.api.Controllers
         [HttpPost("AddUserAddresses")]
         public async Task<IActionResult> AddUserAddresses([FromBody] AddressDto address)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            await _services.UserAddressService.AddAddressesAsync(user.Id, address);
+            await _services.UserAddressService.AddAddressesAsync(userId, address);
             return CreatedAtAction("AddUserAddresses", address);
         }
 
@@ -127,8 +113,7 @@ namespace CarRent.api.Controllers
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword passwords)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _authentication.GetUserByClaims(User);
 
             if (user == null)
             {
@@ -154,13 +139,8 @@ namespace CarRent.api.Controllers
         [HttpPut("UpdateUserAddresses/{id:int}")]
         public async Task<IActionResult> UpdateUserAddresses(int id, [FromBody] AddressDto address)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _authentication.GetUserByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
 
             await _services.UserAddressService.UpdateAddressesAsync(id, address);
             return Ok(address);
@@ -220,18 +200,12 @@ namespace CarRent.api.Controllers
         [HttpGet("UserPersonalDetails")]
         public async Task<IActionResult> GetUserPersonalDetails()
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = await _authentication.GetUserByClaims(User);
 
             UserPersonalDataDto useData = new (
                 user.FirstName,
                 user.LastName,
-                username,
+                user.UserName,
                 user.Email,
                 user.PhoneNumber
             );
@@ -243,14 +217,8 @@ namespace CarRent.api.Controllers
         [HttpPost("UpdatePersonalDetails")]
         public async Task<IActionResult> UpdateUserPersonalDetails(UserPersonalDataDto updated)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _authentication.GetUserByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-            
             user.FirstName = updated.FirstName ?? user.FirstName;
             user.LastName = updated.LastName ?? user.LastName;
             user.PhoneNumber = updated.PhoneNumber ?? user.PhoneNumber;
@@ -268,6 +236,5 @@ namespace CarRent.api.Controllers
 
             return Ok("");
         }
-
     }
 }

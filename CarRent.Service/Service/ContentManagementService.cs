@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CMS;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
@@ -38,7 +39,7 @@ namespace CarRent.Service.Service
             var item = await _repository.ContactPage
                 .FindByCondition(x => x.IsActive == true, false)
                 .Select(x => _mapper.Map<ContactPageDto>(x))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Page not found");
 
             return item;
         }
@@ -46,7 +47,7 @@ namespace CarRent.Service.Service
         public async Task EditHomePage(HomePageDto homePage)
         {
             var item = await _repository.HomePage.FindByCondition(x => x.IsActive == true, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Page not found");
 
             item.HomePageImage = homePage.HomePageImage;
             item.HomePageTitle = homePage.HomePageTitle;
@@ -60,7 +61,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.ContactPage
                 .FindByCondition(x => x.IsActive == true, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Page not found"); 
 
             item.PageTitle = pageDto.PageTitle;
             item.PageDescription = pageDto.PageDescription;
@@ -125,13 +126,8 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.Footer
                  .FindByCondition(x => x.IsActive, true)
-                 .SingleOrDefaultAsync();
-            
-            if(item == null)
-            {
-                throw new Exception("not found");
-            }
-            
+                 .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Page not found");
+ 
             item.Title = footer.Title;
             item.Description = footer.Description;
             item.InstagramLink = footer.InstagramLink;
@@ -150,7 +146,7 @@ namespace CarRent.Service.Service
         {
             var toUpdate = await _repository.FooterLinks
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Page not found");
 
             toUpdate.Title = links.Title;
             await _repository.SaveAsync();
@@ -178,8 +174,7 @@ namespace CarRent.Service.Service
                 {
                     it.Path = newData.Path;
                     it.Name = newData.Name;
-                }
-                
+                } 
             }
             await _repository.SaveAsync();
         }
@@ -202,8 +197,8 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.FooterLinksPaths
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
-            
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
+
             item.IsActive = false;
             await _repository.SaveAsync();
         }

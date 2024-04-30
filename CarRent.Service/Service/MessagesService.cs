@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
-using CarRent.data.Models.CarRent;
-using CarRent.data.Models.Company;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
@@ -51,13 +49,11 @@ namespace CarRent.Service.Service
 
         public async Task<MessageDto> AnswerToMessage(int id, string? workerId,string? whoAnswerName, MessageAnswerDto answerDto)
         {
-            var item = await  _repository.Message.GetAsync(id, true).SingleOrDefaultAsync();
-            
-            if (item == null)
-            {
-                throw new Exception("Not found");
-            }
-
+            var item = await  _repository
+                .Message
+                .GetAsync(id, true)
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found"); ;
+   
             if(item.IsAnswered == true)
             {
                 throw new AnswerWasSentException();

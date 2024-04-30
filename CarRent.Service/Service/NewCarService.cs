@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Extensions;
@@ -74,7 +75,7 @@ namespace CarRent.Service.Service
         public async Task DeleteCar(int id)
         {
             var car = await _repository.NewCar.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Car not found");
 
             car.IsActive = false;
             await _repository.SaveAsync();
@@ -84,7 +85,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarImages
                .GetAsync(id, true)
-               .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+               .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Car not found");
 
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -158,7 +159,7 @@ namespace CarRent.Service.Service
                 .Include(x => x.AirConditioningType)
                 .Include(x => x.CarImages)
                 .Include(x => x.CarsEquipment)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Car not found");
 
             return MapHelper.MapCarToCarDetailsPageForClient(item);
         }
@@ -267,7 +268,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.RecommendedCars
                 .FindByCondition(x => x.CarId == id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -276,7 +277,7 @@ namespace CarRent.Service.Service
         public async Task SetCarVisibility(int id, bool IsVisible)
         {
             var car = await _repository.NewCar.GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Car not found");
 
             car.IsVisible = IsVisible;
             await _repository.SaveAsync();
@@ -285,7 +286,7 @@ namespace CarRent.Service.Service
         public async Task UpdateCarAsync(int id, NewCarDto newCar, bool trackChanges)
         {
             var car = await _repository.NewCar.GetAsync(id, true)
-                 .SingleOrDefaultAsync() ?? throw new Exception("not found");
+                 .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Car not found");
 
             MapHelper.UpdateCar(ref car, newCar);
             await _repository.SaveAsync();

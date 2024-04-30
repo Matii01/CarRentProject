@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
@@ -8,23 +9,16 @@ using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace CarRent.Service.Service
 {
     public class CarOpinionService : ServiceBase, ICarOpinionService
     {
-        private readonly UserManager<User> _userManager;
-        
-        public CarOpinionService(UserManager<User> userManager,IRepositoryManager repository, IMapper mapper) 
+        public CarOpinionService(IRepositoryManager repository, IMapper mapper) 
             : base(repository, mapper)
         {
-            _userManager = userManager;
+             
         }
 
         public async Task AddOpinionAsync(NewOpinionDto opinion, string userId)
@@ -74,7 +68,7 @@ namespace CarRent.Service.Service
                     x => x.CarId == carId &&
                     x.IsActive == true &&
                     x.IsAccepted == true, false)
-                .Include(x=>x.User)
+                .Include(x => x.User)
                 .Select(x=> new OpinionDto(x.Id, x.Title, x.Text, x.AddedDate, x.Mark, x.CarId, x.User.UserName??""))
                 .ToListAsync();
 
@@ -95,7 +89,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarOpinion
                 .GetAsync(Id, true)
-                .SingleOrDefaultAsync() ?? throw new ArgumentException("not found"); 
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Opinion not found");
             item.IsActive = false;
             await _repository.SaveAsync();
         }
@@ -104,7 +98,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarOpinion
                  .GetAsync(Id, true)
-                 .SingleOrDefaultAsync() ?? throw new ArgumentException("not found");
+                 .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Oppinion not found");
 
             item.IsAccepted = IsAccepted;
             await _repository.SaveAsync();

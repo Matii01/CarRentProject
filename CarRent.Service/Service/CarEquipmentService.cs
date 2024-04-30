@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace CarRent.Service.Service
 {
@@ -63,7 +60,7 @@ namespace CarRent.Service.Service
             var item = await _repository.CarEquipment
                 .GetAsync(id, false)
                 .Select(x => _mapper.Map<CarEquipmentDto>(x))
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarEquipment not found");
 
             return item;
         }
@@ -111,7 +108,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarEquipmentCar
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarEquipment not found");
 
             item.IsActive = false;
             await _repository.SaveAsync();
@@ -121,7 +118,7 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarEquipment
                  .GetAsync(id, true)
-                 .SingleOrDefaultAsync() ?? throw new Exception("Not found");
+                 .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarEquipment not found");
 
             item.Description = carEquipment.Description;
             item.Name = carEquipment.Name;
@@ -133,8 +130,8 @@ namespace CarRent.Service.Service
         {
             var item = await _repository.CarEquipment
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync() ?? throw new Exception("Not found");
-            
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("CarEquipment not found");
+
             item.IsActive = false;
             await _repository.SaveAsync();
             await DeleteEquipmentFromCar(id);
