@@ -7,14 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 namespace CarRent.api.Controllers
 {
-    public class CarOpinionController : BaseController
+    public class CarOpinionController : ControllerWithUserManager
     {
-        private readonly UserManager<User> _userManager;
-
-        public CarOpinionController(UserManager<User> userManager, IServiceManager serviceManager) 
-            : base(serviceManager)
+        public CarOpinionController(IServiceManager serviceManager, UserManager<User> userManager) 
+            : base(serviceManager, userManager)
         {
-            _userManager = userManager;
         }
 
         [HttpGet("{carId:int}")]
@@ -52,11 +49,13 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateOpinion([FromBody] NewOpinionDto opinion)
         {
+            var validationResult = await ValidateUser();
+            if (!validationResult.IsSuccess || validationResult.User == null)
+            {
+                return Unauthorized();
+            }
 
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-            await _services.CarOpinionService.AddOpinionAsync(opinion, user.Id);
+            await _services.CarOpinionService.AddOpinionAsync(opinion, validationResult.User.Id);
             return Ok("");
         }
 
