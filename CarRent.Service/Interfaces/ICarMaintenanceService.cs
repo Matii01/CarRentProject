@@ -13,7 +13,7 @@ namespace CarRent.Service.Interfaces
     {
         Task<IEnumerable<CarMaintenanceListDto>> GetCarMaintenanceListAsync(MaintenanceParameters param);
         Task<CarMaintenanceDto> GetCarMaintenanceByIdAsync(int id, bool trackChanges);
-        Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance);
+        Task<CarMaintenanceDto> CreateCarMaintenance(string workerId, NewCarMaintenanceDto carMaintenance);
         Task<CarMaintenanceDto> EditCarMaintenanceAsync(int id, CarMaintenanceDto carMaintenance, string userId);
         Task<IEnumerable<int>> GetCarsThatHaveServiceInDates(NewRentalForClient dates);
         Task<IEnumerable<CarMaintenanceDatesDto>> GetFutureMaintenanceDatesForCarAsync(int CarId);

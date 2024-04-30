@@ -2,7 +2,6 @@
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
@@ -38,18 +37,7 @@ namespace CarRent.api.Controllers
             var user = User.Identity.Name;
             var userId = await _authentication.FindUserByUserName(user);
 
-            var item = new CarMaintenanceDto(
-                    0, 
-                    carMaintenance.CarId,
-                    userId,
-                    carMaintenance.Description,
-                    carMaintenance.Remarks,
-                    carMaintenance.DateStart,
-                    carMaintenance.DateEnd,
-                    carMaintenance.TotalCost
-                );
-
-            var result = await _services.CarMaintenanceService.CreateCarMaintenance(item);
+            var result = await _services.CarMaintenanceService.CreateCarMaintenance(userId, carMaintenance);
             return Ok(result);
         }
 

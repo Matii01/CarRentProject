@@ -2,6 +2,7 @@
 using CarRent.data.Models;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
+using CarRent.Repository.Migrations;
 using CarRent.Service.Interfaces;
 using Microsoft.Identity.Client;
 using System;
@@ -195,6 +196,20 @@ namespace CarRent.Service.Helper
                 PhoneNumber = userForRegistration.PhoneNumber,
                 IsActive = true,
             };
+        }
+
+        public static CarMaintenanceDto MapNewCarMaintenanceDtoToCarMaintenanceDto(string workerId, NewCarMaintenanceDto carMaintenance)
+        {
+            return new CarMaintenanceDto(
+                0,
+                carMaintenance.CarId,
+                workerId,
+                carMaintenance.Description,
+                carMaintenance.Remarks,
+                carMaintenance.DateStart,
+                carMaintenance.DateEnd,
+                carMaintenance.TotalCost
+             );
         }
     }
 }

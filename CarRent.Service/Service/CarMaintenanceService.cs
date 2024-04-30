@@ -2,9 +2,11 @@
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
+using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
+using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -49,14 +51,15 @@ namespace CarRent.Service.Service
 
             var item = await _repository.CarMaintenances
                 .GetAsync(id, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new Exception("Item not found");
 
             item.UserId = userId;
             item.TotalCost = carMaintenance.TotalCost;
             item.DateStart = carMaintenance.DateStart;
             item.DateEnd = carMaintenance.DateEnd;
-            item.Description = carMaintenance.Description;
+            item.Description = carMaintenance.Description ?? "";
             item.Remarks = carMaintenance.Remarks;
+
             await _repository.SaveAsync();
             
             return _mapper.Map<CarMaintenanceDto>(item);
@@ -79,8 +82,10 @@ namespace CarRent.Service.Service
             return list;    
         }
 
-        public async Task<CarMaintenanceDto> CreateCarMaintenance(CarMaintenanceDto carMaintenance)
+        public async Task<CarMaintenanceDto> CreateCarMaintenance(string workerId, NewCarMaintenanceDto carMaintenance)
         {
+            var item = MapHelper.MapNewCarMaintenanceDtoToCarMaintenanceDto(workerId, carMaintenance);
+
             var carHaveRental = await _rentalService.CarHaveRentalInThisDate(
                 carMaintenance.CarId, carMaintenance.DateStart, carMaintenance.DateEnd);
 
@@ -88,7 +93,8 @@ namespace CarRent.Service.Service
             {
                 throw new DatesTakenException();
             }
-            var newMaintenance = _mapper.Map<CarMaintenance>(carMaintenance);
+
+            var newMaintenance = _mapper.Map<CarMaintenance>(item);
 
             _repository.CarMaintenances.Create(newMaintenance);
             await _repository.SaveAsync();
