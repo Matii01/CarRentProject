@@ -121,11 +121,6 @@ namespace CarRent.Service.Service
             await SendUpdateInvoiceStatusNotification(invoiceId, newStatus);
         }
 
-        public async Task<RentalDataForClientDto> CreateRentalAndOutstandingInvoiceAndAssignUser()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
             string? paymentIntent,
                 InvoiceDto invoiceDto,
@@ -260,36 +255,44 @@ namespace CarRent.Service.Service
         {
             if (data.ClientDetails != null)
             {
-                var Client = new IndividualClient
-                {
-                    FirstName = data.ClientDetails.FirstName,
-                    LastName = data.ClientDetails.LastName,
-                    Email = data.ClientDetails.Email,
-                    PhoneNumber = data.ClientDetails.PhoneNumber,
-                    Address = data.ClientDetails.Address,
-                    PostCode = data.ClientDetails.PostCode,
-                    City = data.ClientDetails.City,
-                    IsActive = true,
-                };
-                return Client;
+                return GetIndividualClient(data.ClientDetails);
             }
-            else if (data.FirmClientDto != null)
+            if (data.FirmClientDto != null)
             {
-                var Client = new FirmClient
-                {
-                    NIP = data.FirmClientDto.NIP,
-                    CompanyName = data.FirmClientDto.CompanyName,
-                    StreetAndNumber = data.FirmClientDto.StreetAndNumber,
-                    PostCode = data.FirmClientDto.PostCode,
-                    City = data.FirmClientDto.City,
-                    IsActive = true,
-                };
-                return Client;
+                return GetFirmClient(data.FirmClientDto);
             }
-            else
+
+            throw new DataNotFoundException("No client data");
+        }
+
+        private static IndividualClient GetIndividualClient(ClientDetailsDto clientDetails)
+        {
+            var Client = new IndividualClient
             {
-                throw new DataNotFoundException("No client data");
-            }
+                FirstName = clientDetails.FirstName,
+                LastName = clientDetails.LastName,
+                Email = clientDetails.Email,
+                PhoneNumber = clientDetails.PhoneNumber,
+                Address = clientDetails.Address,
+                PostCode = clientDetails.PostCode,
+                City = clientDetails.City,
+                IsActive = true,
+            };
+            return Client;
+        }
+
+        private static FirmClient GetFirmClient(FirmClientDto firmClient)
+        {
+            var Client = new FirmClient
+            {
+                NIP = firmClient.NIP,
+                CompanyName = firmClient.CompanyName,
+                StreetAndNumber = firmClient.StreetAndNumber,
+                PostCode = firmClient.PostCode,
+                City = firmClient.City,
+                IsActive = true,
+            };
+            return Client;
         }
 
         private async Task<List<InvoiceAndRentalDto>> GenerateInvoiceItemsList(NewRentalForClient[] rentals)

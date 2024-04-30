@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.SendingEmail;
@@ -53,26 +54,28 @@ namespace CarRent.Service.Service
 
         public async Task UpdatePaymentSucceeded(string intentId)
         {
-
             var rentalData = await _repository.DataForRental
                 .FindByCondition(x => x.PaymentIntentId == intentId, false)
-                .SingleOrDefaultAsync() ?? throw new Exception("");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("");
 
-            var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
+            var rentalDetails = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
 
-            var result = await _rental.CreateRentalAndInvoiceAndAssignUser
-                (rentalData.UserId,
-                rentalData.PaymentIntentId,
-                    allRentalData.Invoice,
-                    allRentalData.NewRentalForClient,
-                    allRentalData.ClientDetails);
+            var result = await _rental.CreateRentalAndInvoiceAndAssignUser (
+                    rentalData.UserId,
+                    rentalData.PaymentIntentId,
+                    rentalDetails.Invoice,
+                    rentalDetails.NewRentalForClient,
+                    rentalDetails.ClientDetails
+                );
 
             _emailSender.SendEmailPaymentSucceeded(
-                allRentalData.ClientDetails,
-                allRentalData.NewRentalForClient,
-                allRentalData.Invoice.InvoiceItems);
-            
+                rentalDetails.ClientDetails,
+                rentalDetails.NewRentalForClient,
+                rentalDetails.Invoice.InvoiceItems
+            );
         }
+
+
 
         public Task UpdatePaymentFailed(string intentId)
         {
@@ -80,6 +83,7 @@ namespace CarRent.Service.Service
             Console.WriteLine("PAYMENT FAILED ");
             return Task.CompletedTask;
         }
+
         private async Task SaveRentalData(string? userId, string? dataForRental, string paymentIntentId)
         {
             if (dataForRental == null)
