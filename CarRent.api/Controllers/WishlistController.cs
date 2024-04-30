@@ -10,9 +10,12 @@ namespace CarRent.api.Controllers
     public class WishlistController : BaseController
     {
         private readonly UserManager<User> _userManager;
-        public WishlistController(IServiceManager serviceManager, UserManager<User> userManager) 
+        private readonly IAuthenticationService _authentication;
+
+        public WishlistController(IServiceManager serviceManager, IAuthenticationService authentication, UserManager<User> userManager) 
             : base(serviceManager)
         {
+            _authentication = authentication;
             _userManager = userManager;
         }
 
@@ -20,10 +23,9 @@ namespace CarRent.api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersWishlist()
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            var list = await _services.WishlistService.GetUserWishlistAsync(user.Id);
+            var list = await _services.WishlistService.GetUserWishlistAsync(userId);
             return Ok(list);
         }
 
@@ -31,10 +33,9 @@ namespace CarRent.api.Controllers
         [HttpGet("Wishlist")]
         public async Task<IActionResult> GetWishlistForView()
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            var list = await _services.WishlistService.GetUserWishlistForViewAsync(user.Id);
+            var list = await _services.WishlistService.GetUserWishlistForViewAsync(userId);
             return Ok(list);
         }
 
@@ -42,11 +43,9 @@ namespace CarRent.api.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddElementToWishlist([FromBody] WishlistDto item)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            await _services.WishlistService.CreateAsync(item, user.Id);
-            
+            await _services.WishlistService.CreateAsync(item, userId);
             return Ok("");
         }
 
@@ -54,10 +53,9 @@ namespace CarRent.api.Controllers
         [HttpDelete("{carId:int}")]
         public async Task<IActionResult> DeleteWishlistElement(int carId)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            await _services.WishlistService.DeleteAsync(carId, user.Id);
+            await _services.WishlistService.DeleteAsync(carId, userId);
             return NoContent();
         }
     }
