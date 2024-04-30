@@ -217,5 +217,17 @@ namespace CarRent.Service.Service
             var userName = principal.Identity.Name;
             return await FindUserIdByUserName(userName);
         }
+
+        public async Task<User> GetUserByClaims(ClaimsPrincipal principal)
+        {
+            if (principal.Identity == null || principal.Identity.Name == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+
+            return user ?? throw new UnauthorizedException("Unauthorized");
+        }
     }
 }

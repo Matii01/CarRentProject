@@ -1,4 +1,5 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Models.User;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace CarRent.Service.Interfaces
         Task<UserLoginData> RetrieveData(TokenDto tokenDto);
         Task<string> FindUserIdByUserName(string? userName);
         Task<string> GetUserIdByClaims(ClaimsPrincipal principal);
+        Task<User> GetUserByClaims(ClaimsPrincipal principal);
     }
 }

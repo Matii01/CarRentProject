@@ -1,20 +1,19 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
     public class MessagesController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        public MessagesController(IServiceManager serviceManager, UserManager<User> userManager)
+        private readonly IAuthenticationService _authentication;
+
+        public MessagesController(IServiceManager serviceManager, IAuthenticationService authentication)
             : base(serviceManager)
         {
-            _userManager = userManager;
+            _authentication = authentication;
         }
 
         [Authorize(Roles = "Administrator,Worker")]
@@ -29,13 +28,11 @@ namespace CarRent.api.Controllers
         [HttpPost("AnswerMessage/{id:int}")]
         public async Task<IActionResult> AnswerForMessage(int id, [FromBody] MessageAnswerDto answerDto)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _authentication.GetUserByClaims(User);
             var name = user.FirstName + " " + user.LastName;
 
             var item = await _services.MessagesService
                 .AnswerToMessage(id, user.Id, name, answerDto);
-
 
             return Ok(item);
         }
