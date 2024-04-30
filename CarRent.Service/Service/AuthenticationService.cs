@@ -1,4 +1,5 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.User;
 using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
@@ -194,10 +195,27 @@ namespace CarRent.Service.Service
             return data;
         }
 
-        public async Task<string> FindUserByUserName(string userName)
+        public async Task<string> FindUserIdByUserName(string? userName)
         {
+            if(userName is null)
+            {
+                throw new UnauthorizedException("Username not found");
+            }
+
             var user = await _userManager.FindByNameAsync(userName);
-            return user.Id;
+
+            return user is null ? throw new UnauthorizedException("User id not found") : user.Id;
+        }
+
+        public async Task<string> GetUserIdByClaims(ClaimsPrincipal principal)
+        {
+            if(principal.Identity == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            var userName = principal.Identity.Name;
+            return await FindUserIdByUserName(userName);
         }
     }
 }

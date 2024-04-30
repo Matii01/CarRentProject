@@ -34,8 +34,7 @@ namespace CarRent.api.Controllers
         [HttpPost("AddMaintenance")]
         public async Task<IActionResult> CarTestMaintenance([FromBody] NewCarMaintenanceDto carMaintenance)
         {
-            var user = User.Identity.Name;
-            var userId = await _authentication.FindUserByUserName(user);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
             var result = await _services.CarMaintenanceService.CreateCarMaintenance(userId, carMaintenance);
             return Ok(result);
@@ -45,8 +44,8 @@ namespace CarRent.api.Controllers
         [HttpPost("EditMaintenance/{id}")]
         public async Task<IActionResult> EditMaintenance(int id, [FromBody] CarMaintenanceDto carMaintenance)
         {
-            var user = User.Identity.Name;
-            var userId = await _authentication.FindUserByUserName(user);
+            var userId = await _authentication.GetUserIdByClaims(User);
+
 
             var result = await _services.CarMaintenanceService.EditCarMaintenanceAsync(id, carMaintenance, userId);
             return Ok(result);

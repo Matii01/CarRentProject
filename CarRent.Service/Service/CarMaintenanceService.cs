@@ -2,7 +2,6 @@
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
@@ -10,11 +9,7 @@ using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CarRent.Service.Service
 {

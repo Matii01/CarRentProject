@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
@@ -19,11 +20,9 @@ namespace CarRent.Service.Service
     {
         private readonly IPriceListService _priceList;
         private readonly INotificationService _notification;
-        private readonly ICarService _carService;
 
         public RentalService(
             IRepositoryManager repository,
-            ICarService carService,
             IPriceListService priceList,
             IMapper mapper,
             INotificationService notification
@@ -32,7 +31,6 @@ namespace CarRent.Service.Service
         {
            _priceList = priceList;
            _notification = notification;
-            _carService = carService;
         }
 
         public async Task<PagedList<RentalListDataDto>> GetRentalsListAsync(RentalParameters param, bool tractChanges)
@@ -195,7 +193,10 @@ namespace CarRent.Service.Service
             await CreateUserRentalAsync(userId, Rental.Id);
             await CreateUserInvoiceAsync(userId, Invoice.Id);
 
-            var car = await _carService.GetCarById(newRental.CarId, false); 
+            var car = await _repository.NewCar.GetAsync(newRental.CarId, false)
+                .SingleOrDefaultAsync();
+
+            //var car = await _carService.GetCarById(newRental.CarId, false); 
             var rentalInfo = new RentalDataForClientDto(
                     clientDetails.FirstName + " " + clientDetails.LastName,
                     newRental.DateFrom,

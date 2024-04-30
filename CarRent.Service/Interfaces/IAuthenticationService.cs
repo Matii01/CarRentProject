@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace CarRent.Service.Interfaces
         Task<UserLoginData> Login(bool populateExp);
         Task<UserLoginData> RefreshToken(TokenDto tokenDto);
         Task<UserLoginData> RetrieveData(TokenDto tokenDto);
-        Task<string> FindUserByUserName(string userName);
-        //Task<TokenDto> RefreshToken(TokenDto tokenDto);
+        Task<string> FindUserIdByUserName(string? userName);
+        Task<string> GetUserIdByClaims(ClaimsPrincipal principal);
     }
 }

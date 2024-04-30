@@ -25,6 +25,7 @@ namespace CarRent.api
                         {
                             NotFoundException => StatusCodes.Status404NotFound,
                             BadRequestException => StatusCodes.Status400BadRequest,
+                            UnauthorizedException => StatusCodes.Status401Unauthorized,
                             _ => StatusCodes.Status500InternalServerError,
                         };
 
