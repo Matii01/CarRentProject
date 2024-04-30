@@ -46,7 +46,6 @@ namespace CarRent.api.Controllers
         {
             var userId = await _authentication.GetUserIdByClaims(User);
 
-
             var result = await _services.CarMaintenanceService.EditCarMaintenanceAsync(id, carMaintenance, userId);
             return Ok(result);
         }

@@ -1,17 +1,17 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 namespace CarRent.api.Controllers
 {
-    public class CarOpinionController : ControllerWithUserManager
+    public class CarOpinionController : BaseController
     {
-        public CarOpinionController(IServiceManager serviceManager, UserManager<User> userManager) 
-            : base(serviceManager, userManager)
+        private readonly IAuthenticationService _authentication;
+        public CarOpinionController(IServiceManager serviceManager,  IAuthenticationService authentication) 
+            : base(serviceManager)
         {
+            _authentication = authentication;
         }
 
         [HttpGet("{carId:int}")]
@@ -49,13 +49,9 @@ namespace CarRent.api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateOpinion([FromBody] NewOpinionDto opinion)
         {
-            var validationResult = await ValidateUser();
-            if (!validationResult.IsSuccess || validationResult.User == null)
-            {
-                return Unauthorized();
-            }
+            var useId = await _authentication.GetUserIdByClaims(User);
 
-            await _services.CarOpinionService.AddOpinionAsync(opinion, validationResult.User.Id);
+            await _services.CarOpinionService.AddOpinionAsync(opinion, useId);
             return Ok("");
         }
 
