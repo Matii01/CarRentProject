@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
 using System.Text;
@@ -53,12 +52,8 @@ namespace CarRent.api.Extensions
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            var emailConfig = configuration
-                .GetSection("EmailConfiguration")
-                .Get<EmailConfiguration>();
-
-            services.AddSingleton(emailConfig);
-            services.AddSingleton(configuration.GetSection("Secret").Get<WhSecretConfiguration>());
+            services.AddSingleton(GetEmailConfiguration(configuration));
+            services.AddSingleton(GetWhConfiguration(configuration));
 
             services.AddScoped<IEmailSender, EmailSender>();
         }
@@ -75,7 +70,6 @@ namespace CarRent.api.Extensions
                 .AddCookie(options =>
                 {
                     options.Cookie.HttpOnly = true;
-                    //options.LoginPath = 
                 });
             services.AddIdentity<User, IdentityRole>(o =>
             {
@@ -87,7 +81,7 @@ namespace CarRent.api.Extensions
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            var secretKey = Environment.GetEnvironmentVariable("SECRET");
+            var secretKey = Environment.GetEnvironmentVariable("SECRET") ?? throw new InvalidOperationException("Enviroment Variable not found"); ;
 
             services.AddAuthentication(opt =>
             {
@@ -115,6 +109,20 @@ namespace CarRent.api.Extensions
             StripeConfiguration.ApiKey = config["SecretKey"];
             Console.WriteLine("Configure api key");
             Console.WriteLine(StripeConfiguration.ApiKey);
+        }
+
+        private static WhSecretConfiguration GetWhConfiguration(IConfiguration configuration)
+        {
+            return configuration.GetSection("Secret").Get<WhSecretConfiguration>()
+                ?? throw new InvalidOperationException("WhConfiguration not found.");
+        }
+
+        private static EmailConfiguration GetEmailConfiguration(IConfiguration configuration)
+        {
+            return configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>()
+                ?? throw new InvalidOperationException("Email configuration not found.");
         }
     }
 }
