@@ -1,30 +1,22 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Repository;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Security.Claims;
 
 namespace CarRent.api.Controllers
 {
     public class RentalController : BaseController
     {
-        private readonly UserManager<User> _userManager;
         private readonly CarRentContext _db;
-        public RentalController(IServiceManager serviceManager, CarRentContext db,
-        UserManager<User> userManager)
+        private readonly IAuthenticationService _authentication;
+        public RentalController(IServiceManager serviceManager,  CarRentContext db,
+         IAuthenticationService authentication)
             : base(serviceManager)
         {
-            _userManager = userManager;
             _db = db;
+            _authentication = authentication;
         }
 
         [HttpGet("AllRentals")]
@@ -60,15 +52,9 @@ namespace CarRent.api.Controllers
         [HttpGet("UserRental")]
         public async Task<IActionResult> GetUserRental([FromQuery] OrderParameters param)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            param.ClientId = user.Id;
+            param.ClientId = userId;
             var items = await _services.RentalService.GetUserRentalsAsync(param);
 
             return Ok(items);
@@ -78,17 +64,8 @@ namespace CarRent.api.Controllers
         [HttpGet("UserRental/{id}")]
         public async Task<IActionResult> GetUserRentalDetail(int id)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            await Console.Out.WriteLineAsync($"{user.Id} : {id}");
-
-            var item = await _services.RentalService.GetUserRentalDetailAsync(user.Id, id);
+            var userId = await _authentication.GetUserIdByClaims(User);
+            var item = await _services.RentalService.GetUserRentalDetailAsync(userId, id);
 
             return Ok(item);
         }
@@ -107,13 +84,7 @@ namespace CarRent.api.Controllers
         [HttpGet("CheckPriceForClient")]
         public async Task<IActionResult> CheckPriceForClient([FromQuery] NewRentalForClient dates)
         {
-            if (User == null || User.Identity == null)
-            {
-                throw new Exception();
-            }
-
-            var username = User.Identity.Name ?? throw new Exception("");
-            var user = await _userManager.FindByNameAsync(username) ?? throw new Exception("");
+            var user = await _authentication.GetUserByClaims(User);
             var cost = await _services.PriceListService.GetPriceForCarForDate(user.Id, dates);
             var total = cost.Gross - cost.Rabat;
             await Console.Out.WriteLineAsync("logged in");
@@ -142,7 +113,7 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateNewRental([FromBody] NewRentalFromWorker data)
         {
             await _services.RentalService.CreateRentalsAndInvoice(data);
-            await Console.Out.WriteLineAsync(data.ToString());
+
             foreach(var item in data.Rentals) {
                 await Console.Out.WriteLineAsync(item.ToString());
             }
@@ -152,13 +123,10 @@ namespace CarRent.api.Controllers
         [HttpPost("IsDateAvailable")]
         public async Task<IActionResult> IsDateAvailable([FromBody] NewRentalForClient dates)
         {
-            await Console.Out.WriteLineAsync("carId = ===" + dates.CarId);
             if (dates.CarId == 0)
             {
                 return NotFound();
             }
-
-            await Console.Out.WriteLineAsync("data: " + dates);
 
             var isAvailable = await _services.RentalService.IsAvailable(dates);
             return Ok(isAvailable);
@@ -176,7 +144,6 @@ namespace CarRent.api.Controllers
         [HttpPost("UpdateInvoiceStatus/{invoiceId:int}")]
         public async Task<IActionResult> UpdateInvoiceStatus(int invoiceId, [FromBody] UpdateInvoiceDto statusDto)
         {
-            await Console.Out.WriteLineAsync("Update invoice");
             await _services.RentalService.UpdateInvoiceAsync(invoiceId, statusDto);
             return Ok("");
         }
