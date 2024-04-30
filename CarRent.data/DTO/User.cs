@@ -1,10 +1,4 @@
-﻿using CarRent.data.Models.User;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CarRent.data.DTO
 {
@@ -24,17 +18,14 @@ namespace CarRent.data.DTO
     }
     public record UserForRegistrationDto
     {
-        public string? FirstName { get; init; }
-        public string? LastName { get; init; }
+        public string FirstName { get; init; } = null!;
+        public string LastName { get; init; } = null!;
 
-        //[Required(ErrorMessage = "Username is required")]
-        //public string? UserName { get; init; }
-        
         [Required(ErrorMessage = "Password is required")]
-        public string? Password { get; init; }
+        public string Password { get; init; } = null!;
 
         [Required(ErrorMessage = "Email is required")]
-        public string? Email { get; init; }
+        public string Email { get; init; } = null!;
         public string? PhoneNumber { get; init; }
         public ICollection<string>? Roles { get; set; }
     }
@@ -42,9 +33,9 @@ namespace CarRent.data.DTO
     public record UserForAuthenticationDto
     {
         [Required(ErrorMessage = "User name is required")]
-        public string? UserName { get; init; }
+        public string UserName { get; init; } = null!;
         [Required(ErrorMessage = "Password name is required")]
-        public string? Password { get; init; }
+        public string Password { get; init; } = null!;
     }
 
     public record UserLoginData
@@ -82,15 +73,6 @@ namespace CarRent.data.DTO
         string? RetypePassword
     );
 
-    /*ClientDetails: {
-         FirstName: "",
-         LastName: "",
-         Email: "",
-         PhoneNumber: "",
-         Address: "",
-         PostCode: "",
-         City: "",
-       }, */
     public record DefaultRentalData
     {
         public string? FirstName { get; set; }

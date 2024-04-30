@@ -195,7 +195,7 @@ namespace CarRent.Service.Service
             await CreateUserRentalAsync(userId, Rental.Id);
             await CreateUserInvoiceAsync(userId, Invoice.Id);
 
-            var car = await _carService.GetCarById(newRental.CarId, false);
+            var car = await _carService.GetCarById(newRental.CarId, false); 
             var rentalInfo = new RentalDataForClientDto(
                     clientDetails.FirstName + " " + clientDetails.LastName,
                     newRental.DateFrom,

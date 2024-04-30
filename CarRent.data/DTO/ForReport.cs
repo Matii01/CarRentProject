@@ -37,7 +37,7 @@ namespace CarRent.data.DTO
     public class ForCarsReport
     {
         public int CarId {  get; set; }
-        public string CarName {  get; set; }
+        public string CarName { get; set; } = null!;
         public decimal Cost { get; set; }
         public int RentalCount { get; set; }
         public int TotalRentalDays {  get; set; }

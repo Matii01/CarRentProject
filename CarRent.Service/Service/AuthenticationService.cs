@@ -1,21 +1,14 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.Auth;
 using CarRent.data.Models.User;
 using CarRent.Service.Helper;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -38,19 +31,13 @@ namespace CarRent.Service.Service
         {
             var user = MapHelper.MapUserForRegistrationDtoToUser(userForRegistration);
 
-            foreach (var t in userForRegistration.Roles)
-            {
-                await Console.Out.WriteLineAsync(t);
-            }
-
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
-            if (result.Succeeded)
+            if (result.Succeeded && userForRegistration.Roles != null)
             {
                 foreach (var t in userForRegistration.Roles)
                 {
                     await _userManager.AddToRoleAsync(user, t);
                 }
-                //await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             }
 
             return result;

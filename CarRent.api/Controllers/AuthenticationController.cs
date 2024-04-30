@@ -33,9 +33,9 @@ namespace CarRent.api.Controllers
                 return BadRequest(ModelState);
             }
 
+
             var user = await _userManager.FindByEmailAsync(newUser.Email);
             await _services.UserAddressService.AddAddressFromRegisterData(user.Id, newUser);
-
 
             return StatusCode(201);
         }

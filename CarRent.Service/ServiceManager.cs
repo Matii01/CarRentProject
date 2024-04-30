@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
-using CarRent.data.Models.CarRent;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.SendingEmail;
@@ -8,11 +7,6 @@ using CarRent.Service.Interfaces;
 using CarRent.Service.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service
 {
