@@ -1,22 +1,19 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
 
 namespace CarRent.api.Controllers
 {
     public class WorkOrderController : BaseController
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IAuthenticationService _authentication;
 
-        public WorkOrderController(UserManager<User> userManager, IServiceManager serviceManager) 
+        public WorkOrderController(IServiceManager serviceManager, IAuthenticationService authentication) 
             : base(serviceManager)
         {
-            _userManager = userManager;
+            _authentication = authentication;
         }
 
         [Authorize(Roles = "Administrator")]
@@ -31,15 +28,9 @@ namespace CarRent.api.Controllers
         [HttpGet("workerAll")]
         public async Task<IActionResult> GetWorksOrdersForWorker([FromQuery] WorkOrderParameters param)
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            param.WorkerId = user.Id;
+            param.WorkerId = userId;
 
             var list = await _services.WorkOrderService.GetWorkOrderByParamsAsync(param);
             return Ok(list);

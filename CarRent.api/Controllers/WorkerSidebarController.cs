@@ -9,27 +9,20 @@ namespace CarRent.api.Controllers
 {
     public class WorkerSidebarController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        public WorkerSidebarController(IServiceManager serviceManager, UserManager<User> userManager)
+        private readonly IAuthenticationService _authentication;
+        public WorkerSidebarController(IServiceManager serviceManager, IAuthenticationService authentication)
             : base(serviceManager)
         {
-            _userManager = userManager;
+            _authentication = authentication;
         }
         
         [Authorize(Roles = "Worker")]
         [HttpGet("GetWorkerSidebar")]
         public async Task<IActionResult> GetWorkerSidebar()
         {
-            var username = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var userId = await _authentication.GetUserIdByClaims(User);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var items = await _services.WorkerSidebar.GetWorkerSidebarAsync(user.Id);
-            
+            var items = await _services.WorkerSidebar.GetWorkerSidebarAsync(userId);
             return Ok(items);
         }
 
@@ -46,17 +39,6 @@ namespace CarRent.api.Controllers
         [HttpPost("GenerateWorkerSidebar/{workerId}")]
         public async Task<IActionResult> GenerateWorkerSidebar([FromBody] WorkerSidebarDto[] Sidebar, string workerId)
         {
-            await Console.Out.WriteLineAsync(workerId);
-
-            foreach (var sidebar in Sidebar)
-            {
-                await Console.Out.WriteLineAsync(sidebar.Title);
-                foreach (var item in sidebar.Children)
-                {
-                    await Console.Out.WriteLineAsync($"   -{item.Name}");
-                }
-            }
-
             await _services.WorkerSidebar.GenerateWorkerSidebarAsync(Sidebar, workerId);
             return Ok("");
         }
@@ -66,7 +48,6 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> EditWorkerSidebar([FromBody] WorkerSidebarDto[] Sidebar, string workerId)
         {
             var items = await _services.WorkerSidebar.EditWorkerSidebarAsync(Sidebar, workerId);
-            await Console.Out.WriteLineAsync("edit sidebar");
             return Ok(items);
         }
     }

@@ -1,22 +1,17 @@
 ﻿using CarRent.data.DTO;
-using CarRent.data.Models.User;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.api.Controllers
 {
     public class WishlistController : BaseController
     {
-        private readonly UserManager<User> _userManager;
         private readonly IAuthenticationService _authentication;
-
-        public WishlistController(IServiceManager serviceManager, IAuthenticationService authentication, UserManager<User> userManager) 
+        public WishlistController(IServiceManager serviceManager, IAuthenticationService authentication ) 
             : base(serviceManager)
         {
             _authentication = authentication;
-            _userManager = userManager;
         }
 
         [Authorize(Roles = "User")]

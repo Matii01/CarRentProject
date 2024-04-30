@@ -1,5 +1,4 @@
 ﻿using CarRent.data.DTO;
-using CarRent.Repository;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -9,13 +8,10 @@ namespace CarRent.api.Controllers
 {
     public class RentalController : BaseController
     {
-        private readonly CarRentContext _db;
         private readonly IAuthenticationService _authentication;
-        public RentalController(IServiceManager serviceManager,  CarRentContext db,
-         IAuthenticationService authentication)
+        public RentalController(IServiceManager serviceManager, IAuthenticationService authentication)
             : base(serviceManager)
         {
-            _db = db;
             _authentication = authentication;
         }
 
@@ -87,7 +83,6 @@ namespace CarRent.api.Controllers
             var user = await _authentication.GetUserByClaims(User);
             var cost = await _services.PriceListService.GetPriceForCarForDate(user.Id, dates);
             var total = cost.Gross - cost.Rabat;
-            await Console.Out.WriteLineAsync("logged in");
 
             return Ok(total);
         }
