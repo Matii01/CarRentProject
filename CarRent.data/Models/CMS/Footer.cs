@@ -19,6 +19,6 @@ namespace CarRent.data.Models.CMS
         public string? InstagramLink { get; set; }
         public string? TikTokLink { get; set; }
         public string? Info { get; set; }
-        public IEnumerable<FooterLinks> Links { get; set; }
+        public IEnumerable<FooterLinks> Links { get; set; } = new List<FooterLinks>();
     }
 }

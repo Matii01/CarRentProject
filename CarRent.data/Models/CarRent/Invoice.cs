@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.data.Models.CarRent
 {
@@ -13,7 +8,6 @@ namespace CarRent.data.Models.CarRent
         public override int Id { get; set; }
         public string Number { get; set; } = null!;
         public string? Comment {  get; set; }
-        //public ICollection<InvoiceItem> invoices { get; set; } 
         public string? PaymentIntentId {  get; set; }
         public int ClientId { get; set; }
         public int? InvoiceStatus { get; set; }
@@ -29,6 +23,6 @@ namespace CarRent.data.Models.CarRent
         public DateTime? PaymentDate {  get; set; }
         public bool? IsEditable { get; set; }
         public Client Client { get; set; } = null!;
-        public ICollection<InvoiceItem> InvoicesItems { get; set;} 
+        public ICollection<InvoiceItem> InvoicesItems { get; set;} = new List<InvoiceItem>();
     }
 }

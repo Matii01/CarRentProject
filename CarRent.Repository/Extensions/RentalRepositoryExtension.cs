@@ -70,10 +70,5 @@ namespace CarRent.Repository.Extensions
         {
             return invoices;
         }
-
-        //public static async Task<PagedList<RentalListData>> GetPagedListAsync(this IQueryable<Rental> rentals, RentalParameters param)
-        //{
-
-        //}
     }
 }

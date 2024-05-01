@@ -6,16 +6,6 @@ using System.Threading.Tasks;
 
 namespace CarRent.data.DTO
 {
-    //public record InvoiceParamDto(
-    //    DateTime? CreatedDateFrom,
-    //    DateTime? CreatedDateTo,
-    //    DateTime? PaymentDateFrom,
-    //    DateTime? PaymentDateTo,
-    //    decimal? Min,
-    //    decimal? Max,
-    //    int? StatusId
-    //);
-
     public record ReportParamDto(
        DateTime? DateFrom,
        DateTime? DateTo
@@ -28,7 +18,7 @@ namespace CarRent.data.DTO
 
     public class ForMonthReport
     {
-        public string Month { get; set; }
+        public string Month { get; set; } = null!;
         public int Year { get; set; }
         public int MonthValue { get; set; }
         public decimal Amount { get; set; }
@@ -43,8 +33,6 @@ namespace CarRent.data.DTO
         public int TotalRentalDays {  get; set; }
         public double AverageRentalDays {  get; set; }
     }
-
-
 
     public record InvoiceForReportDto(
         int Id, 

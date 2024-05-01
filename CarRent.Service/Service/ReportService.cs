@@ -68,16 +68,19 @@ namespace CarRent.Service.Service
                 .ToListAsync();
 
             var carList = new List<ForCarsReport>();
+
             foreach (var item in list)
             {
+                var totalRentalDays = (item.RentalEnd - item.RentalStart).Days;
+                var averageRentalDays = (item.RentalEnd - item.RentalStart).Days;
                 ForCarsReport newItem = new()
                 {
                     CarId = item.CarId,
                     CarName = item.Car.Name,
                     Cost = item?.InvoiceItem?.PaidAmount ?? 0,
                     RentalCount = 1,
-                    TotalRentalDays = (item.RentalEnd - item.RentalStart).Days,
-                    AverageRentalDays = (item.RentalEnd - item.RentalStart).Days,
+                    TotalRentalDays = totalRentalDays,
+                    AverageRentalDays = averageRentalDays,
                 };
                 AddCarToReport(carList, newItem);
             }

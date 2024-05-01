@@ -16,8 +16,6 @@ namespace CarRent.data.DTO
         public decimal Price { get; set; }
     }
 
-    //public record CarDetailsDtoForClient(int Id, string Name, string Description, string Make, string PictureUrl, string Engine, string Gearbox, string Ac, decimal Price);
-
     public record CarListDto(int Id, string Name, string Make,string Engine, string Gearbox, string Ac, decimal Price);
 
     public record NewCarDto(
@@ -109,7 +107,7 @@ namespace CarRent.data.DTO
         IEnumerable<CarEquipmentDto>? CarEquipment
     )
     {
-        public IEnumerable<RentalDatesDto> ExcludedDates { get; set; }
+        public IEnumerable<RentalDatesDto> ExcludedDates { get; set; } = new List<RentalDatesDto>();
     }
 
     public record CarForWishlistDto(
@@ -117,5 +115,4 @@ namespace CarRent.data.DTO
         string Name,
         string PictureUrl
     );
-
 }

@@ -69,12 +69,11 @@ namespace CarRent.Service.Helper
                 null   
                 );
         }
-
         public static CarDetailForWorkerDto MapCarToCarDetailForWorkerDto(Car car)
         {
             List<CarImageDto> images = new List<CarImageDto>();
 
-            if (car.CarImage != null)
+            if (car.CarImages != null)
             {
                 foreach (var item in car.CarImages)
                 {
@@ -111,8 +110,6 @@ namespace CarRent.Service.Helper
                 images
                 );
         }
-
-
         public static void UpdateCar(ref Car toUpdate, NewCarDto carDto)
         {
             toUpdate.Name = carDto.Name;
@@ -162,9 +159,13 @@ namespace CarRent.Service.Helper
         }
         public static CarDetailsPage MapCarToCarDetailsPageForClient(Car car)
         {
-            var images = car.CarImages.Where(x=>x.IsActive == true)
-                .Select(x => new CarImageDto(x.Id, x.CarId, x.ImgUrl))
-                .ToList();
+            var images = new List<CarImageDto>();
+            if(car.CarImages != null)
+            {
+                 images = car.CarImages.Where(x=>x.IsActive == true)
+                    .Select(x => new CarImageDto(x.Id, x.CarId, x.ImgUrl))
+                    .ToList();
+            }
 
             var equipment = car.CarsEquipment.Where(x => x.IsActive == true)
                 .Select(x => new CarEquipmentDto(x.Id, x.Name, x.Description))
@@ -197,7 +198,6 @@ namespace CarRent.Service.Helper
                 IsActive = true,
             };
         }
-
         public static CarMaintenanceDto MapNewCarMaintenanceDtoToCarMaintenanceDto(string workerId, NewCarMaintenanceDto carMaintenance)
         {
             return new CarMaintenanceDto(

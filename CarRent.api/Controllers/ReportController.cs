@@ -1,8 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Composition;
-using System.IO;
 
 namespace CarRent.api.Controllers
 {
