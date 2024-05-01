@@ -20,8 +20,10 @@ namespace CarRent.Service.Service
         private readonly IPriceListService _priceList;
         private readonly IRentalService _rental;
         private readonly IEmailSender _emailSender;
+        private readonly INotificationService _notification;
 
-        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental, IEmailSender emailSender) : base(repository, mapper)
+        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental, IEmailSender emailSender, INotificationService notification) 
+            : base(repository, mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
@@ -29,6 +31,7 @@ namespace CarRent.Service.Service
             _priceList = priceList;
             _rental = rental;
             _emailSender = emailSender;
+            _notification = notification;
         }
 
         public async Task<PaymentIntent> CreatePayment(string? userId, string? dataForRental)
@@ -60,7 +63,7 @@ namespace CarRent.Service.Service
 
             var rentalDetails = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
 
-            var result = await _rental.CreateRentalAndInvoiceAndAssignUser (
+            var result = await _rental.CreateRentalAndAssignUser (
                     rentalData.UserId,
                     rentalData.PaymentIntentId,
                     rentalDetails.Invoice,
@@ -68,14 +71,17 @@ namespace CarRent.Service.Service
                     rentalDetails.ClientDetails
                 );
 
-            _emailSender.SendEmailPaymentSucceeded(
-                rentalDetails.ClientDetails,
-                rentalDetails.NewRentalForClient,
-                rentalDetails.Invoice.InvoiceItems
-            );
+            if (result == true)
+            {
+                _emailSender.SendEmailPaymentSucceeded(
+                    rentalDetails.ClientDetails,
+                    rentalDetails.NewRentalForClient,
+                    rentalDetails.Invoice.InvoiceItems
+                );
+
+                await _notification.SendAddedRentalNotificationAsync(rentalData.UserId, rentalDetails.NewRentalForClient);
+            }
         }
-
-
 
         public Task UpdatePaymentFailed(string intentId)
         {

@@ -40,6 +40,7 @@ namespace CarRent.api.Controllers
             switch (stripeEvent.Type) 
             {
                 case "payment_intent.succeeded":
+                    await Console.Out.WriteLineAsync("Payment succeeded");
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     await _services.PaymentService.UpdatePaymentSucceeded(intent.Id);
                     break;

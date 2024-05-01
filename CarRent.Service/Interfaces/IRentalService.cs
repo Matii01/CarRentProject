@@ -46,7 +46,7 @@ namespace CarRent.Service.Interfaces
 
         Task CreateRentalsAndInvoice(NewRentalFromWorker data);
 
-        Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(
+        Task<bool> CreateRentalAndAssignUser(
                 string userId, 
                 string? paymentIntentId,
                 InvoiceDto invoiceDto,
