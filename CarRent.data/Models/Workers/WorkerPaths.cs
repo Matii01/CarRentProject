@@ -12,7 +12,7 @@ namespace CarRent.data.Models.Workers
         public string Title { get; set; } = null!;
         public string? Icon { get; set; }
         public int? Position { get; set; }
-        public ICollection<PathItem>? Paths { get; set; }
+        public ICollection<PathItem> Paths { get; set; } = new List<PathItem>();
     }
 }
 

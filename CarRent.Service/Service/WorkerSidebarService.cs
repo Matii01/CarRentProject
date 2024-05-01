@@ -25,7 +25,7 @@ namespace CarRent.Service.Service
            
             return items.Select(x => new WorkerSidebarDto(
                 x.WorkerPaths.Title,
-                x.WorkerPaths.Icon,
+                x.WorkerPaths.Icon ?? "",
                 x.WorkerPaths.IsActive,
                 x.WorkerPaths.Paths.Select(y => new 
                     WorkerSidebarItemDto(y.Name,y.Path,y.IsActive)).ToList()
@@ -36,7 +36,6 @@ namespace CarRent.Service.Service
         {
             foreach (WorkerSidebarDto sidebar in Sidebar)
             {
-
                 UserWorkerPaths userWorkerPaths = new ()
                 {
                     UserAccountId = workerId,
@@ -73,7 +72,6 @@ namespace CarRent.Service.Service
                     .Select(x => x.IsActive)
                     .SingleOrDefault();
 
-
                 if (item.WorkerPaths.Paths != null)
                 {
                     foreach(var path in item.WorkerPaths.Paths)
@@ -92,7 +90,7 @@ namespace CarRent.Service.Service
 
             return items.Select(x => new WorkerSidebarDto(
                x.WorkerPaths.Title,
-               x.WorkerPaths.Icon,
+               x.WorkerPaths.Icon ?? "",
                x.WorkerPaths.IsActive,
                x.WorkerPaths.Paths.Select(y => new
                    WorkerSidebarItemDto(y.Name, y.Path, y.IsActive)).ToList()

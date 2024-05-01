@@ -240,7 +240,7 @@ namespace CarRent.Service.Service
         {
             var list = await _repository.RecommendedCars
                 .FindByCondition(x => x.IsActive, false)
-                .Select(x => new CarListForRecommended(x.CarId, x.Car.Name, x.Car.CarImage))
+                .Select(x => new CarListForRecommended(x.CarId, x.Car.Name, x.Car.CarImage ?? ""))
                 .ToListAsync();
 
             foreach (var item in list)
