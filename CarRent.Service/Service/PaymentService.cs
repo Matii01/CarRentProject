@@ -34,12 +34,16 @@ namespace CarRent.Service.Service
             _notification = notification;
         }
 
-        public async Task<PaymentIntent> CreatePayment(string? userId, string? dataForRental)
+        public async Task<PaymentIntent?> CreatePayment(string userId, string dataForRental)
         {
-            StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
-            await Console.Out.WriteLineAsync(StripeConfiguration.ApiKey);
-
             var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(dataForRental);
+            if(allRentalData == null || allRentalData.NewRentalForClient == null)
+            {
+                return null;
+            }
+
+            StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+
             var price = await _priceList.GetPriceForCarForDate(userId, allRentalData.NewRentalForClient);
 
             var service = new PaymentIntentService();
@@ -47,7 +51,7 @@ namespace CarRent.Service.Service
             {
                 Amount = (long)price.Gross * 100,
                 Currency = "pln",
-                PaymentMethodTypes = new List<string> { "card"}
+                PaymentMethodTypes = new List<string> { "card" }
             };
             var paymentIntent = await service.CreateAsync(options);
             await SaveRentalData(userId, dataForRental, paymentIntent.Id);
@@ -90,7 +94,7 @@ namespace CarRent.Service.Service
             return Task.CompletedTask;
         }
 
-        private async Task SaveRentalData(string? userId, string? dataForRental, string paymentIntentId)
+        private async Task SaveRentalData(string userId, string? dataForRental, string paymentIntentId)
         {
             if (dataForRental == null)
             {

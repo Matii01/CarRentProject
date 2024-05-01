@@ -23,7 +23,18 @@ namespace CarRent.api.Controllers
         public async Task<IActionResult> CreateCharge([FromBody] object allRentalData)
         {
             var userId = await _authentication.GetUserIdByClaims(User);
-            var intent = await _services.PaymentService.CreatePayment(userId, allRentalData.ToString());
+            string? rentalsData = allRentalData.ToString();
+            
+            if(rentalsData is null)
+            {
+                return BadRequest("No data");
+            }
+
+            var intent = await _services.PaymentService.CreatePayment(userId, rentalsData);
+            if(intent is null)
+            {
+                return BadRequest("Incomplete data");
+            }
 
             return Ok(new { ClientSecret = intent.ClientSecret });
         }

@@ -1,15 +1,10 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.Repository.Abstract;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Repository.Repositories
 {
@@ -130,7 +125,7 @@ namespace CarRent.Repository.Repositories
                             y.Rental)
                         ).ToList()
                     ))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             return newList;
         }
@@ -297,39 +292,6 @@ namespace CarRent.Repository.Repositories
                     null);
                 return newInvoice;
             }
-        }
-
-        private async Task<bool> IsUserRentalByRentalId(string userId, int rentalId)
-        {
-            var invoiceId = await GetInvoiceIdByRentalId(rentalId);
-
-            var item = await context
-                .UserInvoices
-                .Where(x => x.InvoiceId == invoiceId)
-                .Select(x => x.UserAccountId)
-                .SingleOrDefaultAsync();
-
-            return userId.Equals(item);
-        }
-
-        private ClientDetailsDto GetClientDetailsDto(Client client)
-        {
-            var c = client as IndividualClient;
-
-            if (c == null)
-            {
-                throw new Exception("");
-            }
-
-            return new ClientDetailsDto(
-                c.FirstName,
-                c.LastName,
-                c.Email,
-                c.PhoneNumber,
-                c.Address,
-                c.PostCode,
-                c.City
-                );
         }
     }
 }
