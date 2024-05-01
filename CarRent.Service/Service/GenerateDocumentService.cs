@@ -1,8 +1,6 @@
 ﻿using CarRent.data.DTO;
 using CarRent.Service.Interfaces;
-using MimeKit;
 using Spire.Doc;
-using Spire.Doc.Documents;
 using Spire.Xls;
 
 
@@ -79,7 +77,7 @@ namespace CarRent.Service.Service
 
         public string GenerateExcelDocument(List<InvoiceForReportDto> rows, string filePath)
         {
-            Workbook workbook = new Workbook();
+            Workbook workbook = new ();
             Worksheet sheet = workbook.Worksheets[0];
 
             string[] headers = new string[] { "ID", "Klient", "Zapłacono", "Do zapłaty", "Data powstania", "Data płatności" };
@@ -156,62 +154,32 @@ namespace CarRent.Service.Service
         public string GetPathForExcelDocuments()
         {
             string currentDirectory = Directory.GetCurrentDirectory();
-            string parentDirectory = Directory.GetParent(currentDirectory).FullName;
+            string parentDirectory = (Directory.GetParent(currentDirectory)?.FullName) 
+                ?? throw new Exception("File do not exist");
             string templateFile = Path.Combine(parentDirectory, "ExcelFiles");
-
-            bool folderExists = Directory.Exists(templateFile);
-            if (folderExists)
-            {
-                Console.WriteLine("The folder exists.");
-            }
-            else
-            {
-                Console.WriteLine("The folder does not exist.");
-            }
-
-            Console.WriteLine(currentDirectory);
-            Console.WriteLine(templateFile);
             return templateFile;
         }
 
-        private string GetPathForDocInvoiceTemplateFile()
+        private static string GetPathForDocInvoiceTemplateFile()
         {
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string solutionFolder = Directory.GetParent(baseDirectory)?.Parent?.Parent?.Parent?.FullName;
-
-            Console.WriteLine("Solution Folder: " + solutionFolder);
-            try
-            {
-                string currentDirectory = Directory.GetCurrentDirectory();
-                string parentDirectory = Directory.GetParent(currentDirectory).FullName;
-                string templateFile = Path.Combine(parentDirectory, "documentTemplates");
-                string filePath = Path.Combine(templateFile, "faktura.docx");
-                Console.WriteLine(filePath);
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-                throw new Exception("template file do not exist");
-            }
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string parentDirectory = Directory.GetParent(currentDirectory)?.FullName
+                ?? throw new Exception("Template file do not exist");
+            string templateFile = Path.Combine(parentDirectory, "documentTemplates");
+            string filePath = Path.Combine(templateFile, "faktura.docx");
+            
+            return filePath;
         }
 
         private static string GetPathForDocInvoiceResultFile()
         {
-            try
-            {
-                string currentDirectory = Directory.GetCurrentDirectory();
-                string parentDirectory = Directory.GetParent(currentDirectory).FullName;
-                string templateFile = Path.Combine(parentDirectory, "documentTemplates");
-                string filePath = Path.Combine(templateFile, "faktura1.docx");
-
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-                throw new Exception("template file do not exist");
-            }
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string parentDirectory = (Directory.GetParent(currentDirectory)?.FullName)
+                ?? throw new Exception("template file do not exist");
+                
+            string templateFile = Path.Combine(parentDirectory, "documentTemplates");
+            string filePath = Path.Combine(templateFile, "faktura1.docx");
+            return filePath;
         }
 
         private Dictionary<string, string> GenerateValueForFirmClientDocument(InvoiceWithFirmClient invoice)
@@ -221,19 +189,18 @@ namespace CarRent.Service.Service
             return keyValuePairs;
         }
         
-
-        private Dictionary<string, string> GenerateValueForIndividualClientDocument(InvoiceWithIndividualClient invoice, AboutCompanyDto aboutCompany)
+        private static Dictionary<string, string> GenerateValueForIndividualClientDocument(InvoiceWithIndividualClient invoice, AboutCompanyDto aboutCompany)
         {
             var rental = invoice.InvoiceItems.First();
             var totalToPay = invoice?.TotalToPay - invoice?.TotalPay ?? 0;
 
-            var keyValuePairs = new Dictionary<string, string>()
+            var keyValuePairs = new Dictionary<string, string>() 
             {
-                { "@FakturaNr@"         , invoice.Number },
-                { "@dataW@"             , invoice.CreatedDate.Value.ToShortDateString()??"" },
+                { "@FakturaNr@"         , invoice?.Number ?? "" },
+                { "@dataW@"             , GetCreatedData(invoice) },
                 { "@dataD@"             , rental.Rental?.RentalStart.ToShortDateString() ?? "" },
                 { "@firma@"             , aboutCompany.Name },
-                { "@nabywca@"           , $"{invoice.Client.FirstName} {invoice.Client.LastName}" },
+                { "@nabywca@"           , GetBuyerName(invoice) },
                 { "@nrKlienta@"         , "123456789" },
                 { "@nrNIP@"             , aboutCompany.NIP },
                 { "@nazwaBanku@"        , "PKO BP" },
@@ -252,13 +219,40 @@ namespace CarRent.Service.Service
                 { "@bruttoR@"           , invoice?.TotalToPay?.ToString()?? "" },
                 { "@kwotaDZ@"           , totalToPay.ToString() },
                 { "@sposobP@"           , "" },
-                { "@termin@"            , invoice?.PaymentDate.Value.ToShortDateString() ?? "" },
+                { "@termin@"            , GetPaymentData(invoice) },
                 { "@dokumentWystawil@"  , "" },
                 { "@FAdres@"            , aboutCompany.Address?? "" },
-                { "@NAdres@"            , invoice.Client?.Address??" " },
+                { "@NAdres@"            , invoice?.Client?.Address ?? "" },
             };
 
             return keyValuePairs;
+        }
+
+        private static string GetCreatedData(InvoiceWithIndividualClient? invoice)
+        {
+            if(invoice !=null && invoice.CreatedDate != null)
+            {
+                invoice.CreatedDate.Value.ToShortDateString();
+            }
+            return string.Empty;
+        }
+
+        private static string GetPaymentData(InvoiceWithIndividualClient? invoice)
+        {
+            if (invoice != null && invoice.PaymentDate != null)
+            {
+                invoice.PaymentDate.Value.ToShortDateString();
+            }
+            return string.Empty;
+        }
+
+        private static string GetBuyerName(InvoiceWithIndividualClient? invoice)
+        {
+            if(invoice != null && invoice.Client != null)
+            {
+                return $"{invoice.Client.FirstName} {invoice.Client.LastName}";
+            }
+            return string.Empty;
         }
     }
 }
