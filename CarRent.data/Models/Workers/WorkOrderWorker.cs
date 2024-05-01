@@ -10,9 +10,8 @@ namespace CarRent.data.Models.Workers
     {
         public override int Id { get; set; }
         public int WorkOrderId { get; set; }
-        public WorkOrder? WorkOrder { get; set; }
-    
-        public string? WorkerId { get; set; }
-        public User.User? Worker { get; set; }
+        public WorkOrder WorkOrder { get; set; } = null!;
+        public string WorkerId { get; set; } = null!;
+        public User.User Worker { get; set; } = null!;
     }
 }

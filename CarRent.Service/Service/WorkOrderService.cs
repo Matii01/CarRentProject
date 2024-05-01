@@ -88,15 +88,15 @@ namespace CarRent.Service.Service
         }
         public async Task RemoveWorkerFromWorkOrderAsync(WorkOrderToAssign workOrder)
         {
-            var t = await _repository
+            var order = await _repository
                 .WorkOrderWorker
                 .FindByCondition(
                     x=> x.IsActive == true && 
                     x.WorkerId == workOrder.WorkerId && 
                     x.WorkOrderId == workOrder.WorkOrderId, true)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found"); ;
 
-            t.IsActive = false;
+            order.IsActive = false;
             await _repository.SaveAsync();
         }
         public async Task ChangeWorkOrderStatusAsync(StatusToChange status)

@@ -11,7 +11,7 @@ namespace CarRent.data.DTO
 {
     public record NewWorkOrderDto(
         string Title,
-        string? WorkerId,
+        string WorkerId,
         string? Description,
         DateTime? ScheduledDate,
         int WorkOrderStatusId,
