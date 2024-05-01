@@ -102,11 +102,16 @@ namespace CarRent.api
             CreateMap<CarEquipmentDto, CarEquipment>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
-            /*
-                CreateMap<Company, CompanyDto>()
-                    .ForMember(c => c.FullAddress,
-                        opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
-             */
+            CreateMap<NewOpinionDto, CarOpinion>()
+                .ForMember(x => x.AddedDate, opt => opt.MapFrom(x => DateTime.Now))
+                .ForMember(x => x.IsAccepted, opt => opt.MapFrom(x => true))
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true))
+                .AfterMap((src, dest, context) => dest.UserId = context.Items["UserId"] as string ?? throw new Exception("UserId is required"));
+
+
+            CreateMap<CarOpinion, OpinionForAdminViewDto>();
+
+            
         }
     }
 }

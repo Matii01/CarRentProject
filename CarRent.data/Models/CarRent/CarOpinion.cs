@@ -19,8 +19,8 @@ namespace CarRent.data.Models.CarRent
 
         [Range(1, 6)]
         public int Mark {  get; set; }
-        public string? UserId { get; set; }
-        public User.User? User { get; set; }
+        public string UserId { get; set; } = null!;
+        public User.User User { get; set; } = null!;
         public int CarId {  get; set; }
         public Car? Car { get; set; }
     }
