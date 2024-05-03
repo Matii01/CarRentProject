@@ -6,7 +6,6 @@ using CarRent.data.Models.User;
 using CarRent.data.Models.Workers;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Repositories;
-using System;
 
 namespace CarRent.Repository
 {
@@ -15,9 +14,9 @@ namespace CarRent.Repository
         private readonly CarRentContext _context;
 
         private readonly Lazy<IGenericRepository<Car>> _newCarRepository;
-        private readonly Lazy<IGenericRepository<PriceList>> _newPricesListRepository;
+        private readonly Lazy<IGenericRepository<PriceList>> _priceListRepository;
 
-        private readonly Lazy<IPriceListRepository> _priceListRepository;
+        //private readonly Lazy<IPriceListRepository> _priceListRepository;
         private readonly Lazy<IGenericRepository<CarMake>> _carMakeRepository;
         private readonly Lazy<IGenericRepository<CarType>> _carTypeRepository;
         private readonly Lazy<IGenericRepository<AirConditioningType>> _airConditioningTypeRepository;
@@ -94,11 +93,8 @@ namespace CarRent.Repository
             _newCarRepository = new Lazy<IGenericRepository<Car>>(() =>
                 new GenericRepository<Car>(_context));
 
-            _newPricesListRepository = new Lazy<IGenericRepository<PriceList>>(()=>
+            _priceListRepository = new Lazy<IGenericRepository<PriceList>>(()=>
                 new GenericRepository<PriceList>(_context));
-
-            _priceListRepository = new Lazy<IPriceListRepository>(() =>
-                new PriceListRepository(_context));
 
             _carMakeRepository = new Lazy<IGenericRepository<CarMake>>(() =>
                 new GenericRepository<CarMake>(_context));
@@ -255,8 +251,7 @@ namespace CarRent.Repository
         public CarRentContext Context { get => _context; }
 
         public IGenericRepository<Car> NewCar => _newCarRepository.Value;
-        public IGenericRepository<PriceList> NewPriceList => _newPricesListRepository.Value;
-        public IPriceListRepository PriceList => _priceListRepository.Value;
+        public IGenericRepository<PriceList> NewPriceList => _priceListRepository.Value;
         public IGenericRepository<CarMake> CarMake => _carMakeRepository.Value;
         public IGenericRepository<CarType> CarType => _carTypeRepository.Value;
         public IGenericRepository<AirConditioningType> AirConditioningType => _airConditioningTypeRepository.Value;

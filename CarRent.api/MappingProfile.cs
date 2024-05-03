@@ -102,11 +102,55 @@ namespace CarRent.api
             CreateMap<CarEquipmentDto, CarEquipment>()
                 .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true));
 
-            /*
-                CreateMap<Company, CompanyDto>()
-                    .ForMember(c => c.FullAddress,
-                        opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
-             */
+            CreateMap<NewOpinionDto, CarOpinion>()
+                .ForMember(x => x.AddedDate, opt => opt.MapFrom(x => DateTime.Now))
+                .ForMember(x => x.IsAccepted, opt => opt.MapFrom(x => true))
+                .ForMember(x => x.IsActive, opt => opt.MapFrom(x => true))
+                .AfterMap((src, dest, context) => dest.UserId = context.Items["UserId"] as string ?? throw new Exception("UserId is required"));
+
+
+            CreateMap<CarOpinion, OpinionForAdminViewDto>();
+
+            CreateMap<Rental, UserRentalDetailDto>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => ""))
+                .ForMember(x => x.CarName, opt => opt.MapFrom(x => x.Car.Name))
+                .ForMember(x => x.CarImg, opt => opt.MapFrom(x => x.Car.CarImage))
+                .ForMember(x => x.Vat, opt => opt.MapFrom(x => x.InvoiceItem.VAT))
+                .ForMember(x => x.TotalPrice, opt => opt.MapFrom(x => x.InvoiceItem.Gross - x.InvoiceItem.Rabat))
+                .ForMember(x => x.Status, opt => opt.MapFrom(x => x.RentalStatus == null ? "" : x.RentalStatus.Status));
+
+
+            CreateMap<InvoiceWithClient, InvoiceWithIndividualClient>()
+                .ConstructUsing(src => new InvoiceWithIndividualClient(
+                    src.Id,
+                    src.InvoiceStatusId,
+                    src.Number,
+                    src.Comment,
+                    true,
+                    src.TotalToPay,
+                    src.TotalPay,
+                    src.IsEditable,
+                    src.CreatedDate,
+                    src.PaymentDate,
+                    src.Client as IndividualClient,
+                    src.InvoiceItems
+                ));
+
+
+            CreateMap<FirmClient, FirmClientDto>();
+
+            CreateMap<InvoiceWithClient, InvoiceWithFirmClient>()
+               .ConstructUsing(src => new InvoiceWithFirmClient(
+                   src.Id,
+                   src.InvoiceStatusId,
+                   src.Number,
+                   src.Comment,
+                   true,
+                   src.TotalToPay,
+                   src.TotalPay,
+                   src.IsEditable,
+                   src.InvoiceItems
+               ));
         }
     }
 }

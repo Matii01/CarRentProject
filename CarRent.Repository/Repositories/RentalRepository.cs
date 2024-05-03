@@ -1,15 +1,11 @@
 ﻿using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.Repository.Abstract;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Repository.Repositories
 {
@@ -25,54 +21,6 @@ namespace CarRent.Repository.Repositories
             var currentDate = DateTime.Now.AddDays(-1);
             return FindByCondition(
                 x => x.CarId == carId && x.RentalStart >= currentDate, false);
-        }
-
-        public async Task<NewInvoiceDto> GetInvoiceDataAsync(int invoiceId)
-        {
-            var invoice = context.Invoices
-                .Where(x => x.Id == invoiceId)
-                .Include(x => x.Client)
-                .Include(x => x.InvoicesItems)
-                .ThenInclude(x => x.Rental)
-                .ThenInclude(x => x.Car)
-                .ThenInclude(x => x.CarMake);
-
-
-            var transformedData = await invoice
-                .Select(x => new InvoiceWithClient(
-                        x.Id,
-                        x.InvoiceStatus,
-                        x.Number,
-                        x.Comment,
-                        x.TotalToPay,
-                        x.TotalPaid,
-                        x.IsEditable,
-                        x.CreatedDate,
-                        x.PaymentDate,
-                        x.Client,
-                        x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
-                            y.InvoiceId,
-                            y.Rabat,
-                            y.Net,
-                            y.Gross,
-                            y.PaidAmount,
-                            y.VAT,
-                            y.VATValue,
-                            new RentalDetailsDto(
-                                y.Rental.Id,
-                                y.Rental.CarId, 
-                                y.Rental.Car.Name, 
-                                y.Rental.Car.CarImage, 
-                                y.Rental.Car.CarMake.Name,
-                                y.Rental.RentalStart,
-                                y.Rental.RentalEnd,
-                                y.Rental.RentalStatus.Status,
-                                y.Rental.RentalStatusId
-                                ))
-                        ).ToList()
-                    )).SingleOrDefaultAsync();
-
-            return TransformInvoiceClient(transformedData);
         }
 
         public async Task<PagedList<InvoiceDto>> GetInvoicesDataAsync(OrderParameters param, bool trackChanges)
@@ -130,7 +78,7 @@ namespace CarRent.Repository.Repositories
                             y.Rental)
                         ).ToList()
                     ))
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
             return newList;
         }
@@ -149,8 +97,8 @@ namespace CarRent.Repository.Repositories
                 .Select(x => new RentalListDto(
                         x.Id,
                         x.InvoiceItem.Invoice.Client,
-                        x.Car.Name, 
-                        x.RentalStatus.Status,
+                        x.Car.Name,
+                        x.RentalStatus == null ? "" : x.RentalStatus.Status,
                         x.RentalStart, 
                         x.RentalEnd)
                 );
@@ -197,16 +145,17 @@ namespace CarRent.Repository.Repositories
                 .Include(x => x.InvoiceItem)
                 .Include(x => x.Car)
                 .Include(x => x.RentalStatus)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("Not found");
 
 
             var userRental = new UserRentalDetailDto(
-                    rentalId,invoiceId,
+                    rentalId,
+                    invoiceId,
                     "",
                     item.CarId,
                     item.Car.Name,
-                    item.Car.CarImage,
-                    item.RentalStatus.Status,
+                    item.Car.CarImage ?? "",
+                    item.RentalStatus == null ? "" : item.RentalStatus.Status,
                     item.InvoiceItem.Gross - item.InvoiceItem.Rabat,
                     item.InvoiceItem.VAT,
                     item.RentalStart,
@@ -256,80 +205,6 @@ namespace CarRent.Repository.Repositories
             var newPagedList = new PagedList<RentalListDataDto>(newItems, pagedList.MetaData.TotalCount, pagedList.MetaData.CurrentPage, pagedList.MetaData.PageSize);
 
             return newPagedList;
-        }
-
-        private static NewInvoiceDto TransformInvoiceClient(InvoiceWithClient invoice)
-        {
-            if (invoice.Client is IndividualClient)
-            {
-                var c = invoice.Client as IndividualClient;
-                var newInvoice = new NewInvoiceDto(true, null, new InvoiceWithIndividualClient(
-                        invoice.Id,
-                        invoice.InvoiceStatusId,
-                        invoice.Number,
-                        invoice.Comment,
-                        true,
-                        invoice.TotalToPay,
-                        invoice.TotalPay,
-                        invoice.IsEditable,
-                        invoice.CreatedDate,
-                        invoice.PaymentDate,
-                        invoice.Client as IndividualClient,
-                        invoice.InvoiceItems
-                    ));
-                return newInvoice;
-            }
-            else
-            {
-                var c = invoice.Client as FirmClient;
-                var newInvoice = new NewInvoiceDto(true, new InvoiceWithFirmClient(
-                        invoice.Id,
-                        invoice.InvoiceStatusId,
-                        invoice.Number,
-                        invoice.Comment,
-                        true,
-                        invoice.TotalToPay,
-                        invoice.TotalPay,
-                        invoice.IsEditable,
-                        new FirmClientDto(c.PostCode,c.City, c.NIP, c.CompanyName, c.StreetAndNumber),
-                        invoice.InvoiceItems
-                    ), 
-                    null);
-                return newInvoice;
-            }
-        }
-
-        private async Task<bool> IsUserRentalByRentalId(string userId, int rentalId)
-        {
-            var invoiceId = await GetInvoiceIdByRentalId(rentalId);
-
-            var item = await context
-                .UserInvoices
-                .Where(x => x.InvoiceId == invoiceId)
-                .Select(x => x.UserAccountId)
-                .SingleOrDefaultAsync();
-
-            return userId.Equals(item);
-        }
-
-        private ClientDetailsDto GetClientDetailsDto(Client client)
-        {
-            var c = client as IndividualClient;
-
-            if (c == null)
-            {
-                throw new Exception("");
-            }
-
-            return new ClientDetailsDto(
-                c.FirstName,
-                c.LastName,
-                c.Email,
-                c.PhoneNumber,
-                c.Address,
-                c.PostCode,
-                c.City
-                );
         }
     }
 }

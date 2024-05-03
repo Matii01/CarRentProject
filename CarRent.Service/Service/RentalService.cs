@@ -57,10 +57,7 @@ namespace CarRent.Service.Service
         public async Task<NewInvoiceDto> GetInvoiceRentalDetailsAsync(int id)
         {
             var invoiceId = await _repository.Rentals.GetInvoiceIdByRentalId(id);
-            var invoice = await _repository.Rentals.GetInvoiceDataAsync(invoiceId);
-
-
-            return invoice;
+            return await GetInvoiceDataAsync(invoiceId);
         }
         
         public async Task<NewInvoiceDto> GetDataForGenerateInvoice(int id)
@@ -121,13 +118,9 @@ namespace CarRent.Service.Service
             await SendUpdateInvoiceStatusNotification(invoiceId, newStatus);
         }
 
-        public async Task<RentalDataForClientDto> CreateRentalAndOutstandingInvoiceAndAssignUser()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<RentalDataForClientDto> CreateRentalAndInvoiceAndAssignUser(string userId,
-            string? paymentIntent,
+        public async Task<bool> CreateRentalAndAssignUser(
+                string userId,
+                string? paymentIntent,
                 InvoiceDto invoiceDto,
                 NewRentalForClient newRental,
                 ClientDetailsDto clientDetails)
@@ -138,73 +131,61 @@ namespace CarRent.Service.Service
             }
 
             var price = await _priceList.GetPriceForCarForDate(userId, newRental);
-
             string invoiceNumber = await GenerateInvoiceNumber();
-            var Invoice = new Invoice 
-            { 
-                Number = invoiceNumber, 
-                Comment = invoiceDto.Comment, 
-                PaymentIntentId = paymentIntent,
-                IsActive = true, 
-                InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
-                TotalPaid = price.Gross,
-                TotalToPay = price.Gross,
-                CreatedDate = DateTime.Now,
-                PaymentDate = DateTime.Now,
-                IsEditable = false,
-                Client = new IndividualClient
+            var defaultRentalStatusId = await GetDefaultRentalStatus();
+
+            var userInvoice = new UserInvoice()
+            {
+                UserAccountId = userId,
+                IsActive = true,
+                Invoice = new Invoice
                 {
-                    FirstName = clientDetails.FirstName, 
-                    LastName = clientDetails.LastName,
-                    Email = clientDetails.Email,
-                    PhoneNumber = clientDetails.PhoneNumber,
-                    Address = clientDetails.Address,
-                    PostCode = clientDetails.PostCode,
-                    City = clientDetails.City,
+                    Number = invoiceNumber,
+                    Comment = invoiceDto.Comment,
+                    PaymentIntentId = paymentIntent,
                     IsActive = true,
+                    InvoiceStatus = GetInvoiceStatusForPaidInvoice(),
+                    TotalPaid = price.Gross,
+                    TotalToPay = price.Gross,
+                    CreatedDate = DateTime.Now,
+                    PaymentDate = DateTime.Now,
+                    IsEditable = false,
+                    Client = GetIndividualClient(clientDetails),
+                    InvoicesItems = new List<InvoiceItem>()
+                    {
+                        new ()
+                        {
+                            Rabat = price.Rabat,
+                            Net = price.Net,
+                            Gross = price.Gross,
+                            PaidAmount = price.Gross,
+                            VAT = price.VAT,
+                            VATValue = price.VATValue,
+                            IsActive = true,
+                            Rental = new Rental()
+                            {
+                                CarId = newRental.CarId,
+                                RentalStart = newRental.DateFrom,
+                                RentalEnd = newRental.DateTo,
+                                RentalStatusId = defaultRentalStatusId,
+                                IsActive = true,
+                            }
+                        }
+                    }
                 }
             };
 
-            _repository.Invoice.Create(Invoice);
+            _repository.UserInvoice.Create(userInvoice);
             await _repository.SaveAsync();
-
-
-            var Rental = await CreateRental(newRental);
-            Rental.InvoiceItem = new InvoiceItem
+            var rentalId = userInvoice.Invoice.InvoicesItems.FirstOrDefault()?.RentalId;
+            if(rentalId != null)
             {
-                Rabat = price.Rabat,
-                Net = price.Net,
-                Gross = price.Gross,
-                PaidAmount = price.Gross,
-                VAT = price.VAT,
-                VATValue = price.VATValue,
-                InvoiceId = Invoice.Id,
-                RentalId = Rental.Id,
-                IsActive = true,
-            };
+                await CreateUserRentalAsync(userId, (int)rentalId);
+            }
 
-            _repository.Rentals.Create(Rental);
-            await _repository.SaveAsync();
-            await CreateUserRentalAsync(userId, Rental.Id);
-            await CreateUserInvoiceAsync(userId, Invoice.Id);
-
-            var car = await _repository.NewCar.GetAsync(newRental.CarId, false)
-                .SingleOrDefaultAsync();
-
-            //var car = await _carService.GetCarById(newRental.CarId, false); 
-            var rentalInfo = new RentalDataForClientDto(
-                    clientDetails.FirstName + " " + clientDetails.LastName,
-                    newRental.DateFrom,
-                    newRental.DateTo,
-                    car.Name,
-                    car.CarImage,
-                    Rental.InvoiceItem.Gross
-                    );
-
-            await _notification.SendAddedRentalNotificationAsync(userId, newRental);
-            return rentalInfo;
+            return true;
         }
-
+ 
         public async Task CreateRentalsAndInvoice(NewRentalFromWorker data)
         {
             await Console.Out.WriteLineAsync("New invoice will be added");
@@ -256,40 +237,48 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        private static Client GetClientToInvoice(NewRentalFromWorker data)
+        private static Client GetClientToInvoice(NewRentalFromWorker? data)
         {
-            if (data.ClientDetails != null)
+            if (data != null && data.ClientDetails != null)
             {
-                var Client = new IndividualClient
-                {
-                    FirstName = data.ClientDetails.FirstName,
-                    LastName = data.ClientDetails.LastName,
-                    Email = data.ClientDetails.Email,
-                    PhoneNumber = data.ClientDetails.PhoneNumber,
-                    Address = data.ClientDetails.Address,
-                    PostCode = data.ClientDetails.PostCode,
-                    City = data.ClientDetails.City,
-                    IsActive = true,
-                };
-                return Client;
+                return GetIndividualClient(data.ClientDetails);
             }
-            else if (data.FirmClientDto != null)
+            if (data != null && data.FirmClientDto != null)
             {
-                var Client = new FirmClient
-                {
-                    NIP = data.FirmClientDto.NIP,
-                    CompanyName = data.FirmClientDto.CompanyName,
-                    StreetAndNumber = data.FirmClientDto.StreetAndNumber,
-                    PostCode = data.FirmClientDto.PostCode,
-                    City = data.FirmClientDto.City,
-                    IsActive = true,
-                };
-                return Client;
+                return GetFirmClient(data.FirmClientDto);
             }
-            else
+
+            throw new DataNotFoundException("No client data");
+        }
+
+        private static IndividualClient GetIndividualClient(ClientDetailsDto clientDetails)
+        {
+            var Client = new IndividualClient
             {
-                throw new DataNotFoundException("No client data");
-            }
+                FirstName = clientDetails.FirstName,
+                LastName = clientDetails.LastName,
+                Email = clientDetails.Email,
+                PhoneNumber = clientDetails.PhoneNumber,
+                Address = clientDetails.Address,
+                PostCode = clientDetails.PostCode,
+                City = clientDetails.City,
+                IsActive = true,
+            };
+            return Client;
+        }
+
+        private static FirmClient GetFirmClient(FirmClientDto firmClient)
+        {
+            var Client = new FirmClient
+            {
+                NIP = firmClient.NIP,
+                CompanyName = firmClient.CompanyName,
+                StreetAndNumber = firmClient.StreetAndNumber,
+                PostCode = firmClient.PostCode,
+                City = firmClient.City,
+                IsActive = true,
+            };
+            return Client;
         }
 
         private async Task<List<InvoiceAndRentalDto>> GenerateInvoiceItemsList(NewRentalForClient[] rentals)
@@ -375,20 +364,6 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
         }
 
-        private async Task<Rental> CreateRental(NewRentalForClient newRental)
-        {
-            var RentalStatusId = await GetDefaultRentalStatus();
-            Rental rental = new()
-            {
-                CarId = newRental.CarId,
-                RentalStart = newRental.DateFrom,
-                RentalEnd = newRental.DateTo,
-                IsActive = true,
-                RentalStatusId = RentalStatusId,
-            };
-            return rental;
-        }
-
         private async Task<UserRental> CreateUserRentalAsync(string? userId, int rentalId)
         {
             UserRental userRental = new()
@@ -401,19 +376,6 @@ namespace CarRent.Service.Service
             await _repository.SaveAsync();
 
             return userRental;
-        }
-
-        private async Task<UserInvoice> CreateUserInvoiceAsync(string? userId, int invoiceId)
-        {
-            UserInvoice invoiceClient = new()
-            {
-                UserAccountId = userId,
-                InvoiceId = invoiceId,
-                IsActive = true,
-            };
-            _repository.UserInvoice.Create(invoiceClient);
-            await _repository.SaveAsync();
-            return invoiceClient;
         }
 
         private async Task<bool> CarIsBusy(NewRentalForClient newRental)
@@ -496,13 +458,13 @@ namespace CarRent.Service.Service
                 newInvoiceNum.Append(next);
                 return newInvoiceNum.ToString();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return "NR/1";
             }
         }
 
-        private int GetInvoiceStatusForPaidInvoice()
+        private static int GetInvoiceStatusForPaidInvoice()
         {
             return 2;
         }
@@ -553,24 +515,87 @@ namespace CarRent.Service.Service
                 await _notification.SendUpdateInvoiceStatusNotificationAsync(UserId, old, newSt);
             }
         }
+
         private async Task<string?> GetUserIdFromInvoiceNr(int invoiceId)
         {
-            try
-            {
-                var rentalId = await _repository.Invoice
-                    .GetAsync(invoiceId, false)
-                    .Select(x => x.InvoicesItems.First().Rental.Id)
-                    .FirstOrDefaultAsync();
+            var rental = await _repository.Invoice
+                .GetAsync(invoiceId, false)
+                .Select(x => x.InvoicesItems.First().Rental)
+                .FirstOrDefaultAsync();
 
-                return await _repository.UserRental
-                    .GetAsync(rentalId, false)
-                    .Select(x=> x.UserAccountId)
-                    .SingleOrDefaultAsync();
-            }
-            catch(Exception )
+            if (rental is null)
             {
                 return null;
+            }
+
+            return await _repository.UserRental
+                .GetAsync(rental.Id, false)
+                .Select(x => x.UserAccountId)
+                .SingleOrDefaultAsync();
+        }
+
+        private async Task<NewInvoiceDto> GetInvoiceDataAsync(int invoiceId)
+        {
+            var invoice = await _repository.Invoice.FindByCondition(x => x.Id == invoiceId, false)
+                .Where(x => x.Id == invoiceId)
+                .Include(x => x.Client)
+                .Include(x => x.InvoicesItems)
+                .ThenInclude(x => x.Rental)
+                .ThenInclude(x => x.Car)
+                .ThenInclude(x => x.CarMake)
+                .Select(x => new InvoiceWithClient(
+                        x.Id,
+                        x.InvoiceStatus,
+                        x.Number,
+                        x.Comment,
+                        x.TotalToPay,
+                        x.TotalPaid,
+                        x.IsEditable,
+                        x.CreatedDate,
+                        x.PaymentDate,
+                        x.Client,
+                        x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
+                            y.InvoiceId,
+                            y.Rabat,
+                            y.Net,
+                            y.Gross,
+                            y.PaidAmount,
+                            y.VAT,
+                            y.VATValue,
+                            new RentalDetailsDto(
+                                y.Rental.Id,
+                                y.Rental.CarId,
+                                y.Rental.Car.Name,
+                                y.Rental.Car.CarImage ?? "",
+                                y.Rental.Car.CarMake.Name,
+                                y.Rental.RentalStart,
+                                y.Rental.RentalEnd,
+                                y.Rental.RentalStatus == null ? "" : y.Rental.RentalStatus.Status,
+                                y.Rental.RentalStatusId
+                                ))
+                        ).ToList()
+                    )).SingleOrDefaultAsync() ?? throw new DataNotFoundException("Invoice not found");
+
+            return TransformInvoiceClient(invoice);
+        }
+
+        private NewInvoiceDto TransformInvoiceClient(InvoiceWithClient invoice)
+        {
+            if (invoice.Client is IndividualClient)
+            {
+                var newInvoice = new NewInvoiceDto(true, null, _mapper.Map<InvoiceWithIndividualClient>(invoice));
+                return newInvoice;
+            }
+            else
+            {
+                var client = invoice.Client as FirmClient;
+                var firmClient = _mapper.Map<InvoiceWithFirmClient>(invoice);
+                firmClient.Client = _mapper.Map<FirmClientDto>(client);
+                
+                var newInvoice = new NewInvoiceDto(true, firmClient, null);
+                return newInvoice;
             }
         }
     }
 }
+

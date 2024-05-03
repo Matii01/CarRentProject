@@ -14,7 +14,6 @@ namespace CarRent.Repository.Interfaces
         IGenericRepository<Car> NewCar {  get; }
         IGenericRepository<PriceList> NewPriceList { get; }
 
-        IPriceListRepository PriceList { get; }
         IGenericRepository<AirConditioningType> AirConditioningType { get; }
         IGenericRepository<CarDrive> CarDrive { get; }
         IGenericRepository<CarMake> CarMake { get; }

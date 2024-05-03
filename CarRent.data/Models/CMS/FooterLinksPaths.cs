@@ -10,10 +10,10 @@ namespace CarRent.data.Models.CMS
     {
         public override int Id { get; set; }
         public int FooterLinksId { get; set; }
-        public FooterLinks FooterLinks { get; set; }
+        public FooterLinks FooterLinks { get; set; } = null!;
 
-        public string Name { get; set; }
-        public string Path { get; set; }
+        public string Name { get; set; } = null!;
+        public string Path { get; set; } = null!;
         public int DisplayPosition { get; set; }
     }
 }

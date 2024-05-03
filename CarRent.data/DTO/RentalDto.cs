@@ -183,9 +183,11 @@ namespace CarRent.data.DTO
         decimal? TotalToPay,
         decimal? TotalPay,
         bool? IsEditable,
-        FirmClientDto? Client,
         List<InvoiceItemWithRentalDetailDto> InvoiceItems
-    );
+    )
+    {
+        public FirmClientDto? Client { get; set; }
+    }
 
     public record InvoiceWithIndividualClient(
         int Id,

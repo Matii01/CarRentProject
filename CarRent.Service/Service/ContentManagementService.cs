@@ -205,6 +205,8 @@ namespace CarRent.Service.Service
 
         private async Task<FooterDto> GenerateFooter()
         {
+            // TODO 
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 

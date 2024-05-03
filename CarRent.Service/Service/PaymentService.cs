@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
+using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
 using CarRent.Repository.Interfaces;
 using CarRent.SendingEmail;
@@ -19,8 +20,10 @@ namespace CarRent.Service.Service
         private readonly IPriceListService _priceList;
         private readonly IRentalService _rental;
         private readonly IEmailSender _emailSender;
+        private readonly INotificationService _notification;
 
-        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental, IEmailSender emailSender) : base(repository, mapper)
+        public PaymentService(IRepositoryManager repository, IMapper mapper, IConfiguration config, IPriceListService priceList, IRentalService rental, IEmailSender emailSender, INotificationService notification) 
+            : base(repository, mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
@@ -28,14 +31,19 @@ namespace CarRent.Service.Service
             _priceList = priceList;
             _rental = rental;
             _emailSender = emailSender;
+            _notification = notification;
         }
 
-        public async Task<PaymentIntent> CreatePayment(string? userId, string? dataForRental)
+        public async Task<PaymentIntent?> CreatePayment(string userId, string dataForRental)
         {
-            StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
-            await Console.Out.WriteLineAsync(StripeConfiguration.ApiKey);
-
             var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(dataForRental);
+            if(allRentalData == null || allRentalData.NewRentalForClient == null)
+            {
+                return null;
+            }
+
+            StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+
             var price = await _priceList.GetPriceForCarForDate(userId, allRentalData.NewRentalForClient);
 
             var service = new PaymentIntentService();
@@ -43,7 +51,7 @@ namespace CarRent.Service.Service
             {
                 Amount = (long)price.Gross * 100,
                 Currency = "pln",
-                PaymentMethodTypes = new List<string> { "card"}
+                PaymentMethodTypes = new List<string> { "card" }
             };
             var paymentIntent = await service.CreateAsync(options);
             await SaveRentalData(userId, dataForRental, paymentIntent.Id);
@@ -53,25 +61,30 @@ namespace CarRent.Service.Service
 
         public async Task UpdatePaymentSucceeded(string intentId)
         {
-
             var rentalData = await _repository.DataForRental
                 .FindByCondition(x => x.PaymentIntentId == intentId, false)
-                .SingleOrDefaultAsync() ?? throw new Exception("");
+                .SingleOrDefaultAsync() ?? throw new DataNotFoundException("");
 
-            var allRentalData = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
+            var rentalDetails = JsonConvert.DeserializeObject<AllRentalDataDto>(rentalData.RentalData);
 
-            var result = await _rental.CreateRentalAndInvoiceAndAssignUser
-                (rentalData.UserId,
-                rentalData.PaymentIntentId,
-                    allRentalData.Invoice,
-                    allRentalData.NewRentalForClient,
-                    allRentalData.ClientDetails);
+            var result = await _rental.CreateRentalAndAssignUser (
+                    rentalData.UserId,
+                    rentalData.PaymentIntentId,
+                    rentalDetails.Invoice,
+                    rentalDetails.NewRentalForClient,
+                    rentalDetails.ClientDetails
+                );
 
-            _emailSender.SendEmailPaymentSucceeded(
-                allRentalData.ClientDetails,
-                allRentalData.NewRentalForClient,
-                allRentalData.Invoice.InvoiceItems);
-            
+            if (result == true)
+            {
+                _emailSender.SendEmailPaymentSucceeded(
+                    rentalDetails.ClientDetails,
+                    rentalDetails.NewRentalForClient,
+                    rentalDetails.Invoice.InvoiceItems
+                );
+
+                await _notification.SendAddedRentalNotificationAsync(rentalData.UserId, rentalDetails.NewRentalForClient);
+            }
         }
 
         public Task UpdatePaymentFailed(string intentId)
@@ -80,7 +93,8 @@ namespace CarRent.Service.Service
             Console.WriteLine("PAYMENT FAILED ");
             return Task.CompletedTask;
         }
-        private async Task SaveRentalData(string? userId, string? dataForRental, string paymentIntentId)
+
+        private async Task SaveRentalData(string userId, string? dataForRental, string paymentIntentId)
         {
             if (dataForRental == null)
             {

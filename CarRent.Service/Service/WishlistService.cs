@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
-using CarRent.data.Models;
 using CarRent.data.Models.User;
 using CarRent.Repository.Interfaces;
 using CarRent.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.Service.Service
 {
@@ -40,7 +34,7 @@ namespace CarRent.Service.Service
                     x.Id, 
                     x.CarId, 
                     x.UserId,
-                    new CarForWishlistDto(x.Car.Id, x.Car.Name, x.Car.CarImage)
+                    new CarForWishlistDto(x.Car.Id, x.Car.Name, x.Car.CarImage ?? "")
                     ))
                 .ToListAsync();
 

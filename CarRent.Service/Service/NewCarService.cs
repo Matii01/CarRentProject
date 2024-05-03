@@ -239,8 +239,8 @@ namespace CarRent.Service.Service
         public async Task<IEnumerable<CarListForRecommended>> GetRecommended()
         {
             var list = await _repository.RecommendedCars
-                .FindByCondition(x => x.IsActive == true, false)
-                .Select(x => new CarListForRecommended(x.CarId, x.Car.Name, x.Car.CarImage))
+                .FindByCondition(x => x.IsActive, false)
+                .Select(x => new CarListForRecommended(x.CarId, x.Car.Name, x.Car.CarImage ?? ""))
                 .ToListAsync();
 
             foreach (var item in list)

@@ -20,12 +20,14 @@ namespace CarRent.Service.Service
 
         private const string EnvironmentSecretName = "SECRET";
         private User? _user;
-        public string Secret { get; set; } = Environment.GetEnvironmentVariable(EnvironmentSecretName);
+        public string Secret { get; set; } 
 
         public AuthenticationService(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
+            Secret = Environment.GetEnvironmentVariable(EnvironmentSecretName) 
+                ?? throw new Exception("Environment Variable not found");
         }
 
         public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
@@ -54,7 +56,6 @@ namespace CarRent.Service.Service
 
         public async Task<UserLoginData> Login(bool populateExp)
         {
-
             var loginData = new UserLoginData {
                 UserId = _user.Id,
                 UserName = _user.UserName,

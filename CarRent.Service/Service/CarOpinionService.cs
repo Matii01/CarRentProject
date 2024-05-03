@@ -2,38 +2,26 @@
 using CarRent.data.DTO;
 using CarRent.data.Exceptions;
 using CarRent.data.Models.CarRent;
-using CarRent.data.Models.User;
 using CarRent.Repository.Extensions;
 using CarRent.Repository.Interfaces;
 using CarRent.Repository.Parameters;
 using CarRent.Service.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
- 
+
 
 namespace CarRent.Service.Service
 {
     public class CarOpinionService : ServiceBase, ICarOpinionService
     {
-        public CarOpinionService(IRepositoryManager repository, IMapper mapper) 
+        public CarOpinionService(IRepositoryManager repository, IMapper mapper)
             : base(repository, mapper)
         {
-             
+
         }
 
         public async Task AddOpinionAsync(NewOpinionDto opinion, string userId)
         {
-            var newOpinion = new CarOpinion
-            {
-                Title = opinion.Title,
-                Text = opinion.Text,
-                AddedDate = DateTime.Now,
-                Mark = opinion.Mark,
-                UserId = userId,
-                CarId = opinion.CarId,
-                IsAccepted = true,
-                IsActive = true,
-            };
+            var newOpinion = _mapper.Map<CarOpinion>(opinion, opts => opts.Items["UserId"] = userId);
 
             _repository.CarOpinion.Create(newOpinion);
             await _repository.SaveAsync();
@@ -46,16 +34,7 @@ namespace CarRent.Service.Service
                 .OrderByDescending(x => x.AddedDate)
                 .Where(x => x.IsActive == true)
                 .Search(param)
-                .Select(x => new OpinionForAdminViewDto(
-                        x.Id,
-                        x.Title,
-                        x.Text,
-                        x.AddedDate,
-                        x.IsAccepted,
-                        x.UserId,
-                        x.Mark,
-                        x.CarId
-                    ));
+                .Select(x => _mapper.Map<OpinionForAdminViewDto>(x));
 
             return await PagedList<OpinionForAdminViewDto>
                 .ToPagedList(items, param.PageNumber, param.PageSize);
@@ -69,7 +48,7 @@ namespace CarRent.Service.Service
                     x.IsActive == true &&
                     x.IsAccepted == true, false)
                 .Include(x => x.User)
-                .Select(x=> new OpinionDto(x.Id, x.Title, x.Text, x.AddedDate, x.Mark, x.CarId, x.User.UserName??""))
+                .Select(x => new OpinionDto(x.Id, x.Title, x.Text, x.AddedDate, x.Mark, x.CarId, x.User.UserName ?? ""))
                 .ToListAsync();
 
             return items;

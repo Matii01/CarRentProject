@@ -17,9 +17,9 @@ namespace CarRent.data.Models.Workers
         public DateTime? ScheduledDate {  get; set; }
         public DateTime? CompletedDate {  get; set; }
         public int WorkOrderStatusId { get; set; }
-        public WorkOrderStatus? WorkOrderStatus { get; set; }
+        public WorkOrderStatus WorkOrderStatus { get; set; } = null!;
         public int WorkOrderPriorityId { get; set; }
-        public WorkOrderPriority? WorkOrderPriority { get; set; }
+        public WorkOrderPriority WorkOrderPriority { get; set; } = null!;
 
         [Precision(18, 2)]
         [Range(0, double.MaxValue)]

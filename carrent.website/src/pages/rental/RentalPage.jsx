@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useSelector } from "react-redux";
 import LoginToContinue from "./LoginToContinue";
 const stripePromise = loadStripe(
-  "pk_test_51ORfB9CVslDt3sXBnA5naMHNVkFLkJ7NO0b6ZOsxgPRvizzp2qtLHvgqwgTVIDU5uk5DHy5gKDD0lmBEz4lQ5WS100g3zcYTo0"
+  "pk_test_51ORfB9CVslDt3sXBo1gfAIG4wsUUIPPS1YSIFD065DDOrsyXYJD20fqhiZYDGj4ajTGgzZSRCiiWoyJWYyHI89Jj00FsmZNDgv"
 );
 
 function RentalPage() {
