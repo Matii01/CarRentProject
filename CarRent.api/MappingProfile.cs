@@ -111,7 +111,46 @@ namespace CarRent.api
 
             CreateMap<CarOpinion, OpinionForAdminViewDto>();
 
-            
+            CreateMap<Rental, UserRentalDetailDto>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => ""))
+                .ForMember(x => x.CarName, opt => opt.MapFrom(x => x.Car.Name))
+                .ForMember(x => x.CarImg, opt => opt.MapFrom(x => x.Car.CarImage))
+                .ForMember(x => x.Vat, opt => opt.MapFrom(x => x.InvoiceItem.VAT))
+                .ForMember(x => x.TotalPrice, opt => opt.MapFrom(x => x.InvoiceItem.Gross - x.InvoiceItem.Rabat))
+                .ForMember(x => x.Status, opt => opt.MapFrom(x => x.RentalStatus == null ? "" : x.RentalStatus.Status));
+
+
+            CreateMap<InvoiceWithClient, InvoiceWithIndividualClient>()
+                .ConstructUsing(src => new InvoiceWithIndividualClient(
+                    src.Id,
+                    src.InvoiceStatusId,
+                    src.Number,
+                    src.Comment,
+                    true,
+                    src.TotalToPay,
+                    src.TotalPay,
+                    src.IsEditable,
+                    src.CreatedDate,
+                    src.PaymentDate,
+                    src.Client as IndividualClient,
+                    src.InvoiceItems
+                ));
+
+
+            CreateMap<FirmClient, FirmClientDto>();
+
+            CreateMap<InvoiceWithClient, InvoiceWithFirmClient>()
+               .ConstructUsing(src => new InvoiceWithFirmClient(
+                   src.Id,
+                   src.InvoiceStatusId,
+                   src.Number,
+                   src.Comment,
+                   true,
+                   src.TotalToPay,
+                   src.TotalPay,
+                   src.IsEditable,
+                   src.InvoiceItems
+               ));
         }
     }
 }

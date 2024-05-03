@@ -57,10 +57,7 @@ namespace CarRent.Service.Service
         public async Task<NewInvoiceDto> GetInvoiceRentalDetailsAsync(int id)
         {
             var invoiceId = await _repository.Rentals.GetInvoiceIdByRentalId(id);
-            var invoice = await _repository.Rentals.GetInvoiceDataAsync(invoiceId);
-
-
-            return invoice;
+            return await GetInvoiceDataAsync(invoiceId);
         }
         
         public async Task<NewInvoiceDto> GetDataForGenerateInvoice(int id)
@@ -535,6 +532,69 @@ namespace CarRent.Service.Service
                 .GetAsync(rental.Id, false)
                 .Select(x => x.UserAccountId)
                 .SingleOrDefaultAsync();
+        }
+
+        private async Task<NewInvoiceDto> GetInvoiceDataAsync(int invoiceId)
+        {
+            var invoice = await _repository.Invoice.FindByCondition(x => x.Id == invoiceId, false)
+                .Where(x => x.Id == invoiceId)
+                .Include(x => x.Client)
+                .Include(x => x.InvoicesItems)
+                .ThenInclude(x => x.Rental)
+                .ThenInclude(x => x.Car)
+                .ThenInclude(x => x.CarMake)
+                .Select(x => new InvoiceWithClient(
+                        x.Id,
+                        x.InvoiceStatus,
+                        x.Number,
+                        x.Comment,
+                        x.TotalToPay,
+                        x.TotalPaid,
+                        x.IsEditable,
+                        x.CreatedDate,
+                        x.PaymentDate,
+                        x.Client,
+                        x.InvoicesItems.Select(y => new InvoiceItemWithRentalDetailDto(
+                            y.InvoiceId,
+                            y.Rabat,
+                            y.Net,
+                            y.Gross,
+                            y.PaidAmount,
+                            y.VAT,
+                            y.VATValue,
+                            new RentalDetailsDto(
+                                y.Rental.Id,
+                                y.Rental.CarId,
+                                y.Rental.Car.Name,
+                                y.Rental.Car.CarImage ?? "",
+                                y.Rental.Car.CarMake.Name,
+                                y.Rental.RentalStart,
+                                y.Rental.RentalEnd,
+                                y.Rental.RentalStatus == null ? "" : y.Rental.RentalStatus.Status,
+                                y.Rental.RentalStatusId
+                                ))
+                        ).ToList()
+                    )).SingleOrDefaultAsync() ?? throw new DataNotFoundException("Invoice not found");
+
+            return TransformInvoiceClient(invoice);
+        }
+
+        private NewInvoiceDto TransformInvoiceClient(InvoiceWithClient invoice)
+        {
+            if (invoice.Client is IndividualClient)
+            {
+                var newInvoice = new NewInvoiceDto(true, null, _mapper.Map<InvoiceWithIndividualClient>(invoice));
+                return newInvoice;
+            }
+            else
+            {
+                var client = invoice.Client as FirmClient;
+                var firmClient = _mapper.Map<InvoiceWithFirmClient>(invoice);
+                firmClient.Client = _mapper.Map<FirmClientDto>(client);
+                
+                var newInvoice = new NewInvoiceDto(true, firmClient, null);
+                return newInvoice;
+            }
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRent.data.Models.CarRent
 {
@@ -40,6 +35,6 @@ namespace CarRent.data.Models.CarRent
         [Range(0, double.MaxValue)]
         public decimal VATValue { get; set; }
         public int RentalId { get;set; }
-        public Rental? Rental { get; set; } 
+        public Rental Rental { get; set; } = null!;
     }
 }

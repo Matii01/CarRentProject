@@ -80,7 +80,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContactPage");
+                    b.ToTable("ContactPage", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CMS.Footer", b =>
@@ -126,7 +126,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Footer");
+                    b.ToTable("Footer", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CMS.FooterLinks", b =>
@@ -151,7 +151,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("FooterId");
 
-                    b.ToTable("FooterLinks");
+                    b.ToTable("FooterLinks", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CMS.FooterLinksPaths", b =>
@@ -183,7 +183,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("FooterLinksId");
 
-                    b.ToTable("FooterLinksPaths");
+                    b.ToTable("FooterLinksPaths", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CMS.HomePage", b =>
@@ -211,7 +211,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HomePage");
+                    b.ToTable("HomePage", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Car", b =>
@@ -310,7 +310,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("KilometrLimitId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.AirConditioningType", b =>
@@ -331,7 +331,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AirConditions");
+                    b.ToTable("AirConditions", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarDrive", b =>
@@ -355,7 +355,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarDrives");
+                    b.ToTable("CarDrives", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarEquipment", b =>
@@ -378,7 +378,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarEquipment");
+                    b.ToTable("CarEquipment", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarEquipmentCar", b =>
@@ -404,7 +404,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarEquipmentCars");
+                    b.ToTable("CarEquipmentCars", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarImages", b =>
@@ -428,7 +428,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarImages");
+                    b.ToTable("CarImages", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarMaintenance", b =>
@@ -471,7 +471,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CarMaintenances");
+                    b.ToTable("CarMaintenances", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarMake", b =>
@@ -494,7 +494,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarMakes");
+                    b.ToTable("CarMakes", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarOpinion", b =>
@@ -535,7 +535,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CarOpinions");
+                    b.ToTable("CarOpinions", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.CarType", b =>
@@ -556,7 +556,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarsTypes");
+                    b.ToTable("CarsTypes", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.Client", b =>
@@ -584,7 +584,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Client");
+                    b.ToTable("Client", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Client");
 
@@ -616,7 +616,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataForRentals");
+                    b.ToTable("DataForRentals", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.EngineType", b =>
@@ -637,7 +637,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EngineTypes");
+                    b.ToTable("EngineTypes", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.GearboxType", b =>
@@ -658,7 +658,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GearboxTypes");
+                    b.ToTable("GearboxTypes", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.Invoice", b =>
@@ -709,7 +709,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceItem", b =>
@@ -760,7 +760,7 @@ namespace CarRent.Repository.Migrations
                     b.HasIndex("RentalId")
                         .IsUnique();
 
-                    b.ToTable("InvoicesItems");
+                    b.ToTable("InvoicesItems", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.InvoiceStatus", b =>
@@ -784,7 +784,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoicesStatus");
+                    b.ToTable("InvoicesStatus", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.KilometrLimit", b =>
@@ -805,7 +805,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KilometrLimits");
+                    b.ToTable("KilometrLimits", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.PriceList", b =>
@@ -832,7 +832,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("PricesList");
+                    b.ToTable("PricesList", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.PricelistDate", b =>
@@ -859,7 +859,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("PriceListId");
 
-                    b.ToTable("PricelistDates");
+                    b.ToTable("PricelistDates", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.PricelistItem", b =>
@@ -891,7 +891,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("PriceListId");
 
-                    b.ToTable("PricelistItems");
+                    b.ToTable("PricelistItems", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.Rabat", b =>
@@ -922,7 +922,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Rabats");
+                    b.ToTable("Rabats", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.RabatForUser", b =>
@@ -954,7 +954,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RabatForUsers");
+                    b.ToTable("RabatForUsers", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.RecommendedCars", b =>
@@ -978,7 +978,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("RecommendedCars");
+                    b.ToTable("RecommendedCars", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.Rental", b =>
@@ -1017,7 +1017,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("RentalStatusId");
 
-                    b.ToTable("Rentals");
+                    b.ToTable("Rentals", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.RentalStatus", b =>
@@ -1043,7 +1043,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RentalStatuses");
+                    b.ToTable("RentalStatuses", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.UserInvoice", b =>
@@ -1072,7 +1072,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserInvoices");
+                    b.ToTable("UserInvoices", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.CarRent.UserRental", b =>
@@ -1101,7 +1101,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRentals");
+                    b.ToTable("UserRentals", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Company.AboutCompany", b =>
@@ -1150,7 +1150,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutCompany");
+                    b.ToTable("AboutCompany", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Company.ApplicationSettings", b =>
@@ -1175,7 +1175,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationSettings");
+                    b.ToTable("ApplicationSettings", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Company.Message", b =>
@@ -1221,7 +1221,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Company.NewsletterSubscriber", b =>
@@ -1250,7 +1250,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NewsletterSubscriber");
+                    b.ToTable("NewsletterSubscriber", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Company.SendHistory", b =>
@@ -1275,7 +1275,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SendHistory");
+                    b.ToTable("SendHistory", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.User.Address", b =>
@@ -1315,7 +1315,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.User.Notification", b =>
@@ -1351,7 +1351,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notification", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.User.User", b =>
@@ -1462,7 +1462,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddresses");
+                    b.ToTable("UserAddresses", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.User.Wishlist", b =>
@@ -1487,7 +1487,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Wishlist");
+                    b.ToTable("Wishlist", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.PathItem", b =>
@@ -1519,7 +1519,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("WorkerPathId");
 
-                    b.ToTable("PathItems");
+                    b.ToTable("PathItems", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.UserWorkerPaths", b =>
@@ -1544,7 +1544,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("WorkerPathsId");
 
-                    b.ToTable("UserWorkerPaths");
+                    b.ToTable("UserWorkerPaths", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.WorkOrder", b =>
@@ -1597,7 +1597,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("WorkOrderStatusId");
 
-                    b.ToTable("WorkOrder");
+                    b.ToTable("WorkOrder", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.WorkOrderPriority", b =>
@@ -1620,7 +1620,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkOrderPriority");
+                    b.ToTable("WorkOrderPriority", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.WorkOrderStatus", b =>
@@ -1652,7 +1652,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkOrderStatus");
+                    b.ToTable("WorkOrderStatus", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.WorkOrderWorker", b =>
@@ -1678,7 +1678,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasIndex("WorkerId");
 
-                    b.ToTable("WorkOrderWorker");
+                    b.ToTable("WorkOrderWorker", (string)null);
                 });
 
             modelBuilder.Entity("CarRent.data.Models.Workers.WorkerPaths", b =>
@@ -1704,7 +1704,7 @@ namespace CarRent.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkerPaths");
+                    b.ToTable("WorkerPaths", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
