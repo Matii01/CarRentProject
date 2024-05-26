@@ -11,6 +11,14 @@ const carsApi = carRentApi.injectEndpoints({
     getCarDetails: builder.query({
       query: (carId) => `Car/details/${carId}`,
     }),
+    getCars: builder.query({
+      query: (queryString) => {
+        return `/car/cars?${queryString}`;
+      },
+    }),
+    getUserWithlist: builder.query({
+      query: () => "/Wishlist",
+    }),
   }),
 });
 
@@ -18,4 +26,6 @@ export const {
   useGetRecomendetCarsQuery,
   useGetCarSortingInfoQuery,
   useGetCarDetailsQuery,
+  useGetCarsQuery,
+  useGetUserWithlistQuery,
 } = carsApi;
