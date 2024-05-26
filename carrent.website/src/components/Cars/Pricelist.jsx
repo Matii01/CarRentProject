@@ -1,25 +1,12 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
+import { useGetCarPricelistQuery } from "../../api/carsApi";
 
 function Pricelist({ id }) {
-  const [pricelist, setPricelist] = useState([]);
+  const { data: pricelist, error, isLoading } = useGetCarPricelistQuery(id);
 
-  // [HttpGet("{carId:int}/PriceList")]
-  // CarPriceList
-  useEffect(() => {
-    //https://localhost:7091/CarPriceList/1/carPricelist
-    axiosInstance
-      .get(`CarPriceList/${id}/carPricelist`)
-      .then((data) => {
-        console.log(data);
-        setPricelist(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
+  if (isLoading) {
+    return <>Loading</>;
+  }
 
   if (!pricelist) {
     return <>PriceList</>;

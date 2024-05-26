@@ -80,7 +80,11 @@ function CarListForClient() {
   };
 
   const filterClick = () => {
-    onPageChange(1);
+    if (filterInfo.PageNumber === 1) {
+      setQueryString(transformObjectToQueryString(filterInfo));
+    } else {
+      onPageChange(1);
+    }
   };
 
   if (isLoading || lodingWishlist) {
