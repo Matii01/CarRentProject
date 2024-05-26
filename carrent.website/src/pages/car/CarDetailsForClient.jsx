@@ -1,49 +1,42 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import { Col, Container, Image, ListGroup, Row } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TechDetailCard from "../../components/Cars/TechDetailCard";
 import BookCar from "../../components/Cars/BookCar";
 import Pricelist from "../../components/Cars/Pricelist";
 import CarOpinionList from "../../components/Cars/CarOpinionList";
-import axiosInstance from "../../utils/axiosConfig";
 import AdditionalImgModal from "../../components/Modal/AdditionalImgModal";
+import { useGetCarDetailsQuery } from "../../api/carsApi";
 
 function CarDetailsForClient() {
-  const [car, setCar] = useState({});
-  const [carImages, setCarImages] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
   const param = useParams();
-  const navigation = useNavigate();
-
-  useEffect(() => {
-    axiosInstance
-      .get(`Car/details/${param.carId}`)
-      .then((data) => {
-        console.log(data.data);
-        setCar(data.data);
-        setCarImages([
-          data.data.pictureUrl,
-          ...data.data.carImages.map((it) => {
-            return it.imgUrl;
-          }),
-        ]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [param.carId]);
-
-  let url = car.pictureUrl;
-  if (car.pictureUrl === "") {
-    url =
-      "https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_960_720.jpg%201x,%20https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_1280.jpg";
-  }
+  const { data: car, error, isLoading } = useGetCarDetailsQuery(param.carId);
+  const [modalShow, setModalShow] = useState(false);
 
   const openAdditionalImg = () => {
-    console.log("open additional");
     setModalShow(true);
   };
+
+  const defaultImageUrl =
+    "https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_960_720.jpg%201x,%20https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_1280.jpg";
+
+  const carImages = useMemo(() => {
+    return car ? [car.pictureUrl, ...car.carImages.map((it) => it.imgUrl)] : [];
+  }, [car]);
+
+  if (isLoading) {
+    return <>loading</>;
+  }
+
+  if (error) {
+    return <>Error loading car details</>;
+  }
+
+  if (!car) {
+    return <>Car not found.</>;
+  }
+
+  const imageUrl = car.pictureUrl || defaultImageUrl;
 
   return (
     <>
@@ -61,7 +54,7 @@ function CarDetailsForClient() {
             <Row>
               <Image
                 className="roundedImg"
-                src={url}
+                src={imageUrl}
                 onClick={openAdditionalImg}
               />
             </Row>
