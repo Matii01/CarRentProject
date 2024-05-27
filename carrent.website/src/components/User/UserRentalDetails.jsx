@@ -55,14 +55,7 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
           <Card.Img variant="top" src={rentalDetail.carImg} />
           <Row></Row>
         </Card.Body>
-        {/* <ListGroup className="list-group-flush">
-          <ListGroup.Item>
-            {formatDate(rentalDetail.rentalStart)}
-          </ListGroup.Item>
-          <ListGroup.Item>{formatDate(rentalDetail.rentalEnd)}</ListGroup.Item>
-          <ListGroup.Item>{rentalDetail.status}</ListGroup.Item>
-          <ListGroup.Item>{rentalDetail.totalPrice}</ListGroup.Item>
-        </ListGroup> */}
+
         <Table className="text-center">
           <tbody>
             <tr>
@@ -106,24 +99,3 @@ function UserRentalDetails({ onGoBackClick, rentalDetail }) {
 }
 
 export default UserRentalDetails;
-
-/* 
-<Card.Body className="p-4">
-    <Row>
-    <Col>From</Col>
-    <Col className="text-end">{rentalDetail.rentalStart}</Col>
-    </Row>
-    <Row>
-    <Col>To</Col>
-    <Col className="text-end">{rentalDetail.rentalEnd}</Col>
-    </Row>
-    <Row>
-    <Col>Status</Col>
-    <Col className="text-end">{rentalDetail.status}</Col>
-    </Row>
-    <Row>
-    <Col>Price</Col>
-    <Col className="text-end">{rentalDetail.totalPrice}</Col>
-    </Row>
-</Card.Body>
-*/
