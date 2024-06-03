@@ -2,7 +2,6 @@ import { Button, Col, Container, Form, Nav, Row } from "react-bootstrap";
 import style from "./Footer.module.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosInstance from "../../utils/axiosConfig";
 import {
   useGetFooterQuery,
   useSubscribeNewsletterMutation,

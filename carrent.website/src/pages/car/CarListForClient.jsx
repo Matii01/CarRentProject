@@ -8,7 +8,8 @@ import CarsGridView from "../../components/Cars/CarsGridView";
 import CarsListView from "../../components/Cars/CarsListView";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import { useSelector } from "react-redux";
-import { useGetCarsQuery, useGetUserWithlistQuery } from "../../api/carsApi";
+import { useGetCarsQuery } from "../../api/carsApi";
+import { useGetUserWithlistQuery } from "../../api/userApi";
 
 function CarListForClient() {
   const user = useSelector((state) => state.user);

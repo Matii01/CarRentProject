@@ -3,7 +3,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
-} from "../../api/carsApi";
+} from "../../api/userApi";
 
 function AddToWishList({ carId, wishlist }) {
   const [isSaved, setIsSaved] = useState(
@@ -18,11 +18,11 @@ function AddToWishList({ carId, wishlist }) {
     </OverlayTrigger>
   );
 
-  const onSaveClick = () => {
+  const onSaveClick = async () => {
     if (!isSaved) {
       addToWishlist(carId);
     } else {
-      removeFromWishlist(carId);
+      await removeFromWishlist(carId);
     }
     setIsSaved(!isSaved);
   };

@@ -16,25 +16,7 @@ const carsApi = carRentApi.injectEndpoints({
         return `/car/cars?${queryString}`;
       },
     }),
-    getUserWithlist: builder.query({
-      query: () => "/Wishlist",
-    }),
-    addToWishlist: builder.mutation({
-      query: (carId) => ({
-        url: `Wishlist/add`,
-        method: "POST",
-        body: JSON.stringify({ CarId: carId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    removeFromWishlist: builder.mutation({
-      query: (carId) => ({
-        url: `Wishlist/${carId}`,
-        method: "DELETE",
-      }),
-    }),
+
     getCarPricelist: builder.query({
       query: (id) => `CarPriceList/${id}/carPricelist`,
     }),
@@ -46,8 +28,5 @@ export const {
   useGetCarSortingInfoQuery,
   useGetCarDetailsQuery,
   useGetCarsQuery,
-  useGetUserWithlistQuery,
   useGetCarPricelistQuery,
-  useAddToWishlistMutation,
-  useRemoveFromWishlistMutation,
 } = carsApi;

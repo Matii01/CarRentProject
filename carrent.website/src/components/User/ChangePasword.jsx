@@ -30,6 +30,13 @@ function ChangePasword() {
     }
   };
 
+  const validPassword = () => {
+    if (data.newPassword != data.retypePassword) {
+      return false;
+    }
+    return true;
+  };
+
   const updatePassword = () => {
     axiosInstance
       .post("Users/ChangePassword", JSON.stringify(data), {

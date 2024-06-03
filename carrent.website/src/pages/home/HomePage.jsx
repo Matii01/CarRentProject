@@ -1,27 +1,18 @@
 import { Col, Container, Image, Row } from "react-bootstrap";
 import style from "./HomePage.module.css";
 import RecommendedCars from "../../components/Cars/RecommendedCars";
-import { useEffect, useState } from "react";
-import axiosInstance from "../../utils/axiosConfig";
+import { useGetHomePageQuery } from "../../api/contentManagement";
 
 function HomePage() {
-  const [page, setPage] = useState({
-    homePageImage: "",
-    homePageTextOne: "",
-    homePageTextTwo: "",
-    homePageTitle: "",
-  });
+  const { data: page, error, isLoading } = useGetHomePageQuery();
 
-  useEffect(() => {
-    axiosInstance
-      .get(`ContentManagement/homePage`)
-      .then((data) => {
-        setPage(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  if (isLoading) {
+    return (
+      <>
+        <p>Loading ... </p>
+      </>
+    );
+  }
 
   return (
     <>
@@ -61,7 +52,5 @@ function HomePage() {
     </>
   );
 }
-
-//<Image src="imgs/car-login.jpg" style={{ width: "100vw" }} />
 
 export default HomePage;

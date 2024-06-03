@@ -8,6 +8,9 @@ const contentManagementApi = carRentApi.injectEndpoints({
     getContactPage: builder.query({
       query: () => "ContentManagement/contact",
     }),
+    getHomePage: builder.query({
+      query: () => "ContentManagement/homePage",
+    }),
     subscribeNewsletter: builder.mutation({
       query: (newSubscription) => ({
         url: "Newsletter/subscribe",
@@ -25,4 +28,5 @@ export const {
   useGetFooterQuery,
   useSubscribeNewsletterMutation,
   useGetContactPageQuery,
+  useGetHomePageQuery,
 } = contentManagementApi;
