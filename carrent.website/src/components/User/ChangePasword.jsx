@@ -1,10 +1,12 @@
-import axios from "axios";
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
+import { useChangeUserPasswordMutation } from "../../api/userApi";
+import InformationModal from "../Modal/InformationModal";
 
 function ChangePasword() {
+  const [changePassword, result] = useChangeUserPasswordMutation();
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -13,105 +15,97 @@ function ChangePasword() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    setError("");
     setData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(data);
 
     if (data.newPassword != data.retypePassword) {
-      console.log("passwords are different");
-    } else {
-      updatePassword();
+      setError("passwords are different");
+      return;
     }
-  };
+    const response = await changePassword(data);
+    console.log(response);
 
-  const validPassword = () => {
-    if (data.newPassword != data.retypePassword) {
-      return false;
+    if (response.error) {
+      setError(response.error.data.message);
+      return;
     }
-    return true;
-  };
-
-  const updatePassword = () => {
-    axiosInstance
-      .post("Users/ChangePassword", JSON.stringify(data), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          setError("");
-          console.log("password was changed");
-        }
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-        setError(error.response.data.message);
-      });
+    setData({
+      oldPassword: "",
+      newPassword: "",
+      retypePassword: "",
+    });
+    setShowModal(true);
   };
 
   return (
-    <Card>
-      <Card.Header className="cardHeader">CHANGE YOUR PASSWORD</Card.Header>
-      <Card.Body>
-        <Form onSubmit={handleSubmit}>
-          <Row>
-            <Form.Group as={Col}>
-              <Form.Label>Old Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                name="oldPassword"
-                value={data.oldPassword}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </Row>
-          <Row className="mt-2">
-            <Form.Group as={Col}>
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter new password"
-                name="newPassword"
-                value={data.newPassword}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Row className="mt-2">
+    <>
+      <InformationModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        infoText={"Password has been changed"}
+      />
+      <Card>
+        <Card.Header className="cardHeader">CHANGE YOUR PASSWORD</Card.Header>
+        <Card.Body>
+          <Form onSubmit={handleSubmit}>
+            <Row>
               <Form.Group as={Col}>
-                <Form.Label>Retype Password</Form.Label>
+                <Form.Label>Old Password</Form.Label>
                 <Form.Control
                   type="password"
-                  placeholder="Retype Password"
-                  name="retypePassword"
-                  value={data.retypePassword}
+                  placeholder="Password"
+                  name="oldPassword"
+                  value={data.oldPassword}
                   onChange={handleChange}
                 />
               </Form.Group>
             </Row>
-            <Row className="mt-3">
-              <Col>
-                <Button className="customButton" type="submit">
-                  Change
-                </Button>
-              </Col>
-              <Col>
-                <p className="errorText">{error}</p>
-              </Col>
+            <Row className="mt-2">
+              <Form.Group as={Col}>
+                <Form.Label>New Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter new password"
+                  name="newPassword"
+                  value={data.newPassword}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Row className="mt-2">
+                <Form.Group as={Col}>
+                  <Form.Label>Retype Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Retype Password"
+                    name="retypePassword"
+                    value={data.retypePassword}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="mt-3">
+                <Col>
+                  <Button className="customButton" type="submit">
+                    Change
+                  </Button>
+                </Col>
+                <Col>
+                  <p className="errorText">{error}</p>
+                </Col>
+              </Row>
             </Row>
-          </Row>
-        </Form>
-      </Card.Body>
-    </Card>
+          </Form>
+        </Card.Body>
+      </Card>
+    </>
   );
 }
 

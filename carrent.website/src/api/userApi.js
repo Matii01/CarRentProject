@@ -95,6 +95,7 @@ export const {
   useGetUserWithlistQuery,
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
+  useChangeUserPasswordMutation,
   useGetParsonalDeatilsQuery,
   useChangePersonalDetailsMutation,
 } = userApi;

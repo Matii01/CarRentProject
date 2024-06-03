@@ -6,6 +6,9 @@ import {
 } from "../../api/userApi";
 
 function ChangePersonalDetails() {
+  const { data, error, isLoading } = useGetParsonalDeatilsQuery();
+  const [updateDetails, result] = useChangePersonalDetailsMutation();
+
   const [user, setUser] = useState({
     email: " ",
     firstName: " ",
@@ -13,9 +16,6 @@ function ChangePersonalDetails() {
     phoneNumber: " ",
     userName: " ",
   });
-
-  const { data, error, isLoading } = useGetParsonalDeatilsQuery();
-  const [updateDetails, result] = useChangePersonalDetailsMutation();
 
   useEffect(() => {
     setUser((prev) => ({
@@ -32,15 +32,9 @@ function ChangePersonalDetails() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    updateDetails(user)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await updateDetails(user);
   };
 
   if (isLoading) {
