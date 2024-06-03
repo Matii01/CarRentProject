@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Image, Row, Col } from "react-bootstrap";
 
 function AdditionalImgModal(props) {
