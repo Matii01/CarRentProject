@@ -2,6 +2,9 @@ import { carRentApi } from "./carRentApi";
 
 const userApi = carRentApi.injectEndpoints({
   endpoints: (builder) => ({
+    getUserRabats: builder.query({
+      query: () => "Rabat/myRabats",
+    }),
     getUserRentals: builder.query({
       query: (queryString) => `rental/UserRental?${queryString}`,
     }),
@@ -90,6 +93,7 @@ const userApi = carRentApi.injectEndpoints({
 });
 
 export const {
+  useGetUserRabatsQuery,
   useGetUserRentalsQuery,
   useGetRentalDetailsQuery,
   useGetUserWithlistQuery,
@@ -99,21 +103,3 @@ export const {
   useGetParsonalDeatilsQuery,
   useChangePersonalDetailsMutation,
 } = userApi;
-
-/**onQueryStarted: async (user, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          carRentApi.util.updateQueryData(
-            "getParsonalDeatils",
-            undefined,
-            (draft) => {
-              return draft;
-            }
-          )
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          console.log("error during removing from list");
-          patchResult.undo();
-        }
-      }, */
