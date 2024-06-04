@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Card, Col, Container, Form, Button, Row } from "react-bootstrap";
-import fetchData from "../../components/functions/fetchData";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosConfig";
 
@@ -53,7 +52,6 @@ function RegisterPage() {
       ["password"]: value,
     }));
 
-    // Basic password requirements
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(value);
     const hasLowerCase = /[a-z]/.test(value);

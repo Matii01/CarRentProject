@@ -3,7 +3,7 @@ import { Container, Form, Button, Card, Col, Row } from "react-bootstrap";
 import SetLocalStorage from "../../hooks/SetLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import axiosInstance from "../../utils/axiosConfig";
+import { useLoginUserMutation } from "../../api/userApi";
 
 function LoginPage() {
   const [error, setError] = useState();
@@ -11,62 +11,43 @@ function LoginPage() {
     username: "",
     password: "",
   });
+
+  const [loginUser, result] = useLoginUserMutation();
   const [setLocalStorage] = SetLocalStorage();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
     if (user.isLogin) {
-      console.log("is login");
-      navigate("/user");
+      navigate("/user/profile");
     }
-    console.log("is logout");
   }, [user]);
 
-  const login = () => {
-    console.log(loginForm);
-    axiosInstance
-      .post(`/authentication/login`, JSON.stringify(loginForm), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+  function handleLoginClik(event) {
+    event.preventDefault();
+    loginUser(loginForm)
       .then((data) => {
-        setTokens(data.data);
+        setLocalStorage(data.data);
         navigate("/car/cars");
       })
-      .catch((error) => {
+      .catch(() => {
         setError("Incorrect login or password");
       });
-  };
+  }
 
-  const setTokens = (data) => {
-    setLocalStorage(data);
-  };
-
-  const handleLoginClik = (event) => {
-    event.preventDefault();
-    login();
-  };
-
-  const handleChange = (event) => {
+  function handleChange(event) {
     const { name, value } = event.target;
     setLoginForm((prevState) => ({
       ...prevState,
       [name]: value,
     }));
     setError("");
-  };
-
-  const goToRegister = () => {
-    navigate("/register");
-  };
+  }
 
   const url =
     "https://firebasestorage.googleapis.com/v0/b/car-rental-7fc22.appspot.com/o/car-login.jpg?alt=media&token=0bee9f6d-4e32-4eab-9289-e650ba1fedcc";
 
   return (
-    // <Container className="mt-4 mb-4" fluid="xs">
     <Container className="mt-4 mb-4 loginContainer">
       <Card className="p-4 customCard">
         <Row>
@@ -106,7 +87,7 @@ function LoginPage() {
                   <Button
                     type="submit"
                     className="mt-4 customButton w-100"
-                    onClick={goToRegister}
+                    onClick={() => navigate("/register")}
                   >
                     Create account
                   </Button>
