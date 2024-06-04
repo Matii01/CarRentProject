@@ -1,24 +1,6 @@
-import { useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
 
-function NotificationDetails({ item, onGoBack, onMessageRead }) {
-  useEffect(() => {
-    readMessage();
-  }, [item]);
-
-  const readMessage = () => {
-    axiosInstance
-      .post(`Notification/read/${item.id}`)
-      .then((data) => {
-        console.log(data);
-        onMessageRead(item.id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
+function NotificationDetails({ item, onGoBack }) {
   return (
     <>
       <Card>

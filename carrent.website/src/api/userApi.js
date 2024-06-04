@@ -89,6 +89,41 @@ const userApi = carRentApi.injectEndpoints({
         }
       },
     }),
+    getNotification: builder.query({
+      query: (queryString) => `Notification/myNotification?${queryString}`,
+      transformResponse: (data) => {
+        const transformed = data.items.map((it) => ({
+          ...it,
+          createdDate: it.createdDate.slice(0, 10),
+        }));
+        return { metaData: data.metaData, items: transformed };
+      },
+    }),
+    readNotification: builder.mutation({
+      query: (id) => ({
+        url: `Notification/read/${id}`,
+        method: "POST",
+      }),
+      onQueryStarted: async (notificationId, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          userApi.util.updateQueryData(
+            "getNotification",
+            undefined,
+            (draft) => {
+              console.log(notificationId);
+              return draft.filter((item) => item.id !== id);
+            }
+          )
+        );
+        try {
+          console.log("removed !!!!");
+          await queryFulfilled;
+        } catch {
+          console.log("error during removing from list");
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -102,4 +137,6 @@ export const {
   useChangeUserPasswordMutation,
   useGetParsonalDeatilsQuery,
   useChangePersonalDetailsMutation,
+  useGetNotificationQuery,
+  useReadNotificationMutation,
 } = userApi;
