@@ -116,13 +116,21 @@ const userApi = carRentApi.injectEndpoints({
           )
         );
         try {
-          console.log("removed !!!!");
           await queryFulfilled;
         } catch {
-          console.log("error during removing from list");
           patchResult.undo();
         }
       },
+    }),
+    loginUser: builder.mutation({
+      query: (loginForm) => ({
+        url: `/authentication/login`,
+        method: "POST",
+        body: JSON.stringify(loginForm),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
     }),
   }),
 });
@@ -139,4 +147,5 @@ export const {
   useChangePersonalDetailsMutation,
   useGetNotificationQuery,
   useReadNotificationMutation,
+  useLoginUserMutation,
 } = userApi;
