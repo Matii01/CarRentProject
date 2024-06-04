@@ -16,6 +16,7 @@ import ContactPage from "./pages/contact/ContactPage";
 import HomePage from "./pages/home/HomePage";
 import RentalPage from "./pages/rental/RentalPage";
 import { contactLoader } from "./utils/contacltLoader";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,14 @@ const router = createBrowserRouter([
       { path: "contact", element: <ContactPage />, loader: contactLoader },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
-      { path: "user", element: <UserPage /> },
+      {
+        path: "user/:view?",
+        element: (
+          <ProtectedRoute>
+            <UserPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);

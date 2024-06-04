@@ -1,40 +1,16 @@
 import { Card, Col, Container, ListGroup, Row } from "react-bootstrap";
 import ChangePasword from "../../components/User/ChangePasword";
 import ChangePersonalDetails from "../../components/User/ChangePersonalDetails";
-import { useEffect, useState } from "react";
 import ChangeAddress from "../../components/User/ChangeAddress";
 import UserOrders from "../../components/User/UserOrders";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserWishList from "../../components/User/UserWishlist";
 import UserNotification from "../../components/User/UserNotification";
 import ShowRabat from "../../components/User/ShowRabat";
 
 function UserPage() {
   const navigate = useNavigate();
-  const [view, setView] = useState("PROFILE");
-  const order = "ORDER";
-  const profile = "PROFILE";
-  const address = "ADDRESS";
-  const wishlist = "WISHLIST";
-  const notification = "NOTIFICATION";
-  const rabats = "RABATS";
-  const user = useSelector((state) => state.user);
-
-  useEffect(() => {
-    console.log(window.location.hash);
-  }, []);
-
-  useEffect(() => {
-    console.log(user);
-    if (!user.isLogin) {
-      navigate("/login");
-    }
-  }, []);
-
-  const changeView = (view) => {
-    setView(view);
-  };
+  const param = useParams();
 
   let selectedView = (
     <>
@@ -44,32 +20,31 @@ function UserPage() {
     </>
   );
 
-  if (view === address) {
-    selectedView = (
-      <>
-        <ChangeAddress />
-      </>
-    );
-  }
-
-  if (view === order) {
-    selectedView = (
-      <>
-        <UserOrders />
-      </>
-    );
-  }
-
-  if (view === wishlist) {
-    selectedView = <UserWishList />;
-  }
-
-  if (view === notification) {
-    selectedView = <UserNotification />;
-  }
-
-  if (view === rabats) {
-    selectedView = <ShowRabat />;
+  switch (param.view) {
+    case "address":
+      selectedView = <ChangeAddress />;
+      break;
+    case "order":
+      selectedView = <UserOrders />;
+      break;
+    case "wishlist":
+      selectedView = <UserWishList />;
+      break;
+    case "notification":
+      selectedView = <UserNotification />;
+      break;
+    case "discount":
+      selectedView = <ShowRabat />;
+      break;
+    case "profile":
+      selectedView = (
+        <>
+          <ChangePasword />
+          <div className="m-4" />
+          <ChangePersonalDetails />
+        </>
+      );
+      break;
   }
 
   const url =
@@ -79,12 +54,7 @@ function UserPage() {
     <>
       <Container className="mt-5 mb-5" fluid="md">
         <Row>
-          <Col lg={9}>
-            {/* <ChangePasword />
-            <div className="m-4" />
-            <ChangePersonalDetails /> */}
-            {selectedView}
-          </Col>
+          <Col lg={9}>{selectedView}</Col>
           <Col lg={3}>
             <Container>
               <Card style={{ width: "18rem", backgroundColor: "#F8F9FA" }}>
@@ -98,25 +68,40 @@ function UserPage() {
                   <Card.Text className="text-center"></Card.Text>
                 </Card.Body>
                 <ListGroup className="list-group-flush">
-                  <ListGroup.Item action onClick={() => changeView(order)}>
+                  <ListGroup.Item
+                    action
+                    onClick={() => navigate("/user/order")}
+                  >
                     Orders
                   </ListGroup.Item>
-                  <ListGroup.Item action onClick={() => changeView(wishlist)}>
+                  <ListGroup.Item
+                    action
+                    onClick={() => navigate("/user/wishlist")}
+                  >
                     Wishlist
                   </ListGroup.Item>
-                  <ListGroup.Item action onClick={() => changeView(profile)}>
+                  <ListGroup.Item
+                    action
+                    onClick={() => navigate("/user/profile")}
+                  >
                     Profile
                   </ListGroup.Item>
-                  <ListGroup.Item action onClick={() => changeView(address)}>
+                  <ListGroup.Item
+                    action
+                    onClick={() => navigate("/user/address")}
+                  >
                     Address
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
-                    onClick={() => changeView(notification)}
+                    onClick={() => navigate("/user/notification")}
                   >
                     Notification
                   </ListGroup.Item>
-                  <ListGroup.Item action onClick={() => changeView(rabats)}>
+                  <ListGroup.Item
+                    action
+                    onClick={() => navigate("/user/discount")}
+                  >
                     Discount
                   </ListGroup.Item>
                 </ListGroup>
@@ -130,14 +115,3 @@ function UserPage() {
 }
 
 export default UserPage;
-
-/* <Row></Row>
-<Row>
-  <ListGroup>
-    <ListGroup.Item>Cras justo odio</ListGroup.Item>
-    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-    <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-    <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-  </ListGroup>
-</Row> */

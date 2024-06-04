@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import SetLocalStorage from "./SetLocalStorage";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import config from "../../config";
+import { updateRetriveTokenInfo } from "../features/loading/loadingSlice";
 
 function useRefreshToken() {
   const [setLocalStorage] = SetLocalStorage();
   const isLogin = useSelector((state) => state.user.isLogin);
+
+  const dispatch = useDispatch();
+
+  // updateRetriveTokenInfo()
 
   const onFirstRender = () => {
     retriveData();
@@ -61,6 +66,8 @@ function useRefreshToken() {
     if (isTokensSet()) {
       const url = `${config.API_URL}/token/retrieve`;
       fetchData(url);
+    } else {
+      dispatch(updateRetriveTokenInfo(true));
     }
   };
 
@@ -86,6 +93,9 @@ function useRefreshToken() {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        dispatch(updateRetriveTokenInfo(true));
       });
   };
 }

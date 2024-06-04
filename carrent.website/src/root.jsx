@@ -10,14 +10,20 @@ import LoadingOverlay from "./components/Overlay/LoadingOverlay";
 
 export default function Root() {
   const loading = useSelector((state) => state.loading);
+  const tokenRetrived = useSelector((state) => state.loading.tokenWasRetrived);
+
   useRefreshToken();
 
   return (
     <>
-      <LoadingOverlay hidden={!loading.isLoading} />
-      <NavBar />
-      <Outlet />
-      <Footer />
+      {tokenRetrived && (
+        <>
+          <LoadingOverlay hidden={!loading.isLoading} />
+          <NavBar />
+          <Outlet />
+          <Footer />
+        </>
+      )}
     </>
   );
 }
