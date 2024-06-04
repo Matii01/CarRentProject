@@ -36,6 +36,7 @@ function CarListForClient() {
 
   const { data, error, isLoading, refetch } = useGetCarsQuery(queryString);
   const { data: wishList, isLoading: lodingWishlist } = useGetUserWithlistQuery(
+    "",
     { skip: !user.isLogin }
   );
 
@@ -89,7 +90,7 @@ function CarListForClient() {
   };
 
   if (isLoading || lodingWishlist) {
-    return <>Loading ...</>;
+    return <></>;
   }
 
   const cars = data.items;
