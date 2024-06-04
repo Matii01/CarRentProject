@@ -57,11 +57,11 @@ function NavBar() {
               </Nav.Link>
             )}
             {user.isLogin && (
-              <Nav.Link to="/user#notification" as={NavLink}>
+              <Nav.Link to="/user/notification" as={NavLink}>
                 <NotificationElement />
               </Nav.Link>
             )}
-            <Nav.Link to="/user" as={NavLink}>
+            <Nav.Link to="/user/profile" as={NavLink}>
               {user.isLogin ? "Profile" : ""}
             </Nav.Link>
             {user.isLogin && (
