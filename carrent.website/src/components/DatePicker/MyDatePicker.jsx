@@ -21,12 +21,12 @@ function MyDatePicker({ onChange, excludedDate, onBlur }) {
 
   const onStartDate = (date) => {
     setStartDate(date);
-    onChange("DateFrom", formatDate(date));
+    onChange("dateFrom", formatDate(date));
   };
 
   const onEndDate = (date) => {
     setEndDate(date);
-    onChange("DateTo", formatDate(date));
+    onChange("dateTo", formatDate(date));
   };
 
   const formatDate = (date) => {

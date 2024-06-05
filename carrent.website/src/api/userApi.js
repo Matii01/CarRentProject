@@ -43,7 +43,6 @@ const userApi = carRentApi.injectEndpoints({
         try {
           await queryFulfilled;
         } catch {
-          console.log("error during removing from list");
           patchResult.undo();
         }
       },
@@ -155,6 +154,9 @@ const userApi = carRentApi.injectEndpoints({
         },
       }),
     }),
+    getUserDataForRental: builder.query({
+      query: () => `Users/GetDefaultDataForRental`,
+    }),
   }),
 });
 
@@ -174,4 +176,5 @@ export const {
   useGetAddressesQuery,
   useAddAddressMutation,
   useUpdateAddressMutation,
+  useGetUserDataForRentalQuery,
 } = userApi;

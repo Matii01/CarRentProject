@@ -39,6 +39,27 @@ const carsApi = carRentApi.injectEndpoints({
         },
       }),
     }),
+    checkPriceForNotLoggedIn: builder.query({
+      query: (data) => ({
+        url: `Rental/CheckPrice`,
+        params: {
+          carId: data.carId,
+          DateFrom: data.dateFrom,
+          DateTo: data.dateTo,
+        },
+      }),
+    }),
+    checkPriceForUser: builder.query({
+      query: (data) => ({
+        url: `Rental/CheckPriceForClient`,
+        params: {
+          carId: data.carId,
+          DateFrom: data.dateFrom,
+          DateTo: data.dateTo,
+        },
+      }),
+    }),
+    isDateAvailable: builder.query({}),
   }),
 });
 
@@ -50,4 +71,6 @@ export const {
   useGetCarPricelistQuery,
   useGetCarOpinionsQuery,
   useAddCarOpinionMutation,
+  useCheckPriceForUserQuery,
+  useCheckPriceForNotLoggedInQuery,
 } = carsApi;
