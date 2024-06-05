@@ -132,6 +132,29 @@ const userApi = carRentApi.injectEndpoints({
         },
       }),
     }),
+    getAddresses: builder.query({
+      query: () => `Users/GetUserAddresses`,
+    }),
+    addAddress: builder.mutation({
+      query: (address) => ({
+        url: `Users/AddUserAddresses`,
+        method: "POST",
+        body: JSON.stringify(address),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    updateAddress: builder.mutation({
+      query: (address) => ({
+        url: `Users/UpdateUserAddresses/${address.id}`,
+        method: "PUT",
+        body: JSON.stringify(address),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
@@ -148,4 +171,7 @@ export const {
   useGetNotificationQuery,
   useReadNotificationMutation,
   useLoginUserMutation,
+  useGetAddressesQuery,
+  useAddAddressMutation,
+  useUpdateAddressMutation,
 } = userApi;
