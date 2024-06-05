@@ -21,6 +21,23 @@ const carsApi = carRentApi.injectEndpoints({
     }),
     getCarOpinions: builder.query({
       query: (carId) => `CarOpinion/${carId}`,
+      transformResponse: (data) => {
+        const transformed = data.map((it) => ({
+          ...it,
+          addedDate: it.addedDate.slice(0, 10),
+        }));
+        return transformed;
+      },
+    }),
+    addCarOpinion: builder.mutation({
+      query: (opinion) => ({
+        url: `CarOpinion/create`,
+        method: "POST",
+        body: JSON.stringify(opinion),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
     }),
   }),
 });
@@ -32,4 +49,5 @@ export const {
   useGetCarsQuery,
   useGetCarPricelistQuery,
   useGetCarOpinionsQuery,
+  useAddCarOpinionMutation,
 } = carsApi;
