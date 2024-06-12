@@ -1,7 +1,6 @@
 import { Form, Button, Container, Accordion, FormCheck } from "react-bootstrap";
 import styles from "./CarFilter.module.css";
-import { useEffect, useState } from "react";
-import axiosInstance from "../../utils/axiosConfig";
+import { useGetCarSortingInfoQuery } from "../../api/carsApi";
 
 function CarFilter({
   isOpen,
@@ -11,53 +10,10 @@ function CarFilter({
   filterInfo,
   setFilterInfo,
 }) {
-  const [data, setData] = useState();
-  const [priceError, setPriceError] = useState(null);
-
-  useEffect(() => {
-    if (filterInfo.PriceMax === null || filterInfo.PriceMin === null) {
-      return;
-    }
-    if (filterInfo.PriceMax < filterInfo.PriceMin) {
-      setPriceError("Min price can't exceed Max price");
-    } else {
-      setPriceError(null);
-    }
-  }, [filterInfo.PriceMax, filterInfo.PriceMin]);
-
-  useEffect(() => {
-    axiosInstance
-      .get("car/CarSortingInfo")
-      .then((data) => {
-        setData(data.data);
-      })
-      .catch();
-  }, []);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFilterInfo((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handlePriceChange = (event) => {
-    const { name, value } = event.target;
-    setFilterInfo((prevState) => ({
-      ...prevState,
-      [name]: parseFloat(value),
-    }));
-  };
+  const { data, error, isLoading } = useGetCarSortingInfoQuery();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (priceError) {
-      console.log("Price Error");
-      return;
-    }
-    console.log("applay filterClick");
     applayFilterClick(filterInfo);
   };
 
@@ -78,9 +34,11 @@ function CarFilter({
       ...prevState,
       [name]: selected,
     }));
-    console.log(id);
-    console.log(selected);
   };
+
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <div
@@ -90,32 +48,11 @@ function CarFilter({
       style={{ paddingTop: "75px" }}
     >
       <Container className="mb-4">
-        {/* Your Sidebar Content Here */}
         <h2 className="text-center mt-4">Filtrs</h2>
         <Button onClick={close} className="start-50 mt-2 mb-4 customButton">
           <i className="fa-solid fa-bars"></i>
         </Button>
         <Form onSubmit={handleSubmit}>
-          {/* <Form.Group className="mb-3 ms-4 me-4">
-            <Form.Control
-              type="number"
-              placeholder="Enter min price"
-              onChange={handlePriceChange}
-              name="PriceMin"
-              min={0}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3 ms-4 me-4">
-            <Form.Control
-              type="number"
-              placeholder="Enter max price"
-              onChange={handlePriceChange}
-              name="PriceMax"
-              min={0}
-            />
-            {priceError && <p className="text-danger">{priceError}</p>}
-          </Form.Group> */}
           <Form.Group>
             <hr />
             <Accordion>
@@ -233,18 +170,3 @@ function CarFilter({
 }
 
 export default CarFilter;
-
-/*
-<Form.Group className="mb-3">
-            <Form.Label>Car Type</Form.Label>
-            <Form.Select onChange={handleChange} name="CarTypeId">
-              {!filterInfo.CarTypeId && <option>Select... </option>}
-              {data &&
-                data.carType.map((type) => (
-                  <option key={type.id} value={type.id}>
-                    {type.name}
-                  </option>
-                ))}
-            </Form.Select>
-          </Form.Group>
-*/

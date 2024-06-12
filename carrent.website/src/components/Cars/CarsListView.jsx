@@ -1,4 +1,3 @@
-import { Col, Container, Row } from "react-bootstrap";
 import CarCardForListView from "../Cards/Cars/CarCardForListView";
 
 function CarsListView({ cars, isLogin, wishlist }) {

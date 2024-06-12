@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, Form, Col, Row } from "react-bootstrap";
-import axiosInstance from "./../../utils/axiosConfig";
+import { useAddCarOpinionMutation } from "../../api/carsApi";
 
 function AddCarOpinion({ onCancel, carId, ...props }) {
   const [opinion, setOpinion] = useState({
@@ -9,6 +9,8 @@ function AddCarOpinion({ onCancel, carId, ...props }) {
     text: "",
     mark: 6,
   });
+
+  const [addOpinion, result] = useAddCarOpinionMutation();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -20,15 +22,8 @@ function AddCarOpinion({ onCancel, carId, ...props }) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(opinion);
-    axiosInstance
-      .post(`CarOpinion/create`, JSON.stringify(opinion), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        console.log(data);
+    addOpinion(opinion)
+      .then(() => {
         onCancel();
       })
       .catch((error) => {

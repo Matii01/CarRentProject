@@ -1,15 +1,7 @@
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
-import CardOverlay from "../Overlay/CardOverlay";
 import CarPagination from "../Pagination/CarPagination";
 
-function UserRentalList({
-  items,
-  onDetailsClick,
-  hidden,
-  isLoading,
-  metaData,
-  onPageChange,
-}) {
+function UserRentalList({ items, onDetailsClick, metaData, onPageChange }) {
   const formatDate = (date) => {
     return date.slice(0, 10);
   };
@@ -19,8 +11,7 @@ function UserRentalList({
   };
 
   return (
-    <Card hidden={hidden && !isLoading}>
-      {isLoading && <CardOverlay />}
+    <Card>
       <Card.Header className="cardHeader">User Orders</Card.Header>
       <Card.Body>
         <Table>
@@ -34,25 +25,24 @@ function UserRentalList({
             </tr>
           </thead>
           <tbody>
-            {!isLoading &&
-              items.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.carName}</td>
-                  <td>{formatDate(item.rentalStart)}</td>
-                  <td>{formatDate(item.rentalEnd)}</td>
-                  <td>
-                    <Button
-                      onClick={() => goToDetails(item.id)}
-                      className="w-100"
-                      variant="outline-dark"
-                      size="sm"
-                    >
-                      Details
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+            {items.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.carName}</td>
+                <td>{formatDate(item.rentalStart)}</td>
+                <td>{formatDate(item.rentalEnd)}</td>
+                <td>
+                  <Button
+                    onClick={() => goToDetails(item.id)}
+                    className="w-100"
+                    variant="outline-dark"
+                    size="sm"
+                  >
+                    Details
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
         <Row>

@@ -9,7 +9,6 @@ const stripePromise = loadStripe(
 
 function RentalPage() {
   const user = useSelector((state) => state.user);
-  const userName = user.name;
 
   return (
     <>

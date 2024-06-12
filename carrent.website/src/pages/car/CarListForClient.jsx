@@ -1,24 +1,20 @@
 import { Form, Button, Container } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import CarCard from "../../components/Cards/Cars/CarCard";
 import { useEffect, useState } from "react";
 import CarFilter from "../../components/Sidebar/CarFilter";
 import CarPagination from "../../components/Pagination/CarPagination";
 import CarsGridView from "../../components/Cars/CarsGridView";
 import CarsListView from "../../components/Cars/CarsListView";
 import transformObjectToQueryString from "../../utils/transformObjectToQuery";
-import axiosInstance from "./../../utils/axiosConfig";
 import { useSelector } from "react-redux";
+import { useGetCarsQuery } from "../../api/carsApi";
+import { useGetUserWithlistQuery } from "../../api/userApi";
 
 function CarListForClient() {
   const user = useSelector((state) => state.user);
-  const defaultParams = { PageNumber: 1, PageSize: 10 };
-  const [metaData, setMetaData] = useState();
-  const [cars, setCars] = useState();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isGridView, setIsGridView] = useState(true);
-  const [userWishList, setUserWishList] = useState([]);
   const [filterInfo, setFilterInfo] = useState({
     PageNumber: 1,
     PageSize: 10,
@@ -34,47 +30,19 @@ function CarListForClient() {
     PriceMax: null,
     MinSeatsNum: null,
   });
+  const [queryString, setQueryString] = useState(
+    transformObjectToQueryString(filterInfo)
+  );
+
+  const { data, error, isLoading, refetch } = useGetCarsQuery(queryString);
+  const { data: wishList, isLoading: lodingWishlist } = useGetUserWithlistQuery(
+    "",
+    { skip: !user.isLogin }
+  );
 
   useEffect(() => {
-    getFilteredCars(defaultParams);
-  }, []);
-
-  useEffect(() => {
-    getClientWishList();
-  }, [user.isLogin]);
-
-  useEffect(() => {
-    getFilteredCars(filterInfo);
-  }, [filterInfo.PageNumber, filterInfo.PageSize]);
-
-  const getFilteredCars = () => {
-    const queryString = transformObjectToQueryString(filterInfo);
-    axiosInstance
-      .get(`/car/cars?${queryString}`)
-      .then((data) => {
-        setCars(data.data.items);
-        setMetaData(data.data.metaData);
-      })
-      .catch((error) => {
-        console.log(error);
-        setCars(null);
-      });
-  };
-
-  const getClientWishList = () => {
-    if (user.isLogin) {
-      axiosInstance
-        .get("/Wishlist")
-        .then((data) => {
-          setUserWishList(data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      console.log("user is not login");
-    }
-  };
+    setQueryString(transformObjectToQueryString(filterInfo));
+  }, [filterInfo.PageSize, filterInfo.PageNumber]);
 
   const closeFilters = () => {
     setIsFilterOpen(false);
@@ -86,12 +54,7 @@ function CarListForClient() {
     }
   };
 
-  const filterClick = (params) => {
-    getFilteredCars(params);
-  };
-
   const onPageChange = (pageNumber) => {
-    console.log("change page");
     setFilterInfo((prevState) => ({
       ...prevState,
       PageNumber: pageNumber,
@@ -107,7 +70,6 @@ function CarListForClient() {
   };
 
   const toggleFilter = () => {
-    console.log("click");
     setIsFilterOpen(!isFilterOpen);
   };
 
@@ -118,6 +80,21 @@ function CarListForClient() {
       setIsGridView(false);
     }
   };
+
+  const filterClick = () => {
+    if (filterInfo.PageNumber === 1) {
+      setQueryString(transformObjectToQueryString(filterInfo));
+    } else {
+      onPageChange(1);
+    }
+  };
+
+  if (isLoading || lodingWishlist) {
+    return <></>;
+  }
+
+  const cars = data.items;
+  const metaData = data.metaData;
 
   return (
     <>
@@ -148,17 +125,7 @@ function CarListForClient() {
                 </Form.Select>
               </Form.Group>
             </Col>
-            {/* <Col md={2}>
-              <Form.Group>
-                <Form.Label>Other info</Form.Label>
-                <Form.Select>
-                  <option value={2}>2</option>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </Form.Select>
-              </Form.Group>
-            </Col> */}
+
             <Col md={2}>
               <Form.Group>
                 <Form.Label>View</Form.Label>
@@ -167,9 +134,6 @@ function CarListForClient() {
                   <option value="List">List</option>
                 </Form.Select>
               </Form.Group>
-              {/* <Button className="customButton" onClick={toggleView}>
-                Toggle view
-              </Button> */}
             </Col>
             <hr className="mt-4" />
           </Row>
@@ -178,7 +142,7 @@ function CarListForClient() {
           <CarsGridView
             cars={cars}
             isLogin={user.isLogin}
-            wishlist={userWishList}
+            wishlist={wishList ? wishList : []}
           />
         )}
         {cars && !isGridView && (
@@ -190,7 +154,7 @@ function CarListForClient() {
                   <CarsListView
                     cars={cars}
                     isLogin={user.isLogin}
-                    wishlist={userWishList}
+                    wishlist={wishList ? wishList : []}
                   />
                 </Col>
               </Row>

@@ -1,3 +1,117 @@
+import { useEffect, useState } from "react";
+import { Button, Card, Col, Form, ListGroup, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import MyDatePicker from "../DatePicker/MyDatePicker";
+import { useSelector } from "react-redux";
+import {
+  useCheckPriceForNotLoggedInQuery,
+  useCheckPriceForUserQuery,
+} from "../../api/carsApi";
+
+function BookCar({ carId, excludedDates }) {
+  const user = useSelector((state) => state.user);
+  const navigation = useNavigate();
+  const [error, setError] = useState(false);
+  const [canBook, setCanBook] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [reservationData, setReservationDate] = useState({
+    carId: carId,
+    dateFrom: "",
+    dateTo: "",
+  });
+
+  const {
+    data: costForUser,
+    dataError,
+    isLoading,
+  } = useCheckPriceForUserQuery(reservationData, {
+    skip: !shouldFetch || !user.isLogin,
+  });
+  const {
+    data: cost,
+    err,
+    isLoad,
+  } = useCheckPriceForNotLoggedInQuery(reservationData, {
+    skip: !shouldFetch || user.isLogin,
+  });
+
+  useEffect(() => {
+    if (reservationData.dateFrom === "") {
+      return;
+    }
+    if (reservationData.dateFrom < reservationData.dateTo) {
+      setShouldFetch(true);
+      setCanBook(true);
+      isDatesValid();
+    } else {
+      setCanBook(false);
+    }
+  }, [reservationData.dateFrom, reservationData.dateTo]);
+
+  function onSubmit(event) {
+    event.preventDefault();
+    navigation(
+      `/car/reservation/${carId}?from=${reservationData.dateFrom}&to=${reservationData.dateTo}`
+    );
+  }
+
+  function isDatesValid() {
+    excludedDates.forEach((element) => {
+      if (
+        new Date(reservationData.dateFrom) <= new Date(element.rentalStart) &&
+        new Date(reservationData.dateTo) >= new Date(element.rentalEnd)
+      ) {
+        setError(true);
+        return false;
+      } else {
+        setError(false);
+      }
+    });
+  }
+
+  function handleDate(name, value) {
+    setReservationDate((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  return (
+    <Card>
+      <Form onSubmit={onSubmit}>
+        <Card.Body>
+          <Card.Title>Rezerwacja</Card.Title>
+          <Row>
+            <Col>
+              <MyDatePicker
+                onBlur={isDatesValid}
+                onChange={handleDate}
+                excludedDate={excludedDates}
+              />
+            </Col>
+          </Row>
+        </Card.Body>
+        <ListGroup className="list-group-flush">
+          <ListGroup.Item>Rental Cost: {cost | costForUser}</ListGroup.Item>
+        </ListGroup>
+        <Card.Body>
+          <Button
+            type="submit"
+            className={`w-100 customButton ${error ? "errorButton" : ""}`}
+            disabled={error || !canBook}
+          >
+            Book
+          </Button>
+          {error && <p>Includes exemptions</p>}
+        </Card.Body>
+      </Form>
+    </Card>
+  );
+}
+
+export default BookCar;
+
+/* 
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, ListGroup, Row } from "react-bootstrap";
@@ -6,6 +120,7 @@ import transformObjectToQueryString from "../../utils/transformObjectToQuery";
 import MyDatePicker from "../DatePicker/MyDatePicker";
 import axiosInstance from "../../utils/axiosConfig";
 import { useSelector } from "react-redux";
+import { useCheckPriceForUserQuery } from "../../api/carsApi";
 
 function BookCar({ carId, excludedDates }) {
   const [error, setError] = useState(false);
@@ -15,6 +130,13 @@ function BookCar({ carId, excludedDates }) {
     DateFrom: "",
     DateTo: "",
   });
+
+  const { data, dataError, isLoading } = useCheckPriceForUserQuery(
+    transformObjectToQueryString(reservationData),
+    {
+      skip: isDatesValid(),
+    }
+  );
 
   const user = useSelector((state) => state.user);
   const navigation = useNavigate();
@@ -96,19 +218,20 @@ function BookCar({ carId, excludedDates }) {
       });
   };
 
-  const isDatesValid = () => {
+  function isDatesValid() {
     excludedDates.forEach((element) => {
       if (
         new Date(reservationData.DateFrom) <= new Date(element.rentalStart) &&
         new Date(reservationData.DateTo) >= new Date(element.rentalEnd)
       ) {
         setError(true);
-        return;
+        return false;
       } else {
         setError(false);
       }
     });
-  };
+    return true;
+  }
 
   const handleDate = (name, value) => {
     setReservationDate((prev) => ({
@@ -116,6 +239,8 @@ function BookCar({ carId, excludedDates }) {
       [name]: value,
     }));
   };
+
+  console.log("cost and data: ", data);
 
   return (
     <Card>
@@ -152,25 +277,4 @@ function BookCar({ carId, excludedDates }) {
 
 export default BookCar;
 
-/*
-<Row>
-  <Col>
-    <Form.Group as={Col}>
-      <Form.Label>Od</Form.Label>
-      <Form.Control
-        type="date"
-        name="DateFrom"
-        onChange={handleChange}
-      />
-    </Form.Group>
-    <Form.Group as={Col}>
-      <Form.Label>Do</Form.Label>
-      <Form.Control
-        type="date"
-        name="DateTo"
-        onChange={handleChange}
-      />
-    </Form.Group>
-  </Col>
-</Row>
 */

@@ -1,25 +1,9 @@
-import { useEffect, useState } from "react";
 import { Card, Row, Col } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
 import { formatDate } from "../../utils/formatData";
+import { useGetUserRabatsQuery } from "../../api/userApi";
 
 function ShowRabat() {
-  const [rabats, setRabats] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    axiosInstance
-      .get(`Rabat/myRabats`)
-      .then((data) => {
-        console.log(data.data);
-        setRabats(data.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const { data: rabats, error, isLoading } = useGetUserRabatsQuery();
 
   return (
     <Card>

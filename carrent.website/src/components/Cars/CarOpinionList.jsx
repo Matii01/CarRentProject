@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "../../utils/axiosConfig";
 import { Col, Row } from "react-bootstrap";
+import { useGetCarOpinionsQuery } from "../../api/carsApi";
 
 function CarOpinionList({ carid }) {
-  const [list, setList] = useState([]);
-  useEffect(() => {
-    axiosInstance
-      .get(`CarOpinion/${carid}`)
-      .then((data) => {
-        setList(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const { data: list, error, isLoading } = useGetCarOpinionsQuery(carid);
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>

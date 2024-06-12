@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row, Form } from "react-bootstrap";
-import axiosInstance from "./../../utils/axiosConfig";
+import {
+  useChangePersonalDetailsMutation,
+  useGetParsonalDeatilsQuery,
+} from "../../api/userApi";
 
 function ChangePersonalDetails() {
+  const { data, error, isLoading } = useGetParsonalDeatilsQuery();
+  const [updateDetails, result] = useChangePersonalDetailsMutation();
+
   const [user, setUser] = useState({
     email: " ",
     firstName: " ",
@@ -12,16 +18,11 @@ function ChangePersonalDetails() {
   });
 
   useEffect(() => {
-    axiosInstance
-      .get("Users/UserPersonalDetails")
-      .then((data) => {
-        console.log(data);
-        setUser(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    setUser((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  }, [data]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -31,23 +32,14 @@ function ChangePersonalDetails() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(user);
-    axiosInstance
-      .post("Users/UpdatePersonalDetails", JSON.stringify(user), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        console.log(data);
-        setUser(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    await updateDetails(user);
   };
+
+  if (isLoading) {
+    return <>Loading..</>;
+  }
 
   return (
     <Card>

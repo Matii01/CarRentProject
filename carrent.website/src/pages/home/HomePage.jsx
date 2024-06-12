@@ -1,27 +1,22 @@
 import { Col, Container, Image, Row } from "react-bootstrap";
 import style from "./HomePage.module.css";
 import RecommendedCars from "../../components/Cars/RecommendedCars";
-import { useEffect, useState } from "react";
-import axiosInstance from "../../utils/axiosConfig";
+import { useGetHomePageQuery } from "../../api/contentManagement";
 
 function HomePage() {
-  const [page, setPage] = useState({
-    homePageImage: "",
-    homePageTextOne: "",
-    homePageTextTwo: "",
-    homePageTitle: "",
-  });
+  const { data: page, error, isLoading } = useGetHomePageQuery();
 
-  useEffect(() => {
-    axiosInstance
-      .get(`ContentManagement/homePage`)
-      .then((data) => {
-        setPage(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  if (isLoading) {
+    return (
+      <>
+        <p>Loading ... </p>
+      </>
+    );
+  }
+
+  if (error) {
+    return <></>;
+  }
 
   return (
     <>
@@ -36,7 +31,7 @@ function HomePage() {
         </Row>
         <Row>
           <Col className="justify-content-center text-center m-5">
-            <h2>{page.homePageTitle} </h2>
+            <h2>{page.homePageTitle ?? ""} </h2>
           </Col>
         </Row>
         <Row
@@ -45,8 +40,8 @@ function HomePage() {
         >
           <Container style={{ width: "90%" }}>
             <Row>
-              <Col className="m-5">{page.homePageTextOne}</Col>
-              <Col className="m-5">{page.homePageTextTwo}</Col>
+              <Col className="m-5">{page.homePageTextOne ?? ""}</Col>
+              <Col className="m-5">{page.homePageTextTwo ?? ""}</Col>
             </Row>
           </Container>
         </Row>
@@ -61,7 +56,5 @@ function HomePage() {
     </>
   );
 }
-
-//<Image src="imgs/car-login.jpg" style={{ width: "100vw" }} />
 
 export default HomePage;

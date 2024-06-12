@@ -1,39 +1,32 @@
-import { useEffect, useState } from "react";
 import { Button, Card, Table } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
 import { useNavigate } from "react-router-dom";
+import {
+  useGetUserWithlistQuery,
+  useRemoveFromWishlistMutation,
+} from "../../api/userApi";
+import CardOverlay from "../Overlay/CardOverlay";
 
 function UserWishList() {
   const navigate = useNavigate();
-  const [list, setList] = useState([]);
-  useEffect(() => {
-    axiosInstance
-      .get("Wishlist/Wishlist")
-      .then((data) => {
-        console.log(data);
-        setList(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const [removeFromWithlist, result] = useRemoveFromWishlistMutation();
+  const { data: list, error, isLoading, refetch } = useGetUserWithlistQuery();
 
   const goToDetails = (id) => {
     console.log("go to details: " + id);
     navigate(`/car/details/${id}`);
   };
 
-  const removeFromList = (id) => {
-    axiosInstance
-      .delete(`Wishlist/${id}`)
-      .then((data) => {
-        const newList = list.filter((it) => it.carId != id);
-        setList(newList);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const removeFromList = async (id) => {
+    await removeFromWithlist(id);
   };
+
+  if (isLoading) {
+    return (
+      <Card className="h-100">
+        <CardOverlay />
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -89,25 +82,3 @@ function UserWishList() {
 }
 
 export default UserWishList;
-
-/*
- {!isLoading &&
-    items.map((item) => (
-    <tr key={item.id}>
-        <td>{item.id}</td>
-        <td>{item.carName}</td>
-        <td>{formatDate(item.rentalStart)}</td>
-        <td>{formatDate(item.rentalEnd)}</td>
-        <td>
-        <Button
-            onClick={() => goToDetails(item.id)}
-            className="w-100"
-            variant="outline-dark"
-            size="sm"
-        >
-            Details
-        </Button>
-        </td>
-    </tr>
-    ))}
-*/

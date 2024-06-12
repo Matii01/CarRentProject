@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row, Form } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
+import {
+  useAddAddressMutation,
+  useUpdateAddressMutation,
+} from "../../api/userApi";
 
 function AddressComponent({ address, onAdd }) {
-  const [updateAddress, setUpdatedAddress] = useState({
+  const deafultData = {
     firstName: "",
     lastName: "",
     address1: "",
@@ -12,11 +15,14 @@ function AddressComponent({ address, onAdd }) {
     state: "",
     zip: "",
     isDefault: false,
-  });
+  };
+  const [updateAddress, setUpdatedAddress] = useState(address || deafultData);
+  const [update, result] = useUpdateAddressMutation();
+  const [addAddress, addResult] = useAddAddressMutation();
 
   useEffect(() => {
     if (address != undefined) {
-      setUpdatedAddress({ ...address });
+      setUpdatedAddress(address);
     }
   }, [address]);
 
@@ -31,46 +37,13 @@ function AddressComponent({ address, onAdd }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (address === undefined) {
-      addNewAddres();
+      addAddress(updateAddress).then(() => onAdd());
     } else {
-      onUpdateAddress();
+      update(updateAddress).then(() => {
+        setUpdatedAddress(deafultData);
+        onAdd();
+      });
     }
-  };
-
-  const onUpdateAddress = () => {
-    axiosInstance
-      .put(
-        `Users/UpdateUserAddresses/${updateAddress.id}`,
-        JSON.stringify(updateAddress),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        onAdd();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const addNewAddres = () => {
-    axiosInstance
-      .post(`Users/AddUserAddresses`, JSON.stringify(updateAddress), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        onAdd();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const handleCheckboxChange = (event) => {
@@ -132,7 +105,7 @@ function AddressComponent({ address, onAdd }) {
             <Form.Group as={Col}>
               <Form.Label>City</Form.Label>
               <Form.Control
-                name="City"
+                name="city"
                 onChange={handleChange}
                 value={updateAddress.city}
               />
@@ -141,7 +114,7 @@ function AddressComponent({ address, onAdd }) {
             <Form.Group as={Col}>
               <Form.Label>State</Form.Label>
               <Form.Control
-                name="State"
+                name="state"
                 onChange={handleChange}
                 value={updateAddress.state}
               />

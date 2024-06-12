@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Root from "./root";
@@ -9,13 +9,13 @@ import { Provider } from "react-redux";
 import store from "./app/store";
 import RegisterPage from "./pages/user/RegisterPage";
 import LoginPage from "./pages/user/LoginPage";
-import UserPage from "./pages/user/UserPage";
 import RentalConfirmation from "./pages/rental/RentalConfirmation";
 import "./globalStyles.css";
 import ContactPage from "./pages/contact/ContactPage";
 import HomePage from "./pages/home/HomePage";
 import RentalPage from "./pages/rental/RentalPage";
 import { contactLoader } from "./utils/contacltLoader";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -23,10 +23,7 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { index: true, element: <HomePage /> },
-      {
-        path: "cars",
-        element: <CarsPage />,
-      },
+      { path: "cars", element: <CarsPage /> },
       { path: "car/cars", element: <CarListForClient /> },
       { path: "car/details/:carId", element: <CarDetailsForClient /> },
       { path: "car/reservation/:carId", element: <RentalPage /> },
@@ -37,7 +34,19 @@ const router = createBrowserRouter([
       { path: "contact", element: <ContactPage />, loader: contactLoader },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
-      { path: "user", element: <UserPage /> },
+      {
+        path: "user/:view?",
+        async lazy() {
+          let UserPage = lazy(() => import("./pages/user/UserPage"));
+          return {
+            element: (
+              <ProtectedRoute>
+                <UserPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
     ],
   },
 ]);

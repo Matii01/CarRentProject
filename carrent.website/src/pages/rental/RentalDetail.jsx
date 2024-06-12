@@ -1,47 +1,41 @@
 import axiosInstance from "./../../utils/axiosConfig";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import RentalData from "../../components/Rental/RentalData";
-
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { updateLoading } from "../../features/loading/loadingSlice";
+import { useGetUserDataForRentalQuery } from "../../api/userApi";
+import getAllRentalDataInitialState from "../../state/rentalDataInitialState";
 
 function RentalDetail() {
   const param = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
-  const [allRentalData, setAllRentalData] = useState({
-    NewRentalForClient: {
-      CarId: param.carId,
-      DateFrom: from,
-      DateTo: to,
-    },
-    ClientDetails: {
-      FirstName: "",
-      LastName: "",
-      Email: "",
-      PhoneNumber: "",
-      Address: "",
-      PostCode: "",
-      City: "",
-    },
-    Invoice: {
-      Number: "zxcvbnm",
-      Comment: "brak uwag",
-    },
-  });
+  const [allRentalData, setAllRentalData] = useState(
+    getAllRentalDataInitialState(
+      param.carId,
+      searchParams.get("from"),
+      searchParams.get("to")
+    )
+  );
+
+  const { data, userDataError, isLoadingUserData } =
+    useGetUserDataForRentalQuery();
+
+  useEffect(() => {
+    if (data === undefined) {
+      return;
+    }
+    setAllRentalData((prev) => ({
+      ...prev,
+      ClientDetails: {
+        ...prev.ClientDetails,
+        ...data,
+      },
+    }));
+  }, [data]);
 
   ///
   const stripe = useStripe();
@@ -52,20 +46,16 @@ function RentalDetail() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     dispatch(
       updateLoading({
         isLoading: true,
       })
     );
-
     if (!stripe || !elements) {
       console.log("stripe or element");
       return;
     }
-
     const cardElemet = elements.getElement(CardElement);
-
     try {
       const response = await axiosInstance.post(
         `Payment/NewPayment`,
@@ -76,14 +66,12 @@ function RentalDetail() {
           },
         }
       );
-
       const clientSecret = response.data.clientSecret;
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardElemet,
         },
       });
-
       if (result.error) {
         setError(result.error.message);
         console.log(result.error.message);
@@ -104,6 +92,10 @@ function RentalDetail() {
       );
     }
   };
+
+  if (isLoadingUserData) {
+    return <></>;
+  }
 
   return (
     <>

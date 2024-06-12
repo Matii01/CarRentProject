@@ -1,25 +1,13 @@
-import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
 import AddressComponent from "./AddressCompanant";
+import { useGetAddressesQuery } from "../../api/userApi";
 
 function ChangeAddress() {
-  const [addresses, setAddresses] = useState([]);
+  const { data: addresses, error, isLoading, refetch } = useGetAddressesQuery();
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = () => {
-    axiosInstance.get(`Users/GetUserAddresses`).then((response) => {
-      console.log(response);
-      setAddresses(response.data);
-    });
-  };
-
-  const onAdd = () => {
-    getData();
-  };
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -27,13 +15,13 @@ function ChangeAddress() {
         addresses.map((item, index) => (
           <Row key={index}>
             <Col className="mb-4">
-              <AddressComponent address={item} onAdd={onAdd} />
+              <AddressComponent address={item} onAdd={refetch} />
             </Col>
           </Row>
         ))}
       <Row>
         <Col>
-          <AddressComponent onAdd={onAdd} />
+          <AddressComponent onAdd={refetch} />
         </Col>
       </Row>
     </>

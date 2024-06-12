@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import axiosInstance from "../../utils/axiosConfig";
+import {
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+} from "../../api/userApi";
 
 function AddToWishList({ carId, wishlist }) {
   const [isSaved, setIsSaved] = useState(
     wishlist.some((item) => item.carId === carId)
   );
+  const [addToWishlist, result] = useAddToWishlistMutation();
+  const [removeFromWishlist, res] = useRemoveFromWishlistMutation();
 
   const Link = ({ id, children, title }) => (
     <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
@@ -13,39 +18,13 @@ function AddToWishList({ carId, wishlist }) {
     </OverlayTrigger>
   );
 
-  const onSaveClick = () => {
+  const onSaveClick = async () => {
     if (!isSaved) {
-      addToWishList();
+      addToWishlist(carId);
     } else {
-      removeFromWishList();
+      await removeFromWishlist(carId);
     }
     setIsSaved(!isSaved);
-  };
-
-  const addToWishList = () => {
-    axiosInstance
-      .post(`Wishlist/add`, JSON.stringify({ CarId: carId }), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const removeFromWishList = () => {
-    axiosInstance
-      .delete(`Wishlist/${carId}`)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   return (
