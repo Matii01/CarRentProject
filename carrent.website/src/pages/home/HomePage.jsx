@@ -14,6 +14,10 @@ function HomePage() {
     );
   }
 
+  if (error) {
+    return <></>;
+  }
+
   return (
     <>
       <Container className="p-0 m-0 ">
@@ -27,7 +31,7 @@ function HomePage() {
         </Row>
         <Row>
           <Col className="justify-content-center text-center m-5">
-            <h2>{page.homePageTitle} </h2>
+            <h2>{page.homePageTitle ?? ""} </h2>
           </Col>
         </Row>
         <Row
@@ -36,8 +40,8 @@ function HomePage() {
         >
           <Container style={{ width: "90%" }}>
             <Row>
-              <Col className="m-5">{page.homePageTextOne}</Col>
-              <Col className="m-5">{page.homePageTextTwo}</Col>
+              <Col className="m-5">{page.homePageTextOne ?? ""}</Col>
+              <Col className="m-5">{page.homePageTextTwo ?? ""}</Col>
             </Row>
           </Container>
         </Row>

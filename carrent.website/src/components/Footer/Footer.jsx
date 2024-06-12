@@ -51,6 +51,10 @@ function Footer() {
       });
   };
 
+  if (error) {
+    return <></>;
+  }
+
   return (
     <>
       {isLoading ? (
