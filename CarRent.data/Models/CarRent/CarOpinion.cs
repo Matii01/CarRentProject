@@ -11,7 +11,11 @@ namespace CarRent.data.Models.CarRent
     public class CarOpinion : BaseDictionaryModel
     {
         public override int Id { get; set; }
+
+        [MaxLength(100)]
         public string? Title {  get; set; }
+
+        [MaxLength(1000)]
         public string? Text { get; set; }
 
         public DateTime? AddedDate { get; set; }

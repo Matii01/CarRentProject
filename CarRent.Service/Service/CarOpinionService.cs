@@ -21,6 +21,11 @@ namespace CarRent.Service.Service
 
         public async Task AddOpinionAsync(NewOpinionDto opinion, string userId)
         {
+            if(opinion?.Text?.Length > 1000)
+            {
+                throw new DataTooLongException("Text exceeds character limit of 1000. Please reduce the text length.");
+            }
+
             var newOpinion = _mapper.Map<CarOpinion>(opinion, opts => opts.Items["UserId"] = userId);
 
             _repository.CarOpinion.Create(newOpinion);

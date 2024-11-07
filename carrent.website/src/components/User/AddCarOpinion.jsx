@@ -3,6 +3,8 @@ import { Button, Card, Form, Col, Row } from "react-bootstrap";
 import { useAddCarOpinionMutation } from "../../api/carsApi";
 
 function AddCarOpinion({ onCancel, carId, ...props }) {
+  const MaxCharactersCount = 1000;
+  const [characterLeft, setCharactersLeft] = useState(MaxCharactersCount);
   const [opinion, setOpinion] = useState({
     carId: carId,
     title: "",
@@ -20,11 +22,21 @@ function AddCarOpinion({ onCancel, carId, ...props }) {
     }));
   };
 
+  const updateCharactersLeft = (event) => {
+    const { value } = event.target;
+    const left = MaxCharactersCount - value.length;
+    setCharactersLeft(() => left);
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
     addOpinion(opinion)
-      .then(() => {
-        onCancel();
+      .then((res) => {
+        if (res.error) {
+          // TODO
+        } else {
+          onCancel();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -74,15 +86,26 @@ function AddCarOpinion({ onCancel, carId, ...props }) {
           </Row>
 
           <Form.Group className="mb-3" controlId="formGroupPassword">
-            <Form.Label>Opinion</Form.Label>
+            <Row>
+              <Col xs={2}>
+                <Form.Label>Opinion</Form.Label>
+              </Col>
+              <Col className="text-end">
+                Max {MaxCharactersCount} characters (left: {characterLeft}){" "}
+              </Col>
+            </Row>
             <Form.Control
               required
               as="textarea"
               placeholder="..."
               type="text"
               name="text"
+              maxLength={1000}
               value={opinion.text}
-              onChange={handleChange}
+              onChange={(event) => {
+                handleChange(event);
+                updateCharactersLeft(event);
+              }}
               style={{ height: 100 }}
             />
           </Form.Group>
