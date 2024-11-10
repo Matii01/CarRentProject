@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 appsettings.json
 /CarRent.api/appsettings.json
+my-app/
